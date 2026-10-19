@@ -1,0 +1,3529 @@
+# Russian translation for Nook.
+# This file is distributed under the same license as the nook package.
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: nook\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2026-10-19 20:29+0300\n"
+"PO-Revision-Date: 2026-10-14 12:00+0300\n"
+"Last-Translator: \n"
+"Language-Team: Russian\n"
+"Language: ru\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=3; plural=(n%10==1 && n%100!=11 ? 0 : n%10>=2 && "
+"n%10<=4 && (n%100<10 || n%100>=20) ? 1 : 2);\n"
+
+#: extension.js:122 extension.js:765
+msgctxt "unit"
+msgid "lx"
+msgstr "лк"
+
+#: extension.js:124
+msgctxt "unit"
+msgid "s"
+msgstr "с"
+
+#: extension.js:125
+msgctxt "unit"
+msgid "min"
+msgstr "мин"
+
+#: extension.js:126
+msgctxt "unit"
+msgid "h"
+msgstr "ч"
+
+#: extension.js:127
+msgctxt "unit"
+msgid "d"
+msgstr "дн"
+
+#: extension.js:130
+msgctxt "unit"
+msgid "W"
+msgstr "Вт"
+
+#: extension.js:131 extension.js:768
+msgctxt "unit"
+msgid "V"
+msgstr "В"
+
+#: extension.js:132
+msgctxt "unit"
+msgid "A"
+msgstr "А"
+
+#: extension.js:133
+msgctxt "unit"
+msgid "kWh"
+msgstr "кВт·ч"
+
+#: extension.js:134
+msgctxt "unit"
+msgid "Pa"
+msgstr "Па"
+
+#: extension.js:156 extension.js:192 extension.js:193 extension.js:1357
+#: extension.js:1431
+msgid "Closed"
+msgstr "Закрыто"
+
+#: extension.js:156 extension.js:191 extension.js:1355
+msgid "Open"
+msgstr "Открыто"
+
+#: extension.js:158 extension.js:1430 extension.js:1936
+msgid "Motion"
+msgstr "Движение"
+
+#: extension.js:158
+msgid "No motion"
+msgstr "Нет движения"
+
+#: extension.js:160 extension.js:1428 extension.js:1993
+msgid "Leak"
+msgstr "Протечка"
+
+#: extension.js:160
+msgid "Dry"
+msgstr "Сухо"
+
+#: extension.js:162 extension.js:705 extension.js:1115
+msgid "Smoke!"
+msgstr "Дым!"
+
+#: extension.js:162 extension.js:703 extension.js:1115
+msgid "No smoke"
+msgstr "Дыма нет"
+
+#: extension.js:164 extension.js:705 extension.js:1113
+msgid "Gas!"
+msgstr "Газ!"
+
+#: extension.js:164 extension.js:703 extension.js:1113
+msgid "No gas"
+msgstr "Газа нет"
+
+#: extension.js:166 extension.js:179 extension.js:481 extension.js:497
+#: extension.js:810 extension.js:819 extension.js:1126 extension.js:1172
+#: extension.js:1202 extension.js:1218 extension.js:1294 extension.js:1308
+#: extension.js:1323 extension.js:1345 extension.js:5206 extension.js:5580
+#: extension.js:5622 extension.js:6089 extension.js:6269 extension.js:6403
+#: extension.js:6606 extension.js:7203
+msgid "On"
+msgstr "Вкл."
+
+#: extension.js:166 extension.js:178 extension.js:481 extension.js:486
+#: extension.js:496 extension.js:793 extension.js:809 extension.js:819
+#: extension.js:1126 extension.js:1172 extension.js:1202 extension.js:1218
+#: extension.js:1294 extension.js:1308 extension.js:1323 extension.js:1345
+#: extension.js:1763 extension.js:1769 extension.js:5206 extension.js:5580
+#: extension.js:5622 extension.js:6057 extension.js:6079 extension.js:6085
+#: extension.js:6089 extension.js:6269 extension.js:6319 extension.js:6330
+#: extension.js:6403 extension.js:6606 extension.js:7203 extension.js:7565
+msgid "Off"
+msgstr "Выкл."
+
+#: extension.js:180 extension.js:491 extension.js:563 extension.js:802
+msgid "Idle"
+msgstr "Ожидание"
+
+#: extension.js:181 extension.js:182 extension.js:1861
+msgid "Cleaning"
+msgstr "Уборка"
+
+#: extension.js:183 extension.js:491 extension.js:801 extension.js:3752
+#: extension.js:5442
+msgid "Paused"
+msgstr "Пауза"
+
+#: extension.js:184 extension.js:185
+msgid "Error"
+msgstr "Ошибка"
+
+#: extension.js:186 extension.js:1953
+msgid "Charging"
+msgstr "Зарядка"
+
+#: extension.js:187
+msgid "Not charging"
+msgstr "Не заряжается"
+
+#: extension.js:188
+msgid "Returning to dock"
+msgstr "Едет на базу"
+
+#: extension.js:189
+msgid "Charged"
+msgstr "Заряжен"
+
+#: extension.js:190
+msgid "Busy"
+msgstr "Занят"
+
+#: extension.js:194 extension.js:515 extension.js:1758 extension.js:1823
+#: extension.js:5206 extension.js:6072
+msgid "Auto"
+msgstr "Авто"
+
+#: extension.js:195 extension.js:1735
+msgid "Sleep"
+msgstr "Сон"
+
+#: extension.js:196
+msgid "Favourite"
+msgstr "Любимый"
+
+#: extension.js:197
+msgid "Low"
+msgstr "Низкий"
+
+#: extension.js:198 extension.js:199 extension.js:217 extension.js:293
+msgid "Medium"
+msgstr "Средний"
+
+#: extension.js:200
+msgid "High"
+msgstr "Высокий"
+
+#: extension.js:201
+msgid "Normal"
+msgstr "По умолчанию"
+
+#: extension.js:202
+msgid "Very low"
+msgstr "Очень низкий"
+
+#: extension.js:203 extension.js:517
+msgid "Cool"
+msgstr "Холод"
+
+#: extension.js:204 extension.js:523
+msgid "Heat"
+msgstr "Тепло"
+
+#: extension.js:205 extension.js:519
+msgctxt "mode"
+msgid "Dry"
+msgstr "Осушение"
+
+#: extension.js:206 extension.js:521
+msgctxt "mode"
+msgid "Fan"
+msgstr "Обдув"
+
+#: extension.js:207 extension.js:5752 extension.js:6358
+msgid "Left"
+msgstr "Влево"
+
+#: extension.js:208 extension.js:5753 extension.js:6359
+msgid "Right"
+msgstr "Вправо"
+
+#: extension.js:209 extension.js:210 extension.js:754
+msgid "None"
+msgstr "Нет"
+
+#: extension.js:211
+msgid "No faults"
+msgstr "Нет неисправностей"
+
+#: extension.js:212
+msgid "Straight wind"
+msgstr "Прямой поток"
+
+#: extension.js:213
+msgid "Natural wind"
+msgstr "Естественный поток"
+
+#: extension.js:215 extension.js:219 extension.js:1737
+msgid "Quiet"
+msgstr "Тихий"
+
+#: extension.js:216 extension.js:220
+msgid "Standard"
+msgstr "Стандарт"
+
+#: extension.js:218 extension.js:221 extension.js:222 extension.js:1736
+msgid "Turbo"
+msgstr "Турбо"
+
+#: extension.js:223
+msgid "Waiting to start"
+msgstr "Ждёт старта"
+
+#: extension.js:224
+msgid "Cooking"
+msgstr "Готовит"
+
+#: extension.js:225
+msgid "Preheating"
+msgstr "Разогрев"
+
+#: extension.js:226
+msgid "Done"
+msgstr "Готово"
+
+#: extension.js:227
+msgid "Preheated"
+msgstr "Разогрет"
+
+#: extension.js:228
+msgid "Preheat paused"
+msgstr "Разогрев на паузе"
+
+#: extension.js:229
+msgid "Paused to turn the food"
+msgstr "Пауза, чтобы перевернуть"
+
+#: extension.js:230 extension.js:563
+msgid "Keeping warm"
+msgstr "Подогрев"
+
+#: extension.js:231
+msgid "Keeping warm, paused"
+msgstr "Подогрев на паузе"
+
+#: extension.js:232
+msgid "Kept warm"
+msgstr "Подогрев окончен"
+
+#: extension.js:233
+msgid "Crispy roast"
+msgstr "Хрустящая корочка"
+
+#: extension.js:234
+msgid "Tender roast"
+msgstr "Нежное запекание"
+
+#: extension.js:235
+msgid "Less fat"
+msgstr "Меньше жира"
+
+#: extension.js:236
+msgid "Sensor disconnected"
+msgstr "Датчик отключён"
+
+#: extension.js:237
+msgid "Sensor short circuit"
+msgstr "Замыкание датчика"
+
+#: extension.js:238
+msgid "Sensor failure"
+msgstr "Сбой датчика"
+
+#: extension.js:239
+msgid "French fries"
+msgstr "Картофель фри"
+
+#: extension.js:240
+msgid "Chicken wings"
+msgstr "Куриные крылышки"
+
+#: extension.js:241
+msgid "Steak"
+msgstr "Стейк"
+
+#: extension.js:242
+msgid "Lamb chops"
+msgstr "Бараньи рёбрышки"
+
+#: extension.js:243
+msgid "Fish"
+msgstr "Рыба"
+
+#: extension.js:244
+msgid "Shrimp"
+msgstr "Креветки"
+
+#: extension.js:245
+msgid "Vegetables"
+msgstr "Овощи"
+
+#: extension.js:246
+msgid "Cake"
+msgstr "Выпечка"
+
+#: extension.js:247
+msgid "Pizza"
+msgstr "Пицца"
+
+#: extension.js:248
+msgid "Defrost"
+msgstr "Разморозка"
+
+#: extension.js:249
+msgid "Dried fruit"
+msgstr "Сухофрукты"
+
+#: extension.js:250
+msgid "Yoghurt"
+msgstr "Йогурт"
+
+#: extension.js:251
+msgid "Manual"
+msgstr "Вручную"
+
+#: extension.js:252
+msgid "No need to turn"
+msgstr "Не переворачивать"
+
+#: extension.js:253 extension.js:1952
+msgid "Turn the food"
+msgstr "Перевернуть"
+
+#: extension.js:254
+msgid "One layer"
+msgstr "Один слой"
+
+#: extension.js:255
+msgid "Two layers"
+msgstr "Два слоя"
+
+#: extension.js:256
+msgid "Half a basket"
+msgstr "Полкорзины"
+
+#: extension.js:257
+msgid "Full basket"
+msgstr "Полная корзина"
+
+#: extension.js:258
+msgid "Kilograms"
+msgstr "Килограммы"
+
+#: extension.js:259
+msgid "Pounds"
+msgstr "Фунты"
+
+#: extension.js:260
+msgid "Battery fine"
+msgstr "Батарея в норме"
+
+#: extension.js:261
+msgid "Battery low"
+msgstr "Батарея садится"
+
+#: extension.js:262
+msgid "Battery very low"
+msgstr "Батарея почти села"
+
+#: extension.js:263
+msgid "White"
+msgstr "Белый"
+
+#: extension.js:264
+msgid "Red"
+msgstr "Красный"
+
+#: extension.js:265
+msgid "Orange"
+msgstr "Оранжевый"
+
+#: extension.js:266
+msgid "Yellow"
+msgstr "Жёлтый"
+
+#: extension.js:267
+msgid "Green"
+msgstr "Зелёный"
+
+#: extension.js:268
+msgid "Cyan"
+msgstr "Голубой"
+
+#: extension.js:269
+msgid "Blue"
+msgstr "Синий"
+
+#: extension.js:270
+msgid "Purple"
+msgstr "Фиолетовый"
+
+#: extension.js:271
+msgid "Pink"
+msgstr "Розовый"
+
+#: extension.js:272
+msgid "Heat and cool"
+msgstr "Нагрев и охлаждение"
+
+#: extension.js:273
+msgid "Opening"
+msgstr "Открывается"
+
+#: extension.js:274
+msgid "Closing"
+msgstr "Закрывается"
+
+#: extension.js:275
+msgid "Stopped"
+msgstr "Остановлено"
+
+#: extension.js:276
+msgid "Locked"
+msgstr "Заперт"
+
+#: extension.js:277
+msgid "Unlocked"
+msgstr "Открыт"
+
+#: extension.js:278
+msgid "Locking"
+msgstr "Запирается"
+
+#: extension.js:279
+msgid "Unlocking"
+msgstr "Отпирается"
+
+#: extension.js:280
+msgid "Jammed"
+msgstr "Заклинило"
+
+#: extension.js:281 extension.js:490 extension.js:799 extension.js:1185
+msgid "Playing"
+msgstr "Играет"
+
+#: extension.js:282
+msgid "Standby"
+msgstr "Ожидание"
+
+#: extension.js:283
+msgid "Buffering"
+msgstr "Загрузка"
+
+#: extension.js:284
+msgid "Humidify"
+msgstr "Увлажнение"
+
+#: extension.js:285
+msgid "Dehumidify"
+msgstr "Осушение"
+
+#: extension.js:286
+msgid "Excellent"
+msgstr "Отличный"
+
+#: extension.js:287
+msgid "Good"
+msgstr "Хороший"
+
+#: extension.js:288
+msgid "Fair"
+msgstr "Средний"
+
+#: extension.js:289
+msgid "Inferior"
+msgstr "Плохой"
+
+#: extension.js:290
+msgid "Poor"
+msgstr "Очень плохой"
+
+#: extension.js:291 extension.js:1734
+msgid "Eco"
+msgstr "Эко"
+
+#: extension.js:292
+msgid "Smart"
+msgstr "Умный"
+
+#: extension.js:298
+#, javascript-format
+msgid "Level %s"
+msgstr "Уровень %s"
+
+#: extension.js:301 extension.js:656 extension.js:6317 extension.js:6569
+#: extension.js:7572
+#, javascript-format
+msgid "%s min"
+msgstr "%s мин"
+
+#: extension.js:353 extension.js:365
+msgid "TV"
+msgstr "Телевизор"
+
+#: extension.js:382
+msgid "The switch is not in DIY mode."
+msgstr "Выключатель не в режиме DIY."
+
+#: extension.js:382
+msgid "The switch did not take the command."
+msgstr "Выключатель не принял команду."
+
+#: extension.js:384
+msgid "The switch is not answering. Is it on and on this network?"
+msgstr "Выключатель не отвечает. Он включён и в этой сети?"
+
+#: extension.js:392 prefs.js:1142
+msgid "The device is busy. Try again in a moment."
+msgstr "Устройство занято. Попробуйте чуть позже."
+
+#: extension.js:394 prefs.js:1144
+msgid "The accessory cannot be reached."
+msgstr "Аксессуар недоступен."
+
+#: extension.js:396 prefs.js:1146
+msgid "The device refused it."
+msgstr "Устройство отказало."
+
+#: extension.js:398 prefs.js:1148
+msgid "The device sent an answer Nook cannot read."
+msgstr "Устройство прислало ответ, который Nook не может прочитать."
+
+#: extension.js:400
+msgid "The device cannot do that."
+msgstr "Устройство так не умеет."
+
+#: extension.js:402 prefs.js:1164
+msgid ""
+"The certificate of this Home Assistant is not trusted. Use its http:// "
+"address on this network, or give it a trusted certificate."
+msgstr ""
+"Сертификату этого Home Assistant нет доверия. Используйте его адрес http:// "
+"в этой сети или выдайте ему доверенный сертификат."
+
+#: extension.js:404 prefs.js:1158
+msgid "The device no longer knows Nook. Pair it again."
+msgstr "Устройство больше не знает Nook. Сопрягите его заново."
+
+#: extension.js:406 prefs.js:1160
+msgid ""
+"The bridge answered with another certificate. Pair it again if it was "
+"replaced."
+msgstr ""
+"Мост ответил с другим сертификатом. Если его заменили, сопрягите заново."
+
+#: extension.js:408 extension.js:4619 prefs.js:1162
+msgid "Home Assistant refused the access token."
+msgstr "Home Assistant не принял токен доступа."
+
+#: extension.js:410 extension.js:4640 prefs.js:1170
+msgid "The Smart Life login has expired."
+msgstr "Вход в Smart Life истёк."
+
+#: extension.js:412 prefs.js:1166
+msgid "The device did not answer in time."
+msgstr "Устройство не ответило вовремя."
+
+#: extension.js:414 prefs.js:1168
+msgid "The connection closed. Try again."
+msgstr "Соединение закрылось. Попробуйте ещё раз."
+
+#: extension.js:422 extension.js:5652
+msgid "Pair it in Settings, under TVs, to control it from here."
+msgstr ""
+"Чтобы управлять им отсюда, выполните сопряжение в настройках, в разделе "
+"«Телевизоры»."
+
+#: extension.js:424 prefs.js:1122
+msgid "The TV did not let Nook in."
+msgstr "Телевизор не пустил Nook."
+
+#: extension.js:426
+msgid ""
+"The TV did not wake up. Turn on network standby (Powered On by Apps) in its "
+"network settings."
+msgstr ""
+"Телевизор не проснулся. Включите сетевой режим ожидания (Powered On by Apps) "
+"в его сетевых настройках."
+
+#: extension.js:428 extension.js:5567
+msgid "The TV is not answering. Is it on the same network?"
+msgstr "Телевизор не отвечает. Он в той же сети?"
+
+#: extension.js:494 extension.js:807 extension.js:5578 prefs.js:2271
+msgid "Not paired"
+msgstr "Не сопряжён"
+
+#: extension.js:497 extension.js:810 extension.js:5627
+msgid "Muted"
+msgstr "Без звука"
+
+#: extension.js:563 extension.js:1817
+msgid "Heating"
+msgstr "Нагрев"
+
+#: extension.js:563
+msgid "Cooling down"
+msgstr "Остывает"
+
+#: extension.js:583
+msgid "Water"
+msgstr "Вода"
+
+#: extension.js:583 extension.js:759 extension.js:1708 extension.js:1929
+#: extension.js:1941
+msgid "Temperature"
+msgstr "Температура"
+
+#: extension.js:587 extension.js:1922 extension.js:1923
+msgid "Status"
+msgstr "Состояние"
+
+#: extension.js:589 extension.js:761 extension.js:1709 extension.js:1930
+msgid "Humidity"
+msgstr "Влажность"
+
+#: extension.js:591 extension.js:767 extension.js:1855 extension.js:1933
+msgid "Battery"
+msgstr "Батарея"
+
+#: extension.js:593 extension.js:636 extension.js:672
+msgid "Signal"
+msgstr "Сигнал"
+
+#: extension.js:593 extension.js:636 extension.js:672
+msgctxt "unit"
+msgid "dBm"
+msgstr "дБм"
+
+#: extension.js:595
+msgid "Heard"
+msgstr "Последний сигнал"
+
+#: extension.js:634 extension.js:670
+msgid "Network"
+msgstr "Сеть"
+
+#: extension.js:638
+msgid "Devices connected"
+msgstr "Подключено устройств"
+
+#: extension.js:640 extension.js:674 prefs.js:3541
+msgid "Address"
+msgstr "Адрес"
+
+#: extension.js:642 extension.js:680 extension.js:1955 extension.js:1956
+msgid "Firmware"
+msgstr "Прошивка"
+
+#: extension.js:644 extension.js:686
+msgid "Up for"
+msgstr "Работает"
+
+#: extension.js:653
+#, javascript-format
+msgid "%s d %s h"
+msgstr "%s д %s ч"
+
+#: extension.js:655 extension.js:6571
+#, javascript-format
+msgid "%s h %s min"
+msgstr "%s ч %s мин"
+
+#: extension.js:668 extension.js:1851
+msgid "Gateway"
+msgstr "Шлюз"
+
+#: extension.js:676
+msgid "Bluetooth address"
+msgstr "Адрес Bluetooth"
+
+#: extension.js:676
+msgid "MAC address"
+msgstr "MAC-адрес"
+
+#: extension.js:682
+msgid "MCU firmware"
+msgstr "Прошивка MCU"
+
+#: extension.js:684
+msgid "Hardware"
+msgstr "Аппаратная версия"
+
+#: extension.js:689 extension.js:1958
+msgid "Model"
+msgstr "Модель"
+
+#: extension.js:691
+msgid "Last online"
+msgstr "Был в сети"
+
+#: extension.js:706 extension.js:754 extension.js:1925
+msgid "Fault"
+msgstr "Неисправность"
+
+#: extension.js:709 extension.js:724
+msgid "Leak!"
+msgstr "Протечка!"
+
+#: extension.js:711 extension.js:724
+msgid "No leak"
+msgstr "Протечки нет"
+
+#: extension.js:753 extension.js:1850
+msgid "Alarm"
+msgstr "Тревога"
+
+#: extension.js:754 extension.js:3053
+msgid "Alarm!"
+msgstr "Тревога!"
+
+#: extension.js:757
+msgid "Density"
+msgstr "Плотность"
+
+#: extension.js:763 extension.js:1710 extension.js:1998
+msgid "Pressure"
+msgstr "Давление"
+
+#: extension.js:765 extension.js:1848 extension.js:6335 extension.js:6392
+msgid "Light"
+msgstr "Свет"
+
+#: extension.js:784
+msgid "Bluetooth"
+msgstr "Bluetooth"
+
+#: extension.js:786 extension.js:3556 extension.js:5576 extension.js:7384
+#: extension.js:7889
+msgid "Offline"
+msgstr "Не в сети"
+
+#: extension.js:789 extension.js:823 extension.js:828 extension.js:835
+#: extension.js:7384
+msgid "Online"
+msgstr "В сети"
+
+#: extension.js:818 extension.js:1265
+msgid "Light on"
+msgstr "Свет включён"
+
+#: extension.js:818 extension.js:1265
+msgid "Light off"
+msgstr "Свет выключен"
+
+#: extension.js:979
+msgid "The wheels are off the floor"
+msgstr "Колёса на весу"
+
+#: extension.js:980
+msgid "A cliff sensor is dirty or blocked"
+msgstr "Датчик перепада загрязнён или закрыт"
+
+#: extension.js:981
+msgid "The bumper is stuck"
+msgstr "Бампер застрял"
+
+#: extension.js:982
+msgid "The robot is tilted"
+msgstr "Робот наклонён"
+
+#: extension.js:983
+msgid "The bumper keeps getting stuck"
+msgstr "Бампер застревает снова и снова"
+
+#: extension.js:984
+msgid "The wheels keep coming off the floor"
+msgstr "Колёса снова и снова на весу"
+
+#: extension.js:985
+msgid "The floor sensor underneath is dirty"
+msgstr "Датчик пола снизу загрязнён"
+
+#: extension.js:986
+msgid "The dust bin is missing"
+msgstr "Нет контейнера для пыли"
+
+#: extension.js:987
+msgid "The water tank is missing"
+msgstr "Нет бака для воды"
+
+#: extension.js:988
+msgid "The water tank is empty"
+msgstr "Бак для воды пуст"
+
+#: extension.js:989
+msgid "The dust bin is full"
+msgstr "Контейнер для пыли полон"
+
+#: extension.js:990
+msgid "The main brush is stuck"
+msgstr "Основная щётка застряла"
+
+#: extension.js:991
+msgid "The side brush is stuck"
+msgstr "Боковая щётка застряла"
+
+#: extension.js:992
+msgid "The fan is blocked"
+msgstr "Вентилятор заблокирован"
+
+#: extension.js:993
+msgid "The left wheel is stuck"
+msgstr "Левое колесо застряло"
+
+#: extension.js:994
+msgid "The right wheel is stuck"
+msgstr "Правое колесо застряло"
+
+#: extension.js:995
+msgid "The robot is stuck and cannot turn"
+msgstr "Робот застрял и не может развернуться"
+
+#: extension.js:996
+msgid "The robot is stuck and cannot go on"
+msgstr "Робот застрял и не может ехать дальше"
+
+#: extension.js:997
+msgid "The robot cannot find its dock"
+msgstr "Робот не может найти базу"
+
+#: extension.js:998
+msgid "The battery is low"
+msgstr "Батарея разряжена"
+
+#: extension.js:999
+msgid "It is not charging"
+msgstr "Не заряжается"
+
+#: extension.js:1000
+msgid "The battery is too low to start"
+msgstr "Слишком мало заряда, чтобы начать"
+
+#: extension.js:1001
+msgid "Something is wrong inside the robot"
+msgstr "Внутренняя ошибка робота"
+
+#: extension.js:1002
+msgid "The camera is covered"
+msgstr "Камера закрыта"
+
+#: extension.js:1003
+msgid "The camera does not work"
+msgstr "Камера не работает"
+
+#: extension.js:1004
+msgid "Something is wrong with the battery"
+msgstr "Ошибка батареи"
+
+#: extension.js:1005
+msgid "The front sensor is dirty"
+msgstr "Передний датчик загрязнён"
+
+#: extension.js:1006
+msgid "The gyroscope does not work"
+msgstr "Гироскоп не работает"
+
+#: extension.js:1069
+msgid "Humidity %s %"
+msgstr "Влажность %s %"
+
+#: extension.js:1081
+#, javascript-format
+msgid "Last seen %s"
+msgstr "Замечено %s"
+
+#: extension.js:1091
+#, javascript-format
+msgid "Since %s"
+msgstr "Изменилось: %s"
+
+#: extension.js:1119
+#, javascript-format
+msgid "Smoke %s"
+msgstr "Дым %s"
+
+#: extension.js:1133
+#, javascript-format
+msgid "Speed %s"
+msgstr "Скорость %s"
+
+#: extension.js:1174 extension.js:1259 extension.js:1325 extension.js:1347
+#, javascript-format
+msgid "Set to %s"
+msgstr "Задано %s"
+
+#: extension.js:1175 extension.js:6055
+#, javascript-format
+msgid "Room %s°"
+msgstr "В комнате %s°"
+
+#: extension.js:1185 extension.js:3751 extension.js:5438
+msgid "Nothing playing"
+msgstr "Ничего не играет"
+
+#: extension.js:1187
+msgid "Volume %s %"
+msgstr "Громкость %s %"
+
+#: extension.js:1205
+msgid "Brightness %s %"
+msgstr "Яркость %s %"
+
+#: extension.js:1220
+#, javascript-format
+msgid "Drawing %s"
+msgstr "Потребляет %s"
+
+#: extension.js:1241
+msgid "Battery %s %"
+msgstr "Батарея %s %"
+
+#: extension.js:1243
+msgid "Battery %s %, needs charging"
+msgstr "Батарея %s %, нужна зарядка"
+
+#: extension.js:1274
+#, javascript-format
+msgid "Signal %s dBm"
+msgstr "Сигнал %s дБм"
+
+#: extension.js:1297
+#, javascript-format
+msgid "%s left"
+msgstr "Осталось %s"
+
+#: extension.js:1310
+msgid "Filter %s %"
+msgstr "Фильтр %s %"
+
+#: extension.js:1359
+msgid "Open %s %"
+msgstr "Открыто на %s %"
+
+#: extension.js:1378
+#, javascript-format
+msgid "Freezer %s"
+msgstr "Морозилка %s"
+
+#: extension.js:1391
+msgid "Soil %s %"
+msgstr "Почва %s %"
+
+#: extension.js:1428
+msgid "Dry again"
+msgstr "Снова сухо"
+
+#: extension.js:1429
+msgid "Pressed"
+msgstr "Нажатие"
+
+#: extension.js:1429
+msgid "Pressed twice"
+msgstr "Двойное нажатие"
+
+#: extension.js:1429
+msgid "Held"
+msgstr "Удержание"
+
+#: extension.js:1431
+msgid "Opened"
+msgstr "Открыто"
+
+#: extension.js:1439
+#, javascript-format
+msgid "today, %s"
+msgstr "сегодня, %s"
+
+#: extension.js:1441
+#, javascript-format
+msgid "yesterday, %s"
+msgstr "вчера, %s"
+
+#: extension.js:1485
+msgid "A leak, and when it is dry again"
+msgstr "Протечка и когда снова сухо"
+
+#: extension.js:1486 extension.js:1487
+msgid "An alarm, and when it is over"
+msgstr "Тревога и её окончание"
+
+#: extension.js:1488
+msgid "Every opening and closing"
+msgstr "Каждое открытие и закрытие"
+
+#: extension.js:1489
+msgid "Every motion it sees"
+msgstr "Каждое движение"
+
+#: extension.js:1490
+msgid "Every knock, tilt and fall"
+msgstr "Каждый стук, наклон и падение"
+
+#: extension.js:1491
+msgid "Every press"
+msgstr "Каждое нажатие"
+
+#: extension.js:1499
+msgid "Water leak!"
+msgstr "Протечка воды!"
+
+#: extension.js:1500
+msgid "Dry again."
+msgstr "Снова сухо."
+
+#: extension.js:1507
+msgid "Smoke alarm!"
+msgstr "Задымление!"
+
+#: extension.js:1507
+msgid "Gas alarm!"
+msgstr "Утечка газа!"
+
+#: extension.js:1508
+msgid "The alarm is over."
+msgstr "Тревога закончилась."
+
+#: extension.js:1508
+msgid "The detector reports a fault."
+msgstr "Датчик сообщает о неисправности."
+
+#: extension.js:1512
+msgid "Still open."
+msgstr "Всё ещё открыто."
+
+#: extension.js:1513
+msgid "Opened."
+msgstr "Открыто."
+
+#: extension.js:1513
+msgid "Closed."
+msgstr "Закрыто."
+
+#: extension.js:1515
+msgid "Motion."
+msgstr "Движение."
+
+#: extension.js:1518
+msgid "A knock."
+msgstr "Стук."
+
+#: extension.js:1519
+msgid "Tilted."
+msgstr "Наклон."
+
+#: extension.js:1520
+msgid "Dropped."
+msgstr "Падение."
+
+#: extension.js:1524 extension.js:1527
+msgid "Pressed."
+msgstr "Нажатие."
+
+#: extension.js:1525
+msgid "Pressed twice."
+msgstr "Двойное нажатие."
+
+#: extension.js:1526
+msgid "Held down."
+msgstr "Удержание."
+
+#: extension.js:1528
+msgid "Shaken."
+msgstr "Встряхивание."
+
+#: extension.js:1738
+msgid "Display"
+msgstr "Дисплей"
+
+#: extension.js:1739 extension.js:1962
+msgid "Ionizer"
+msgstr "Ионизатор"
+
+#: extension.js:1740
+msgid "X-Fan"
+msgstr "Просушка"
+
+#: extension.js:1741
+msgid "8° heat"
+msgstr "Обогрев 8°"
+
+#: extension.js:1742
+msgid "Fresh air"
+msgstr "Свежий воздух"
+
+#: extension.js:1761 extension.js:1767 extension.js:1919 extension.js:1920
+#: extension.js:6079 extension.js:6085 extension.js:6307
+msgid "Swing"
+msgstr "Качание"
+
+#: extension.js:1815
+msgid "Cooling"
+msgstr "Охлаждение"
+
+#: extension.js:1819
+msgid "Drying"
+msgstr "Осушение"
+
+#: extension.js:1821
+msgid "Fan only"
+msgstr "Только вентилятор"
+
+#: extension.js:1846
+msgid "Air fryer"
+msgstr "Аэрогриль"
+
+#: extension.js:1847 extension.js:5896
+msgid "Fan"
+msgstr "Вентилятор"
+
+#: extension.js:1849
+msgid "Indicator light"
+msgstr "Индикатор"
+
+#: extension.js:1852
+msgid "Motion sensor"
+msgstr "Датчик движения"
+
+#: extension.js:1853
+msgid "Door and window sensor"
+msgstr "Датчик двери и окна"
+
+#: extension.js:1854
+msgid "Wireless switch"
+msgstr "Беспроводная кнопка"
+
+#: extension.js:1856
+msgid "Smoke detector"
+msgstr "Датчик дыма"
+
+#: extension.js:1857
+msgid "Leak sensor"
+msgstr "Датчик протечки"
+
+#: extension.js:1858
+msgid "Temperature and humidity"
+msgstr "Температура и влажность"
+
+#: extension.js:1859
+msgid "Environment"
+msgstr "Среда"
+
+#: extension.js:1860
+msgid "Vacuum"
+msgstr "Пылесос"
+
+#: extension.js:1862 extension.js:6336
+msgid "Sound"
+msgstr "Звук"
+
+#: extension.js:1863
+msgid "Do not disturb"
+msgstr "Не беспокоить"
+
+#: extension.js:1864
+msgid "Scale"
+msgstr "Весы"
+
+#: extension.js:1865 extension.js:1866
+msgid "Child lock"
+msgstr "Защита от детей"
+
+#: extension.js:1867 extension.js:1868 extension.js:1869 extension.js:6327
+msgid "Timer"
+msgstr "Таймер"
+
+#: extension.js:1870
+msgid "Motor"
+msgstr "Мотор"
+
+#: extension.js:1871
+msgid "Device information"
+msgstr "Об устройстве"
+
+#: extension.js:1872
+msgid "Filter"
+msgstr "Фильтр"
+
+#: extension.js:1873
+msgid "Brush"
+msgstr "Щётка"
+
+#: extension.js:1874
+msgid "Main brush"
+msgstr "Основная щётка"
+
+#: extension.js:1875
+msgid "Side brush"
+msgstr "Боковая щётка"
+
+#: extension.js:1876
+msgid "Consumables"
+msgstr "Расходники"
+
+#: extension.js:1877
+msgid "Map"
+msgstr "Карта"
+
+#: extension.js:1878 extension.js:6696
+msgid "Find"
+msgstr "Найти"
+
+#: extension.js:1879
+msgid "Air purifier"
+msgstr "Очиститель воздуха"
+
+#: extension.js:1880
+msgid "Humidifier"
+msgstr "Увлажнитель"
+
+#: extension.js:1881
+msgid "Heater"
+msgstr "Обогреватель"
+
+#: extension.js:1882
+msgid "Washing machine"
+msgstr "Стиральная машина"
+
+#: extension.js:1883
+msgid "Dishwasher"
+msgstr "Посудомойка"
+
+#: extension.js:1884
+msgid "Dehumidifier"
+msgstr "Осушитель"
+
+#: extension.js:1885
+msgid "Curtain"
+msgstr "Шторы"
+
+#: extension.js:1886
+msgid "Lock"
+msgstr "Замок"
+
+#: extension.js:1887 extension.js:1888
+msgid "Fridge"
+msgstr "Холодильник"
+
+#: extension.js:1889
+msgid "Freezer"
+msgstr "Морозилка"
+
+#: extension.js:1890
+msgid "Coffee machine"
+msgstr "Кофемашина"
+
+#: extension.js:1891
+msgid "Thermostat"
+msgstr "Термостат"
+
+#: extension.js:1892
+msgid "Doorbell"
+msgstr "Дверной звонок"
+
+#: extension.js:1893
+msgid "Plant sensor"
+msgstr "Датчик растения"
+
+#: extension.js:1894
+msgid "Cooker"
+msgstr "Мультиварка"
+
+#: extension.js:1895
+msgid "Water purifier"
+msgstr "Фильтр для воды"
+
+#: extension.js:1896
+msgid "Switch"
+msgstr "Выключатель"
+
+#: extension.js:1897 extension.js:1898
+msgid "Socket"
+msgstr "Розетка"
+
+#: extension.js:1899
+msgid "Energy used"
+msgstr "Расход энергии"
+
+#: extension.js:1900
+msgid "Kettle"
+msgstr "Чайник"
+
+#: extension.js:1901
+msgid "Screen"
+msgstr "Экран"
+
+#: extension.js:1902
+msgid "Remote control"
+msgstr "Пульт"
+
+#: extension.js:1903
+msgid "Warnings"
+msgstr "Предупреждения"
+
+#: extension.js:1904 extension.js:1942 extension.js:6588
+msgid "Time"
+msgstr "Время"
+
+#: extension.js:1905
+msgid "Users"
+msgstr "Пользователи"
+
+#: extension.js:1906 extension.js:5854 extension.js:6292 extension.js:7288
+msgid "Power"
+msgstr "Питание"
+
+#: extension.js:1907
+msgid "PM2.5"
+msgstr "PM2.5"
+
+#: extension.js:1908
+msgid "Air quality"
+msgstr "Качество воздуха"
+
+#: extension.js:1909
+msgid "Soil moisture"
+msgstr "Влажность почвы"
+
+#: extension.js:1910
+msgid "Water purity"
+msgstr "Чистота воды"
+
+#: extension.js:1911 prefs.js:3638
+msgid "Position"
+msgstr "Положение"
+
+#: extension.js:1912
+msgid "Open to"
+msgstr "Открыть на"
+
+#: extension.js:1913 extension.js:6558
+msgid "Program"
+msgstr "Программа"
+
+#: extension.js:1914
+msgid "Spin speed"
+msgstr "Скорость отжима"
+
+#: extension.js:1915 extension.js:5895
+msgid "Mode"
+msgstr "Режим"
+
+#: extension.js:1916 extension.js:1917 extension.js:1918 extension.js:1991
+#: extension.js:6293
+msgid "Speed"
+msgstr "Скорость"
+
+#: extension.js:1921
+msgid "Swing angle"
+msgstr "Угол качания"
+
+#: extension.js:1924
+msgid "Work mode"
+msgstr "Режим работы"
+
+#: extension.js:1926
+msgid "Brightness"
+msgstr "Яркость"
+
+#: extension.js:1927
+msgid "Colour temperature"
+msgstr "Цветовая температура"
+
+#: extension.js:1928
+msgid "Colour"
+msgstr "Цвет"
+
+#: extension.js:1931
+msgid "Target humidity"
+msgstr "Целевая влажность"
+
+#: extension.js:1932
+msgid "Light level"
+msgstr "Освещённость"
+
+#: extension.js:1934
+msgid "Voltage"
+msgstr "Напряжение"
+
+#: extension.js:1935
+msgid "State"
+msgstr "Состояние"
+
+#: extension.js:1937
+msgid "No motion for"
+msgstr "Без движения"
+
+#: extension.js:1938 extension.js:1994
+msgid "Smoke"
+msgstr "Дым"
+
+#: extension.js:1939 extension.js:3699 extension.js:5676 extension.js:5684
+#: extension.js:6837
+msgid "Volume"
+msgstr "Громкость"
+
+#: extension.js:1940 extension.js:6393
+msgid "Guard"
+msgstr "Охрана"
+
+#: extension.js:1943
+msgid "Time left"
+msgstr "Осталось"
+
+#: extension.js:1944 extension.js:6597
+msgid "Preheat"
+msgstr "Разогрев"
+
+#: extension.js:1945
+msgid "Keep warm"
+msgstr "Подогрев"
+
+#: extension.js:1946
+msgid "Keep warm now"
+msgstr "Подогрев сейчас"
+
+#: extension.js:1947
+msgid "Start in"
+msgstr "Старт через"
+
+#: extension.js:1948
+msgid "Weight"
+msgstr "Вес"
+
+#: extension.js:1949
+msgid "Amount"
+msgstr "Количество"
+
+#: extension.js:1950
+msgid "Texture"
+msgstr "Текстура"
+
+#: extension.js:1951
+msgid "Turn reminder"
+msgstr "Переворот"
+
+#: extension.js:1954
+msgid "Unit"
+msgstr "Единицы"
+
+#: extension.js:1957
+msgid "Maker"
+msgstr "Производитель"
+
+#: extension.js:1959
+msgid "Serial number"
+msgstr "Серийный номер"
+
+#: extension.js:1960
+msgid "Power draw"
+msgstr "Мощность"
+
+#: extension.js:1961
+msgid "Current"
+msgstr "Ток"
+
+#: extension.js:1963
+msgid "Water level"
+msgstr "Уровень воды"
+
+#: extension.js:1964
+msgid "Water tank"
+msgstr "Бак для воды"
+
+#: extension.js:1965
+msgid "Heat level"
+msgstr "Уровень нагрева"
+
+#: extension.js:1966
+msgid "Filter life"
+msgstr "Ресурс фильтра"
+
+#: extension.js:1967
+msgid "Filter time left"
+msgstr "Фильтру осталось"
+
+#: extension.js:1968
+msgid "Brush life"
+msgstr "Ресурс щётки"
+
+#: extension.js:1969
+msgid "Brush time left"
+msgstr "Щётке осталось"
+
+#: extension.js:1970
+msgid "Enabled"
+msgstr "Включено"
+
+#: extension.js:1971
+msgid "Starts at"
+msgstr "Начало"
+
+#: extension.js:1972
+msgid "Ends at"
+msgstr "Конец"
+
+#: extension.js:1973
+msgid "Duration"
+msgstr "Длительность"
+
+#: extension.js:1974
+msgid "Area"
+msgstr "Площадь"
+
+#: extension.js:1975
+msgid "Toggle"
+msgstr "Переключить"
+
+#: extension.js:1976
+msgid "Next mode"
+msgstr "Следующий режим"
+
+#: extension.js:1977
+msgid "Next speed"
+msgstr "Следующая скорость"
+
+#: extension.js:1978 extension.js:6542
+msgid "Start"
+msgstr "Старт"
+
+#: extension.js:1979 extension.js:1984 extension.js:1985 extension.js:6544
+#: extension.js:6694
+msgid "Stop"
+msgstr "Стоп"
+
+#: extension.js:1980 extension.js:3759 extension.js:5455 extension.js:5757
+#: extension.js:6538 extension.js:6692
+msgid "Pause"
+msgstr "Пауза"
+
+#: extension.js:1981
+msgid "Go on"
+msgstr "Продолжить"
+
+#: extension.js:1982 extension.js:1983 extension.js:6693
+msgid "Clean"
+msgstr "Уборка"
+
+#: extension.js:1986 extension.js:6695
+msgid "Dock"
+msgstr "На базу"
+
+#: extension.js:1987
+msgid "Play a sound"
+msgstr "Подать звук"
+
+#: extension.js:1988
+msgid "Locate"
+msgstr "Найти"
+
+#: extension.js:1989
+msgid "Brighter"
+msgstr "Ярче"
+
+#: extension.js:1990
+msgid "Dimmer"
+msgstr "Темнее"
+
+#: extension.js:1992
+msgid "Vertical swing"
+msgstr "Вертикальное качание"
+
+#: extension.js:1995
+msgid "Gas"
+msgstr "Газ"
+
+#: extension.js:1996
+msgid "CO₂"
+msgstr "CO₂"
+
+#: extension.js:1997
+msgid "PM10"
+msgstr "PM10"
+
+#: extension.js:1999 extension.js:5390 extension.js:5479 extension.js:5668
+msgid "Mute"
+msgstr "Выключить звук"
+
+#: extension.js:2000
+msgid "Playback"
+msgstr "Воспроизведение"
+
+#: extension.js:2001
+msgctxt "action"
+msgid "Open"
+msgstr "Открыть"
+
+#: extension.js:2002
+msgctxt "action"
+msgid "Close"
+msgstr "Закрыть"
+
+#: extension.js:2003
+msgctxt "action"
+msgid "Stop"
+msgstr "Стоп"
+
+#: extension.js:2004
+msgctxt "action"
+msgid "Lock"
+msgstr "Запереть"
+
+#: extension.js:2005
+msgctxt "action"
+msgid "Play"
+msgstr "Играть"
+
+#: extension.js:2006 extension.js:3687 extension.js:5385
+msgid "Next"
+msgstr "Следующий"
+
+#: extension.js:2407
+msgid "Turn Left"
+msgstr "Повернуть влево"
+
+#: extension.js:2408
+msgid "Turn Right"
+msgstr "Повернуть вправо"
+
+#: extension.js:2409
+msgid "Turn Up"
+msgstr "Повернуть вверх"
+
+#: extension.js:2410
+msgid "Turn Down"
+msgstr "Повернуть вниз"
+
+#: extension.js:2595
+msgid ""
+"The camera refused the login: the password is wrong, or the camera locked it "
+"for a while after too many tries."
+msgstr ""
+"Камера не приняла вход: пароль неверный, или камера на время заблокировала "
+"его после слишком многих попыток."
+
+#: extension.js:2639 extension.js:5098
+msgid "GStreamer is needed to show the picture."
+msgstr "Чтобы показать картинку, нужен GStreamer."
+
+#: extension.js:2641 extension.js:5100
+msgid "The picture needs a GStreamer plugin that is not installed."
+msgstr "Для картинки нужен плагин GStreamer, которого нет в системе."
+
+#: extension.js:2646
+msgid "The camera stopped sending its picture."
+msgstr "Камера перестала присылать картинку."
+
+#: extension.js:3012
+msgid "Lights"
+msgstr "Свет"
+
+#: extension.js:3013
+msgid "Climate"
+msgstr "Климат"
+
+#: extension.js:3014
+msgid "Media"
+msgstr "Медиа"
+
+#: extension.js:3015 extension.js:7887 prefs.js:610 prefs.js:1493
+msgid "Cameras"
+msgstr "Камеры"
+
+#: extension.js:3016
+msgid "Security"
+msgstr "Безопасность"
+
+#: extension.js:3017
+msgid "Appliances"
+msgstr "Техника"
+
+#: extension.js:3044
+#, javascript-format
+msgid "%s of %s online"
+msgstr "%s из %s в сети"
+
+#: extension.js:3048 extension.js:3059
+#, javascript-format
+msgid "%s on"
+msgstr "Включено: %s"
+
+#: extension.js:3054
+msgid "All quiet"
+msgstr "Всё спокойно"
+
+#: extension.js:3056
+#, javascript-format
+msgid "%s working"
+msgstr "Работает: %s"
+
+#: extension.js:3060
+msgid "All off"
+msgstr "Всё выключено"
+
+#: extension.js:3323
+#, javascript-format
+msgid "Group %s"
+msgstr "Группа %s"
+
+#: extension.js:3438
+msgid "Switch On or Off"
+msgstr "Включить или выключить"
+
+#: extension.js:3759 extension.js:5381 extension.js:5455 extension.js:5755
+msgid "Play"
+msgstr "Играть"
+
+#: extension.js:3848
+#, javascript-format
+msgid "Open for %s min."
+msgstr "Открыто уже %s мин."
+
+#: extension.js:3871
+#, javascript-format
+msgid "%s now, warmer than %s."
+msgstr "Сейчас %s, теплее %s."
+
+#: extension.js:3873
+#, javascript-format
+msgid "%s now, colder than %s."
+msgstr "Сейчас %s, холоднее %s."
+
+#: extension.js:3879
+#, javascript-format
+msgid "Humidity %s now, above %s."
+msgstr "Влажность сейчас %s, выше %s."
+
+#: extension.js:3881
+#, javascript-format
+msgid "Humidity %s now, below %s."
+msgstr "Влажность сейчас %s, ниже %s."
+
+#: extension.js:3887
+msgid "The battery is at %s %. Time for a new one."
+msgstr "Заряд батареи %s %. Пора её заменить."
+
+#: extension.js:3917
+msgid "Snapshot saved"
+msgstr "Снимок сохранён"
+
+#: extension.js:3924
+msgid "Show in Files"
+msgstr "Показать в Файлах"
+
+#: extension.js:3965 extension.js:4018 extension.js:4570 extension.js:7827
+#: extension.js:8339
+msgid "Nook"
+msgstr "Nook"
+
+#: extension.js:4014 extension.js:5750
+msgid "Back"
+msgstr "Назад"
+
+#: extension.js:4024 extension.js:4792
+msgid "Show in the Top Bar"
+msgstr "Показывать в верхней панели"
+
+#: extension.js:4027 extension.js:4786 prefs.js:658
+msgid "Pin"
+msgstr "Закрепить"
+
+#: extension.js:4029 extension.js:4788
+msgid "Hide from the Menu"
+msgstr "Скрыть из меню"
+
+#: extension.js:4031
+msgid "Find Devices Again"
+msgstr "Найти устройства заново"
+
+#: extension.js:4033 extension.js:6850
+msgid "Settings"
+msgstr "Настройки"
+
+#: extension.js:4480 extension.js:4492
+msgid "Log In…"
+msgstr "Войти…"
+
+#: extension.js:4482
+msgid "Add an account or a device in Settings, and your home shows up here."
+msgstr ""
+"Добавьте аккаунт или устройство в настройках — и ваш дом появится здесь."
+
+#: extension.js:4482
+msgid "Open Settings…"
+msgstr "Открыть настройки…"
+
+#: extension.js:4531 extension.js:8130
+msgid "The Mi Home login has expired."
+msgstr "Вход в Mi Home истёк."
+
+#: extension.js:4533
+msgid "Try Again"
+msgstr "Повторить"
+
+#: extension.js:4599
+msgid "The eWeLink login has expired."
+msgstr "Вход в eWeLink истёк."
+
+#: extension.js:4609
+msgid "A Hue bridge needs to be paired again."
+msgstr "Мост Hue нужно сопрячь заново."
+
+#: extension.js:4630
+msgid "A HomeKit accessory needs to be paired again."
+msgstr "Аксессуар HomeKit нужно сопрячь заново."
+
+#: extension.js:4651
+#, javascript-format
+msgid "The keyring could not be read: %s"
+msgstr "Не удалось прочитать связку ключей: %s"
+
+#: extension.js:4665
+msgid "The saved Mi Home login could not be read."
+msgstr "Не удалось прочитать сохранённый вход в Mi Home."
+
+#: extension.js:4786
+msgid "Unpin"
+msgstr "Открепить"
+
+#: extension.js:4788
+msgid "Show in the Menu"
+msgstr "Показывать в меню"
+
+#: extension.js:4792
+msgid "Take Off the Top Bar"
+msgstr "Убрать из верхней панели"
+
+#: extension.js:4965 extension.js:5149 extension.js:5656
+msgid "Settings…"
+msgstr "Настройки…"
+
+#: extension.js:4972
+msgid ""
+"Search for cameras again in Settings, under Cameras, so Nook learns how to "
+"reach this one."
+msgstr ""
+"Снова найдите камеры в настройках, в разделе «Камеры», чтобы Nook узнал, как "
+"подключиться к этой."
+
+#: extension.js:4985
+msgid "Add the camera account from the Tapo app in Settings, under Cameras."
+msgstr ""
+"Добавьте учётную запись камеры из приложения Tapo в настройках, в разделе "
+"«Камеры»."
+
+#: extension.js:4986
+msgid "Add the login of this camera in Settings, under Cameras."
+msgstr "Добавьте вход этой камеры в настройках, в разделе «Камеры»."
+
+#: extension.js:4993
+msgid ""
+"The saved camera account could not be read. Save it again in Settings, under "
+"Cameras."
+msgstr ""
+"Не удалось прочитать сохранённую учётную запись камеры. Сохраните её снова в "
+"настройках, в разделе «Камеры»."
+
+#: extension.js:5021
+msgid "Take a Snapshot"
+msgstr "Сделать снимок"
+
+#: extension.js:5106
+msgid "The camera sent no picture to save."
+msgstr "Камера не прислала кадр для снимка."
+
+#: extension.js:5133
+msgid "Camera"
+msgstr "Камера"
+
+#: extension.js:5148
+msgid ""
+"Privacy mode, the light, night vision and the siren need your TP-Link "
+"password, in Settings under Cameras."
+msgstr ""
+"Для режима приватности, подсветки, ночного видения и сирены нужен ваш пароль "
+"TP-Link: настройки, раздел «Камеры»."
+
+#: extension.js:5170
+msgid "The TP-Link password in Settings is not the one this camera knows."
+msgstr "Пароль TP-Link в настройках не тот, что знает эта камера."
+
+#: extension.js:5189
+msgid "Privacy Mode"
+msgstr "Режим приватности"
+
+#: extension.js:5190
+msgid "Status Light"
+msgstr "Индикатор"
+
+#: extension.js:5191
+msgid "Motion Detection"
+msgstr "Обнаружение движения"
+
+#: extension.js:5192
+msgid "Siren on Motion"
+msgstr "Сирена при движении"
+
+#: extension.js:5204
+msgid "Night Vision"
+msgstr "Ночное видение"
+
+#: extension.js:5225 extension.js:5242 extension.js:5262
+msgid "Sound the Siren"
+msgstr "Включить сирену"
+
+#: extension.js:5238
+msgid "Click Again to Sound It"
+msgstr "Нажмите ещё раз, чтобы включить"
+
+#: extension.js:5262
+msgid "Stop the Siren"
+msgstr "Выключить сирену"
+
+#: extension.js:5301
+#, javascript-format
+msgid "Could not turn the camera: %s"
+msgstr "Не удалось повернуть камеру: %s"
+
+#: extension.js:5307
+msgid "Turn to the Home Position"
+msgstr "Вернуть в исходное положение"
+
+#: extension.js:5331
+msgid "The speaker is not answering. Is it on the same network?"
+msgstr "Колонка не отвечает. Она в той же сети?"
+
+#: extension.js:5379
+msgid "Previous"
+msgstr "Предыдущий"
+
+#: extension.js:5443
+msgid "Ready"
+msgstr "Готова"
+
+#: extension.js:5479 extension.js:5668
+msgid "Unmute"
+msgstr "Включить звук"
+
+#: extension.js:5598 extension.js:6063 extension.js:7408
+msgid "Turn Off"
+msgstr "Выключить"
+
+#: extension.js:5598 extension.js:6063 extension.js:7408
+msgid "Turn On"
+msgstr "Включить"
+
+#: extension.js:5631
+#, javascript-format
+msgid "Volume %s"
+msgstr "Громкость %s"
+
+#: extension.js:5680
+msgid "Quieter"
+msgstr "Тише"
+
+#: extension.js:5689
+msgid "Louder"
+msgstr "Громче"
+
+#: extension.js:5703
+msgid "Input"
+msgstr "Источник"
+
+#: extension.js:5706 extension.js:5718
+msgid "Apps"
+msgstr "Приложения"
+
+#: extension.js:5728
+msgid "Remote"
+msgstr "Пульт"
+
+#: extension.js:5730
+msgid "Arrows, OK"
+msgstr "Стрелки, OK"
+
+#: extension.js:5750
+msgid "Up"
+msgstr "Вверх"
+
+#: extension.js:5751
+msgid "Home"
+msgstr "Главная"
+
+#: extension.js:5752
+msgid "OK"
+msgstr "OK"
+
+#: extension.js:5754 prefs.js:3677
+msgid "Menu"
+msgstr "Меню"
+
+#: extension.js:5754
+msgid "Down"
+msgstr "Вниз"
+
+#: extension.js:5756
+msgid "Channel Down"
+msgstr "Предыдущий канал"
+
+#: extension.js:5757
+msgid "Channel Up"
+msgstr "Следующий канал"
+
+#: extension.js:5832
+msgid ""
+"The air conditioner is not answering. Is it plugged in and on the same "
+"network?"
+msgstr "Кондиционер не отвечает. Он включён в розетку и в той же сети?"
+
+#: extension.js:5878
+msgid "Cooler"
+msgstr "Холоднее"
+
+#: extension.js:5889
+msgid "Warmer"
+msgstr "Теплее"
+
+#: extension.js:5897
+msgid "Up and down"
+msgstr "Вверх-вниз"
+
+#: extension.js:5898
+msgid "Left and right"
+msgstr "Влево-вправо"
+
+#: extension.js:6056
+msgid "Room temperature unknown"
+msgstr "Температура в комнате неизвестна"
+
+#: extension.js:6295
+msgid "Wind"
+msgstr "Поток"
+
+#: extension.js:6304
+msgid "Straight"
+msgstr "Прямой"
+
+#: extension.js:6304
+msgid "Natural"
+msgstr "Естественный"
+
+#: extension.js:6308
+msgid "Angle"
+msgstr "Угол"
+
+#: extension.js:6318 extension.js:6571
+#, javascript-format
+msgid "%s h"
+msgstr "%s ч"
+
+#: extension.js:6337
+msgid "Child Lock"
+msgstr "Защита от детей"
+
+#: extension.js:6353
+msgid "Turn the Head"
+msgstr "Поворот головы"
+
+#: extension.js:6412
+msgid "Siren"
+msgstr "Сирена"
+
+#: extension.js:6412
+msgid "Siren Volume"
+msgstr "Громкость сирены"
+
+#: extension.js:6425
+msgid "Light Around It"
+msgstr "Освещённость"
+
+#: extension.js:6466 extension.js:7737
+msgid "Less"
+msgstr "Меньше"
+
+#: extension.js:6468 extension.js:7741
+msgid "More"
+msgstr "Больше"
+
+#: extension.js:6506
+msgid "min left, paused"
+msgstr "мин осталось, пауза"
+
+#: extension.js:6506
+msgid "min left"
+msgstr "мин осталось"
+
+#: extension.js:6522
+msgid "Time to turn the food over."
+msgstr "Пора перевернуть еду."
+
+#: extension.js:6540
+msgid "Go On"
+msgstr "Продолжить"
+
+#: extension.js:6586
+msgctxt "fryer"
+msgid "Heat"
+msgstr "Нагрев"
+
+#: extension.js:6594
+msgid "Start In"
+msgstr "Старт через"
+
+#: extension.js:6594
+msgid "Now"
+msgstr "Сейчас"
+
+#: extension.js:6598
+msgid "Keep Warm"
+msgstr "Подогрев"
+
+#: extension.js:6599
+msgid "Turn Over"
+msgstr "Переворот"
+
+#: extension.js:6727
+msgid "Suction"
+msgstr "Всасывание"
+
+#: extension.js:6759
+msgid "Brushes and Filter"
+msgstr "Щётки и фильтр"
+
+#: extension.js:6767
+#, javascript-format
+msgid "%s h left"
+msgstr "Осталось %s ч"
+
+#: extension.js:6791
+msgid "cleanings"
+msgstr "уборок"
+
+#: extension.js:6792
+msgid "hours"
+msgstr "ч"
+
+#: extension.js:6793
+msgid "m² cleaned"
+msgstr "м² убрано"
+
+#: extension.js:6815
+msgid "Do Not Disturb"
+msgstr "Не беспокоить"
+
+#: extension.js:6840
+msgid "Play a Sound"
+msgstr "Подать звук"
+
+#: extension.js:6917
+msgid "No map yet: one is drawn as the robot cleans."
+msgstr "Карты пока нет: она рисуется, пока робот убирает."
+
+#: extension.js:7029
+msgid "Cleaning for"
+msgstr "Убирает"
+
+#: extension.js:7031
+msgid "Cleaned"
+msgstr "Убрано"
+
+#: extension.js:7097
+msgid "Its settings show once it is back online."
+msgstr "Настройки появятся, когда устройство снова будет в сети."
+
+#: extension.js:7103
+msgid "Last 24 Hours"
+msgstr "За 24 часа"
+
+#: extension.js:7109
+msgid "History"
+msgstr "История"
+
+#: extension.js:7125
+msgid "Online, with nothing more to show."
+msgstr "В сети, больше показать нечего."
+
+#: extension.js:7125
+msgid "Offline."
+msgstr "Не в сети."
+
+#: extension.js:7134 extension.js:7138
+msgid "Device Info"
+msgstr "Об устройстве"
+
+#: extension.js:7379
+#, javascript-format
+msgid "Heard %s"
+msgstr "Сигнал %s"
+
+#: extension.js:7381
+msgid "Bluetooth is off, so it cannot be heard."
+msgstr "Bluetooth выключен, поэтому сигнал не слышен."
+
+#: extension.js:7381
+msgid "Listening for it nearby…"
+msgstr "Слушаю эфир поблизости…"
+
+#: extension.js:7486
+msgid "Nothing kept"
+msgstr "Ничего не сохранено"
+
+#: extension.js:7514
+msgid "Nothing in the last 30 days."
+msgstr "За последние 30 дней ничего."
+
+#: extension.js:7519
+msgid "Notifications"
+msgstr "Уведомления"
+
+#: extension.js:7571
+msgid "Left open longer than"
+msgstr "Открыто дольше"
+
+#: extension.js:7575
+msgid "Warmer than"
+msgstr "Теплее"
+
+#: extension.js:7576
+msgid "Colder than"
+msgstr "Холоднее"
+
+#: extension.js:7577
+msgid "More humid than"
+msgstr "Влажнее"
+
+#: extension.js:7578
+msgid "Drier than"
+msgstr "Суше"
+
+#: extension.js:7580
+msgid "A battery running low"
+msgstr "Батарея садится"
+
+#: extension.js:7584
+msgid ""
+"They come from the gateway once its LAN protocol is on, in the gateway’s "
+"settings in Mi Home."
+msgstr ""
+"Они приходят от шлюза, когда в его настройках в Mi Home включён протокол LAN."
+
+#: extension.js:7620
+msgid "Remove Its Tile"
+msgstr "Убрать плитку"
+
+#: extension.js:7620
+msgid "Give It a Tile"
+msgstr "Добавить плитку"
+
+#: extension.js:7834
+msgid "No devices in this Mi Home account."
+msgstr "В этом аккаунте Mi Home нет устройств."
+
+#: extension.js:7835
+msgid "No devices to show. Add them, or show hidden ones, in Settings."
+msgstr ""
+"Нет устройств для показа. Добавьте их или верните скрытые в настройках."
+
+#: extension.js:7844 extension.js:7860 extension.js:7883 prefs.js:3744
+msgid "Pinned"
+msgstr "Закреплённые"
+
+#: extension.js:7854 extension.js:7868 prefs.js:3745
+msgid "Other"
+msgstr "Другие"
+
+#: extension.js:7868
+msgid "All"
+msgstr "Все"
+
+#: extension.js:7884
+msgid "Controls"
+msgstr "Управление"
+
+#: extension.js:7885 prefs.js:611 prefs.js:850
+msgid "Speakers"
+msgstr "Колонки"
+
+#: extension.js:7886 prefs.js:612 prefs.js:1201
+msgid "TVs"
+msgstr "Телевизоры"
+
+#: extension.js:7888
+msgid "Sensors"
+msgstr "Датчики"
+
+#: extension.js:8063
+msgid "Rename Group"
+msgstr "Переименовать группу"
+
+#: prefs.js:135
+#, javascript-format
+msgid "%d device"
+msgid_plural "%d devices"
+msgstr[0] "%d устройство"
+msgstr[1] "%d устройства"
+msgstr[2] "%d устройств"
+
+#: prefs.js:213
+msgid "Expand"
+msgstr "Развернуть"
+
+#: prefs.js:213
+msgid "Collapse"
+msgstr "Свернуть"
+
+#: prefs.js:251 prefs.js:277
+msgid "Rename"
+msgstr "Переименовать"
+
+#: prefs.js:252
+msgid ""
+"A name for Nook only; the device and its app keep their own. Leave it empty "
+"to use that one."
+msgstr ""
+"Имя только для Nook; у устройства и его приложения останется своё. Оставьте "
+"поле пустым, чтобы использовать его."
+
+#: prefs.js:257 prefs.js:380 prefs.js:1186 prefs.js:1979 prefs.js:2166
+#: prefs.js:2177 prefs.js:2704 prefs.js:3111 prefs.js:3273
+msgid "Cancel"
+msgstr "Отмена"
+
+#: prefs.js:258 prefs.js:1440
+msgid "Save"
+msgstr "Сохранить"
+
+#: prefs.js:330
+msgid "Images"
+msgstr "Изображения"
+
+#: prefs.js:334
+msgid "Choose an Image"
+msgstr "Выберите изображение"
+
+#: prefs.js:345
+msgid "Could Not Use the Image"
+msgstr "Не удалось использовать изображение"
+
+#: prefs.js:346
+msgid "Close"
+msgstr "Закрыть"
+
+#: prefs.js:363 prefs.js:396
+msgid "Icon"
+msgstr "Значок"
+
+#: prefs.js:364
+msgid "Pick one for the tile, or use an image of your own."
+msgstr "Выберите значок для плитки или загрузите своё изображение."
+
+#: prefs.js:381
+msgid "Default"
+msgstr "По умолчанию"
+
+#: prefs.js:382
+msgid "Image…"
+msgstr "Изображение…"
+
+#: prefs.js:420 prefs.js:702 prefs.js:862 prefs.js:988 prefs.js:1215
+#: prefs.js:1542 prefs.js:1704 prefs.js:2209 prefs.js:2730
+msgid "Search"
+msgstr "Найти"
+
+#: prefs.js:425
+msgid "Searching…"
+msgstr "Поиск…"
+
+#: prefs.js:458 prefs.js:597
+msgid "Devices"
+msgstr "Устройства"
+
+#: prefs.js:466
+msgid "Top Bar"
+msgstr "Верхняя панель"
+
+#: prefs.js:467
+msgid ""
+"Pin a device below with the button beside it, and its reading or state shows "
+"next to the icon."
+msgstr ""
+"Закрепите устройство кнопкой рядом с ним, и его показания или состояние "
+"появятся рядом со значком."
+
+#: prefs.js:470
+msgid "Read Every"
+msgstr "Опрашивать каждые"
+
+#: prefs.js:471
+msgid ""
+"Minutes. Each time is one small request to each account or device with a "
+"reading there, and none is made while the screen is locked."
+msgstr ""
+"Минуты. Каждый раз — один небольшой запрос к каждому аккаунту или устройству "
+"с показаниями там, и ни одного, пока экран заблокирован."
+
+#: prefs.js:595
+msgid ""
+"Drag a row to move its tile. Pinned devices come first and have a tab of "
+"their own. The card a device opens in the menu can pin and hide it too."
+msgstr ""
+"Перетащите строку, чтобы переместить плитку. Закреплённые устройства идут "
+"первыми и получают свою вкладку. Закрепить и скрыть устройство можно и в его "
+"карточке в меню."
+
+#: prefs.js:599
+msgid "No devices yet"
+msgstr "Устройств пока нет"
+
+#: prefs.js:600
+msgid "Add an account on the Accounts page, then open the menu once."
+msgstr "Добавьте аккаунт на странице «Аккаунты», затем один раз откройте меню."
+
+#: prefs.js:608 prefs.js:3194
+msgid "Mi Home"
+msgstr "Mi Home"
+
+#: prefs.js:609 prefs.js:690
+msgid "Air Conditioners"
+msgstr "Кондиционеры"
+
+#: prefs.js:613 prefs.js:976
+msgid "Sonoff"
+msgstr "Sonoff"
+
+#: prefs.js:614 prefs.js:1848
+msgid "eWeLink"
+msgstr "eWeLink"
+
+#: prefs.js:615 prefs.js:2194
+msgid "Philips Hue"
+msgstr "Philips Hue"
+
+#: prefs.js:616 prefs.js:2538
+msgid "Home Assistant"
+msgstr "Home Assistant"
+
+#: prefs.js:617 prefs.js:2716
+msgid "HomeKit"
+msgstr "HomeKit"
+
+#: prefs.js:618 prefs.js:2998
+msgid "Smart Life"
+msgstr "Smart Life"
+
+#: prefs.js:642
+msgid "No room"
+msgstr "Без комнаты"
+
+#: prefs.js:655
+msgid "Show in the top bar"
+msgstr "Показывать в верхней панели"
+
+#: prefs.js:661
+msgid "Hide from the menu"
+msgstr "Скрыть из меню"
+
+#: prefs.js:691
+msgid "Gree units on this network, controlled directly: no account, no cloud."
+msgstr "Кондиционеры Gree в этой сети, напрямую: без аккаунта и без облака."
+
+#: prefs.js:699 prefs.js:859 prefs.js:985 prefs.js:1212 prefs.js:1539
+#: prefs.js:2206 prefs.js:2727
+msgid "Find on This Network"
+msgstr "Найти в этой сети"
+
+#: prefs.js:700
+msgid "The unit has to be on and connected to the same Wi-Fi."
+msgstr "Кондиционер должен быть включён и подключён к той же сети Wi-Fi."
+
+#: prefs.js:706 prefs.js:2213
+msgid "Add by Address"
+msgstr "Добавить по адресу"
+
+#: prefs.js:744 prefs.js:902 prefs.js:1055 prefs.js:1282 prefs.js:1588
+#: prefs.js:1922 prefs.js:2292 prefs.js:2788
+msgid "Remove"
+msgstr "Удалить"
+
+#: prefs.js:774
+#, javascript-format
+msgid "%s would not pair: %s"
+msgstr "%s не подключается: %s"
+
+#: prefs.js:828
+msgid "No air conditioner answered."
+msgstr "Ни один кондиционер не ответил."
+
+#: prefs.js:830 prefs.js:958 prefs.js:1089 prefs.js:1418 prefs.js:1655
+#: prefs.js:2510
+msgid "Nothing new found."
+msgstr "Ничего нового не найдено."
+
+#: prefs.js:851
+msgid ""
+"Google Nest speakers and other Cast devices on this network: what plays, "
+"pause and volume, without the cloud."
+msgstr ""
+"Колонки Google Nest и другие устройства Cast в этой сети: что играет, пауза "
+"и громкость, без облака."
+
+#: prefs.js:860
+msgid "Speakers in the Google Home app show up here too."
+msgstr "Колонки из приложения Google Home тоже появятся здесь."
+
+#: prefs.js:956
+msgid "No speaker answered."
+msgstr "Ни одна колонка не ответила."
+
+#: prefs.js:977
+msgid ""
+"Sonoff relays and plugs in DIY mode on this network, without the cloud. One "
+"paired the usual way with the eWeLink app answers only eWeLink."
+msgstr ""
+"Реле и розетки Sonoff в режиме DIY в этой сети, без облака. Привязанные "
+"обычным способом через приложение eWeLink отвечают только eWeLink."
+
+#: prefs.js:986
+msgid "A switch answers here once it is in DIY mode."
+msgstr "Выключатель отвечает здесь, когда он в режиме DIY."
+
+#: prefs.js:1047 prefs.js:1914
+#, javascript-format
+msgid "%d channel"
+msgid_plural "%d channels"
+msgstr[0] "%d канал"
+msgstr[1] "%d канала"
+msgstr[2] "%d каналов"
+
+#: prefs.js:1087
+msgid "No Sonoff in DIY mode answered."
+msgstr "Ни один Sonoff в режиме DIY не ответил."
+
+#: prefs.js:1120
+msgid "The TV did not take the PIN. Pair again for a new one."
+msgstr ""
+"Телевизор не принял PIN-код. Начните сопряжение снова, он покажет новый."
+
+#: prefs.js:1124
+msgid "Nobody answered on the TV in time."
+msgstr "На телевизоре не ответили вовремя."
+
+#: prefs.js:1126
+msgid "Pairing this TV needs the openssl command, which is not installed."
+msgstr ""
+"Для сопряжения с этим телевизором нужна команда openssl, а она не "
+"установлена."
+
+#: prefs.js:1128
+msgid "The TV is not answering. It has to be on."
+msgstr "Телевизор не отвечает. Он должен быть включён."
+
+#: prefs.js:1136
+msgid "This is not an address Nook can use."
+msgstr "Nook не может использовать этот адрес."
+
+#: prefs.js:1138
+msgid "Home Assistant was not found at this address."
+msgstr "По этому адресу Home Assistant не найден."
+
+#: prefs.js:1140
+msgid "This is not a Hue bridge that Nook can use."
+msgstr "Это не тот мост Hue, с которым может работать Nook."
+
+#: prefs.js:1150
+msgid "The setup code is wrong."
+msgstr "Неверный код настройки."
+
+#: prefs.js:1152
+msgid ""
+"The accessory is in another home. Remove it from the Home app, or reset it, "
+"then pair again."
+msgstr ""
+"Аксессуар в другом доме. Удалите его из приложения «Дом» или сбросьте, затем "
+"сопрягите снова."
+
+#: prefs.js:1154
+msgid ""
+"The accessory refuses pairing for a while after wrong codes. Wait, or "
+"restart it."
+msgstr ""
+"После неверных кодов аксессуар какое-то время отказывает в сопряжении. "
+"Подождите или перезапустите его."
+
+#: prefs.js:1156
+msgid "The accessory has as many owners as it can take."
+msgstr "У аксессуара уже столько владельцев, сколько он допускает."
+
+#: prefs.js:1180
+msgid "Pair with the TV"
+msgstr "Сопряжение с телевизором"
+
+#: prefs.js:1187 prefs.js:1271 prefs.js:2284 prefs.js:2705 prefs.js:2798
+msgid "Pair"
+msgstr "Сопрячь"
+
+#: prefs.js:1202
+msgid ""
+"Panasonic, Samsung, LG, Sony, Philips and Roku TVs, Android TV, Google TV "
+"and Apple TV on this network: power, volume, inputs, apps and a remote, "
+"without the cloud."
+msgstr ""
+"Телевизоры Panasonic, Samsung, LG, Sony, Philips и Roku, Android TV, Google "
+"TV и Apple TV в этой сети: питание, громкость, источники, приложения и "
+"пульт, без облака."
+
+#: prefs.js:1213
+msgid "A TV answers while it is on, or in standby if it keeps its network on."
+msgstr ""
+"Телевизор отвечает, пока включён, или в режиме ожидания, если сеть в нём "
+"остаётся включённой."
+
+#: prefs.js:1266
+msgid "Paired"
+msgstr "Сопряжён"
+
+#: prefs.js:1271 prefs.js:2284
+msgid "Pair Again"
+msgstr "Сопрячь снова"
+
+#: prefs.js:1306
+msgid "Pairing…"
+msgstr "Сопряжение…"
+
+#: prefs.js:1312
+msgid "This TV takes commands without pairing."
+msgstr "Этому телевизору сопряжение не нужно."
+
+#: prefs.js:1315
+msgid "Type in the PIN the TV shows now."
+msgstr "Введите PIN-код, который сейчас показывает телевизор."
+
+#: prefs.js:1322
+msgid "Type in the new PIN the TV shows now."
+msgstr "Введите новый PIN-код, который сейчас показывает телевизор."
+
+#: prefs.js:1335
+msgid "Allow Nook on the TV when it asks."
+msgstr "Разрешите Nook на телевизоре, когда он спросит."
+
+#: prefs.js:1339
+msgid ""
+"On the TV, under Network, Home Network, IP Control, set the authentication "
+"to a pre-shared key, then type the same key in here."
+msgstr ""
+"На телевизоре в разделе «Сеть», «Домашняя сеть», «IP-управление» выберите "
+"аутентификацию по общему ключу (Pre-Shared Key) и введите здесь тот же ключ."
+
+#: prefs.js:1350
+#, javascript-format
+msgid "The pairing could not be saved in the keyring: %s"
+msgstr "Не удалось сохранить сопряжение в связке ключей: %s"
+
+#: prefs.js:1353
+#, javascript-format
+msgid "Paired with the %s TV."
+msgstr "Телевизор %s сопряжён."
+
+#: prefs.js:1416
+msgid "No TV answered."
+msgstr "Ни один телевизор не ответил."
+
+#: prefs.js:1439
+msgid "Saved in the Keyring"
+msgstr "Сохранено в связке ключей"
+
+#: prefs.js:1442 prefs.js:1514
+msgid "Forget"
+msgstr "Забыть"
+
+#: prefs.js:1452
+msgid "The keyring could not be used"
+msgstr "Связка ключей недоступна"
+
+#: prefs.js:1468
+msgid "Saved in the keyring"
+msgstr "Сохранено в связке ключей"
+
+#: prefs.js:1468
+msgid "Not saved yet"
+msgstr "Ещё не сохранено"
+
+#: prefs.js:1469
+msgid "Type a new password and save to change it."
+msgstr "Чтобы сменить пароль, введите новый и сохраните."
+
+#: prefs.js:1494
+msgid ""
+"Tapo and other ONVIF cameras on this network, watched and turned directly. A "
+"Tapo camera needs a camera account, which is not your TP-Link login; the "
+"same one on every camera is simplest. Any other camera takes its own login, "
+"under its row."
+msgstr ""
+"Камеры Tapo и другие камеры ONVIF в этой сети: просмотр и поворот напрямую. "
+"Камере Tapo нужна учётная запись камеры, а не ваш вход TP-Link; проще всего "
+"завести одну и ту же на всех камерах. Любой другой камере нужен её "
+"собственный вход, он вводится под её строкой."
+
+#: prefs.js:1500
+msgid "Make a camera account"
+msgstr "Создайте учётную запись камеры"
+
+#: prefs.js:1501
+msgid ""
+"In the Tapo app: the camera, then Settings, Advanced Settings, Camera "
+"Account."
+msgstr ""
+"В приложении Tapo: камера, затем «Настройки», «Расширенные настройки», "
+"«Учётная запись камеры»."
+
+#: prefs.js:1504
+msgid "Camera Account Login"
+msgstr "Логин учётной записи камеры"
+
+#: prefs.js:1504
+msgid "Camera Account Password"
+msgstr "Пароль учётной записи камеры"
+
+#: prefs.js:1507
+msgid "Privacy mode, light, night vision and siren"
+msgstr "Приватность, подсветка, ночное видение и сирена"
+
+#: prefs.js:1508
+msgid ""
+"These need your TP-Link account's password. The camera checks it itself; "
+"from here it never goes to TP-Link."
+msgstr ""
+"Для этого нужен пароль вашего аккаунта TP-Link. Камера проверяет его сама; "
+"отсюда он никогда не уходит в TP-Link."
+
+#: prefs.js:1511 prefs.js:1521
+msgid "TP-Link Password"
+msgstr "Пароль TP-Link"
+
+#: prefs.js:1521
+msgid "TP-Link Password, saved"
+msgstr "Пароль TP-Link, сохранён"
+
+#: prefs.js:1540
+msgid ""
+"Cameras at another place, like a summer house, cannot be reached from here."
+msgstr "Камеры в другом месте, например на даче, отсюда недоступны."
+
+#: prefs.js:1584
+msgid "Camera Login"
+msgstr "Логин камеры"
+
+#: prefs.js:1584
+msgid "Camera Password"
+msgstr "Пароль камеры"
+
+#: prefs.js:1654
+msgid ""
+"No camera answered. A camera answers only once its camera account exists."
+msgstr ""
+"Ни одна камера не ответила. Камера отвечает, только когда у неё есть учётная "
+"запись камеры."
+
+#: prefs.js:1655
+msgid "Cameras added."
+msgstr "Камеры добавлены."
+
+#: prefs.js:1673 prefs.js:2075
+msgid "Already in Nook"
+msgstr "Уже в Nook"
+
+#: prefs.js:1675
+msgid "Comes with the Mi Home account"
+msgstr "Придёт с аккаунтом Mi Home"
+
+#: prefs.js:1677
+msgid "With the eWeLink account, or in Sonoff DIY mode"
+msgstr "Через аккаунт eWeLink или в режиме Sonoff DIY"
+
+#: prefs.js:1679
+msgid "Pair it under Philips Hue"
+msgstr "Сопрягите его в разделе Philips Hue"
+
+#: prefs.js:1681
+msgid "Connect it under Home Assistant"
+msgstr "Подключите его в разделе Home Assistant"
+
+#: prefs.js:1683
+msgid "Pair it under HomeKit, once it is in no other home"
+msgstr "Сопрягите его в разделе HomeKit, когда он не в другом доме"
+
+#: prefs.js:1684
+msgid "Not supported yet"
+msgstr "Пока не поддерживается"
+
+#: prefs.js:1691
+msgid "Find Devices"
+msgstr "Поиск устройств"
+
+#: prefs.js:1692
+msgid ""
+"Air conditioners, cameras, speakers, TVs and Sonoff switches on this network "
+"are added, and eWeLink devices once that account is logged in. Whatever else "
+"answers is listed, with what it would take."
+msgstr ""
+"Кондиционеры, камеры, колонки, телевизоры и выключатели Sonoff в этой сети "
+"добавляются, а устройства eWeLink — после входа в этот аккаунт. Всё "
+"остальное, что отвечает, показано в списке с тем, что для него нужно."
+
+#: prefs.js:1701
+msgid "Search Everything"
+msgstr "Искать везде"
+
+#: prefs.js:1702
+msgid ""
+"Gree, Cast, ONVIF, mDNS and UPnP. Nothing leaves this network, except "
+"eWeLink device IDs sent to the eWeLink account."
+msgstr ""
+"Gree, Cast, ONVIF, mDNS и UPnP. Ничего не уходит за пределы этой сети, кроме "
+"ID устройств eWeLink, которые отправляются в аккаунт eWeLink."
+
+#: prefs.js:1743
+msgid "Nothing new to add."
+msgstr "Добавлять нечего."
+
+#: prefs.js:1745
+#, javascript-format
+msgid "%d new device added."
+msgid_plural "%d new devices added."
+msgstr[0] "Добавлено %d новое устройство."
+msgstr[1] "Добавлено %d новых устройства."
+msgstr[2] "Добавлено %d новых устройств."
+
+#: prefs.js:1747
+msgid "Part of the search failed. Try again in a moment."
+msgstr "Часть поиска не удалась. Попробуйте ещё раз чуть позже."
+
+#: prefs.js:1780
+msgid "In Nook"
+msgstr "В Nook"
+
+#: prefs.js:1849
+msgid ""
+"Sonoff and other eWeLink devices, through a free app of your own on "
+"eWeLink's developer site."
+msgstr ""
+"Sonoff и другие устройства eWeLink через ваше собственное бесплатное "
+"приложение на сайте разработчиков eWeLink."
+
+#: prefs.js:1859
+msgid "Get an App ID and App Secret"
+msgstr "Получите App ID и App Secret"
+
+#: prefs.js:1860
+#, javascript-format
+msgid ""
+"Sign up on the developer site, wait for the approval, then create an app "
+"there with the redirect URL %s and copy its two keys here."
+msgstr ""
+"Зарегистрируйтесь на сайте разработчиков, дождитесь одобрения, затем "
+"создайте там приложение с адресом перенаправления %s и скопируйте сюда два "
+"его ключа."
+
+#: prefs.js:1863
+msgid "App ID"
+msgstr "App ID"
+
+#: prefs.js:1863
+msgid "App Secret"
+msgstr "App Secret"
+
+#: prefs.js:1866 prefs.js:3017 prefs.js:3204
+msgid "Account"
+msgstr "Аккаунт"
+
+#: prefs.js:1872
+msgid "Add by Device ID"
+msgstr "Добавить по Device ID"
+
+#: prefs.js:1950
+#, javascript-format
+msgid "Logged in, region %s"
+msgstr "Вход выполнен, регион %s"
+
+#: prefs.js:1952 prefs.js:3077 prefs.js:3249
+msgid "Not logged in"
+msgstr "Вход не выполнен"
+
+#: prefs.js:1952
+msgid "Save the app keys first"
+msgstr "Сначала сохраните ключи приложения"
+
+#: prefs.js:1953 prefs.js:3079 prefs.js:3250
+msgid "Log Out"
+msgstr "Выйти"
+
+#: prefs.js:1953 prefs.js:3079 prefs.js:3250
+msgid "Log In"
+msgstr "Войти"
+
+#: prefs.js:1981
+msgid "Finish signing in in the browser."
+msgstr "Завершите вход в браузере."
+
+#: prefs.js:2049
+#, javascript-format
+msgid "%d eWeLink device added."
+msgid_plural "%d eWeLink devices added."
+msgstr[0] "Добавлено %d устройство eWeLink."
+msgstr[1] "Добавлено %d устройства eWeLink."
+msgstr[2] "Добавлено %d устройств eWeLink."
+
+#: prefs.js:2050
+msgid ""
+"eWeLink lists no new devices for this app. Search on the Devices page, or "
+"add one by its Device ID from the eWeLink app."
+msgstr ""
+"eWeLink не показывает этому приложению новых устройств. Найдите их на "
+"странице «Устройства» или добавьте по Device ID из приложения eWeLink."
+
+#: prefs.js:2061
+msgid ""
+"A Device ID is 10 letters and digits, like 1000a1b2c3, shown in the device "
+"settings of the eWeLink app."
+msgstr ""
+"Device ID — 10 букв и цифр, например 1000a1b2c3; он есть в настройках "
+"устройства в приложении eWeLink."
+
+#: prefs.js:2071 prefs.js:2105
+msgid "This eWeLink account and app have no switch with that Device ID."
+msgstr ""
+"У этого аккаунта и приложения eWeLink нет выключателя с таким Device ID."
+
+#: prefs.js:2075
+msgid "Device added."
+msgstr "Устройство добавлено."
+
+#: prefs.js:2103
+msgid "Log in to eWeLink first."
+msgstr "Сначала войдите в eWeLink."
+
+#: prefs.js:2160
+msgid "The Bridge Has a New Certificate"
+msgstr "У моста новый сертификат"
+
+#: prefs.js:2161
+#, javascript-format
+msgid "The bridge answered with another certificate than the one Nook saw before. That is expected after it was replaced or reset; otherwise something on this network may be posing as it.\n\nBefore: %s\nNow: %s"
+msgstr "Мост ответил с другим сертификатом, чем Nook видел раньше. Так бывает после его замены или сброса; иначе что-то в этой сети может выдавать себя за него.\n\nРаньше: %s\nСейчас: %s"
+
+#: prefs.js:2167
+msgid "Trust the New One"
+msgstr "Доверять новому"
+
+#: prefs.js:2195
+msgid ""
+"Hue lights, plugs and sensors through a Hue Bridge on this network, without "
+"the cloud."
+msgstr "Лампы, розетки и датчики Hue через мост Hue в этой сети, без облака."
+
+#: prefs.js:2207
+msgid "A Hue Bridge answers on the network it is plugged into."
+msgstr "Мост Hue отвечает в той сети, к которой подключён."
+
+#: prefs.js:2276 prefs.js:2559 prefs.js:2786 prefs.js:3020
+msgid "Read the List Again"
+msgstr "Прочитать список заново"
+
+#: prefs.js:2337
+msgid ""
+"This bridge answered with another certificate than before. Remove it first "
+"to add it again."
+msgstr ""
+"Мост ответил с другим сертификатом, чем раньше. Удалите его, чтобы добавить "
+"снова."
+
+#: prefs.js:2378
+msgid "Another bridge answers at this address now. Search again."
+msgstr "По этому адресу теперь отвечает другой мост. Найдите заново."
+
+#: prefs.js:2381
+msgid "Press the Link Button"
+msgstr "Нажмите кнопку на мосту"
+
+#: prefs.js:2382
+msgid ""
+"Press the round button on the Hue Bridge. Nook keeps asking the bridge for a "
+"minute."
+msgstr ""
+"Нажмите круглую кнопку на мосту Hue. Nook будет спрашивать мост в течение "
+"минуты."
+
+#: prefs.js:2392
+msgid "The link button was not pressed in time."
+msgstr "Кнопку на мосту не нажали вовремя."
+
+#: prefs.js:2425
+msgid "Pair the bridge first."
+msgstr "Сначала сопрягите мост."
+
+#: prefs.js:2446
+#, javascript-format
+msgid "%d Hue device."
+msgid_plural "%d Hue devices."
+msgstr[0] "%d устройство Hue."
+msgstr[1] "%d устройства Hue."
+msgstr[2] "%d устройств Hue."
+
+#: prefs.js:2508
+msgid "No Hue Bridge answered. Add it by its address if the network hides it."
+msgstr ""
+"Ни один мост Hue не ответил. Добавьте его по адресу, если сеть его скрывает."
+
+#: prefs.js:2517
+msgid "Pair each new bridge with the button beside it."
+msgstr "Сопрягите каждый новый мост кнопкой рядом с ним."
+
+#: prefs.js:2539
+msgid ""
+"Lights, switches, climate, covers and sensors of a Home Assistant server, "
+"through an access token of your own."
+msgstr ""
+"Свет, выключатели, климат, шторы и датчики сервера Home Assistant — через "
+"ваш собственный токен доступа."
+
+#: prefs.js:2548
+msgid "Create an Access Token"
+msgstr "Создайте токен доступа"
+
+#: prefs.js:2549
+msgid ""
+"In Home Assistant, open your profile, then Security, and create a long-lived "
+"access token at the bottom of the page."
+msgstr ""
+"В Home Assistant откройте свой профиль, затем «Безопасность», и внизу "
+"страницы создайте долгосрочный токен доступа."
+
+#: prefs.js:2551
+msgid "Address, like http://homeassistant.local:8123"
+msgstr "Адрес, например http://homeassistant.local:8123"
+
+#: prefs.js:2552
+msgid "Access Token"
+msgstr "Токен доступа"
+
+#: prefs.js:2556
+msgid "Server"
+msgstr "Сервер"
+
+#: prefs.js:2615
+msgid "Not connected"
+msgstr "Не подключено"
+
+#: prefs.js:2616
+msgid "Disconnect"
+msgstr "Отключить"
+
+#: prefs.js:2616
+msgid "Connect"
+msgstr "Подключить"
+
+#: prefs.js:2644
+msgid "Type the address of Home Assistant first."
+msgstr "Сначала введите адрес Home Assistant."
+
+#: prefs.js:2648
+msgid "Paste an access token first."
+msgstr "Сначала вставьте токен доступа."
+
+#: prefs.js:2674
+#, javascript-format
+msgid "%d device from Home Assistant."
+msgid_plural "%d devices from Home Assistant."
+msgstr[0] "%d устройство из Home Assistant."
+msgstr[1] "%d устройства из Home Assistant."
+msgstr[2] "%d устройств из Home Assistant."
+
+#: prefs.js:2717
+msgid ""
+"HomeKit accessories on this network, paired with Nook by the setup code on "
+"the accessory or its box. An accessory has one owner: remove it from the "
+"Home app first, or reset it."
+msgstr ""
+"Аксессуары HomeKit в этой сети, сопряжённые с Nook по коду настройки на "
+"аксессуаре или его коробке. У аксессуара один владелец: сначала удалите его "
+"из приложения «Дом» или сбросьте."
+
+#: prefs.js:2728
+msgid ""
+"An accessory answers while it is on; one in another home can only be paired "
+"once it is removed there."
+msgstr ""
+"Аксессуар отвечает, пока включён; аксессуар из другого дома можно сопрячь, "
+"только удалив его оттуда."
+
+#: prefs.js:2795
+msgid "In another home"
+msgstr "В другом доме"
+
+#: prefs.js:2820
+msgid ""
+"This accessory is in another home. Remove it from the Home app, or reset it, "
+"then search again."
+msgstr ""
+"Этот аксессуар в другом доме. Удалите его из приложения «Дом» или сбросьте, "
+"затем найдите снова."
+
+#: prefs.js:2823
+msgid "Pair with HomeKit"
+msgstr "Сопряжение с HomeKit"
+
+#: prefs.js:2824
+#, javascript-format
+msgid "Type in the eight-digit setup code on %s or its box."
+msgstr "Введите восьмизначный код настройки, указанный на «%s» или на коробке."
+
+#: prefs.js:2829
+msgid "A setup code has eight digits, like 123-45-678."
+msgstr "Код настройки — восемь цифр, например 123-45-678."
+
+#: prefs.js:2866
+msgid "Pair the accessory again: its keys are not in the keyring."
+msgstr "Сопрягите аксессуар заново: его ключей нет в связке ключей."
+
+#: prefs.js:2877
+#, javascript-format
+msgid "%d HomeKit accessory."
+msgid_plural "%d HomeKit accessories."
+msgstr[0] "%d аксессуар HomeKit."
+msgstr[1] "%d аксессуара HomeKit."
+msgstr[2] "%d аксессуаров HomeKit."
+
+#: prefs.js:2909
+msgid ""
+"Removed. The accessory could not be reached to forget Nook; reset it before "
+"pairing it again."
+msgstr ""
+"Удалено. До аксессуара не удалось достучаться, чтобы он забыл Nook; сбросьте "
+"его перед новым сопряжением."
+
+#: prefs.js:2950
+msgid "No HomeKit accessory answered."
+msgstr "Ни один аксессуар HomeKit не ответил."
+
+#: prefs.js:2952
+msgid ""
+"Nothing new to pair. An accessory in another home must be removed there "
+"first."
+msgstr "Нечего сопрягать. Аксессуар из другого дома сначала нужно удалить там."
+
+#: prefs.js:2999
+msgid ""
+"Devices in a Smart Life or Tuya Smart account, signed in the way Home "
+"Assistant does it: with the user code from the app and a QR code scanned "
+"with it."
+msgstr ""
+"Устройства из аккаунта Smart Life или Tuya Smart. Вход как в Home Assistant: "
+"код пользователя из приложения и QR-код, отсканированный в нём."
+
+#: prefs.js:3009
+msgid "User Code"
+msgstr "Код пользователя"
+
+#: prefs.js:3011
+msgid "Where the User Code Is"
+msgstr "Где найти код пользователя"
+
+#: prefs.js:3012
+msgid ""
+"In the Smart Life app: Me, the gear at the top, Account and Security, User "
+"Code."
+msgstr ""
+"В приложении Smart Life: «Я», шестерёнка вверху, «Аккаунт и безопасность», "
+"«Код пользователя»."
+
+#: prefs.js:3035
+msgid ""
+"Open Smart Life on the phone, tap + on the Home tab, then Scan, point it at "
+"this code and confirm the login."
+msgstr ""
+"Откройте Smart Life на телефоне, нажмите + на вкладке «Дом», затем "
+"«Сканировать», наведите камеру на этот код и подтвердите вход."
+
+#: prefs.js:3107
+msgid "Type in the user code from the Smart Life app first."
+msgstr "Сначала введите код пользователя из приложения Smart Life."
+
+#: prefs.js:3131
+msgid "The QR code was not scanned in time. Log in again for a new one."
+msgstr "QR-код не отсканировали вовремя. Войдите снова, чтобы получить новый."
+
+#: prefs.js:3176
+#, javascript-format
+msgid "%d device from Smart Life."
+msgid_plural "%d devices from Smart Life."
+msgstr[0] "%d устройство из Smart Life."
+msgstr[1] "%d устройства из Smart Life."
+msgstr[2] "%d устройств из Smart Life."
+
+#: prefs.js:3195
+msgid "Xiaomi devices and everything else added to the Mi Home app."
+msgstr "Устройства Xiaomi и всё остальное, что добавлено в приложение Mi Home."
+
+#: prefs.js:3213
+msgid "A QR code to scan with Mi Home"
+msgstr "QR-код для сканирования в Mi Home"
+
+#: prefs.js:3223
+msgid ""
+"Open Mi Home on your phone, tap the scan icon on the Profile tab and point "
+"it at this code."
+msgstr ""
+"Откройте Mi Home на телефоне, нажмите значок сканирования на вкладке "
+"«Профиль» и наведите камеру на этот код."
+
+#: prefs.js:3248
+#, javascript-format
+msgid "Logged in as %s"
+msgstr "Вход выполнен: %s"
+
+#: prefs.js:3312
+msgid "Appearance"
+msgstr "Оформление"
+
+#: prefs.js:3370
+msgid "Accounts"
+msgstr "Аккаунты"
+
+#: prefs.js:3467
+msgid "About"
+msgstr "О Nook"
+
+#: prefs.js:3482
+msgid "Your smart home, from the top bar"
+msgstr "Ваш умный дом в верхней панели"
+
+#: prefs.js:3491
+msgid "Project page"
+msgstr "Страница проекта"
+
+#: prefs.js:3500
+msgid "Report a problem"
+msgstr "Сообщить о проблеме"
+
+#: prefs.js:3501
+msgid "Request a feature"
+msgstr "Предложить идею"
+
+#: prefs.js:3504
+msgid ""
+"A device it gets wrong, or one it cannot reach yet - either one belongs in "
+"an issue."
+msgstr ""
+"Устройство показано неправильно или пока не поддерживается - и то и другое "
+"стоит описать в issue."
+
+#: prefs.js:3512
+msgid "Support"
+msgstr "Поддержать"
+
+#: prefs.js:3515
+msgid "Nook is free and stays free. If it earned a coffee ☕"
+msgstr "Nook бесплатен и таким останется. Если он заслужил кофе ☕"
+
+#: prefs.js:3520
+msgid "GitHub Sponsors"
+msgstr "GitHub Sponsors"
+
+#: prefs.js:3520
+msgid "Monthly or one time"
+msgstr "Ежемесячно или разово"
+
+#: prefs.js:3521
+msgid "PayPal"
+msgstr "PayPal"
+
+#: prefs.js:3525
+#, javascript-format
+msgid "Nook %s"
+msgstr "Nook %s"
+
+#: prefs.js:3537
+msgid "Cryptocurrency"
+msgstr "Криптовалюта"
+
+#: prefs.js:3547
+msgid "Copy the address"
+msgstr "Скопировать адрес"
+
+#: prefs.js:3567
+#, javascript-format
+msgid "The %s address as a QR code"
+msgstr "Адрес %s в виде QR-кода"
+
+#: prefs.js:3579
+#, javascript-format
+msgid "%s address copied"
+msgstr "Адрес %s скопирован"
+
+#: prefs.js:3617
+msgid "Placement"
+msgstr "Расположение"
+
+#: prefs.js:3620
+msgid "Top bar button"
+msgstr "Кнопка в верхней панели"
+
+#: prefs.js:3621
+msgid "Quick Settings"
+msgstr "Быстрые настройки"
+
+#: prefs.js:3623
+msgid "Location"
+msgstr "Где находится"
+
+#: prefs.js:3624
+msgid "A button of its own, or a tile next to Wi-Fi and Bluetooth."
+msgstr "Своя кнопка или плитка рядом с Wi-Fi и Bluetooth."
+
+#: prefs.js:3628
+msgctxt "top bar area"
+msgid "Left"
+msgstr "Слева"
+
+#: prefs.js:3629
+msgctxt "top bar area"
+msgid "Centre"
+msgstr "По центру"
+
+#: prefs.js:3630
+msgctxt "top bar area"
+msgid "Right"
+msgstr "Справа"
+
+#: prefs.js:3632
+msgid "Top Bar Area"
+msgstr "Часть верхней панели"
+
+#: prefs.js:3633
+msgid "Which part of the top bar the button is in."
+msgstr "В какой части верхней панели стоит кнопка."
+
+#: prefs.js:3639
+msgid "Counted from the left of that area. Zero is first."
+msgstr "Считается слева в этой части. Ноль — первая."
+
+#: prefs.js:3646
+msgid "Nothing"
+msgstr "Ничего"
+
+#: prefs.js:3647
+msgid "Find devices again"
+msgstr "Найти устройства заново"
+
+#: prefs.js:3648
+msgid "Open these settings"
+msgstr "Открыть эти настройки"
+
+#: prefs.js:3650
+msgid "Middle Click"
+msgstr "Средний щелчок"
+
+#: prefs.js:3651
+msgid "On the button in the top bar."
+msgstr "По кнопке в верхней панели."
+
+#: prefs.js:3656
+msgid "Switch Menus on Hover"
+msgstr "Переключать меню при наведении"
+
+#: prefs.js:3657
+msgid ""
+"Pointing at another top bar button closes Nook and opens that menu. Off: "
+"Nook stays open until a click outside it."
+msgstr ""
+"Наведение на другую кнопку верхней панели закрывает Nook и открывает её "
+"меню. Выкл.: Nook остаётся открытым до щелчка за его пределами."
+
+#: prefs.js:3680
+msgid "Rooms as tabs"
+msgstr "Комнаты вкладками"
+
+#: prefs.js:3681
+msgid "Small tiles"
+msgstr "Маленькие плитки"
+
+#: prefs.js:3682
+msgid "Tiles by room"
+msgstr "Плитки по комнатам"
+
+#: prefs.js:3683
+msgid "Modules"
+msgstr "Модули"
+
+#: prefs.js:3686
+msgid "View"
+msgstr "Вид"
+
+#: prefs.js:3687
+msgid "How the menu lays out the devices."
+msgstr "Как меню располагает устройства."
+
+#: prefs.js:3705
+msgid "Colour by Device Type"
+msgstr "Цвет по типу устройства"
+
+#: prefs.js:3706
+msgid ""
+"Fans, lights and sensors each get a colour of their own instead of the "
+"accent colour."
+msgstr "Вентиляторы, свет и датчики получают свои цвета вместо акцентного."
+
+#: prefs.js:3712
+msgid "Coloured Top Bar Icon"
+msgstr "Цветной значок в панели"
+
+#: prefs.js:3713
+msgid ""
+"Cream with a clay doorway. Off: monochrome, in the colour of the other icons."
+msgstr ""
+"Кремовый, с терракотовой дверью. Выключено: монохромный, в цвет остальных "
+"значков."
+
+#: prefs.js:3724
+msgid "Room Tabs"
+msgstr "Вкладки комнат"
+
+#: prefs.js:3725
+msgid ""
+"The tabs shown over the tiles. A room left out keeps its devices under All."
+msgstr ""
+"Вкладки над плитками. Устройства комнаты без вкладки остаются во вкладке "
+"«Все»."
+
+#: prefs.js:3779
+msgid "Show All"
+msgstr "Показать все"
+
+#: prefs.js:3779
+msgid "Hide All"
+msgstr "Скрыть все"
+
+#~ msgid ""
+#~ "The accessory is busy pairing with something else. Try again in a moment."
+#~ msgstr "Аксессуар занят сопряжением с чем-то другим. Попробуйте чуть позже."
+
+#~ msgid "Log in to see the devices in your Mi Home app."
+#~ msgstr "Войдите, чтобы увидеть устройства из приложения Mi Home."
+
+#~ msgid "Stack Alike Devices"
+#~ msgstr "Объединять похожие устройства"
+
+#~ msgid ""
+#~ "Two or more devices of one kind, such as leak sensors, share a module."
+#~ msgstr ""
+#~ "Два и больше устройства одного вида, например датчики протечки, попадают "
+#~ "в один модуль."
+
+#~ msgid "Airflow"
+#~ msgstr "Жалюзи"
+
+#~ msgid "Last state"
+#~ msgstr "Как было"
+
+#~ msgid "Power-on state"
+#~ msgstr "После включения питания"
+
+#~ msgid "Only in Sonoff DIY mode"
+#~ msgstr "Только в режиме DIY Sonoff"
+
+#~ msgid "Needs the eWeLink sign-in"
+#~ msgstr "Нужен вход в eWeLink"
+
+#~ msgid "Loading…"
+#~ msgstr "Загрузка…"
+
+#~ msgid "Loading the map…"
+#~ msgstr "Загрузка карты…"
+
+#~ msgid "Looking for devices…"
+#~ msgstr "Поиск устройств…"

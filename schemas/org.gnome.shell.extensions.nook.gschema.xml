@@ -1,0 +1,222 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<schemalist gettext-domain="nook">
+  <schema id="org.gnome.shell.extensions.nook" path="/org/gnome/shell/extensions/nook/">
+    <key name="xiaomi-user-id" type="s">
+      <default>''</default>
+      <summary>Mi Home account the login in the keyring belongs to</summary>
+      <description>Written by the preferences window after a login or a logout, so the shell knows to read the keyring again. Empty when no one is logged in.</description>
+    </key>
+    <key name="view" type="s">
+      <choices>
+        <choice value="tabs"/>
+        <choice value="grid"/>
+        <choice value="rooms"/>
+        <choice value="control"/>
+      </choices>
+      <default>'tabs'</default>
+      <summary>How the devices are laid out</summary>
+      <description>"tabs" shows one room at a time with the rooms as tabs above two columns of tiles, "grid" puts small tiles three to a row, "rooms" lists every room under its own heading, "control" groups the devices into modules like a control centre.</description>
+    </key>
+    <key name="type-colors" type="b">
+      <default>true</default>
+      <summary>Colour tiles by device type</summary>
+      <description>Each kind of device gets a colour of its own. When off, everything uses the accent colour.</description>
+    </key>
+    <key name="room" type="s">
+      <default>''</default>
+      <summary>Room tab last chosen</summary>
+      <description>The lowercased room name, "@other" for devices in no room, or empty for all rooms.</description>
+    </key>
+    <key name="panel-sensors" type="as">
+      <default>[]</default>
+      <summary>Devices whose readings show in the top bar</summary>
+      <description>Mi Home device ids, in the order they are shown next to the icon.</description>
+    </key>
+    <key name="panel-interval" type="u">
+      <range min="1" max="60"/>
+      <default>5</default>
+      <summary>Minutes between top bar readings</summary>
+      <description>How often the sensors shown in the top bar are read while the session is unlocked. Opening the menu reads everything at once as well.</description>
+    </key>
+    <key name="pinned" type="as">
+      <default>[]</default>
+      <summary>Pinned devices</summary>
+      <description>Mi Home device ids. Pinned devices come first in every view and have a tab of their own.</description>
+    </key>
+    <key name="order" type="as">
+      <default>[]</default>
+      <summary>Order of the devices</summary>
+      <description>Mi Home device ids in the order the user arranged them. Devices not in the list follow, switches first, then by name.</description>
+    </key>
+    <key name="hidden" type="as">
+      <default>[]</default>
+      <summary>Hidden devices</summary>
+      <description>Mi Home device ids left out of the menu.</description>
+    </key>
+    <key name="folded-groups" type="as">
+      <default>[]</default>
+      <summary>Folded groups in the preferences</summary>
+      <description>Groups that show only their title. On the Devices page: find, top-bar, mihome, gree, tapo, cast, tv, sonoff and ewelink; on the Accounts page the same sources with "accounts-" in front.</description>
+    </key>
+    <key name="names" type="a{ss}">
+      <default>{}</default>
+      <summary>Names given in Nook</summary>
+      <description>Mi Home device ids mapped to the name the user gave them here. Mi Home itself keeps its own names.</description>
+    </key>
+    <key name="icons" type="a{ss}">
+      <default>{}</default>
+      <summary>Icons chosen in Nook</summary>
+      <description>Device ids mapped to the icon of their tile: the name of one of Nook's own glyphs, or the absolute path of an image copied into Nook's data folder.</description>
+    </key>
+    <key name="extra-tiles" type="as">
+      <default>[]</default>
+      <summary>Switches with a tile of their own</summary>
+      <description>Each entry is "device id/service id/property id/property name", a switch inside a device that the user put on a tile next to it, like a gateway's guard mode.</description>
+    </key>
+    <key name="groups" type="a{ss}">
+      <default>{}</default>
+      <summary>Groups of the module view</summary>
+      <description>Device ids mapped to the name of the group they were dragged into. Each group shows as one module.</description>
+    </key>
+    <key name="gree-units" type="s">
+      <default>'[]'</default>
+      <summary>Gree air conditioners</summary>
+      <description>A JSON list of the units bound in the preferences: mac, ip, name, key, cipher and version. The key is what a unit hands out to anyone on the local network who asks, so it is kept here and not in the keyring.</description>
+    </key>
+    <key name="find-skipped" type="as">
+      <default>[]</default>
+      <summary>Devices left out of Search Everything</summary>
+      <description>Ids like tapo:uuid or gree:mac of devices the user removed. Search Everything on the Devices page does not add them back; a device's own Search or its switch in Find Devices does.</description>
+    </key>
+    <key name="tapo-cameras" type="s">
+      <default>'[]'</default>
+      <summary>Tapo and other ONVIF cameras</summary>
+      <description>A JSON list of the cameras found on the local network: id (the camera's own uuid), ip, name, model and xaddr (its ONVIF device service; port 2020 is Tapo). The logins they are watched with are kept in the keyring, not here.</description>
+    </key>
+    <key name="cast-speakers" type="s">
+      <default>'[]'</default>
+      <summary>Google Cast speakers</summary>
+      <description>A JSON list of the speakers found in the preferences: id, name, model, ip and port. Nothing secret; a speaker answers anyone on the local network.</description>
+    </key>
+    <key name="tvs" type="s">
+      <default>'[]'</default>
+      <summary>TVs</summary>
+      <description>A JSON list of the TVs added in the preferences: id, brand, name, model, ip and mac. What a TV hands out when it is paired is kept in the keyring, not here.</description>
+    </key>
+    <key name="sonoff-switches" type="s">
+      <default>'[]'</default>
+      <summary>Sonoff switches</summary>
+      <description>A JSON list of the Sonoff switches in DIY mode found in the preferences: id, name, ip, port, and outlets for one with several channels. Nothing secret; in DIY mode a switch answers anyone on the local network.</description>
+    </key>
+    <key name="ewelink-devices" type="s">
+      <default>'[]'</default>
+      <summary>eWeLink devices</summary>
+      <description>A JSON list of the eWeLink devices added in the preferences: id, name, model, uiid, outlets and room. Nothing secret; the eWeLink login stays in the keyring.</description>
+    </key>
+    <key name="ewelink-region" type="s">
+      <default>''</default>
+      <summary>eWeLink region</summary>
+      <description>The region of the eWeLink account, or empty when logged out. Written by the preferences on login and logout to tell the shell; the login itself is in the keyring.</description>
+    </key>
+    <key name="hue-bridges" type="s">
+      <default>'[]'</default>
+      <summary>Hue bridges</summary>
+      <description>A JSON list of the Hue bridges added in the preferences: id, name, model, ip and the fingerprint of the certificate seen when the bridge was added. The key a bridge hands out when paired is kept in the keyring, not here.</description>
+    </key>
+    <key name="hue-devices" type="s">
+      <default>'[]'</default>
+      <summary>Hue devices</summary>
+      <description>A JSON list of the lights, plugs and sensors read from the Hue bridges: id, bridge, kind, name, room, model and what each can do.</description>
+    </key>
+    <key name="hass-server" type="s">
+      <default>''</default>
+      <summary>Home Assistant address</summary>
+      <description>The address of the Home Assistant server, or empty when not connected. Written by the preferences to tell the shell; the access token is in the keyring.</description>
+    </key>
+    <key name="hass-devices" type="s">
+      <default>'[]'</default>
+      <summary>Home Assistant devices</summary>
+      <description>A JSON list of the devices read from Home Assistant: the entity behind each, its type, name, room and the entities of the same device shown with it, with the attributes the card is built from.</description>
+    </key>
+    <key name="homekit-accessories" type="s">
+      <default>'[]'</default>
+      <summary>HomeKit accessories</summary>
+      <description>A JSON list of the HomeKit accessories paired in the preferences: id, name, model, ip, port, and the services and characteristics of each accessory behind it. The keys made at pairing are kept in the keyring, not here.</description>
+    </key>
+    <key name="smartlife-user" type="s">
+      <default>''</default>
+      <summary>Smart Life account</summary>
+      <description>The id of the Smart Life account, or empty when logged out. Written by the preferences on login and logout to tell the shell; the login itself is in the keyring.</description>
+    </key>
+    <key name="smartlife-devices" type="s">
+      <default>'[]'</default>
+      <summary>Smart Life devices</summary>
+      <description>A JSON list of the devices read from the Smart Life account: id, name, room, category, model, channel, and the data points Nook shows with their limits.</description>
+    </key>
+    <key name="colored-icon" type="b">
+      <default>true</default>
+      <summary>Colour the top bar icon</summary>
+      <description>Draws the logo in cream with a clay doorway; off, it is monochrome in the colour of the other icons in the top bar.</description>
+    </key>
+    <key name="hidden-rooms" type="as">
+      <default>[]</default>
+      <summary>Room tabs left out</summary>
+      <description>Rooms whose tab the menu leaves out, by lowercased room name, plus "@pinned" and "@other" for the Pinned and Other tabs. Their devices stay under All.</description>
+    </key>
+    <key name="alerts" type="a{sb}">
+      <default>{}</default>
+      <summary>Sensors that notify</summary>
+      <description>Mi Home device ids of sensors behind a Xiaomi gateway, mapped to whether their events become notifications. A sensor not in here notifies if it is a leak, smoke or gas sensor and stays quiet otherwise.</description>
+    </key>
+    <key name="sensor-rules" type="s">
+      <default>'{}'</default>
+      <summary>What else sensors notify of</summary>
+      <description>JSON: Mi Home device ids of sensors behind a Xiaomi gateway, each mapped to its own thresholds. "openFor" is the minutes a door may stay open; "warm", "cold", "wet" and "dry" are the temperature in degrees and the humidity in percent to tell of crossing; "battery" false keeps a low battery quiet.</description>
+    </key>
+    <key name="location" type="s">
+      <choices>
+        <choice value="panel"/>
+        <choice value="quick-settings"/>
+      </choices>
+      <default>'panel'</default>
+      <summary>Where Nook is opened from</summary>
+      <description>"panel" gives Nook a button of its own in the top bar; "quick-settings" makes it a tile in Quick Settings, with the logo and the readings among the system icons.</description>
+    </key>
+    <key name="panel-box" type="s">
+      <choices>
+        <choice value="left"/>
+        <choice value="center"/>
+        <choice value="right"/>
+      </choices>
+      <default>'right'</default>
+      <summary>Part of the top bar the button is in</summary>
+      <description>The left, centre or right part of the top bar. Not used when Nook is in Quick Settings.</description>
+    </key>
+    <key name="panel-index" type="i">
+      <range min="0" max="20"/>
+      <default>0</default>
+      <summary>Place of the button in that part</summary>
+      <description>Counted from the left of the part of the top bar the button is in; zero puts it first.</description>
+    </key>
+    <key name="middle-click" type="s">
+      <choices>
+        <choice value="none"/>
+        <choice value="refresh"/>
+        <choice value="settings"/>
+      </choices>
+      <default>'none'</default>
+      <summary>What a middle click on the button does</summary>
+      <description>"refresh" looks for the devices again, the way the button in the menu does; "settings" opens the preferences.</description>
+    </key>
+    <key name="prefs-target" type="s">
+      <default>''</default>
+      <summary>Where the preferences window opens</summary>
+      <description>Written by the shell just before it opens the preferences: the id of a group on the Accounts page, such as "accounts-tapo", optionally followed by a space and a device. The window scrolls there and clears the key.</description>
+    </key>
+    <key name="hover-switch" type="b">
+      <default>false</default>
+      <summary>Pointing at another top bar button opens its menu</summary>
+      <description>The usual top bar behaviour: while Nook is open, moving the pointer onto another button closes Nook and opens that button's menu. When off, Nook stays open until a click outside it.</description>
+    </key>
+  </schema>
+</schemalist>

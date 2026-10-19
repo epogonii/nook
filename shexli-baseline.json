@@ -1,0 +1,12 @@
+{
+  "spec_version": "2026-04-02",
+  "known": [
+    {
+      "rule_id": "EGO-P-007",
+      "paths": [
+        "feed.js"
+      ],
+      "snippets": []
+    }
+  ]
+}

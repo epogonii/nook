@@ -1,0 +1,6 @@
+{
+  "uuid": "probe@nook.test",
+  "name": "Nook probe",
+  "description": "Test stand only: opens the Nook menu in each view and saves a screenshot of it. Never installed outside tools/run-nested.sh.",
+  "shell-version": ["46", "47", "48", "49", "50"]
+}

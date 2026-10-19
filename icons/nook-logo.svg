@@ -1,0 +1,14 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="256" height="256" viewBox="0 0 256 256">
+<defs>
+  <clipPath id="tile"><rect width="256" height="256" rx="56.32"/></clipPath>
+  <filter id="pen" x="-10%" y="-10%" width="120%" height="120%">
+    <feTurbulence type="fractalNoise" baseFrequency=".03" numOctaves="2" seed="7"/>
+    <feDisplacementMap in="SourceGraphic" scale="2.5"/>
+  </filter>
+</defs>
+<g clip-path="url(#tile)">
+  <rect width="256" height="256" fill="#efe2da"/>
+  <path d="M89 210V150C89 124 109 110 137 110C165 110 185 124 185 150V210Z" fill="#d99a88"/>
+  <path d="M44 120L128 46L212 120M80 216V156C80 130 100 116 128 116C156 116 176 130 176 156V216M40 216H216" fill="none" stroke="#2a1f1f" stroke-width="8" stroke-linecap="round" stroke-linejoin="round" filter="url(#pen)"/>
+</g>
+</svg>

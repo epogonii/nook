@@ -1,0 +1,909 @@
+.nook-panel {
+  width: 368px;
+  spacing: 10px;
+  padding: 2px 4px;
+}
+
+.nook-header {
+  spacing: 6px;
+}
+
+.nook-title {
+  font-weight: bold;
+  font-size: 1.1em;
+  padding-left: 4px;
+}
+
+.nook-round-button {
+  width: 32px;
+  height: 32px;
+  border-radius: 999px;
+  background-color: rgba(255, 255, 255, 0.1);
+}
+
+.nook-round-button:hover,
+.nook-round-button:focus {
+  background-color: rgba(255, 255, 255, 0.17);
+}
+
+.nook-round-button:active {
+  background-color: rgba(255, 255, 255, 0.24);
+}
+
+/* #3584e4 is the fallback for GNOME 46, which has no -st-accent-color. */
+.nook-round-button:checked {
+  color: #ffffff;
+  background-color: #3584e4;
+  background-color: -st-accent-color;
+}
+
+.nook-chip {
+  padding: 5px 12px;
+  border-radius: 999px;
+  font-weight: bold;
+  background-color: rgba(255, 255, 255, 0.08);
+}
+
+.nook-chip:hover,
+.nook-chip:focus {
+  background-color: rgba(255, 255, 255, 0.12);
+}
+
+.nook-chip:checked {
+  color: #ffffff;
+  background-color: #3584e4;
+  background-color: -st-accent-color;
+}
+
+.nook-body {
+  spacing: 8px;
+}
+
+.nook-body-scrolls {
+  padding-right: 10px;
+}
+
+.nook-row {
+  spacing: 8px;
+}
+
+.nook-room {
+  font-weight: bold;
+  font-size: 0.9em;
+  color: rgba(255, 255, 255, 0.55);
+  padding: 10px 4px 0;
+}
+
+.nook-fold {
+  border-radius: 6px;
+}
+
+.nook-fold:hover,
+.nook-fold:focus {
+  color: rgba(255, 255, 255, 0.85);
+}
+
+.nook-fold-line {
+  spacing: 4px;
+}
+
+.nook-tile {
+  border-radius: 16px;
+  padding: 10px;
+  background-color: rgba(255, 255, 255, 0.07);
+}
+
+.nook-tile:hover,
+.nook-tile:focus {
+  background-color: rgba(255, 255, 255, 0.12);
+}
+
+.nook-tile:checked {
+  color: #ffffff;
+  background-color: #3584e4;
+  background-color: -st-accent-color;
+}
+
+.nook-tile-box {
+  spacing: 10px;
+}
+
+.nook-tile-square .nook-tile-box {
+  spacing: 8px;
+}
+
+.nook-tile-compact {
+  border-radius: 12px;
+  padding: 8px 10px;
+}
+
+.nook-bubble {
+  width: 32px;
+  height: 32px;
+  border-radius: 999px;
+  background-color: rgba(255, 255, 255, 0.07);
+}
+
+.nook-tile:checked .nook-bubble {
+  background-color: rgba(255, 255, 255, 0.22);
+}
+
+.nook-tile-compact .nook-bubble {
+  width: 22px;
+  height: 22px;
+  background-color: transparent;
+}
+
+.nook-toggle:hover,
+.nook-toggle:focus {
+  box-shadow: inset 0 0 0 2px rgba(255, 255, 255, 0.45);
+}
+
+.nook-tile-compact .nook-toggle:hover,
+.nook-tile-compact .nook-toggle:focus {
+  box-shadow: none;
+  background-color: rgba(255, 255, 255, 0.18);
+}
+
+.nook-glyph {
+  width: 16px;
+  height: 16px;
+}
+
+.nook-name {
+  font-weight: bold;
+  font-size: 0.95em;
+}
+
+.nook-state {
+  font-size: 0.9em;
+  color: rgba(255, 255, 255, 0.62);
+}
+
+.nook-tile:checked .nook-state {
+  color: rgba(255, 255, 255, 0.85);
+}
+
+.nook-skeleton {
+  width: 64px;
+  height: 9px;
+  border-radius: 999px;
+  background-color: rgba(255, 255, 255, 0.16);
+}
+
+.nook-tile:checked .nook-skeleton {
+  background-color: rgba(255, 255, 255, 0.3);
+}
+
+.nook-skeleton-name {
+  width: 96px;
+}
+
+.nook-skeleton-mid {
+  width: 120px;
+}
+
+.nook-skeleton-wide {
+  width: 180px;
+}
+
+.nook-skeleton-lines {
+  spacing: 12px;
+  padding: 4px 0;
+}
+
+.nook-skeleton-block {
+  border-radius: 12px;
+  background-color: rgba(255, 255, 255, 0.08);
+}
+
+.nook-camera .nook-skeleton-block,
+.nook-vacuum-map .nook-skeleton-block {
+  border-radius: 14px;
+  background-color: rgba(255, 255, 255, 0.12);
+}
+
+.nook-reading .nook-skeleton {
+  width: 28px;
+  height: 8px;
+  background-color: rgba(255, 255, 255, 0.3);
+}
+
+.nook-message {
+  padding: 6px 4px;
+}
+
+.nook-action {
+  padding: 6px 14px;
+  border-radius: 999px;
+  font-weight: bold;
+  color: #ffffff;
+  background-color: #3584e4;
+  background-color: -st-accent-color;
+}
+
+.nook-panel-box,
+.nook-readings {
+  spacing: 8px;
+}
+
+.nook-reading {
+  spacing: 3px;
+}
+
+.nook-reading-text {
+  font-feature-settings: "tnum";
+}
+
+.nook-card-section {
+  spacing: 10px;
+  padding: 10px 12px;
+  border-radius: 16px;
+  background-color: rgba(255, 255, 255, 0.07);
+}
+
+.nook-card-row {
+  spacing: 6px;
+}
+
+.nook-card-value {
+  color: rgba(255, 255, 255, 0.7);
+  font-feature-settings: "tnum";
+}
+
+.nook-more {
+  width: 28px;
+  height: 28px;
+  border-radius: 999px;
+}
+
+.nook-more:hover,
+.nook-more:focus {
+  background-color: rgba(255, 255, 255, 0.12);
+}
+
+.nook-more:checked {
+  color: #ffffff;
+  background-color: #3584e4;
+  background-color: -st-accent-color;
+}
+
+.nook-mark {
+  width: 19px;
+  height: 19px;
+}
+
+.nook-climate {
+  spacing: 10px;
+  padding: 14px 14px 12px;
+  border-radius: 20px;
+  color: #ffffff;
+  background-color: rgba(255, 255, 255, 0.07);
+  transition-duration: 400ms;
+}
+.nook-climate-top {
+  spacing: 6px;
+}
+.nook-climate-room {
+  font-weight: bold;
+  font-feature-settings: "tnum";
+}
+.nook-climate-dot {
+  width: 7px;
+  height: 7px;
+  border-radius: 999px;
+  background-color: rgba(255, 255, 255, 0.35);
+}
+.nook-climate-dot:checked {
+  background-color: #57e389;
+}
+.nook-climate-dot.nook-listening {
+  background-color: #62a0ea;
+}
+.nook-climate-status {
+  font-size: 0.9em;
+  color: rgba(255, 255, 255, 0.75);
+}
+.nook-power:checked {
+  color: #ffffff;
+  background-color: #3584e4;
+  background-color: -st-accent-color;
+}
+.nook-climate .nook-power:checked {
+  color: #1c1c21;
+  background-color: #ffffff;
+}
+.nook-ac-scene {
+  height: 108px;
+}
+.nook-climate-middle {
+  spacing: 2px;
+}
+.nook-climate-target {
+  font-size: 3.4em;
+  font-weight: 300;
+  font-feature-settings: "tnum";
+}
+.nook-climate-unit {
+  font-size: 1.2em;
+  padding-top: 10px;
+  color: rgba(255, 255, 255, 0.8);
+}
+.nook-climate-range {
+  spacing: 10px;
+}
+.nook-step {
+  width: 36px;
+  height: 36px;
+  background-color: rgba(255, 255, 255, 0.12);
+}
+.nook-climate .slider {
+  height: 26px;
+  -barlevel-height: 6px;
+  -slider-handle-radius: 10px;
+}
+.nook-climate-ends {
+  font-size: 0.8em;
+  color: rgba(255, 255, 255, 0.6);
+  padding: 0 4px;
+}
+.nook-climate-tiles {
+  spacing: 8px;
+}
+.nook-ac-tile {
+  border-radius: 14px;
+  padding: 8px 9px;
+  background-color: rgba(255, 255, 255, 0.07);
+}
+.nook-ac-tile:hover,
+.nook-ac-tile:focus {
+  background-color: rgba(255, 255, 255, 0.15);
+}
+.nook-ac-tile:open {
+  box-shadow: inset 0 0 0 2px rgba(255, 255, 255, 0.55);
+}
+.nook-ac-tile:checked {
+  color: #1c1c21;
+  background-color: rgba(255, 255, 255, 0.92);
+}
+.nook-ac-tile-box {
+  spacing: 3px;
+}
+.nook-ac-bubble {
+  width: 28px;
+  height: 28px;
+  border-radius: 999px;
+  background-color: rgba(255, 255, 255, 0.12);
+}
+.nook-ac-tile:checked .nook-ac-bubble {
+  background-color: rgba(0, 0, 0, 0.08);
+}
+.nook-ac-mark {
+  color: rgba(255, 255, 255, 0.6);
+}
+.nook-ac-led {
+  width: 6px;
+  height: 6px;
+  border-radius: 999px;
+  background-color: rgba(255, 255, 255, 0.3);
+}
+.nook-ac-tile:checked .nook-ac-led {
+  background-color: #2ec27e;
+}
+.nook-ac-tile-title {
+  font-size: 0.8em;
+  padding-top: 4px;
+  color: rgba(255, 255, 255, 0.7);
+}
+.nook-ac-tile:checked .nook-ac-tile-title {
+  color: rgba(28, 28, 33, 0.65);
+}
+.nook-ac-tile-value {
+  font-weight: bold;
+  font-size: 0.92em;
+}
+.nook-ac-tile-head {
+  spacing: 4px;
+}
+.nook-stage-middle {
+  spacing: 6px;
+}
+.nook-stage-words {
+  spacing: 2px;
+}
+.nook-stage-scene {
+  height: 104px;
+}
+.nook-stage-beside .nook-stage-middle {
+  spacing: 12px;
+}
+.nook-stage-beside .nook-stage-scene {
+  width: 128px;
+  height: 92px;
+}
+.nook-stage-big {
+  font-size: 3em;
+  font-weight: 300;
+  font-feature-settings: "tnum";
+}
+.nook-stage-word {
+  font-size: 1.5em;
+  font-weight: bold;
+}
+.nook-stage-controls {
+  spacing: 10px;
+  padding-top: 4px;
+}
+.nook-stage .nook-card-section {
+  padding: 0;
+  border-radius: 0;
+  background-color: transparent;
+}
+.nook-stage-tiles {
+  spacing: 8px;
+}
+.nook-stage-facts {
+  spacing: 6px;
+}
+.nook-stage-beside .nook-stage-facts {
+  padding-top: 6px;
+}
+.nook-drawer {
+  spacing: 4px;
+}
+
+.nook-tv-remote {
+  spacing: 8px;
+  padding: 6px 0;
+}
+.nook-tv-remote-row {
+  spacing: 22px;
+}
+.nook-tv-remote .nook-round-button {
+  width: 40px;
+  height: 40px;
+}
+.nook-stat-chip {
+  spacing: 5px;
+  padding: 4px 10px 4px 8px;
+  border-radius: 999px;
+  background-color: rgba(255, 255, 255, 0.11);
+}
+.nook-stat-chip .nook-glyph {
+  width: 14px;
+  height: 14px;
+}
+.nook-stat-title {
+  font-size: 0.85em;
+  color: rgba(255, 255, 255, 0.72);
+}
+.nook-stat-value {
+  font-size: 0.85em;
+  font-weight: bold;
+  font-feature-settings: "tnum";
+}
+.nook-climate .nook-round-button:checked {
+  color: #1c1c21;
+  background-color: #ffffff;
+}
+.nook-segments {
+  padding: 3px;
+  border-radius: 14px;
+  spacing: 2px;
+  background-color: rgba(0, 0, 0, 0.22);
+}
+.nook-segment {
+  padding: 6px 2px 5px;
+  border-radius: 11px;
+}
+.nook-segment:hover,
+.nook-segment:focus {
+  background-color: rgba(255, 255, 255, 0.1);
+}
+.nook-segment:checked {
+  color: #1c1c21;
+  background-color: rgba(255, 255, 255, 0.92);
+}
+.nook-segment-box {
+  spacing: 4px;
+  font-size: 0.8em;
+  font-weight: bold;
+}
+.nook-hero {
+  spacing: 12px;
+  padding: 12px 16px 12px 8px;
+  border-radius: 20px;
+  color: #ffffff;
+  background-color: rgba(255, 255, 255, 0.07);
+  transition-duration: 400ms;
+}
+.nook-hero-scene {
+  width: 120px;
+  height: 96px;
+}
+.nook-hero-text {
+  spacing: 2px;
+}
+.nook-hero-big {
+  font-size: 2.6em;
+  font-weight: 300;
+  font-feature-settings: "tnum";
+}
+.nook-hero-word {
+  font-size: 1.4em;
+  font-weight: bold;
+}
+.nook-hero-small {
+  font-size: 0.9em;
+  color: rgba(255, 255, 255, 0.78);
+}
+.nook-hero-status {
+  spacing: 6px;
+  padding-top: 4px;
+}
+/* Chart in extension.js reads font and color here for its axis labels and grid. */
+.nook-chart {
+  height: 90px;
+  font-size: 0.8em;
+  color: rgba(255, 255, 255, 0.55);
+}
+
+.nook-camera {
+  height: 205px;
+  border-radius: 14px;
+  background-color: #000000;
+}
+
+.nook-camera-status {
+  color: rgba(255, 255, 255, 0.7);
+  padding: 12px;
+  text-align: center;
+}
+
+.nook-media {
+  spacing: 10px;
+  padding: 12px 14px 14px;
+  border-radius: 20px;
+  color: #ffffff;
+  transition-duration: 400ms;
+}
+.nook-media-hero {
+  spacing: 12px;
+}
+.nook-media-song {
+  font-size: 1.3em;
+  font-weight: bold;
+}
+.nook-media-time {
+  spacing: 2px;
+}
+.nook-media-progress {
+  height: 8px;
+}
+.nook-media-times {
+  font-size: 0.8em;
+  font-feature-settings: "tnum";
+  color: rgba(255, 255, 255, 0.75);
+}
+.nook-media-controls {
+  spacing: 20px;
+  padding: 2px 0;
+}
+.nook-media .nook-round-button {
+  width: 40px;
+  height: 40px;
+  color: #ffffff;
+  background-color: rgba(255, 255, 255, 0.12);
+}
+.nook-media .nook-round-button:hover,
+.nook-media .nook-round-button:focus {
+  background-color: rgba(255, 255, 255, 0.22);
+}
+.nook-media .nook-round-button:insensitive {
+  color: rgba(255, 255, 255, 0.35);
+  background-color: rgba(255, 255, 255, 0.06);
+}
+.nook-media .nook-play {
+  width: 56px;
+  height: 56px;
+  color: rgba(0, 0, 0, 0.8);
+  background-color: #ffffff;
+}
+.nook-media .nook-play:hover,
+.nook-media .nook-play:focus {
+  background-color: rgba(255, 255, 255, 0.86);
+}
+.nook-media .nook-play:insensitive {
+  color: rgba(0, 0, 0, 0.35);
+  background-color: rgba(255, 255, 255, 0.45);
+}
+.nook-media-volume {
+  spacing: 10px;
+}
+.nook-media .nook-step {
+  width: 36px;
+  height: 36px;
+}
+.nook-media .slider {
+  height: 26px;
+  color: #ffffff;
+  -barlevel-height: 6px;
+  -slider-handle-radius: 9px;
+  -barlevel-background-color: rgba(255, 255, 255, 0.25);
+  -barlevel-active-background-color: #ffffff;
+}
+.nook-media-level {
+  min-width: 3em;
+  font-size: 0.9em;
+  font-feature-settings: "tnum";
+  text-align: right;
+}
+
+.nook-fan {
+  spacing: 8px;
+  padding: 10px;
+}
+.nook-fan-turn {
+  spacing: 8px;
+  padding: 2px 2px 0 4px;
+}
+.nook-fryer {
+  spacing: 10px;
+  padding: 12px;
+}
+.nook-fryer-left {
+  spacing: 6px;
+}
+.nook-fryer-minutes {
+  font-size: 2.4em;
+  font-weight: 300;
+}
+.nook-fryer-unit {
+  padding-bottom: 7px;
+  color: rgba(255, 255, 255, 0.7);
+}
+.nook-fryer-note {
+  font-weight: bold;
+  color: #f8e45c;
+}
+.nook-stepper {
+  spacing: 8px;
+}
+.nook-stepper-value {
+  min-width: 84px;
+  font-weight: bold;
+  text-align: center;
+}
+.nook-vacuum {
+  spacing: 10px;
+  padding: 12px;
+}
+.nook-vacuum-actions {
+  spacing: 6px;
+}
+.nook-vacuum-action {
+  spacing: 4px;
+}
+.nook-vacuum-action .nook-round-button {
+  width: 44px;
+  height: 44px;
+}
+.nook-vacuum-word {
+  font-size: 0.8em;
+  color: rgba(255, 255, 255, 0.7);
+}
+.nook-vacuum-title {
+  font-size: 0.85em;
+  font-weight: bold;
+  color: rgba(255, 255, 255, 0.7);
+  padding-top: 4px;
+}
+.nook-wear {
+  spacing: 8px;
+}
+.nook-wear-bar {
+  height: 8px;
+  margin-top: 4px;
+}
+.nook-vacuum-stats {
+  spacing: 6px;
+  padding-top: 4px;
+}
+.nook-vacuum-stat {
+  padding: 8px 4px;
+  border-radius: 12px;
+  background-color: rgba(255, 255, 255, 0.06);
+}
+.nook-vacuum-number {
+  font-size: 1.3em;
+  font-weight: 300;
+  font-feature-settings: "tnum";
+}
+.nook-vacuum-map {
+  border-radius: 14px;
+  background-color: rgba(0, 0, 0, 0.18);
+}
+.nook-vacuum-map-scene {
+  height: 230px;
+}
+
+.nook-footer {
+  padding-left: 2px;
+}
+.nook-footer .nook-title {
+  font-size: 0.85em;
+  color: rgba(255, 255, 255, 0.55);
+}
+.nook-footer .nook-round-button {
+  width: 28px;
+  height: 28px;
+  color: rgba(255, 255, 255, 0.6);
+  background-color: transparent;
+}
+.nook-footer .nook-round-button:hover,
+.nook-footer .nook-round-button:focus {
+  color: #ffffff;
+  background-color: rgba(255, 255, 255, 0.1);
+}
+
+.nook-cc-playing-box {
+  spacing: 8px;
+}
+.nook-cc-module {
+  border-radius: 14px;
+  background-color: rgba(255, 255, 255, 0.08);
+  padding: 6px;
+  spacing: 2px;
+}
+.nook-cc-head {
+  padding: 2px 6px 4px;
+}
+.nook-cc-section {
+  font-size: 0.8em;
+  font-weight: 600;
+  color: rgba(255, 255, 255, 0.6);
+}
+.nook-cc-summary {
+  font-size: 0.8em;
+  color: rgba(255, 255, 255, 0.42);
+}
+.nook-cc-row {
+  padding: 4px 6px;
+  border-radius: 10px;
+}
+.nook-cc-row:hover,
+.nook-cc-row:focus {
+  background-color: rgba(255, 255, 255, 0.06);
+}
+.nook-cc-tile .nook-tile-box {
+  spacing: 10px;
+}
+.nook-cc-group-title {
+  padding: 2px 6px 4px;
+  border-radius: 8px;
+  font-size: 0.8em;
+  font-weight: 600;
+  color: rgba(255, 255, 255, 0.6);
+}
+.nook-cc-group-title:hover,
+.nook-cc-group-title:focus {
+  color: #ffffff;
+  background-color: rgba(255, 255, 255, 0.06);
+}
+.nook-cc-group-entry {
+  padding: 2px 6px;
+  border-radius: 8px;
+  font-size: 0.8em;
+}
+.nook-cc-drag {
+  border-radius: 14px;
+  background-color: #36363a;
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.4);
+}
+.nook-cc-module:drop-into {
+  background-color: rgba(255, 255, 255, 0.16);
+}
+/* St draws an inset shadow only over a background or a border. */
+.nook-cc-row:drop-before,
+.nook-cc-row:drop-after,
+.nook-cc-row:drop-into {
+  background-color: rgba(255, 255, 255, 0.06);
+}
+.nook-cc-tile:drop-into {
+  box-shadow: inset 0 0 0 2px #3584e4;
+  box-shadow: inset 0 0 0 2px -st-accent-color;
+}
+.nook-cc-row:drop-before {
+  box-shadow: inset 2px 0 0 0 #3584e4;
+  box-shadow: inset 2px 0 0 0 -st-accent-color;
+}
+.nook-cc-row:drop-after {
+  box-shadow: inset -2px 0 0 0 #3584e4;
+  box-shadow: inset -2px 0 0 0 -st-accent-color;
+}
+.nook-cc-tile .nook-bubble {
+  width: 30px;
+  height: 30px;
+  border-radius: 999px;
+  color: rgba(255, 255, 255, 0.85);
+  background-color: rgba(255, 255, 255, 0.12);
+}
+.nook-cc-tile:checked .nook-bubble {
+  color: #ffffff;
+  background-color: #3584e4;
+  background-color: -st-accent-color;
+}
+.nook-cc-tile .nook-name {
+  font-weight: 600;
+  font-size: 0.9em;
+}
+.nook-cc-tile .nook-state {
+  font-size: 0.8em;
+  color: rgba(255, 255, 255, 0.5);
+}
+
+.nook-cc-playing {
+  padding: 10px;
+  spacing: 4px;
+}
+.nook-cc-open {
+  padding: 2px;
+  border-radius: 11px;
+}
+.nook-cc-open:hover,
+.nook-cc-open:focus {
+  background-color: rgba(255, 255, 255, 0.06);
+}
+.nook-cc-open-box {
+  spacing: 10px;
+}
+.nook-cc-art {
+  width: 44px;
+  height: 44px;
+  border-radius: 10px;
+}
+.nook-cc-art .nook-glyph {
+  width: 22px;
+  height: 22px;
+}
+.nook-cc-song {
+  font-weight: 600;
+  font-size: 0.9em;
+}
+.nook-cc-from {
+  font-size: 0.8em;
+  color: rgba(255, 255, 255, 0.5);
+}
+.nook-cc-control {
+  width: 32px;
+  height: 32px;
+  border-radius: 999px;
+  color: #ffffff;
+}
+.nook-cc-control:hover,
+.nook-cc-control:focus {
+  background-color: rgba(255, 255, 255, 0.1);
+}
+.nook-cc-control:insensitive {
+  color: rgba(255, 255, 255, 0.3);
+}
+.nook-cc-volume {
+  padding: 10px 12px 12px;
+  spacing: 8px;
+}
+.nook-cc-volume-title {
+  font-weight: bold;
+  font-size: 0.85em;
+}
+.nook-cc-volume .slider {
+  height: 22px;
+  color: #ffffff;
+  -barlevel-height: 22px;
+  -slider-handle-radius: 11px;
+  -barlevel-background-color: rgba(255, 255, 255, 0.14);
+  -barlevel-active-background-color: #ffffff;
+}
+.nook-cc-volume-icon {
+  padding-left: 4px;
+  color: #4a4a4f;
+}
