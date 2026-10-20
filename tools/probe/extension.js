@@ -9,6 +9,7 @@ import GLib from 'gi://GLib';
 import Shell from 'gi://Shell';
 
 import {Extension} from 'resource:///org/gnome/shell/extensions/extension.js';
+import * as Config from 'resource:///org/gnome/shell/misc/config.js';
 import * as Main from 'resource:///org/gnome/shell/ui/main.js';
 
 const NOOK = 'nook@epogonii.github.io';
@@ -19,6 +20,9 @@ const SHOTS = [
     ['rooms', true],
     ['control', true],
 ];
+
+// GNOME 51 PopupMenu.open/close take a params object instead of an animation flag.
+const NO_ANIMATION = Number.parseInt(Config.PACKAGE_VERSION, 10) >= 51 ? {animate: false} : false;
 
 const sleep = ms => new Promise(resolve => setTimeout(resolve, ms));
 
@@ -124,26 +128,26 @@ export default class Probe extends Extension {
             settings.set_string('view', view);
             settings.set_boolean('type-colors', colors);
             await sleep(300);
-            button.menu.open(false);
+            button.menu.open(NO_ANIMATION);
             await sleep(4000);
             await shoot(`${dir}/${view}-${colors ? 'type' : 'accent'}.png`);
-            button.menu.close(false);
+            button.menu.close(NO_ANIMATION);
             await sleep(500);
         }
         settings.set_string('view', 'tabs');
         settings.set_boolean('type-colors', true);
-        button.menu.open(false);
+        button.menu.open(NO_ANIMATION);
         await sleep(500);
         button._chips.get_children()[2]?.emit('clicked', 1);
         await sleep(1000);
         await shoot(`${dir}/tabs-room.png`);
-        button.menu.close(false);
+        button.menu.close(NO_ANIMATION);
         settings.set_string('room', '');
 
         const conditioner = Main.panel.statusArea[NOOK]._aircon?.devices[0];
         const camera = Main.panel.statusArea[NOOK]._tapo?.devices[0];
         if (camera) {
-            button.menu.open(false);
+            button.menu.open(NO_ANIMATION);
             await sleep(300);
             await button._openCard(camera);
             await sleep(3000);
@@ -153,13 +157,13 @@ export default class Probe extends Extension {
             find(button.menu.box)?.emit('clicked', 1);
             await sleep(4000);
             await shoot(`${dir}/snapshot.png`);
-            button.menu.close(false);
+            button.menu.close(NO_ANIMATION);
             await sleep(500);
         }
 
         if (conditioner) {
             await conditioner.source.set(conditioner, {Pow: 1, Mod: 1, SetTem: 18});
-            button.menu.open(false);
+            button.menu.open(NO_ANIMATION);
             await sleep(300);
             await button._openCard(conditioner);
             await sleep(800);
@@ -167,29 +171,29 @@ export default class Probe extends Extension {
             await button._climateWrite(conditioner, {Mod: 4, SetTem: 29});
             await sleep(800);
             await shoot(`${dir}/card-climate-warm.png`);
-            button.menu.close(false);
+            button.menu.close(NO_ANIMATION);
             await sleep(500);
         }
 
         const speaker = button._cast?.devices.find(d => /audio/i.test(d.castModel)) ?? button._cast?.devices[0];
         if (speaker) {
-            button.menu.open(false);
+            button.menu.open(NO_ANIMATION);
             await sleep(300);
             await button._openCard(speaker);
             await sleep(900);
             await shoot(`${dir}/card-speaker.png`);
-            button.menu.close(false);
+            button.menu.close(NO_ANIMATION);
             await sleep(500);
         }
 
         const tv = button._tv?.devices[0];
         if (tv) {
-            button.menu.open(false);
+            button.menu.open(NO_ANIMATION);
             await sleep(300);
             await button._openCard(tv);
             await sleep(900);
             await shoot(`${dir}/card-tv.png`);
-            button.menu.close(false);
+            button.menu.close(NO_ANIMATION);
             await sleep(500);
         }
 
@@ -197,7 +201,7 @@ export default class Probe extends Extension {
             const device = devices.find(d => d.urn?.includes(kind));
             if (!device)
                 continue;
-            button.menu.open(false);
+            button.menu.open(NO_ANIMATION);
             await sleep(300);
             await button._openCard(device);
             await sleep(kind === ':vacuum:' ? 12000 : 1000);
@@ -211,7 +215,7 @@ export default class Probe extends Extension {
                     await shoot(`${dir}/card-vacuum-${page}.png`);
                 }
             }
-            button.menu.close(false);
+            button.menu.close(NO_ANIMATION);
             await sleep(500);
         }
 
@@ -224,7 +228,7 @@ export default class Probe extends Extension {
         }
         for (const device of picked) {
             const name = device.did.replace(/[^\w.-]/g, '_');
-            button.menu.open(false);
+            button.menu.open(NO_ANIMATION);
             await sleep(300);
             await button._openCard(device);
             await sleep(700);
@@ -241,7 +245,7 @@ export default class Probe extends Extension {
                 await sleep(400);
                 await shoot(`${dir}/cards/${name}-end.png`);
             }
-            button.menu.close(false);
+            button.menu.close(NO_ANIMATION);
             await sleep(300);
         }
 
@@ -250,7 +254,7 @@ export default class Probe extends Extension {
         await shoot(`${dir}/prefs.png`);
 
         const again = Main.panel.statusArea[NOOK];
-        again.menu.open(false);
+        again.menu.open(NO_ANIMATION);
         await sleep(1500);
         Main.extensionManager.disableExtension(NOOK);
         await sleep(2000);

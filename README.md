@@ -50,7 +50,7 @@ Home Assistant knows comes in through Home Assistant.
 
 ## Install
 
-Nook runs on GNOME 46 to 50.
+Nook runs on GNOME 46 to 51.
 
 ```sh
 git clone https://github.com/epogonii/nook.git

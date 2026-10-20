@@ -3684,11 +3684,12 @@ export default class NookPreferences extends ExtensionPreferences {
         // Adw refocuses the last focused widget on page switch and scrolls to it.
         // Clear the focus and restore the Devices page's scroll position instead.
         let left = 0;
-        let shown = window.visible_page;
+        // The visible_page property makes GJS warn about its getter type.
+        let shown = window.get_visible_page();
         window.connect('notify::visible-page', () => {
             if (shown === devices)
                 left = findScrolled(devices)?.vadjustment.value ?? 0;
-            shown = window.visible_page;
+            shown = window.get_visible_page();
             if (shown !== devices)
                 return;
             window.set_focus(null);
@@ -3764,7 +3765,7 @@ export default class NookPreferences extends ExtensionPreferences {
             const group = groups.get(id);
             if (!group)
                 return;
-            window.visible_page = page;
+            window.set_visible_page(page);
             const target = group.reveal(did);
             // Again after 120 ms: the first layout and the focus Adw restores both scroll the page.
             const scroll = () => {

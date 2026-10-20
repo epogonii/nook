@@ -68,6 +68,10 @@ const VERTICAL = SHELL_MAJOR >= 48
     ? {orientation: Clutter.Orientation.VERTICAL}
     : {vertical: true};
 
+// GNOME 51 renamed St.ButtonMask.ONE and THREE, and the old names log a warning there.
+const PRIMARY_SECONDARY = (St.ButtonMask.PRIMARY ?? St.ButtonMask.ONE) |
+    (St.ButtonMask.SECONDARY ?? St.ButtonMask.THREE);
+
 const DEFAULTS = {
     'view': 'tabs',
     'type-colors': true,
@@ -2607,7 +2611,9 @@ class CameraView extends St.Widget {
         const [x, y] = this._point(event);
         const time = event.get_time();
         const last = this._lastTap;
-        if (last && time !== last.time && time - last.time <= Clutter.Settings.get_default().double_click_time &&
+        // Clutter.Settings.get_default() is gone in GNOME 51.
+        const settings = global.stage.context?.get_settings?.() ?? Clutter.Settings.get_default();
+        if (last && time !== last.time && time - last.time <= settings.double_click_time &&
             Math.hypot(x - last.x, y - last.y) <= this._slop()) {
             this._lastTap = null;
             this._zoom(x, y);
@@ -3436,7 +3442,7 @@ class Tile extends St.Button {
             x_expand: true,
             can_focus: true,
             track_hover: true,
-            button_mask: St.ButtonMask.ONE | St.ButtonMask.THREE,
+            button_mask: PRIMARY_SECONDARY,
         });
         this._openCard = openCard;
         this._awaits = awaits;
@@ -4056,6 +4062,7 @@ class NookButton extends PanelMenu.Button {
         this._listenForMiddleClick();
         this._activitiesHeld = false;
         this.menu.actor.connect('captured-event', (actor, event) => this._holdOpen(actor, event));
+        this.menu.connect('open-state-changed', (_menu, open) => this._pauseMenuManager(open));
 
         this._panel = new St.BoxLayout({...VERTICAL, style_class: 'nook-panel'});
         this.menu.box.add_child(this._panel);
@@ -4298,18 +4305,61 @@ class NookButton extends PanelMenu.Button {
             readSetting(this._settings, 'hover-switch'))
             return Clutter.EVENT_PROPAGATE;
         if (!press) {
-            return event.get_flags() & Clutter.EventFlags.FLAG_GRAB_NOTIFY
-                ? Clutter.EVENT_PROPAGATE : Clutter.EVENT_STOP;
+            // EVENT_STOP on a crossing event trips a Clutter runtime check.
+            if (!(event.get_flags() & Clutter.EventFlags.FLAG_GRAB_NOTIFY))
+                GObject.signal_stop_emission_by_name(actor, 'captured-event::pointer-focus');
+            return Clutter.EVENT_PROPAGATE;
         }
+        const other = this._topBarButtonAt(target);
         // Activities has no menu and toggles the overview on release.
-        if (Main.panel.statusArea.activities?.contains(target)) {
+        if (other === Main.panel.statusArea.activities) {
             this._activitiesHeld = true;
             return Clutter.EVENT_STOP;
         }
-        const other = Object.values(Main.panel.statusArea).find(button =>
-            button.menu instanceof PopupMenu.PopupMenu && button.menu.sourceActor.contains(target));
         other?.menu.toggle();
         return other?.menu.isOpen ? Clutter.EVENT_STOP : Clutter.EVENT_PROPAGATE;
+    }
+
+    _topBarButtonAt(target) {
+        const {statusArea} = Main.panel;
+        if (statusArea.activities?.contains(target))
+            return statusArea.activities;
+        return Object.values(statusArea).find(button =>
+            button.menu instanceof PopupMenu.PopupMenu && button.menu.sourceActor.contains(target));
+    }
+
+    // GNOME 51's menu manager adds capture-phase actions on open that run before
+    // captured-event: a hover controller, paused meanwhile, and a click gesture that
+    // would close the menu on a press _holdOpen handles itself.
+    _pauseMenuManager(open) {
+        if (this._hoverSwitch)
+            this._hoverSwitch.enabled = true;
+        this._hoverSwitch = null;
+        if (!open || readSetting(this._settings, 'hover-switch'))
+            return;
+        // Added after this handler runs.
+        Promise.resolve().then(() => {
+            if (!this.menu?.isOpen)
+                return;
+            this._hoverSwitch = this.menu.actor.get_action('popup-manager-motion-controller');
+            if (this._hoverSwitch)
+                this._hoverSwitch.enabled = false;
+            const click = this.menu.actor.get_action('popup-manager-click-gesture');
+            if (click && click !== this._managerClick) {
+                this._managerClick = click;
+                click.connectObject('may-recognize', () => !this._holdsPress(click), this);
+            }
+        });
+    }
+
+    _holdsPress(click) {
+        if (click.get_actor() !== this.menu.actor || readSetting(this._settings, 'hover-switch'))
+            return false;
+        const event = click.get_point_event(0);
+        const target = global.stage.get_event_actor(event);
+        const primary = event.type() === Clutter.EventType.TOUCH_BEGIN ||
+            event.get_button() === Clutter.BUTTON_PRIMARY;
+        return primary && Boolean(target) && !this.contains(target) && Boolean(this._topBarButtonAt(target));
     }
 
     _releaseActivities(target) {
@@ -6419,7 +6469,7 @@ class NookButton extends PanelMenu.Button {
             made.button.checked = !opens && tile.on === true;
             if (tile.extra) {
                 made.pin.visible = readSetting(this._settings, 'extra-tiles').includes(tile.extra);
-                made.button.button_mask = St.ButtonMask.ONE | St.ButtonMask.THREE;
+                made.button.button_mask = PRIMARY_SECONDARY;
             }
             const own = row;
             made.button.connect('clicked', (_button, clicked) => {
