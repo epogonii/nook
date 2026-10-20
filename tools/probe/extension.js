@@ -140,7 +140,7 @@ export default class Probe extends Extension {
         button.menu.close(false);
         settings.set_string('room', '');
 
-        const conditioner = Main.panel.statusArea[NOOK]._gree?.devices[0];
+        const conditioner = Main.panel.statusArea[NOOK]._aircon?.devices[0];
         const camera = Main.panel.statusArea[NOOK]._tapo?.devices[0];
         if (camera) {
             button.menu.open(false);

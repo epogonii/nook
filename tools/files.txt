@@ -55,7 +55,15 @@ lib/aes.js
 lib/glyphs.js
 lib/gree.js
 lib/gateway.js
-lib/gree-home.js
+lib/aircon-home.js
+lib/climate.js
+lib/cloud-aircon.js
+lib/electrolux.js
+lib/lg.js
+lib/melcloud.js
+lib/smartthings.js
+lib/daikin.js
+lib/midea.js
 lib/mihome.js
 lib/onvif.js
 lib/scenes.js

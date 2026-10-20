@@ -23,12 +23,14 @@ through the account you already have. Nothing to host, no extra hub.
 |---|---|
 | **Hubs and bridges** | Home Assistant · HomeKit · Philips Hue |
 | **Accounts** | Smart Life · Tuya · Mi Home · eWeLink |
-| **On your network** | Gree air conditioners · Sonoff in DIY mode · Tapo and ONVIF cameras · Google Cast speakers |
+| **On your network** | Sonoff in DIY mode · Tapo and ONVIF cameras · Google Cast speakers |
+| **Air conditioners** | Gree, Midea and Daikin on your network · LG ThinQ · Samsung SmartThings · Mitsubishi MELCloud · Electrolux · Xiaomi through Mi Home |
 | **TVs** | Samsung · LG · Sony · Panasonic · Philips · Roku · Android TV · Google TV · Apple TV |
 
 Each one is added the way its own app does it: a token for Home Assistant, the button on the
 Hue bridge, the code on a HomeKit accessory, a QR code for Smart Life and Mi Home, a PIN or a
-prompt on a TV.
+prompt on a TV, the login or a token of an air conditioner's own cloud. Anything else that
+Home Assistant knows comes in through Home Assistant.
 
 ## A closer look
 
@@ -65,7 +67,8 @@ Pairing an Android TV needs `openssl`.
 
 ## Privacy
 
-- Devices on your network are reached directly; nothing goes through a server of ours.
+- Devices on your network are reached directly; nothing goes through a server of ours. A newer
+  Midea air conditioner gets its key from Midea's cloud once, when it is added.
 - Logins and pairing keys stay in the GNOME keyring, never in settings.
 - Cloud accounts are asked only when the menu opens, and every few minutes for readings shown in
   the top bar. Never while the screen is locked.

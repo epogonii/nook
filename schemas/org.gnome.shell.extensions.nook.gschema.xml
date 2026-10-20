@@ -83,6 +83,31 @@
       <summary>Gree air conditioners</summary>
       <description>A JSON list of the units bound in the preferences: mac, ip, name, key, cipher and version. The key is what a unit hands out to anyone on the local network who asks, so it is kept here and not in the keyring.</description>
     </key>
+    <key name="aircons" type="s">
+      <default>'[]'</default>
+      <summary>Midea and Daikin air conditioners</summary>
+      <description>A JSON list of the units added in the preferences: brand, id, ip and name, with port, version and serial number for Midea, and mac, api and firmware for Daikin. A newer Midea unit's token and key are in the keyring.</description>
+    </key>
+    <key name="lg-devices" type="s">
+      <default>'[]'</default>
+      <summary>LG ThinQ air conditioners</summary>
+      <description>A JSON list of the units read when the LG ThinQ account was added: id, name, model and what each can do. The access token is in the keyring.</description>
+    </key>
+    <key name="smartthings-devices" type="s">
+      <default>'[]'</default>
+      <summary>SmartThings air conditioners</summary>
+      <description>A JSON list of the units read when the SmartThings account was added: id, name, model and what each can do. The app keys and tokens are in the keyring.</description>
+    </key>
+    <key name="melcloud-devices" type="s">
+      <default>'[]'</default>
+      <summary>MELCloud air conditioners</summary>
+      <description>A JSON list of the units read when the MELCloud account was added: id, building, name, model and what each can do. The login is in the keyring.</description>
+    </key>
+    <key name="electrolux-devices" type="s">
+      <default>'[]'</default>
+      <summary>Electrolux air conditioners</summary>
+      <description>A JSON list of the units read when the Electrolux account was added: id, name, model and what each can do. The API key and tokens are in the keyring.</description>
+    </key>
     <key name="find-skipped" type="as">
       <default>[]</default>
       <summary>Devices left out of Search Everything</summary>

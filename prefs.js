@@ -15,16 +15,24 @@ import {discover as findSpeakers, parseSpeakers} from './lib/cast-home.js';
 import {browse, survey} from './lib/finder.js';
 import * as Ewelink from './lib/ewelink.js';
 import * as EwelinkHome from './lib/ewelink-home.js';
+import {BRANDS as AIRCONS, didOf as airconDid, parseAircons, parseUnits} from './lib/aircon-home.js';
+import {ClimateError} from './lib/climate.js';
+import {parseEntries, savedAccount} from './lib/cloud-aircon.js';
+import * as Daikin from './lib/daikin.js';
+import * as Electrolux from './lib/electrolux.js';
 import * as Gree from './lib/gree.js';
 import * as Hass from './lib/hass.js';
 import * as HomeKit from './lib/homekit.js';
 import * as Hue from './lib/hue.js';
-import {parseUnits} from './lib/gree-home.js';
+import * as Lg from './lib/lg.js';
+import * as Melcloud from './lib/melcloud.js';
+import * as Midea from './lib/midea.js';
 import {CACHE_VERSION} from './lib/mihome.js';
 import {encode as encodeQr} from './lib/qr.js';
 import * as Secrets from './lib/secrets.js';
 import * as SmartLife from './lib/smartlife.js';
 import * as SmartLifeHome from './lib/smartlife-home.js';
+import * as SmartThings from './lib/smartthings.js';
 import * as Sonoff from './lib/sonoff.js';
 import {SpecError} from './lib/spec-home.js';
 import * as Tapo from './lib/tapo.js';
@@ -81,6 +89,10 @@ const GROUP_LOOKS = {
     hass: ['hub', [0.09, 0.74, 0.95]],
     homekit: ['home', [0.98, 0.62, 0.2]],
     smartlife: ['wifi', [1, 0.35, 0.2]],
+    lg: ['aircon', [0.65, 0.0, 0.2]],
+    smartthings: ['aircon', [0.08, 0.4, 0.75]],
+    melcloud: ['aircon', [0.85, 0.12, 0.15]],
+    electrolux: ['aircon', [0.0, 0.25, 0.5]],
 };
 
 function groupIcon(id) {
@@ -479,8 +491,9 @@ class DevicesPage extends Adw.PreferencesPage {
 
         this._groups = [];
         this._focusables = new Map();
-        this._handlers = ['pinned', 'order', 'hidden', 'panel-sensors', 'names', 'icons', 'xiaomi-user-id', 'gree-units', 'tapo-cameras', 'cast-speakers', 'tvs', 'sonoff-switches', 'ewelink-devices',
-            'hue-bridges', 'hue-devices', 'hass-devices', 'homekit-accessories', 'smartlife-devices']
+        this._handlers = ['pinned', 'order', 'hidden', 'panel-sensors', 'names', 'icons', 'xiaomi-user-id', 'gree-units', 'aircons', 'tapo-cameras', 'cast-speakers', 'tvs', 'sonoff-switches', 'ewelink-devices',
+            'hue-bridges', 'hue-devices', 'hass-devices', 'homekit-accessories', 'smartlife-devices',
+            ...CLOUD_AIRCONS().map(({id}) => `${id}-devices`)]
             .map(key => settings.connect(`changed::${key}`, () => this._fill()));
         this._fill();
     }
@@ -524,9 +537,10 @@ class DevicesPage extends Adw.PreferencesPage {
             this.remove(group);
         this._groups = [];
 
-        const conditioners = parseUnits(this._settings.get_string('gree-units')).map(unit => ({
-            did: `gree:${unit.mac}`,
-            name: unit.name || unit.mac,
+        const conditioners = [...parseUnits(this._settings.get_string('gree-units')),
+            ...parseAircons(this._settings.get_string('aircons'))].map(unit => ({
+            did: airconDid(unit),
+            name: unit.name || unit.mac || AIRCONS[unit.brand ?? 'gree'].title,
             room: unit.room ?? null,
             primary: {kind: 'climate', props: []},
         }));
@@ -587,7 +601,14 @@ class DevicesPage extends Adw.PreferencesPage {
             room: entry.room ?? null,
             primary: {kind: SmartLifeHome.typeOf(entry).endsWith('sensor') ? 'reading' : 'switch', props: []},
         }));
-        const devices = arrange([...cachedDevices(this._settings.get_string('xiaomi-user-id')), ...conditioners, ...cameras, ...speakers, ...tvs, ...switches, ...ewelink, ...hue, ...hass, ...homekit, ...smartlife], {
+        const clouds = CLOUD_AIRCONS().flatMap(({id}) => parseEntries(this._settings.get_string(`${id}-devices`)).map(entry => ({
+            did: `${id}:${entry.id}`,
+            name: entry.name || entry.model || id,
+            room: entry.room ?? null,
+            primary: {kind: 'switch', props: []},
+        })));
+        const devices = arrange([...cachedDevices(this._settings.get_string('xiaomi-user-id')), ...conditioners, ...cameras, ...speakers, ...tvs, ...switches, ...ewelink, ...hue, ...hass, ...homekit, ...smartlife,
+            ...clouds], {
             pinned: this._list('pinned'),
             order: this._list('order'),
             hidden: this._list('hidden'),
@@ -606,7 +627,7 @@ class DevicesPage extends Adw.PreferencesPage {
 
         const sources = [
             ['mihome', _('Mi Home'), d => !d.did.includes(':')],
-            ['gree', _('Air Conditioners'), d => d.did.startsWith('gree:')],
+            ['gree', _('Air Conditioners'), d => /^(gree|midea|daikin):/.test(d.did)],
             ['tapo', _('Cameras'), d => d.did.startsWith('tapo:')],
             ['cast', _('Speakers'), d => d.did.startsWith('cast:')],
             ['tv', _('TVs'), d => d.did.startsWith('tv:')],
@@ -616,6 +637,7 @@ class DevicesPage extends Adw.PreferencesPage {
             ['hass', _('Home Assistant'), d => d.did.startsWith('hass:')],
             ['homekit', _('HomeKit'), d => d.did.startsWith('homekit:')],
             ['smartlife', _('Smart Life'), d => d.did.startsWith('smartlife:')],
+            ...CLOUD_AIRCONS().map(({id, title}) => [id, title, d => d.did.startsWith(`${id}:`)]),
         ];
         const ids = devices.map(d => d.did);
         for (const [id, title, belongs] of sources) {
@@ -683,12 +705,12 @@ class DevicesPage extends Adw.PreferencesPage {
     }
 });
 
-const GreeGroup = GObject.registerClass(
-class GreeGroup extends FoldGroup {
+const AirconGroup = GObject.registerClass(
+class AirconGroup extends FoldGroup {
     _init(settings, window) {
         super._init({
             title: _('Air Conditioners'),
-            description: _('Gree units on this network, controlled directly: no account, no cloud.'),
+            description: _('Gree, Midea and Daikin units on this network, controlled directly. A newer Midea unit gets its key from Midea’s cloud once, when it is added.'),
         });
         setGroupIcon(this, 'gree');
         this._settings = settings;
@@ -706,7 +728,7 @@ class GreeGroup extends FoldGroup {
         this._address = new Adw.EntryRow({title: _('Add by Address'), show_apply_button: true});
         this._address.connect('apply', () => this._find(this._address.text.trim()).catch(logError));
 
-        this._handlers = ['gree-units', 'names'].map(key => settings.connect(`changed::${key}`, () => this._fill()));
+        this._handlers = ['gree-units', 'aircons', 'names'].map(key => settings.connect(`changed::${key}`, () => this._fill()));
         this._fill();
         this.foldable(settings, 'accounts-gree', () => deviceCount(this._units().length));
     }
@@ -717,14 +739,25 @@ class GreeGroup extends FoldGroup {
         this._handlers = [];
     }
 
-    _units() {
+    _gree() {
         return parseUnits(this._settings.get_string('gree-units'));
     }
 
+    _others() {
+        return parseAircons(this._settings.get_string('aircons'));
+    }
+
+    _units() {
+        return [...this._gree().map(u => ({...u, brand: 'gree'})), ...this._others()];
+    }
+
     _save(units) {
-        const json = JSON.stringify(units);
-        if (json !== this._settings.get_string('gree-units'))
-            this._settings.set_string('gree-units', json);
+        for (const [key, list] of [['gree-units', units.filter(u => u.brand === 'gree').map(({brand: _brand, ...u}) => u)],
+            ['aircons', units.filter(u => u.brand !== 'gree')]]) {
+            const json = JSON.stringify(list);
+            if (json !== this._settings.get_string(key))
+                this._settings.set_string(key, json);
+        }
     }
 
     _fill() {
@@ -733,19 +766,22 @@ class GreeGroup extends FoldGroup {
         this._rows = [];
         const names = this._settings.get_value('names').deepUnpack();
         for (const unit of this._units()) {
-            const own = names[`gree:${unit.mac}`];
+            const did = airconDid(unit);
+            const own = names[did];
+            const name = unit.name || unit.mac || AIRCONS[unit.brand].title;
             const row = new Adw.ActionRow({
-                title: GLib.markup_escape_text(own ?? unit.name, -1),
-                subtitle: GLib.markup_escape_text([own ? unit.name : null, unit.ip, unit.mac].filter(Boolean).join(' · '), -1),
+                title: GLib.markup_escape_text(own ?? name, -1),
+                subtitle: GLib.markup_escape_text([own ? name : null, AIRCONS[unit.brand].title, unit.ip,
+                    unit.brand === 'midea' ? null : unit.mac].filter(Boolean).join(' · '), -1),
             });
-            row.add_suffix(renameButton(this._settings, `gree:${unit.mac}`, unit.name || unit.mac, this));
+            row.add_suffix(renameButton(this._settings, did, name, this));
             const remove = new Gtk.Button({
                 icon_name: 'user-trash-symbolic',
                 tooltip_text: _('Remove'),
                 valign: Gtk.Align.CENTER,
                 css_classes: ['flat'],
             });
-            remove.connect('clicked', () => this._drop(unit.mac));
+            remove.connect('clicked', () => this._drop(unit).catch(logError));
             row.add_suffix(remove);
             this._rows.push(row);
         }
@@ -758,45 +794,90 @@ class GreeGroup extends FoldGroup {
         this._window.add_toast?.(new Adw.Toast({title, timeout: 6}));
     }
 
-    _drop(mac) {
-        this._save(this._units().filter(u => u.mac !== mac));
-        setSkipped(this._settings, [`gree:${mac}`], true);
+    async _drop(unit) {
+        const did = airconDid(unit);
+        this._save(this._units().filter(u => airconDid(u) !== did));
+        setSkipped(this._settings, [did], true);
+        if (unit.brand === 'midea')
+            await Secrets.clear(Midea.secretService(unit.id)).catch(e => console.debug(`nook: keyring: ${e.message}`));
     }
 
-    async _bind(unit) {
-        const device = new Gree.GreeDevice(unit);
+    // What a found unit becomes in the settings, or null with a toast saying why not.
+    async _pair(found) {
         try {
-            const {key, cipher} = await device.bind();
-            return {mac: unit.mac, ip: unit.ip, name: unit.name, key, cipher, version: unit.version};
+            if (found.brand === 'gree') {
+                const device = new Gree.GreeDevice(found);
+                try {
+                    const {key, cipher} = await device.bind();
+                    return {brand: 'gree', mac: found.mac, ip: found.ip, name: found.name, key, cipher, version: found.version};
+                } finally {
+                    device.close();
+                }
+            }
+            if (found.brand === 'midea') {
+                const unit = {brand: 'midea', id: found.id, ip: found.ip, port: found.port, sn: found.sn,
+                    version: found.version, name: `Midea ${found.name.split('_').pop()}`};
+                if (Number(found.version) === 3)
+                    await Midea.keepKeys(unit, await Midea.fetchKeys(unit));
+                return unit;
+            }
+            return {brand: 'daikin', id: found.mac, mac: found.mac, ip: found.ip, name: found.name || 'Daikin',
+                api: found.api, firmware: found.firmware};
         } catch (e) {
-            if (!(e instanceof Gree.GreeError) && !(e instanceof GLib.Error))
+            if (!(e instanceof ClimateError) && !(e instanceof GLib.Error))
                 throw e;
-            this._toast(_('%s would not pair: %s').replace('%s', unit.name).replace('%s', e.message));
+            this._toast(_('%s would not pair: %s').replace('%s', found.name || AIRCONS[found.brand].title)
+                .replace('%s', e.message));
             return null;
-        } finally {
-            device.close();
         }
     }
 
-    async _adopt(unit) {
-        const bound = await this._bind(unit);
-        if (!bound)
+    async _adopt(found) {
+        const unit = await this._pair(found);
+        if (!unit)
             return;
-        setSkipped(this._settings, [`gree:${unit.mac}`], false);
-        this._save([...this._units().filter(u => u.mac !== unit.mac), bound]);
+        const did = airconDid(unit);
+        setSkipped(this._settings, [did], false);
+        this._save([...this._units().filter(u => airconDid(u) !== did), unit]);
     }
 
-    _entry(unit) {
-        const did = `gree:${unit.mac}`;
+    _entry(found) {
+        const did = airconDid(found);
         return {
-            kind: 'Gree',
-            name: unit.name || unit.mac,
-            ip: unit.ip,
-            mac: unit.mac,
-            saved: () => (this._units().some(u => u.mac === unit.mac) ? did : null),
-            adopt: () => this._adopt(unit),
-            drop: () => this._drop(unit.mac),
+            kind: AIRCONS[found.brand].title,
+            name: found.name || AIRCONS[found.brand].title,
+            ip: found.ip,
+            mac: found.brand === 'midea' ? null : found.mac,
+            saved: () => (this._units().some(u => airconDid(u) === did) ? did : null),
+            adopt: () => this._adopt(found),
+            drop: () => this._drop(found),
         };
+    }
+
+    // Every maker at once; one that fails doesn't keep the others' finds out.
+    // Gree and Midea answer UDP, to an IPv4 address only; a host name reaches a Daikin.
+    async _look(address) {
+        const broadcast = address === '255.255.255.255';
+        const ipv4 = /^\d{1,3}(\.\d{1,3}){3}$/.test(address);
+        const daikin = broadcast
+            ? Daikin.discover(address)
+            : Daikin.identify(address).then(who => (who ? [{ip: address, ...who}] : []));
+        const results = await Promise.allSettled([ipv4 ? Gree.discover(address) : [], ipv4 ? Midea.discover(address) : [], daikin]);
+        const failed = results.find(r => r.status === 'rejected')?.reason ?? null;
+        const [gree, midea, daikins] = results.map(r => (r.status === 'fulfilled' ? r.value : []));
+        // A Daikin found by broadcast tells its API only to a request of its own.
+        const told = await Promise.all(daikins.map(async found => {
+            if (found.api)
+                return found;
+            const who = await Daikin.identify(found.ip).catch(() => null);
+            return who ? {...found, api: who.api, firmware: who.firmware ?? found.firmware, name: found.name || who.name} : found;
+        }));
+        const found = [
+            ...gree.map(u => ({...u, brand: 'gree'})),
+            ...midea.map(u => ({...u, brand: 'midea'})),
+            ...told.filter(u => u.api).map(u => ({...u, brand: 'daikin', id: u.mac})),
+        ];
+        return {found, failed: found.length === 0 ? failed : null};
     }
 
     async _find(address, quiet = false) {
@@ -804,22 +885,30 @@ class GreeGroup extends FoldGroup {
             return {added: 0};
         setSearching(this._searchButton, true);
         try {
-            const found = await Gree.discover(address);
-            const known = new Set(this._units().map(u => u.mac));
+            const {found, failed} = await this._look(address);
+            if (failed)
+                throw failed;
+            const known = new Set(this._units().map(airconDid));
             const skipped = skippedIn(this._settings, quiet);
+            // A known newer Midea whose key is gone (another computer, a cleared keyring)
+            // fetches it again.
+            for (const unit of found.filter(u => u.brand === 'midea' && Number(u.version) === 3 && known.has(airconDid(u)))) {
+                if (!await Secrets.lookup(Midea.secretService(unit.id)).catch(() => null))
+                    await this._pair(unit);
+            }
             const added = [];
-            for (const unit of found.filter(u => !known.has(u.mac) && !skipped.has(`gree:${u.mac}`))) {
-                const bound = await this._bind(unit);
-                if (bound)
-                    added.push(bound);
+            for (const unit of found.filter(u => !known.has(airconDid(u)) && !skipped.has(airconDid(u)))) {
+                const paired = await this._pair(unit);
+                if (paired)
+                    added.push(paired);
             }
             // Re-read after the awaits: another search may have added the same unit.
-            const at = new Map(found.map(u => [u.mac, u.ip]));
+            const at = new Map(found.map(u => [airconDid(u), u.ip]));
             const units = this._units();
-            const moved = units.some(u => at.has(u.mac) && at.get(u.mac) !== u.ip);
-            const kept = units.map(u => (at.has(u.mac) ? {...u, ip: at.get(u.mac)} : u));
-            const fresh = added.filter(u => !units.some(k => k.mac === u.mac));
-            setSkipped(this._settings, fresh.map(u => `gree:${u.mac}`), false);
+            const moved = units.some(u => at.has(airconDid(u)) && at.get(airconDid(u)) !== u.ip);
+            const kept = units.map(u => (at.has(airconDid(u)) ? {...u, ip: at.get(airconDid(u))} : u));
+            const fresh = added.filter(u => !units.some(k => airconDid(k) === airconDid(u)));
+            setSkipped(this._settings, fresh.map(airconDid), false);
             if (fresh.length > 0 || moved)
                 this._save([...kept, ...fresh]);
             if (quiet)
@@ -834,7 +923,7 @@ class GreeGroup extends FoldGroup {
         } catch (e) {
             if (!quiet)
                 this._toast(e.message);
-            if (!(e instanceof Gree.GreeError) && !(e instanceof GLib.Error))
+            if (!(e instanceof ClimateError) && !(e instanceof GLib.Error))
                 logError(e);
             return {added: 0, failed: true};
         } finally {
@@ -1698,7 +1787,7 @@ class FindGroup extends FoldGroup {
         this._rows = [];
         this._last = null;
         this._choices = [
-            {name: _('Everything'), about: _('Gree, Cast, ONVIF, mDNS and UPnP. Nothing leaves this network, except eWeLink device IDs sent to the eWeLink account.')},
+            {name: _('Everything'), about: _('Gree, Midea, Daikin, Cast, ONVIF, mDNS and UPnP. Nothing leaves this network, except eWeLink device IDs sent to the eWeLink account and a newer Midea unit’s ID sent to Midea’s cloud for its key.')},
             ...finders,
         ];
         const search = new Adw.ComboRow({
@@ -1716,8 +1805,8 @@ class FindGroup extends FoldGroup {
         this._button.connect('clicked', () => this._search().catch(logError));
         search.add_suffix(this._button);
         this.add(search);
-        this._handlers = ['names', 'xiaomi-user-id', 'gree-units', 'tapo-cameras', 'cast-speakers', 'tvs', 'sonoff-switches', 'ewelink-devices',
-            'hue-bridges', 'homekit-accessories']
+        this._handlers = ['names', 'xiaomi-user-id', 'gree-units', 'aircons', 'tapo-cameras', 'cast-speakers', 'tvs', 'sonoff-switches',
+            'ewelink-devices', 'hue-bridges', 'homekit-accessories']
             .map(key => settings.connect(`changed::${key}`, () => {
                 if (this._last)
                     this._show();
@@ -1822,6 +1911,8 @@ class FindGroup extends FoldGroup {
                 .map(t => ({did: `tapo:${t.id}`, name: t.name, ip: t.ip, mac: null})),
             ...parseUnits(this._settings.get_string('gree-units'))
                 .map(t => ({did: `gree:${t.mac}`, name: t.name || t.mac, ip: t.ip, mac: macOf(t.mac)})),
+            ...parseAircons(this._settings.get_string('aircons'))
+                .map(t => ({did: airconDid(t), name: t.name, ip: t.ip, mac: macOf(t.mac)})),
             ...Sonoff.parseSwitches(this._settings.get_string('sonoff-switches'))
                 .map(t => ({did: Sonoff.channels(t)[0].did, name: t.name || t.id, ip: t.ip, mac: null})),
         ];
@@ -2701,6 +2792,229 @@ class HassGroup extends FoldGroup {
     }
 });
 
+// The air conditioners of a maker's cloud account. spec: {id, title, description, help:
+// [title, subtitle, url] or null, fields: [[key, title, secret, placeholder]], module},
+// where module has SECRET, connect(fields), store(account) and, for SmartThings, the
+// browser login with a pasted address.
+const CloudAirconGroup = GObject.registerClass(
+class CloudAirconGroup extends FoldGroup {
+    _init(settings, window, spec) {
+        super._init({title: spec.title, description: spec.description});
+        setGroupIcon(this, spec.id);
+        this._settings = settings;
+        this._window = window;
+        this._spec = spec;
+        this._key = `${spec.id}-devices`;
+        this._connected = false;
+        this._busy = false;
+        this._closed = false;
+        this._pending = null;
+
+        if (spec.help)
+            this.add(helpRow(...spec.help));
+        this._fields = spec.fields.map(([key, title, secret]) => {
+            const row = secret ? new Adw.PasswordEntryRow({title}) : new Adw.EntryRow({title});
+            this.add(row);
+            return [key, row];
+        });
+        if (spec.module.loginUrl) {
+            this._paste = new Adw.EntryRow({title: _('Address the Browser Ended On'), show_apply_button: true, visible: false});
+            this._paste.connect('apply', () => this._finish().catch(logError));
+            this.add(this._paste);
+        }
+
+        this._row = new Adw.ActionRow({title: _('Account')});
+        this._update = new Gtk.Button({
+            icon_name: 'view-refresh-symbolic',
+            tooltip_text: _('Read the List Again'),
+            valign: Gtk.Align.CENTER,
+            css_classes: ['flat'],
+        });
+        this._update.connect('clicked', () => this._read().catch(logError));
+        this._row.add_suffix(this._update);
+        this._button = new Gtk.Button({valign: Gtk.Align.CENTER});
+        this._button.connect('clicked', () => this._onButton().catch(logError));
+        this._row.add_suffix(this._button);
+        this.add(this._row);
+
+        window.connect('close-request', () => {
+            this._closed = true;
+            return false;
+        });
+        this._handlers = [settings.connect(`changed::${this._key}`, () => this._sync().catch(logError))];
+        this._sync().catch(logError);
+        this.foldable(settings, `accounts-${spec.id}`, () => deviceCount(this._devices().length));
+    }
+
+    forget() {
+        for (const id of this._handlers)
+            this._settings.disconnect(id);
+        this._handlers = [];
+    }
+
+    _devices() {
+        return parseEntries(this._settings.get_string(this._key));
+    }
+
+    _toast(title) {
+        this._window.add_toast?.(new Adw.Toast({title, timeout: 6}));
+    }
+
+    async _sync() {
+        const account = await savedAccount(this._spec.module.SECRET);
+        if (this._closed)
+            return;
+        this._connected = Boolean(account);
+        this._row.subtitle = this._connected ? deviceCount(this._devices().length) : _('Not connected');
+        this._button.label = this._connected ? _('Disconnect') : _('Connect');
+        this._button.css_classes = [this._connected ? 'destructive-action' : 'suggested-action'];
+        this._button.sensitive = !this._busy;
+        this._update.visible = this._connected;
+        this._update.sensitive = !this._busy;
+        for (const [, row] of this._fields)
+            row.visible = !this._connected;
+        if (this._paste)
+            this._paste.visible = !this._connected && this._pending !== null;
+    }
+
+    async _onButton() {
+        if (this._connected) {
+            await Secrets.clear(this._spec.module.SECRET);
+            if (this._settings.get_string(this._key) !== '[]')
+                this._settings.set_string(this._key, '[]');
+            await this._sync();
+            return;
+        }
+        const given = Object.fromEntries(this._fields.map(([key, row]) => [key, row.text.trim()]));
+        if (Object.values(given).some(v => !v)) {
+            this._toast(_('Fill in every field first.'));
+            return;
+        }
+        const module = this._spec.module;
+        if (!module.loginUrl) {
+            await this._read(given);
+            return;
+        }
+        this._pending = {...given, state: module.newState()};
+        Gio.AppInfo.launch_default_for_uri(module.loginUrl(given.clientId, this._pending.state), null);
+        this._toast(_('Sign in in the browser, then paste the address it ends on here.'));
+        await this._sync();
+    }
+
+    // The code works once: its tokens are kept before anything else can fail.
+    async _finish() {
+        const pending = this._pending;
+        if (!pending || this._busy)
+            return;
+        let code = null;
+        try {
+            code = this._spec.module.codeFrom(this._paste.text, pending.state);
+        } catch {}
+        if (!code) {
+            this._toast(_('That address has no login code in it.'));
+            return;
+        }
+        this._busy = true;
+        this._paste.sensitive = false;
+        let account = null;
+        try {
+            const {state: _state, ...app} = pending;
+            account = await this._spec.module.logIn(app, code);
+            await this._spec.module.store(account);
+            this._pending = null;
+            this._paste.text = '';
+            for (const [, row] of this._fields)
+                row.text = '';
+        } catch (e) {
+            if (!(e instanceof SpecError) && !(e instanceof GLib.Error))
+                logError(e);
+            this._toast(e.message);
+        } finally {
+            this._busy = false;
+            this._paste.sensitive = true;
+        }
+        if (account)
+            await this._read(account);
+    }
+
+    // Connects with the given login, or the saved one, and keeps what it reads.
+    async _read(given = null) {
+        if (this._busy)
+            return;
+        const module = this._spec.module;
+        const login = given ?? await savedAccount(module.SECRET);
+        if (!login)
+            return;
+        this._busy = true;
+        await this._sync();
+        try {
+            const {account, devices} = await module.connect(login);
+            // Unchanged, the saved login stays as it is: the shell may have renewed it since.
+            if (JSON.stringify(account) !== JSON.stringify(login))
+                await module.store(account);
+            const json = JSON.stringify(devices);
+            if (json !== this._settings.get_string(this._key))
+                this._settings.set_string(this._key, json);
+            if (given) {
+                for (const [, row] of this._fields)
+                    row.text = '';
+            }
+            this._toast(ngettext('%d air conditioner from %s.', '%d air conditioners from %s.', devices.length)
+                .format(devices.length, this._spec.title));
+        } catch (e) {
+            if (!(e instanceof SpecError) && !(e instanceof GLib.Error))
+                logError(e);
+            this._toast(e.message);
+        } finally {
+            this._busy = false;
+        }
+        if (!this._closed)
+            await this._sync();
+    }
+});
+
+const CLOUD_AIRCONS = () => [
+    {
+        id: 'lg',
+        title: _('LG ThinQ'),
+        description: _('LG air conditioners in the LG ThinQ app, through LG’s ThinQ Connect service and a personal access token.'),
+        help: [_('Create a Personal Access Token'),
+            _('Sign in on LG’s site with your LG ThinQ account and create a token with the device permissions. Your country is its two-letter code, like DE or MD.'),
+            Lg.TOKEN_URL],
+        fields: [['token', _('Personal Access Token'), true], ['country', _('Country Code')]],
+        module: Lg,
+    },
+    {
+        id: 'smartthings',
+        title: _('SmartThings'),
+        description: _('Samsung air conditioners in the SmartThings app, through an app of your own: SmartThings’ personal tokens last only a day.'),
+        help: [_('Make a SmartThings App'),
+            _('With the SmartThings CLI, run smartthings apps:create, choose an OAuth-In App, give %s as the redirect URI and the scopes r:devices:* and x:devices:*, then copy its client ID and secret here.')
+                .replace('%s', SmartThings.REDIRECT_URL),
+            SmartThings.CLI_URL],
+        fields: [['clientId', _('Client ID')], ['clientSecret', _('Client Secret'), true]],
+        module: SmartThings,
+    },
+    {
+        id: 'melcloud',
+        title: _('MELCloud'),
+        description: _('Mitsubishi Electric air conditioners in the MELCloud app, with its email and password. MELCloud Home is another service and not supported yet.'),
+        help: null,
+        fields: [['user', _('Email')], ['password', _('Password'), true]],
+        module: Melcloud,
+    },
+    {
+        id: 'electrolux',
+        title: _('Electrolux'),
+        description: _('Electrolux and AEG air conditioners in their apps, through the Electrolux Group developer API.'),
+        help: [_('Get an API Key and Tokens'),
+            _('Sign in on the Electrolux developer site with your Electrolux or AEG account, create an API key, then generate an access token and a refresh token.'),
+            Electrolux.DASHBOARD_URL],
+        fields: [['apiKey', _('API Key'), true], ['accessToken', _('Access Token'), true], ['refreshToken', _('Refresh Token'), true]],
+        module: Electrolux,
+    },
+];
+
 function askForCode(parent, heading, body) {
     return new Promise(resolve => {
         const entry = new Gtk.Entry({
@@ -3332,7 +3646,7 @@ export default class NookPreferences extends ExtensionPreferences {
         look.add(this._roomTabsGroup(settings));
         window.add(look);
 
-        const gree = new GreeGroup(settings, window);
+        const gree = new AirconGroup(settings, window);
         const cameras = new CamerasGroup(settings, window);
         const speakers = new SpeakersGroup(settings, window);
         const tvs = new TvsGroup(settings, window);
@@ -3342,8 +3656,9 @@ export default class NookPreferences extends ExtensionPreferences {
         const hass = new HassGroup(settings, window);
         const homekit = new HomeKitGroup(settings, window);
         const smartlife = new SmartLifeGroup(settings, window);
+        const clouds = CLOUD_AIRCONS().map(spec => new CloudAirconGroup(settings, window, spec));
         const devices = new DevicesPage(settings, new FindGroup(settings, window, [
-            {name: _('Air Conditioners'), about: _('Gree units, by a broadcast on this network.'),
+            {name: _('Air Conditioners'), about: _('Gree, Midea and Daikin units, by a broadcast on this network.'),
                 find: () => gree._find('255.255.255.255', true)},
             {name: _('Cameras'), about: _('Tapo cameras, by ONVIF. A camera answers only once its camera account exists.'),
                 find: () => cameras._find(true)},
@@ -3405,6 +3720,8 @@ export default class NookPreferences extends ExtensionPreferences {
         accounts.add(hass);
         accounts.add(homekit);
         accounts.add(smartlife);
+        for (const cloud of clouds)
+            accounts.add(cloud);
         window.connect('close-request', () => {
             gree.forget();
             cameras.forget();
@@ -3416,6 +3733,8 @@ export default class NookPreferences extends ExtensionPreferences {
             hass.forget();
             homekit.forget();
             smartlife.forget();
+            for (const cloud of clouds)
+                cloud.forget();
             return false;
         });
         window.add(accounts);
@@ -3423,6 +3742,7 @@ export default class NookPreferences extends ExtensionPreferences {
             ['accounts-mihome', xiaomi], ['accounts-gree', gree], ['accounts-tapo', cameras], ['accounts-cast', speakers],
             ['accounts-tv', tvs], ['accounts-sonoff', sonoff], ['accounts-ewelink', ewelink], ['accounts-hue', hue],
             ['accounts-hass', hass], ['accounts-homekit', homekit], ['accounts-smartlife', smartlife],
+            ...clouds.map((cloud, i) => [`accounts-${CLOUD_AIRCONS()[i].id}`, cloud]),
         ]));
 
         this._window = window;
@@ -3751,6 +4071,7 @@ export default class NookPreferences extends ExtensionPreferences {
         for (const device of [
             ...cachedDevices(settings.get_string('xiaomi-user-id')),
             ...parseUnits(settings.get_string('gree-units')),
+            ...parseAircons(settings.get_string('aircons')),
             ...Tapo.parseCameras(settings.get_string('tapo-cameras')),
             ...parseSpeakers(settings.get_string('cast-speakers')),
             ...parseTvs(settings.get_string('tvs')),
