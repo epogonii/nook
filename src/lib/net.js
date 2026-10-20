@@ -164,6 +164,83 @@ export function localNetworks() {
     return [...networks.values()];
 }
 
+/**
+ * Sends packet to address on each port, a few rounds apart (Wi-Fi drops broadcasts,
+ * dozing units miss them), and hands every reply to take(bytes, ip) for timeout ms.
+ * A broadcast also goes to each local network's own broadcast address. localPort is for
+ * units that answer to a fixed port; a busy one falls back to any.
+ */
+export function probe(packet, ports, {address = '255.255.255.255', timeout = 3000, localPort = 0, take}) {
+    const targets = address === '255.255.255.255'
+        ? [address, ...localNetworks().map(network => network.broadcast)] : [address];
+    const socket = Gio.Socket.new(Gio.SocketFamily.IPV4, Gio.SocketType.DATAGRAM, Gio.SocketProtocol.UDP);
+    socket.set_blocking(false);
+    socket.set_broadcast(true);
+    try {
+        socket.bind(Gio.InetSocketAddress.new_from_string('0.0.0.0', localPort), true);
+    } catch (e) {
+        if (!localPort)
+            throw e;
+        console.debug(`nook: probe: port ${localPort}: ${e.message}`);
+        socket.bind(Gio.InetSocketAddress.new_from_string('0.0.0.0', 0), false);
+    }
+    const source = socket.create_source(GLib.IOCondition.IN, null);
+    source.set_callback(() => {
+        for (;;) {
+            let bytes, from;
+            try {
+                [bytes, from] = socket.receive_bytes_from(4096, 0, null);
+            } catch {
+                break;
+            }
+            try {
+                take(bytes.toArray(), from.get_address().to_string());
+            } catch (e) {
+                console.debug(`nook: probe: ${e.message}`);
+            }
+        }
+        return GLib.SOURCE_CONTINUE;
+    });
+    source.attach(null);
+    let sent = 0;
+    const send = () => {
+        for (const target of targets) {
+            for (const port of ports) {
+                try {
+                    socket.send_to(Gio.InetSocketAddress.new_from_string(target, port), packet, null);
+                    sent++;
+                } catch (e) {
+                    console.debug(`nook: probe: ${target}: ${e.message}`);
+                }
+            }
+        }
+    };
+    send();
+    if (sent === 0) {
+        source.destroy();
+        socket.close();
+        return Promise.reject(new TvError(`Nothing could be sent to ${address}`));
+    }
+    let rounds = 1;
+    let again = GLib.timeout_add(GLib.PRIORITY_DEFAULT, 800, () => {
+        send();
+        if (++rounds < 3)
+            return GLib.SOURCE_CONTINUE;
+        again = 0;
+        return GLib.SOURCE_REMOVE;
+    });
+    return new Promise(resolve => {
+        GLib.timeout_add(GLib.PRIORITY_DEFAULT, timeout, () => {
+            if (again)
+                GLib.source_remove(again);
+            source.destroy();
+            socket.close();
+            resolve();
+            return GLib.SOURCE_REMOVE;
+        });
+    });
+}
+
 export function wake(mac) {
     const parts = String(mac ?? '').split(/[:-]/);
     if (parts.length !== 6 || !parts.every(part => /^[0-9a-f]{1,2}$/i.test(part)))

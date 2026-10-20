@@ -37,18 +37,22 @@ function mul(a, b) {
     return r;
 }
 
+// 16, 24 or 32 byte keys; the round count follows from the schedule's length.
 function expandKey(key) {
-    const w = new Uint8Array(176);
+    const n = key.length;
+    const w = new Uint8Array(4 * n + 112);
     w.set(key);
     let rcon = 1;
-    for (let i = 16; i < 176; i += 4) {
+    for (let i = n; i < w.length; i += 4) {
         let t = w.slice(i - 4, i);
-        if (i % 16 === 0) {
+        if (i % n === 0) {
             t = Uint8Array.of(SBOX[t[1]] ^ rcon, SBOX[t[2]], SBOX[t[3]], SBOX[t[0]]);
             rcon = xtime(rcon);
+        } else if (n === 32 && i % n === 16) {
+            t = t.map(b => SBOX[b]);
         }
         for (let j = 0; j < 4; j++)
-            w[i + j] = w[i - 16 + j] ^ t[j];
+            w[i + j] = w[i - n + j] ^ t[j];
     }
     return w;
 }
@@ -80,13 +84,14 @@ function mixColumns(s, inverse) {
 }
 
 function encryptBlock(w, block) {
+    const rounds = w.length / 16 - 1;
     const s = Uint8Array.from(block);
     addRoundKey(s, w, 0);
-    for (let round = 1; round <= 10; round++) {
+    for (let round = 1; round <= rounds; round++) {
         for (let i = 0; i < 16; i++)
             s[i] = SBOX[s[i]];
         shiftRows(s, false);
-        if (round < 10)
+        if (round < rounds)
             mixColumns(s, false);
         addRoundKey(s, w, round);
     }
@@ -94,9 +99,10 @@ function encryptBlock(w, block) {
 }
 
 function decryptBlock(w, block) {
+    const rounds = w.length / 16 - 1;
     const s = Uint8Array.from(block);
-    addRoundKey(s, w, 10);
-    for (let round = 9; round >= 0; round--) {
+    addRoundKey(s, w, rounds);
+    for (let round = rounds - 1; round >= 0; round--) {
         shiftRows(s, true);
         for (let i = 0; i < 16; i++)
             s[i] = INV_SBOX[s[i]];

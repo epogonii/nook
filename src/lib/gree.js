@@ -8,6 +8,7 @@ import Gio from 'gi://Gio';
 import GLib from 'gi://GLib';
 
 import * as Aes from './aes.js';
+import {ClimateError} from './climate.js';
 import {localNetworks} from './net.js';
 
 export const PORT = 7000;
@@ -25,8 +26,6 @@ export const COLUMNS = [
     'Lig', 'SwingLfRig', 'SwUpDn', 'Quiet', 'Tur', 'SvSt', 'TemSen', 'TemRec', 'StHt', 'SlpMod',
 ];
 
-export const MODES = ['auto', 'cool', 'dry', 'fan', 'heat'];
-
 // Most firmware reports TemSen as °C + 40 so it never goes negative; v4 sends plain °C,
 // and 0 means no reading. Per greeclimate, not verified on a real unit.
 const SENSOR_OFFSET = 40;
@@ -38,7 +37,7 @@ function firmwareVersion(info) {
     return match?.[1] ?? null;
 }
 
-export class GreeError extends Error {
+export class GreeError extends ClimateError {
     constructor(message) {
         super(message);
         this.name = 'GreeError';
