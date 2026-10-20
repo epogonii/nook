@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: nook\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-10-19 20:29+0300\n"
+"POT-Creation-Date: 2026-10-20 09:02+0300\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -630,7 +630,7 @@ msgstr ""
 msgid "The TV is not answering. Is it on the same network?"
 msgstr ""
 
-#: extension.js:494 extension.js:807 extension.js:5578 prefs.js:2271
+#: extension.js:494 extension.js:807 extension.js:5578 prefs.js:2286
 msgid "Not paired"
 msgstr ""
 
@@ -688,7 +688,7 @@ msgstr ""
 msgid "Devices connected"
 msgstr ""
 
-#: extension.js:640 extension.js:674 prefs.js:3541
+#: extension.js:640 extension.js:674 prefs.js:3564
 msgid "Address"
 msgstr ""
 
@@ -1369,7 +1369,7 @@ msgstr ""
 msgid "Water purity"
 msgstr ""
 
-#: extension.js:1911 prefs.js:3638
+#: extension.js:1911 prefs.js:3661
 msgid "Position"
 msgstr ""
 
@@ -1704,7 +1704,7 @@ msgstr ""
 msgid "Media"
 msgstr ""
 
-#: extension.js:3015 extension.js:7887 prefs.js:610 prefs.js:1493
+#: extension.js:3015 extension.js:7887 prefs.js:610 prefs.js:1493 prefs.js:3348
 msgid "Cameras"
 msgstr ""
 
@@ -2023,7 +2023,7 @@ msgstr ""
 msgid "OK"
 msgstr ""
 
-#: extension.js:5754 prefs.js:3677
+#: extension.js:5754 prefs.js:3700
 msgid "Menu"
 msgstr ""
 
@@ -2291,11 +2291,11 @@ msgstr ""
 msgid "No devices to show. Add them, or show hidden ones, in Settings."
 msgstr ""
 
-#: extension.js:7844 extension.js:7860 extension.js:7883 prefs.js:3744
+#: extension.js:7844 extension.js:7860 extension.js:7883 prefs.js:3767
 msgid "Pinned"
 msgstr ""
 
-#: extension.js:7854 extension.js:7868 prefs.js:3745
+#: extension.js:7854 extension.js:7868 prefs.js:3768
 msgid "Other"
 msgstr ""
 
@@ -2307,11 +2307,11 @@ msgstr ""
 msgid "Controls"
 msgstr ""
 
-#: extension.js:7885 prefs.js:611 prefs.js:850
+#: extension.js:7885 prefs.js:611 prefs.js:850 prefs.js:3350
 msgid "Speakers"
 msgstr ""
 
-#: extension.js:7886 prefs.js:612 prefs.js:1201
+#: extension.js:7886 prefs.js:612 prefs.js:1201 prefs.js:3352
 msgid "TVs"
 msgstr ""
 
@@ -2348,8 +2348,8 @@ msgid ""
 "to use that one."
 msgstr ""
 
-#: prefs.js:257 prefs.js:380 prefs.js:1186 prefs.js:1979 prefs.js:2166
-#: prefs.js:2177 prefs.js:2704 prefs.js:3111 prefs.js:3273
+#: prefs.js:257 prefs.js:380 prefs.js:1186 prefs.js:1994 prefs.js:2181
+#: prefs.js:2192 prefs.js:2719 prefs.js:3126 prefs.js:3288
 msgid "Cancel"
 msgstr ""
 
@@ -2390,7 +2390,7 @@ msgid "Image…"
 msgstr ""
 
 #: prefs.js:420 prefs.js:702 prefs.js:862 prefs.js:988 prefs.js:1215
-#: prefs.js:1542 prefs.js:1704 prefs.js:2209 prefs.js:2730
+#: prefs.js:1542 prefs.js:1715 prefs.js:2224 prefs.js:2745
 msgid "Search"
 msgstr ""
 
@@ -2436,11 +2436,11 @@ msgstr ""
 msgid "Add an account on the Accounts page, then open the menu once."
 msgstr ""
 
-#: prefs.js:608 prefs.js:3194
+#: prefs.js:608 prefs.js:3209
 msgid "Mi Home"
 msgstr ""
 
-#: prefs.js:609 prefs.js:690
+#: prefs.js:609 prefs.js:690 prefs.js:3346
 msgid "Air Conditioners"
 msgstr ""
 
@@ -2448,23 +2448,23 @@ msgstr ""
 msgid "Sonoff"
 msgstr ""
 
-#: prefs.js:614 prefs.js:1848
+#: prefs.js:614 prefs.js:1863
 msgid "eWeLink"
 msgstr ""
 
-#: prefs.js:615 prefs.js:2194
+#: prefs.js:615 prefs.js:2209 prefs.js:3358
 msgid "Philips Hue"
 msgstr ""
 
-#: prefs.js:616 prefs.js:2538
+#: prefs.js:616 prefs.js:2553
 msgid "Home Assistant"
 msgstr ""
 
-#: prefs.js:617 prefs.js:2716
+#: prefs.js:617 prefs.js:2731 prefs.js:3360
 msgid "HomeKit"
 msgstr ""
 
-#: prefs.js:618 prefs.js:2998
+#: prefs.js:618 prefs.js:3013
 msgid "Smart Life"
 msgstr ""
 
@@ -2485,7 +2485,7 @@ msgid "Gree units on this network, controlled directly: no account, no cloud."
 msgstr ""
 
 #: prefs.js:699 prefs.js:859 prefs.js:985 prefs.js:1212 prefs.js:1539
-#: prefs.js:2206 prefs.js:2727
+#: prefs.js:2221 prefs.js:2742
 msgid "Find on This Network"
 msgstr ""
 
@@ -2493,12 +2493,12 @@ msgstr ""
 msgid "The unit has to be on and connected to the same Wi-Fi."
 msgstr ""
 
-#: prefs.js:706 prefs.js:2213
+#: prefs.js:706 prefs.js:2228
 msgid "Add by Address"
 msgstr ""
 
 #: prefs.js:744 prefs.js:902 prefs.js:1055 prefs.js:1282 prefs.js:1588
-#: prefs.js:1922 prefs.js:2292 prefs.js:2788
+#: prefs.js:1937 prefs.js:2307 prefs.js:2803
 msgid "Remove"
 msgstr ""
 
@@ -2512,7 +2512,7 @@ msgid "No air conditioner answered."
 msgstr ""
 
 #: prefs.js:830 prefs.js:958 prefs.js:1089 prefs.js:1418 prefs.js:1655
-#: prefs.js:2510
+#: prefs.js:2525
 msgid "Nothing new found."
 msgstr ""
 
@@ -2540,7 +2540,7 @@ msgstr ""
 msgid "A switch answers here once it is in DIY mode."
 msgstr ""
 
-#: prefs.js:1047 prefs.js:1914
+#: prefs.js:1047 prefs.js:1929
 #, javascript-format
 msgid "%d channel"
 msgid_plural "%d channels"
@@ -2603,7 +2603,7 @@ msgstr ""
 msgid "Pair with the TV"
 msgstr ""
 
-#: prefs.js:1187 prefs.js:1271 prefs.js:2284 prefs.js:2705 prefs.js:2798
+#: prefs.js:1187 prefs.js:1271 prefs.js:2299 prefs.js:2720 prefs.js:2813
 msgid "Pair"
 msgstr ""
 
@@ -2622,7 +2622,7 @@ msgstr ""
 msgid "Paired"
 msgstr ""
 
-#: prefs.js:1271 prefs.js:2284
+#: prefs.js:1271 prefs.js:2299
 msgid "Pair Again"
 msgstr ""
 
@@ -2756,7 +2756,7 @@ msgstr ""
 msgid "Cameras added."
 msgstr ""
 
-#: prefs.js:1673 prefs.js:2075
+#: prefs.js:1673 prefs.js:2090
 msgid "Already in Nook"
 msgstr ""
 
@@ -2796,128 +2796,132 @@ msgid ""
 msgstr ""
 
 #: prefs.js:1701
-msgid "Search Everything"
+msgid "Everything"
 msgstr ""
 
-#: prefs.js:1702
+#: prefs.js:1701
 msgid ""
 "Gree, Cast, ONVIF, mDNS and UPnP. Nothing leaves this network, except "
 "eWeLink device IDs sent to the eWeLink account."
 msgstr ""
 
-#: prefs.js:1743
+#: prefs.js:1705
+msgid "Look For"
+msgstr ""
+
+#: prefs.js:1758
 msgid "Nothing new to add."
 msgstr ""
 
-#: prefs.js:1745
+#: prefs.js:1760
 #, javascript-format
 msgid "%d new device added."
 msgid_plural "%d new devices added."
 msgstr[0] ""
 msgstr[1] ""
 
-#: prefs.js:1747
+#: prefs.js:1762
 msgid "Part of the search failed. Try again in a moment."
 msgstr ""
 
-#: prefs.js:1780
+#: prefs.js:1795
 msgid "In Nook"
 msgstr ""
 
-#: prefs.js:1849
+#: prefs.js:1864
 msgid ""
 "Sonoff and other eWeLink devices, through a free app of your own on "
 "eWeLink's developer site."
 msgstr ""
 
-#: prefs.js:1859
+#: prefs.js:1874
 msgid "Get an App ID and App Secret"
 msgstr ""
 
-#: prefs.js:1860
+#: prefs.js:1875
 #, javascript-format
 msgid ""
 "Sign up on the developer site, wait for the approval, then create an app "
 "there with the redirect URL %s and copy its two keys here."
 msgstr ""
 
-#: prefs.js:1863
+#: prefs.js:1878
 msgid "App ID"
 msgstr ""
 
-#: prefs.js:1863
+#: prefs.js:1878
 msgid "App Secret"
 msgstr ""
 
-#: prefs.js:1866 prefs.js:3017 prefs.js:3204
+#: prefs.js:1881 prefs.js:3032 prefs.js:3219
 msgid "Account"
 msgstr ""
 
-#: prefs.js:1872
+#: prefs.js:1887
 msgid "Add by Device ID"
 msgstr ""
 
-#: prefs.js:1950
+#: prefs.js:1965
 #, javascript-format
 msgid "Logged in, region %s"
 msgstr ""
 
-#: prefs.js:1952 prefs.js:3077 prefs.js:3249
+#: prefs.js:1967 prefs.js:3092 prefs.js:3264
 msgid "Not logged in"
 msgstr ""
 
-#: prefs.js:1952
+#: prefs.js:1967
 msgid "Save the app keys first"
 msgstr ""
 
-#: prefs.js:1953 prefs.js:3079 prefs.js:3250
+#: prefs.js:1968 prefs.js:3094 prefs.js:3265
 msgid "Log Out"
 msgstr ""
 
-#: prefs.js:1953 prefs.js:3079 prefs.js:3250
+#: prefs.js:1968 prefs.js:3094 prefs.js:3265
 msgid "Log In"
 msgstr ""
 
-#: prefs.js:1981
+#: prefs.js:1996
 msgid "Finish signing in in the browser."
 msgstr ""
 
-#: prefs.js:2049
+#: prefs.js:2064
 #, javascript-format
 msgid "%d eWeLink device added."
 msgid_plural "%d eWeLink devices added."
 msgstr[0] ""
 msgstr[1] ""
 
-#: prefs.js:2050
+#: prefs.js:2065
 msgid ""
 "eWeLink lists no new devices for this app. Search on the Devices page, or "
 "add one by its Device ID from the eWeLink app."
 msgstr ""
 
-#: prefs.js:2061
+#: prefs.js:2076
 msgid ""
 "A Device ID is 10 letters and digits, like 1000a1b2c3, shown in the device "
 "settings of the eWeLink app."
 msgstr ""
 
-#: prefs.js:2071 prefs.js:2105
+#: prefs.js:2086 prefs.js:2120
 msgid "This eWeLink account and app have no switch with that Device ID."
 msgstr ""
 
-#: prefs.js:2075
+#: prefs.js:2090
 msgid "Device added."
 msgstr ""
 
-#: prefs.js:2103
+#: prefs.js:2118
 msgid "Log in to eWeLink first."
 msgstr ""
 
-#: prefs.js:2160
+#: prefs.js:2175
 msgid "The Bridge Has a New Certificate"
 msgstr ""
 
-#: prefs.js:2161
+#: prefs.js:2176
 #, javascript-format
 msgid ""
 "The bridge answered with another certificate than the one Nook saw before. "
@@ -2928,456 +2932,499 @@ msgid ""
 "Now: %s"
 msgstr ""
 
-#: prefs.js:2167
+#: prefs.js:2182
 msgid "Trust the New One"
 msgstr ""
 
-#: prefs.js:2195
+#: prefs.js:2210
 msgid ""
 "Hue lights, plugs and sensors through a Hue Bridge on this network, without "
 "the cloud."
 msgstr ""
 
-#: prefs.js:2207
+#: prefs.js:2222
 msgid "A Hue Bridge answers on the network it is plugged into."
 msgstr ""
 
-#: prefs.js:2276 prefs.js:2559 prefs.js:2786 prefs.js:3020
+#: prefs.js:2291 prefs.js:2574 prefs.js:2801 prefs.js:3035
 msgid "Read the List Again"
 msgstr ""
 
-#: prefs.js:2337
+#: prefs.js:2352
 msgid ""
 "This bridge answered with another certificate than before. Remove it first "
 "to add it again."
 msgstr ""
 
-#: prefs.js:2378
+#: prefs.js:2393
 msgid "Another bridge answers at this address now. Search again."
 msgstr ""
 
-#: prefs.js:2381
+#: prefs.js:2396
 msgid "Press the Link Button"
 msgstr ""
 
-#: prefs.js:2382
+#: prefs.js:2397
 msgid ""
 "Press the round button on the Hue Bridge. Nook keeps asking the bridge for a "
 "minute."
 msgstr ""
 
-#: prefs.js:2392
+#: prefs.js:2407
 msgid "The link button was not pressed in time."
 msgstr ""
 
-#: prefs.js:2425
+#: prefs.js:2440
 msgid "Pair the bridge first."
 msgstr ""
 
-#: prefs.js:2446
+#: prefs.js:2461
 #, javascript-format
 msgid "%d Hue device."
 msgid_plural "%d Hue devices."
 msgstr[0] ""
 msgstr[1] ""
 
-#: prefs.js:2508
+#: prefs.js:2523
 msgid "No Hue Bridge answered. Add it by its address if the network hides it."
 msgstr ""
 
-#: prefs.js:2517
+#: prefs.js:2532
 msgid "Pair each new bridge with the button beside it."
 msgstr ""
 
-#: prefs.js:2539
+#: prefs.js:2554
 msgid ""
 "Lights, switches, climate, covers and sensors of a Home Assistant server, "
 "through an access token of your own."
 msgstr ""
 
-#: prefs.js:2548
+#: prefs.js:2563
 msgid "Create an Access Token"
 msgstr ""
 
-#: prefs.js:2549
+#: prefs.js:2564
 msgid ""
 "In Home Assistant, open your profile, then Security, and create a long-lived "
 "access token at the bottom of the page."
 msgstr ""
 
-#: prefs.js:2551
+#: prefs.js:2566
 msgid "Address, like http://homeassistant.local:8123"
 msgstr ""
 
-#: prefs.js:2552
+#: prefs.js:2567
 msgid "Access Token"
 msgstr ""
 
-#: prefs.js:2556
+#: prefs.js:2571
 msgid "Server"
 msgstr ""
 
-#: prefs.js:2615
+#: prefs.js:2630
 msgid "Not connected"
 msgstr ""
 
-#: prefs.js:2616
+#: prefs.js:2631
 msgid "Disconnect"
 msgstr ""
 
-#: prefs.js:2616
+#: prefs.js:2631
 msgid "Connect"
 msgstr ""
 
-#: prefs.js:2644
+#: prefs.js:2659
 msgid "Type the address of Home Assistant first."
 msgstr ""
 
-#: prefs.js:2648
+#: prefs.js:2663
 msgid "Paste an access token first."
 msgstr ""
 
-#: prefs.js:2674
+#: prefs.js:2689
 #, javascript-format
 msgid "%d device from Home Assistant."
 msgid_plural "%d devices from Home Assistant."
 msgstr[0] ""
 msgstr[1] ""
 
-#: prefs.js:2717
+#: prefs.js:2732
 msgid ""
 "HomeKit accessories on this network, paired with Nook by the setup code on "
 "the accessory or its box. An accessory has one owner: remove it from the "
 "Home app first, or reset it."
 msgstr ""
 
-#: prefs.js:2728
+#: prefs.js:2743
 msgid ""
 "An accessory answers while it is on; one in another home can only be paired "
 "once it is removed there."
 msgstr ""
 
-#: prefs.js:2795
+#: prefs.js:2810
 msgid "In another home"
 msgstr ""
 
-#: prefs.js:2820
+#: prefs.js:2835
 msgid ""
 "This accessory is in another home. Remove it from the Home app, or reset it, "
 "then search again."
 msgstr ""
 
-#: prefs.js:2823
+#: prefs.js:2838
 msgid "Pair with HomeKit"
 msgstr ""
 
-#: prefs.js:2824
+#: prefs.js:2839
 #, javascript-format
 msgid "Type in the eight-digit setup code on %s or its box."
 msgstr ""
 
-#: prefs.js:2829
+#: prefs.js:2844
 msgid "A setup code has eight digits, like 123-45-678."
 msgstr ""
 
-#: prefs.js:2866
+#: prefs.js:2881
 msgid "Pair the accessory again: its keys are not in the keyring."
 msgstr ""
 
-#: prefs.js:2877
+#: prefs.js:2892
 #, javascript-format
 msgid "%d HomeKit accessory."
 msgid_plural "%d HomeKit accessories."
 msgstr[0] ""
 msgstr[1] ""
 
-#: prefs.js:2909
+#: prefs.js:2924
 msgid ""
 "Removed. The accessory could not be reached to forget Nook; reset it before "
 "pairing it again."
 msgstr ""
 
-#: prefs.js:2950
+#: prefs.js:2965
 msgid "No HomeKit accessory answered."
 msgstr ""
 
-#: prefs.js:2952
+#: prefs.js:2967
 msgid ""
 "Nothing new to pair. An accessory in another home must be removed there "
 "first."
 msgstr ""
 
-#: prefs.js:2999
+#: prefs.js:3014
 msgid ""
 "Devices in a Smart Life or Tuya Smart account, signed in the way Home "
 "Assistant does it: with the user code from the app and a QR code scanned "
 "with it."
 msgstr ""
 
-#: prefs.js:3009
+#: prefs.js:3024
 msgid "User Code"
 msgstr ""
 
-#: prefs.js:3011
+#: prefs.js:3026
 msgid "Where the User Code Is"
 msgstr ""
 
-#: prefs.js:3012
+#: prefs.js:3027
 msgid ""
 "In the Smart Life app: Me, the gear at the top, Account and Security, User "
 "Code."
 msgstr ""
 
-#: prefs.js:3035
+#: prefs.js:3050
 msgid ""
 "Open Smart Life on the phone, tap + on the Home tab, then Scan, point it at "
 "this code and confirm the login."
 msgstr ""
 
-#: prefs.js:3107
+#: prefs.js:3122
 msgid "Type in the user code from the Smart Life app first."
 msgstr ""
 
-#: prefs.js:3131
+#: prefs.js:3146
 msgid "The QR code was not scanned in time. Log in again for a new one."
 msgstr ""
 
-#: prefs.js:3176
+#: prefs.js:3191
 #, javascript-format
 msgid "%d device from Smart Life."
 msgid_plural "%d devices from Smart Life."
 msgstr[0] ""
 msgstr[1] ""
 
-#: prefs.js:3195
+#: prefs.js:3210
 msgid "Xiaomi devices and everything else added to the Mi Home app."
 msgstr ""
 
-#: prefs.js:3213
+#: prefs.js:3228
 msgid "A QR code to scan with Mi Home"
 msgstr ""
 
-#: prefs.js:3223
+#: prefs.js:3238
 msgid ""
 "Open Mi Home on your phone, tap the scan icon on the Profile tab and point "
 "it at this code."
 msgstr ""
 
-#: prefs.js:3248
+#: prefs.js:3263
 #, javascript-format
 msgid "Logged in as %s"
 msgstr ""
 
-#: prefs.js:3312
+#: prefs.js:3327
 msgid "Appearance"
 msgstr ""
 
-#: prefs.js:3370
+#: prefs.js:3346
+msgid "Gree units, by a broadcast on this network."
+msgstr ""
+
+#: prefs.js:3348
+msgid ""
+"Tapo cameras, by ONVIF. A camera answers only once its camera account exists."
+msgstr ""
+
+#: prefs.js:3350
+msgid "Google Cast speakers and displays, by mDNS."
+msgstr ""
+
+#: prefs.js:3352
+msgid "By mDNS and UPnP."
+msgstr ""
+
+#: prefs.js:3354
+msgid "Sonoff Switches"
+msgstr ""
+
+#: prefs.js:3354
+msgid "Switches in DIY mode, by mDNS."
+msgstr ""
+
+#: prefs.js:3356
+msgid "eWeLink Devices"
+msgstr ""
+
+#: prefs.js:3356
+msgid ""
+"By mDNS, once the eWeLink account is logged in. Their device IDs are sent to "
+"that account."
+msgstr ""
+
+#: prefs.js:3358
+msgid "Hue bridges, by mDNS."
+msgstr ""
+
+#: prefs.js:3360
+msgid "HomeKit accessories, by mDNS."
+msgstr ""
+
+#: prefs.js:3393
 msgid "Accounts"
 msgstr ""
 
-#: prefs.js:3467
+#: prefs.js:3490
 msgid "About"
 msgstr ""
 
-#: prefs.js:3482
+#: prefs.js:3505
 msgid "Your smart home, from the top bar"
 msgstr ""
 
-#: prefs.js:3491
+#: prefs.js:3514
 msgid "Project page"
 msgstr ""
 
-#: prefs.js:3500
+#: prefs.js:3523
 msgid "Report a problem"
 msgstr ""
 
-#: prefs.js:3501
+#: prefs.js:3524
 msgid "Request a feature"
 msgstr ""
 
-#: prefs.js:3504
+#: prefs.js:3527
 msgid ""
 "A device it gets wrong, or one it cannot reach yet - either one belongs in "
 "an issue."
 msgstr ""
 
-#: prefs.js:3512
+#: prefs.js:3535
 msgid "Support"
 msgstr ""
 
-#: prefs.js:3515
+#: prefs.js:3538
 msgid "Nook is free and stays free. If it earned a coffee ☕"
 msgstr ""
 
-#: prefs.js:3520
+#: prefs.js:3543
 msgid "GitHub Sponsors"
 msgstr ""
 
-#: prefs.js:3520
+#: prefs.js:3543
 msgid "Monthly or one time"
 msgstr ""
 
-#: prefs.js:3521
+#: prefs.js:3544
 msgid "PayPal"
 msgstr ""
 
-#: prefs.js:3525
+#: prefs.js:3548
 #, javascript-format
 msgid "Nook %s"
 msgstr ""
 
-#: prefs.js:3537
+#: prefs.js:3560
 msgid "Cryptocurrency"
 msgstr ""
 
-#: prefs.js:3547
+#: prefs.js:3570
 msgid "Copy the address"
 msgstr ""
 
-#: prefs.js:3567
+#: prefs.js:3590
 #, javascript-format
 msgid "The %s address as a QR code"
 msgstr ""
 
-#: prefs.js:3579
+#: prefs.js:3602
 #, javascript-format
 msgid "%s address copied"
 msgstr ""
 
-#: prefs.js:3617
+#: prefs.js:3640
 msgid "Placement"
 msgstr ""
 
-#: prefs.js:3620
+#: prefs.js:3643
 msgid "Top bar button"
 msgstr ""
 
-#: prefs.js:3621
+#: prefs.js:3644
 msgid "Quick Settings"
 msgstr ""
 
-#: prefs.js:3623
+#: prefs.js:3646
 msgid "Location"
 msgstr ""
 
-#: prefs.js:3624
+#: prefs.js:3647
 msgid "A button of its own, or a tile next to Wi-Fi and Bluetooth."
 msgstr ""
 
-#: prefs.js:3628
+#: prefs.js:3651
 msgctxt "top bar area"
 msgid "Left"
 msgstr ""
 
-#: prefs.js:3629
+#: prefs.js:3652
 msgctxt "top bar area"
 msgid "Centre"
 msgstr ""
 
-#: prefs.js:3630
+#: prefs.js:3653
 msgctxt "top bar area"
 msgid "Right"
 msgstr ""
 
-#: prefs.js:3632
+#: prefs.js:3655
 msgid "Top Bar Area"
 msgstr ""
 
-#: prefs.js:3633
+#: prefs.js:3656
 msgid "Which part of the top bar the button is in."
 msgstr ""
 
-#: prefs.js:3639
+#: prefs.js:3662
 msgid "Counted from the left of that area. Zero is first."
 msgstr ""
 
-#: prefs.js:3646
+#: prefs.js:3669
 msgid "Nothing"
 msgstr ""
 
-#: prefs.js:3647
+#: prefs.js:3670
 msgid "Find devices again"
 msgstr ""
 
-#: prefs.js:3648
+#: prefs.js:3671
 msgid "Open these settings"
 msgstr ""
 
-#: prefs.js:3650
+#: prefs.js:3673
 msgid "Middle Click"
 msgstr ""
 
-#: prefs.js:3651
+#: prefs.js:3674
 msgid "On the button in the top bar."
 msgstr ""
 
-#: prefs.js:3656
+#: prefs.js:3679
 msgid "Switch Menus on Hover"
 msgstr ""
 
-#: prefs.js:3657
+#: prefs.js:3680
 msgid ""
 "Pointing at another top bar button closes Nook and opens that menu. Off: "
 "Nook stays open until a click outside it."
 msgstr ""
 
-#: prefs.js:3680
+#: prefs.js:3703
 msgid "Rooms as tabs"
 msgstr ""
 
-#: prefs.js:3681
+#: prefs.js:3704
 msgid "Small tiles"
 msgstr ""
 
-#: prefs.js:3682
+#: prefs.js:3705
 msgid "Tiles by room"
 msgstr ""
 
-#: prefs.js:3683
+#: prefs.js:3706
 msgid "Modules"
 msgstr ""
 
-#: prefs.js:3686
+#: prefs.js:3709
 msgid "View"
 msgstr ""
 
-#: prefs.js:3687
+#: prefs.js:3710
 msgid "How the menu lays out the devices."
 msgstr ""
 
-#: prefs.js:3705
+#: prefs.js:3728
 msgid "Colour by Device Type"
 msgstr ""
 
-#: prefs.js:3706
+#: prefs.js:3729
 msgid ""
 "Fans, lights and sensors each get a colour of their own instead of the "
 "accent colour."
 msgstr ""
 
-#: prefs.js:3712
+#: prefs.js:3735
 msgid "Coloured Top Bar Icon"
 msgstr ""
 
-#: prefs.js:3713
+#: prefs.js:3736
 msgid ""
 "Cream with a clay doorway. Off: monochrome, in the colour of the other icons."
 msgstr ""
 
-#: prefs.js:3724
+#: prefs.js:3747
 msgid "Room Tabs"
 msgstr ""
 
-#: prefs.js:3725
+#: prefs.js:3748
 msgid ""
 "The tabs shown over the tiles. A room left out keeps its devices under All."
 msgstr ""
 
-#: prefs.js:3779
+#: prefs.js:3802
 msgid "Show All"
 msgstr ""
 
-#: prefs.js:3779
+#: prefs.js:3802
 msgid "Hide All"
 msgstr ""

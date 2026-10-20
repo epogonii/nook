@@ -1697,10 +1697,21 @@ class FindGroup extends FoldGroup {
         this._finders = finders;
         this._rows = [];
         this._last = null;
-        const search = new Adw.ActionRow({
-            title: _('Search Everything'),
-            subtitle: _('Gree, Cast, ONVIF, mDNS and UPnP. Nothing leaves this network, except eWeLink device IDs sent to the eWeLink account.'),
+        this._choices = [
+            {name: _('Everything'), about: _('Gree, Cast, ONVIF, mDNS and UPnP. Nothing leaves this network, except eWeLink device IDs sent to the eWeLink account.')},
+            ...finders,
+        ];
+        const search = new Adw.ComboRow({
+            title: _('Look For'),
+            subtitle_lines: 0,
+            model: Gtk.StringList.new(this._choices.map(c => c.name)),
         });
+        const describe = () => {
+            search.subtitle = this._choices[search.selected]?.about ?? '';
+        };
+        describe();
+        search.connect('notify::selected', describe);
+        this._choice = search;
         this._button = new Gtk.Button({label: _('Search'), valign: Gtk.Align.CENTER, css_classes: ['suggested-action']});
         this._button.connect('clicked', () => this._search().catch(logError));
         search.add_suffix(this._button);
@@ -1723,13 +1734,17 @@ class FindGroup extends FoldGroup {
     async _search() {
         setSearching(this._button, true);
         try {
-            const looking = survey(3000).catch(e => {
+            const choice = this._choices[this._choice.selected];
+            const one = choice?.find ? choice : null;
+            const finders = one ? [one.find] : this._finders.map(f => f.find);
+            // Alone, Hue and HomeKit browse only their own mDNS service.
+            const looking = !one || one.survey ? survey(3000).catch(e => {
                 console.debug(`nook: finder: ${e.message}`);
                 return [];
-            });
+            }) : null;
             const [results, seen] = await Promise.all([
-                Promise.allSettled(this._finders.map(find => find(looking))),
-                looking,
+                Promise.allSettled(finders.map(find => find(looking))),
+                one ? [] : looking,
             ]);
             const added = results.reduce((sum, r) => sum + (r.status === 'fulfilled' ? r.value?.added ?? 0 : 0), 0);
             const failed = results.some(r => r.status === 'rejected' || r.value?.failed);
@@ -3328,14 +3343,22 @@ export default class NookPreferences extends ExtensionPreferences {
         const homekit = new HomeKitGroup(settings, window);
         const smartlife = new SmartLifeGroup(settings, window);
         const devices = new DevicesPage(settings, new FindGroup(settings, window, [
-            () => gree._find('255.255.255.255', true),
-            () => cameras._find(true),
-            () => speakers._find(true),
-            looking => tvs._find(true, looking),
-            () => sonoff._find(true),
-            looking => ewelink._find(true, looking),
-            looking => hue._find(true, looking),
-            looking => homekit._find(true, looking),
+            {name: _('Air Conditioners'), about: _('Gree units, by a broadcast on this network.'),
+                find: () => gree._find('255.255.255.255', true)},
+            {name: _('Cameras'), about: _('Tapo cameras, by ONVIF. A camera answers only once its camera account exists.'),
+                find: () => cameras._find(true)},
+            {name: _('Speakers'), about: _('Google Cast speakers and displays, by mDNS.'),
+                find: () => speakers._find(true)},
+            {name: _('TVs'), about: _('By mDNS and UPnP.'),
+                find: looking => tvs._find(true, looking), survey: true},
+            {name: _('Sonoff Switches'), about: _('Switches in DIY mode, by mDNS.'),
+                find: () => sonoff._find(true)},
+            {name: _('eWeLink Devices'), about: _('By mDNS, once the eWeLink account is logged in. Their device IDs are sent to that account.'),
+                find: looking => ewelink._find(true, looking), survey: true},
+            {name: _('Philips Hue'), about: _('Hue bridges, by mDNS.'),
+                find: looking => hue._find(true, looking)},
+            {name: _('HomeKit'), about: _('HomeKit accessories, by mDNS.'),
+                find: looking => homekit._find(true, looking)},
         ]));
         window.add(devices);
         window.connect('close-request', () => {
