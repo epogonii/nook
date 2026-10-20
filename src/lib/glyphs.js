@@ -782,7 +782,8 @@ const SAME_AS = {
     'window-opener': 'curtain',
 };
 
-const SOURCES = {gree: 'air-conditioner', cast: 'speaker', tapo: 'camera', tv: 'television', sonoff: 'switch'};
+const SOURCES = {gree: 'air-conditioner', midea: 'air-conditioner', daikin: 'air-conditioner', cast: 'speaker',
+    tapo: 'camera', tv: 'television', sonoff: 'switch'};
 
 const MODEL_HINTS = [
     [/aircondition|acpartner/, 'air-conditioner'],

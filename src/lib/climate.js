@@ -55,25 +55,25 @@ function modeOf(description) {
     return null;
 }
 
-// Spec fan levels: named ones by their word, "Level 3" or "3" as numbered steps.
+const FAN_NAMES = [
+    [/^auto(matic)?$/, 'auto', 0],
+    [/^(silent|quiet|mute|sleep|slow)$/, 'quiet', 1],
+    [/^low$/, 'low', 2],
+    [/^(mid|medium|middle)$/, 'medium', 3],
+    [/^high$/, 'high', 4],
+    [/^(max|full)$/, 'max', 5],
+    [/^(turbo|strong|powerful|power)$/, 'turbo', 5],
+];
+
+// Spec fan levels: known words, "Level 3" or "3" as numbered steps, anything else by its
+// own name.
 function fansOf(choices) {
     const counted = choices.filter(c => /^\D*\d+\s*$/.test(String(c.description ?? '')));
     return choices.map(({value, description}) => {
-        const text = String(description ?? '').toLowerCase();
-        if (/auto/.test(text))
-            return {value, word: 'auto', level: 0};
-        if (/silent|quiet|mute|sleep/.test(text))
-            return {value, word: 'quiet', level: 1};
-        if (/turbo|strong|powerful/.test(text))
-            return {value, word: 'turbo', level: 5};
-        if (/max|full/.test(text))
-            return {value, word: 'max', level: 5};
-        if (/low/.test(text))
-            return {value, word: 'low', level: 2};
-        if (/mid|medium/.test(text))
-            return {value, word: 'medium', level: 3};
-        if (/high/.test(text))
-            return {value, word: 'high', level: 4};
+        const text = String(description ?? '').trim().toLowerCase();
+        const named = FAN_NAMES.find(([pattern]) => pattern.test(text));
+        if (named)
+            return {value, word: named[1], level: named[2]};
         const n = counted.findIndex(c => c.value === value);
         if (n >= 0)
             return {value, word: null, level: Math.max(1, Math.round((n + 1) * 5 / counted.length))};
@@ -81,15 +81,18 @@ function fansOf(choices) {
     });
 }
 
-const SPEC_TOGGLES = [['SvSt', 'eco'], ['SwhSlp', 'sleep-mode'], ['Blo', 'dryer'], ['Health', 'anion']];
+const SPEC_TOGGLES = [['SvSt', 'eco'], ['SwhSlp', 'sleep-mode'], ['Tur', 'turbo'], ['Quiet', 'quiet'], ['Blo', 'dryer'],
+    ['Health', 'anion']];
 const DISPLAYS = ['indicator-light', 'screen'];
 
 /**
  * The card's state of an air conditioner described by MIoT-like services (Mi Home and
- * the sources spec-home.js builds), or null without a switch, modes or a target.
- * writes(changes) gives the [siid, piid, value] to set for the card's changes.
+ * the sources spec-home.js builds), or null without a switch, modes or a Celsius target.
+ * Values not read are null. keys lists the properties the card shows itself;
+ * writes(changes) gives the [siid, piid, value] to set for the card's changes. power
+ * stands in for an unread switch.
  */
-export function specClimate(services, values) {
+export function specClimate(services, values, power = null) {
     const find = (name, test = () => true) => {
         for (const service of services) {
             const prop = service.properties.find(p => p.name === name && test(p, service));
@@ -104,7 +107,11 @@ export function specClimate(services, values) {
     const on = mode ? find('on', (p, s) => s.siid === mode.siid && writable(p)) : null;
     if (!mode || !target || !on)
         return null;
+    // The card is in Celsius only; a Fahrenheit unit keeps the plain card.
+    if (target.prop.unit === 'fahrenheit' || /F/.test(target.prop.suffix ?? ''))
+        return null;
     const value = found => (found && values.has(found.key) ? values.get(found.key) : undefined);
+    const flag = found => (typeof value(found) === 'boolean' ? Number(value(found)) : null);
 
     const byMode = new Map();
     for (const choice of mode.prop.choices) {
@@ -125,47 +132,53 @@ export function specClimate(services, values) {
 
     const current = modeOf(mode.prop.choices.find(c => c.value === value(mode))?.description);
     const set = value(target);
+    const switched = typeof value(on) === 'boolean' ? value(on) : power;
     const state = {
-        Pow: value(on) ? 1 : 0,
-        Mod: MODES.indexOf(current ?? 'auto'),
-        SetTem: typeof set === 'number' ? set : Math.round((min + max) / 2),
+        Pow: switched ? 1 : 0,
+        Mod: current ? MODES.indexOf(current) : null,
+        SetTem: typeof set === 'number' ? set : null,
         roomTemperature: null,
     };
+    const keys = new Set([on.key, mode.key, target.key]);
     const room = find('temperature', p => !writable(p)) ?? find('indoor-temperature');
-    if (typeof value(room) === 'number')
-        state.roomTemperature = value(room);
+    if (room) {
+        keys.add(room.key);
+        if (typeof value(room) === 'number')
+            state.roomTemperature = value(room);
+    }
 
     const fields = {Pow: [on, v => Boolean(v)], SetTem: [target, v => v],
         Mod: [mode, v => byMode.get(MODES[v]) ?? byMode.values().next().value]};
+    const take = (key, found, write, read) => {
+        keys.add(found.key);
+        state[key] = read(found);
+        fields[key] = [found, write];
+    };
     const fan = find('fan-level', p => writable(p) && p.choices?.length > 1);
-    if (fan && value(fan) !== undefined) {
+    if (fan) {
         caps.fans = fansOf(fan.prop.choices);
-        state.WdSpd = value(fan);
-        fields.WdSpd = [fan, v => v];
+        take('WdSpd', fan, v => v, found => value(found) ?? null);
     }
     for (const [key, name] of [['SwUpDn', 'vertical-swing'], ['SwingLfRig', 'horizontal-swing']]) {
         const swing = find(name, p => writable(p) && p.format === 'bool');
-        if (swing && typeof value(swing) === 'boolean') {
-            state[key] = value(swing) ? 1 : 0;
-            fields[key] = [swing, v => v === 1];
-        }
+        if (swing)
+            take(key, swing, v => v === 1, flag);
     }
     for (const [key, name] of SPEC_TOGGLES) {
         const toggle = find(name, p => writable(p) && p.format === 'bool');
-        if (toggle && typeof value(toggle) === 'boolean') {
-            state[key] = value(toggle) ? 1 : 0;
-            fields[key] = [toggle, v => Boolean(v)];
-        }
+        if (toggle)
+            take(key, toggle, v => Boolean(v), flag);
     }
-    const display = find('on', (p, s) => DISPLAYS.includes(s.name) && writable(p));
-    if (display && typeof value(display) === 'boolean') {
-        state.Lig = value(display) ? 1 : 0;
-        fields.Lig = [display, v => Boolean(v)];
+    for (const [key, names] of [['Lig', DISPLAYS], ['Air', ['air-fresh']]]) {
+        const own = find('on', (p, s) => names.includes(s.name) && writable(p));
+        if (own)
+            take(key, own, v => Boolean(v), flag);
     }
 
     return {
         state,
         caps,
+        keys,
         writes: changes => Object.entries(changes).filter(([key]) => fields[key])
             .map(([key, v]) => [fields[key][0].siid, fields[key][0].prop.piid, fields[key][1](v)]),
     };
