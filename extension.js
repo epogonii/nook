@@ -27,7 +27,8 @@ import {TvError, TvHome, parseTvs} from './lib/tv-home.js';
 import * as Gateway from './lib/gateway.js';
 import * as Glyphs from './lib/glyphs.js';
 import * as Scenes from './lib/scenes.js';
-import {GreeError, GreeHome, MODES, parseUnits} from './lib/gree-home.js';
+import {AirconHome, ClimateError, MODES, parseAircons, parseUnits} from './lib/aircon-home.js';
+import {snapTemperature, specClimate} from './lib/climate.js';
 import * as Secrets from './lib/secrets.js';
 import {SonoffError, SonoffHome, parseSwitches} from './lib/sonoff.js';
 import {EwelinkError} from './lib/ewelink.js';
@@ -73,6 +74,7 @@ const DEFAULTS = {
     'extra-tiles': [],
     'groups': {},
     'gree-units': '[]',
+    'aircons': '[]',
     'tapo-cameras': '[]',
     'cast-speakers': '[]',
     'tvs': '[]',
@@ -483,7 +485,7 @@ function panelText(device) {
         const room = device.state?.roomTemperature;
         if (typeof room === 'number')
             return `${numberFormat.format(room)}°`;
-        return device.state?.Pow === 1 ? `${device.state.SetTem}°` : _('Off');
+        return device.state?.Pow === 1 ? `${numberFormat.format(device.state.SetTem)}°` : _('Off');
     }
     case 'media':
         if (playingNow(device))
@@ -790,7 +792,7 @@ function stateText(device) {
 
     if (primary.kind === 'climate') {
         const {Pow: power, Mod: mode, SetTem: target} = device.state;
-        return power === 1 ? `${modeText(mode)} · ${target}°` : _('Off');
+        return power === 1 ? `${modeText(mode)} · ${numberFormat.format(target)}°` : _('Off');
     }
 
     if (primary.kind === 'media') {
@@ -1717,6 +1719,7 @@ function historyKeys(device) {
     return HISTORY_KEYS().filter(([, prop]) => device.primary.props.some(p => p.name === prop));
 }
 
+// The colour scale; a unit's own range is in its caps.
 const CLIMATE_MIN = 16;
 const CLIMATE_MAX = 30;
 
@@ -1742,32 +1745,59 @@ const CLIMATE_TOGGLES = () => [
     ['Air', _('Fresh air'), 'wind'],
 ];
 
-// Sleep wants SlpMod alongside where the unit has it. Quiet stays 1: greeclimate sends 2,
-// which firmware 3.75 ignores.
-function climateToggle(state, key) {
-    const on = state[key] ? 0 : 1;
-    if (key === 'SwhSlp' && state.SlpMod !== undefined)
-        return {SwhSlp: on, SlpMod: on};
-    return {[key]: on};
-}
+// Quiet stays 1: greeclimate sends 2, which firmware 3.75 ignores.
+const climateToggle = (state, key) => ({[key]: state[key] ? 0 : 1});
 
 const MODE_GLYPHS = {auto: 'auto', cool: 'snowflake', dry: 'drop', fan: 'fan', heat: 'sun'};
 
-const CLIMATE_MODES = () => MODES.map((mode, i) => [i, modeText(i), MODE_GLYPHS[mode]]);
+const CLIMATE_MODES = caps => caps.modes.map(i => [i, modeText(i), MODE_GLYPHS[MODES[i]]]);
 
-const CLIMATE_FANS = () => [[0, _('Auto'), 'auto'], ...[1, 2, 3, 4, 5].map(n => [n, String(n), `speed${n}`])];
+let fanWords = null;
 
-const CLIMATE_AIRFLOWS = () => [
-    [1, _('Swing'), 'flow-swing'],
-    ...[1, 2, 3, 4, 5].map(n => [n + 1, String(n), `flow${n}`]),
-    [0, _('Off'), 'flow0'],
-];
+// [label, value text] of a fan speed; numbered ones count among the unit's own steps.
+function fanText(fan, caps) {
+    fanWords ??= {
+        auto: _('Auto'),
+        quiet: _('Quiet'),
+        low: _('Low'),
+        medium: _('Medium'),
+        high: _('High'),
+        max: _('Max'),
+        turbo: _('Turbo'),
+    };
+    if (fan.word)
+        return [fanWords[fan.word] ?? fan.word, fanWords[fan.word] ?? fan.word];
+    if (fan.label)
+        return [choiceText(fan.label), choiceText(fan.label)];
+    const steps = caps.fans.filter(f => !f.word);
+    const n = String(steps.indexOf(fan) + 1);
+    return [n, `${n} / ${steps.length}`];
+}
 
-const CLIMATE_SIDES = () => [
-    [1, _('Swing'), 'side-swing'],
-    ...[1, 2, 3, 4, 5].map(n => [n + 1, String(n), `side${n}`]),
-    [0, _('Off'), 'side0'],
-];
+const fanGlyph = fan => (fan?.level >= 1 && fan.level <= 5 ? `speed${fan.level}` : 'auto');
+
+const CLIMATE_FANS = caps => caps.fans.map(fan => [fan.value, fanText(fan, caps)[0], fanGlyph(fan)]);
+
+const swingChoice = (value, swing, prefix) => {
+    if (value === 1)
+        return [1, _('Swing'), swing];
+    if (value >= 2 && value <= 6)
+        return [value, String(value - 1), `${prefix}${value - 1}`];
+    return [0, _('Off'), `${prefix}0`];
+};
+
+const CLIMATE_AIRFLOWS = caps => caps.airflows.map(v => swingChoice(v, 'flow-swing', 'flow'));
+
+const CLIMATE_SIDES = caps => caps.sides.map(v => swingChoice(v, 'side-swing', 'side'));
+
+// Swing or off is a switch, not a choice.
+const swingsOnly = choices => choices.length === 2 && choices.every(([v]) => v === 0 || v === 1);
+
+// The card's view of an air conditioner: native units carry state and caps, a spec one
+// gets them from its services (_readClimate).
+const climateView = device => (device.primary.kind === 'climate'
+    ? device.state && {state: device.state, caps: device.caps}
+    : device.climate ?? null);
 
 function climateLook(mode, temperature) {
     const depth = Math.min(1, Math.max(0, (temperature - CLIMATE_MIN) / (CLIMATE_MAX - CLIMATE_MIN)));
@@ -1827,12 +1857,13 @@ function climateStatus(mode) {
 // SwUpDn 7-11 are partial swings; shown as Swing.
 const airflowChoice = value => (value >= 7 ? 1 : value);
 
-function climateSpeed(state) {
+function climateSpeed(state, caps) {
     if (state.Tur)
         return 1.8;
     if (state.Quiet)
         return 0.55;
-    return state.WdSpd > 0 ? 0.6 + state.WdSpd * 0.18 : 1;
+    const level = caps.fans.find(f => f.value === state.WdSpd)?.level ?? 0;
+    return level > 0 ? 0.6 + level * 0.18 : 1;
 }
 
 const SLIDER_SETTLE = 700;
@@ -2159,8 +2190,11 @@ class CardSlider extends Slider.Slider {
 
 const TemperatureSlider = GObject.registerClass(
 class TemperatureSlider extends CardSlider {
-    _init(preview, set) {
+    _init([min, max, step], preview, set) {
         super._init(0);
+        this._min = min;
+        this._max = max;
+        this._step = step;
         this.x_expand = true;
         this._dragging = false;
         this.connect('notify::value', () => {
@@ -2177,12 +2211,13 @@ class TemperatureSlider extends CardSlider {
     }
 
     get temperature() {
-        return Math.round(CLIMATE_MIN + this.value * (CLIMATE_MAX - CLIMATE_MIN));
+        const raw = this._min + this.value * (this._max - this._min);
+        return Math.round(Math.round(raw / this._step) * this._step * 10) / 10;
     }
 
     showTemperature(temperature) {
         if (!this._dragging)
-            this.value = (temperature - CLIMATE_MIN) / (CLIMATE_MAX - CLIMATE_MIN);
+            this.value = (temperature - this._min) / (this._max - this._min);
     }
 
     vfunc_repaint() {
@@ -2214,8 +2249,8 @@ class TemperatureSlider extends CardSlider {
 
         cr.setLineWidth(scale);
         cr.setSourceRGBA(1, 1, 1, 0.35);
-        for (let degree = CLIMATE_MIN; degree <= CLIMATE_MAX; degree++) {
-            const x = radius + (width - 2 * radius) * (degree - CLIMATE_MIN) / (CLIMATE_MAX - CLIMATE_MIN);
+        for (let degree = Math.ceil(this._min); degree <= this._max; degree++) {
+            const x = radius + (width - 2 * radius) * (degree - this._min) / (this._max - this._min);
             const long = degree % 5 === 0;
             cr.moveTo(x, y + bar / 2 + 3 * scale);
             cr.lineTo(x, y + bar / 2 + (long ? 7 : 5) * scale);
@@ -3633,7 +3668,7 @@ class Tile extends St.Button {
                 device.values = before;
             if (e.matches?.(Gio.IOErrorEnum, Gio.IOErrorEnum.CANCELLED))
                 return;
-            if (!(e instanceof XiaomiError) && !(e instanceof TvError) && !(e instanceof GreeError) &&
+            if (!(e instanceof XiaomiError) && !(e instanceof TvError) && !(e instanceof ClimateError) &&
                 !(e instanceof SonoffError) && !(e instanceof EwelinkError) && !(e instanceof SpecError) &&
                 !(e instanceof GLib.Error))
                 throw e;
@@ -3971,7 +4006,7 @@ class NookButton extends PanelMenu.Button {
         this._openPreferences = openPreferences;
         this._cancellable = null;
         this._home = null;
-        this._gree = null;
+        this._aircon = null;
         this._tapo = null;
         this._cast = null;
         this._tv = null;
@@ -4153,6 +4188,7 @@ class NookButton extends PanelMenu.Button {
             'changed::names', () => this._render(),
             'changed::icons', () => this._render(),
             'changed::gree-units', () => this.reload().catch(logError),
+            'changed::aircons', () => this.reload().catch(logError),
             'changed::tapo-cameras', () => this.reload().catch(logError),
             'changed::cast-speakers', () => {
                 if (!this._keepingSpeaker)
@@ -4374,8 +4410,8 @@ class NookButton extends PanelMenu.Button {
         this._cancellable = null;
         this._home?.abort();
         this._home = null;
-        this._gree?.abort();
-        this._gree = null;
+        this._aircon?.abort();
+        this._aircon = null;
         this._tapo?.abort();
         this._tapo = null;
         this._cast?.abort();
@@ -4503,7 +4539,7 @@ class NookButton extends PanelMenu.Button {
     _devices() {
         return [
             ...this._home?.devices ?? [],
-            ...this._gree?.devices ?? [],
+            ...this._aircon?.devices ?? [],
             ...this._tapo?.devices ?? [],
             ...this._cast?.devices ?? [],
             ...this._tv?.devices ?? [],
@@ -4521,7 +4557,7 @@ class NookButton extends PanelMenu.Button {
     }
 
     _sources() {
-        return [this._home, this._gree, this._tapo, this._cast, this._tv, this._sonoff, this._ewelink, this._hue, this._hass, this._homekit, this._smartlife];
+        return [this._home, this._aircon, this._tapo, this._cast, this._tv, this._sonoff, this._ewelink, this._hue, this._hass, this._homekit, this._smartlife];
     }
 
     _showFailure(home, e) {
@@ -4542,8 +4578,8 @@ class NookButton extends PanelMenu.Button {
         this._cancellable?.cancel();
         this._home?.abort();
         this._home = null;
-        this._gree?.abort();
-        this._gree = null;
+        this._aircon?.abort();
+        this._aircon = null;
         this._tapo?.abort();
         this._tapo = null;
         this._cast?.abort();
@@ -4570,9 +4606,10 @@ class NookButton extends PanelMenu.Button {
         this._title.text = _('Nook');
         this._showLoading();
 
-        const units = parseUnits(readSetting(this._settings, 'gree-units'));
-        if (units.length > 0)
-            this._gree = new GreeHome(units);
+        const aircons = [...parseUnits(readSetting(this._settings, 'gree-units')),
+            ...parseAircons(readSetting(this._settings, 'aircons'))];
+        if (aircons.length > 0)
+            this._aircon = new AirconHome(aircons);
         const cameras = Tapo.parseCameras(readSetting(this._settings, 'tapo-cameras'));
         if (cameras.length > 0)
             this._tapo = new Tapo.TapoHome(cameras);
@@ -4819,7 +4856,7 @@ class NookButton extends PanelMenu.Button {
             await this._openCameraCard(device);
             return;
         }
-        if (device.primary.kind === 'climate') {
+        if (device.primary.kind === 'climate' || deviceType(device) === 'air-conditioner') {
             await this._openClimateCard(device);
             return;
         }
@@ -5797,49 +5834,104 @@ class NookButton extends PanelMenu.Button {
     }
 
     async _openClimateCard(device) {
-        const source = device.source;
+        const home = device.source;
         const again = this._card === device;
+        const scroll = again ? this._scroll.vadjustment.value : 0;
         this._card = device;
         this._setCardMode(true);
         this._title.text = readSetting(this._settings, 'names')[device.did] || device.name;
-        if (!device.state)
+        if (!climateView(device))
             this._showLoading(true);
         else if (!again)
             this._fillClimateCard(device);
-        await source.readDevice(device);
-        if (this._card !== device || source !== this._gree)
+        let read;
+        try {
+            read = await this._readClimate(device);
+        } catch (e) {
+            if (!(e instanceof XiaomiError) && !(e instanceof SpecError) && !(e instanceof GLib.Error))
+                throw e;
+            if (this._card === device && !again)
+                this._message(e instanceof SpecError ? specTrouble(e) : e.message);
             return;
+        }
+        if (this._card !== device || !this._sources().includes(home))
+            return;
+        // A spec unit that is offline or lacks the basics gets the plain card.
+        if (read && (!device.climate || device.online === false)) {
+            this._fillCard(device, read.services, read.values);
+            this._putScrollBack(scroll);
+            return;
+        }
         this._fillClimateCard(device);
+    }
+
+    // Native units keep their own state; a spec unit's is made from its services each read.
+    async _readClimate(device) {
+        const home = device.source;
+        if (device.primary.kind === 'climate') {
+            await home.readDevice(device);
+            return null;
+        }
+        const services = await home.services(device);
+        const readable = services.flatMap(s => s.properties
+            .filter(p => p.access.includes('read'))
+            .map(p => ({siid: s.siid, piid: p.piid})));
+        const values = await home.readProperties(device, readable);
+        device.values = device.primary.props.map((p, i) => values.get(`${p.siid}/${p.piid}`) ?? device.values?.[i] ?? null);
+        Object.defineProperty(device, 'climate', {
+            value: specClimate(services, values),
+            writable: true,
+            configurable: true,
+            enumerable: false,
+        });
+        return {services, values};
     }
 
     async _climateWrite(device, changes) {
         try {
-            await device.source.set(device, changes);
+            if (device.primary.kind === 'climate') {
+                await device.source.set(device, changes);
+            } else {
+                for (const [siid, piid, value] of device.climate.writes(changes))
+                    await device.source.setProperty(device, siid, piid, value);
+                await this._readClimate(device);
+            }
         } catch (e) {
-            if (!(e instanceof GreeError) && !(e instanceof GLib.Error))
+            if (!(e instanceof ClimateError) && !(e instanceof XiaomiError) && !(e instanceof SpecError) &&
+                !(e instanceof GLib.Error))
                 throw e;
             if (this._gone)
                 return;
-            Main.notifyError(device.name, e.message);
+            Main.notifyError(device.name, e instanceof SpecError ? specTrouble(e) : e.message);
         }
-        if (this._card === device)
+        if (this._card === device && climateView(device))
             this._fillClimateCard(device);
     }
 
     // Built once, then updated in place so colours transition rather than redraw.
     _fillClimateCard(device) {
-        if (!device.online || !device.state) {
+        const view = climateView(device);
+        if (!device.online || !view) {
             this._message(_('The air conditioner is not answering. Is it plugged in and on the same network?'));
             return;
         }
-        if (this._climate?.device === device) {
+        const {state, caps} = view;
+        const tiles = [
+            ['Mod', _('Mode'), 'snowflake', CLIMATE_MODES(caps)],
+            ['WdSpd', _('Fan'), 'fan', CLIMATE_FANS(caps)],
+            ['SwUpDn', _('Up and down'), 'flow-swing', CLIMATE_AIRFLOWS(caps)],
+            ['SwingLfRig', _('Left and right'), 'side-swing', CLIMATE_SIDES(caps)],
+            ...CLIMATE_TOGGLES(),
+        ].filter(([key, , , choices]) => state[key] !== undefined && (!choices || choices.length > 1))
+            .map(([key, title, glyph, choices = null]) => [key, title, glyph, choices && !swingsOnly(choices) ? choices : null]);
+        const shape = JSON.stringify([caps.range, tiles]);
+        if (this._climate?.device === device && this._climate.shape === shape) {
             this._syncClimateCard();
             return;
         }
         this._clear();
-        const state = device.state;
         const write = changes => this._climateWrite(device, changes).catch(logError);
-        const c = {device, tiles: new Map(), choosing: null};
+        const c = {device, shape, tiles: new Map(), choosing: null};
 
         c.box = new St.BoxLayout({...VERTICAL, style_class: 'nook-climate'});
 
@@ -5852,7 +5944,7 @@ class NookButton extends PanelMenu.Button {
         c.status = new St.Label({style_class: 'nook-climate-status', x_expand: true, y_align: Clutter.ActorAlign.CENTER});
         top.add_child(c.status);
         c.power = this._addRoundButton(top, 'system-shutdown-symbolic', _('Power'),
-            () => write({Pow: device.state.Pow === 1 ? 0 : 1}));
+            () => write({Pow: climateView(device).state.Pow === 1 ? 0 : 1}));
         c.power.add_style_class_name('nook-power');
         c.box.add_child(top);
 
@@ -5865,9 +5957,11 @@ class NookButton extends PanelMenu.Button {
         middle.add_child(new St.Label({style_class: 'nook-climate-unit', text: '°C', y_align: Clutter.ActorAlign.START}));
         c.box.add_child(middle);
 
+        const [min, max, step] = caps.range;
         const range = new St.BoxLayout({style_class: 'nook-climate-range'});
-        const step = delta => {
-            const next = Math.min(CLIMATE_MAX, Math.max(CLIMATE_MIN, (c.pending ?? device.state.SetTem) + delta));
+        const nudge = delta => {
+            const now = climateView(device);
+            const next = snapTemperature(now.caps, (c.pending ?? now.state.SetTem) + delta);
             c.pending = next;
             this._showTarget(next);
             write({SetTem: next}).finally(() => {
@@ -5875,31 +5969,24 @@ class NookButton extends PanelMenu.Button {
                     c.pending = null;
             });
         };
-        c.minus = this._addRoundButton(range, 'list-remove-symbolic', _('Cooler'), () => step(-1));
+        c.minus = this._addRoundButton(range, 'list-remove-symbolic', _('Cooler'), () => nudge(-step));
         const track = new St.BoxLayout({...VERTICAL, x_expand: true, y_align: Clutter.ActorAlign.CENTER});
-        c.slider = new TemperatureSlider(
+        c.slider = new TemperatureSlider(caps.range,
             temperature => this._showTarget(temperature),
             temperature => write({SetTem: temperature}));
         track.add_child(c.slider);
         const ends = new St.BoxLayout({style_class: 'nook-climate-ends'});
-        ends.add_child(new St.Label({text: `${CLIMATE_MIN}°`, x_expand: true}));
-        ends.add_child(new St.Label({text: `${CLIMATE_MAX}°`}));
+        ends.add_child(new St.Label({text: `${numberFormat.format(min)}°`, x_expand: true}));
+        ends.add_child(new St.Label({text: `${numberFormat.format(max)}°`}));
         track.add_child(ends);
         range.add_child(track);
-        c.plus = this._addRoundButton(range, 'list-add-symbolic', _('Warmer'), () => step(1));
-        for (const step of [c.minus, c.plus])
-            step.add_style_class_name('nook-step');
+        c.plus = this._addRoundButton(range, 'list-add-symbolic', _('Warmer'), () => nudge(step));
+        for (const button of [c.minus, c.plus])
+            button.add_style_class_name('nook-step');
         c.box.add_child(range);
 
-        const tiles = [
-            ['Mod', _('Mode'), 'snowflake', CLIMATE_MODES()],
-            ['WdSpd', _('Fan'), 'fan', CLIMATE_FANS()],
-            ['SwUpDn', _('Up and down'), 'flow-swing', CLIMATE_AIRFLOWS()],
-            ['SwingLfRig', _('Left and right'), 'side-swing', CLIMATE_SIDES()],
-            ...CLIMATE_TOGGLES(),
-        ].filter(([key]) => state[key] !== undefined);
         let row = null;
-        tiles.forEach(([key, title, glyph, choices = null], i) => {
+        tiles.forEach(([key, title, glyph, choices], i) => {
             if (i % 4 === 0) {
                 row = new St.BoxLayout({style_class: 'nook-climate-tiles', x_expand: true});
                 row.layout_manager.homogeneous = true;
@@ -5911,7 +5998,7 @@ class NookButton extends PanelMenu.Button {
                 if (choices)
                     this._chooseClimate(key);
                 else
-                    write(climateToggle(device.state, key));
+                    write(climateToggle(climateView(device).state, key));
             });
             row.add_child(tile.button);
             c.tiles.set(key, tile);
@@ -5994,7 +6081,8 @@ class NookButton extends PanelMenu.Button {
             return;
         const key = c.choosing;
         const tile = c.tiles.get(key);
-        const current = key === 'SwUpDn' ? airflowChoice(c.device.state[key]) : c.device.state[key];
+        const {state} = climateView(c.device);
+        const current = key === 'SwUpDn' ? airflowChoice(state[key]) : state[key];
         for (const [value, label, glyph] of tile.choices) {
             const box = new St.BoxLayout({...VERTICAL, style_class: 'nook-segment-box'});
             box.add_child(new Glyph(glyph));
@@ -6024,7 +6112,7 @@ class NookButton extends PanelMenu.Button {
     // Colour by mode, not a blue-orange blend by target: that went muddy grey mid-range.
     _showTarget(temperature) {
         const c = this._climate;
-        const state = c.device.state;
+        const {state, caps} = climateView(c.device);
         const on = state.Pow === 1;
         const mode = MODES[state.Mod];
         const {color, air} = climateLook(mode, temperature);
@@ -6032,24 +6120,24 @@ class NookButton extends PanelMenu.Button {
         const [top, bottom] = on ? [shade(0.5), shade(0.24)] : [[66, 66, 72], [48, 48, 54]];
         c.box.style = 'background-gradient-direction: vertical; ' +
             `background-gradient-start: rgb(${top}); background-gradient-end: rgb(${bottom});`;
-        c.target.text = String(temperature);
+        c.target.text = numberFormat.format(temperature);
         c.scene.show({
             on,
             color,
             air,
-            target: temperature,
+            target: numberFormat.format(temperature),
             swing: state.SwUpDn ?? 0,
             side: state.SwingLfRig ?? 0,
-            speed: climateSpeed(state),
+            speed: climateSpeed(state, caps),
             light: state.Lig !== 0,
         });
-        c.minus.reactive = temperature > CLIMATE_MIN;
-        c.plus.reactive = temperature < CLIMATE_MAX;
+        c.minus.reactive = temperature > caps.range[0];
+        c.plus.reactive = temperature < caps.range[1];
     }
 
     _syncClimateCard() {
         const c = this._climate;
-        const state = c.device.state;
+        const {state, caps} = climateView(c.device);
         const on = state.Pow === 1;
         c.room.text = typeof state.roomTemperature === 'number'
             ? _('Room %s°').replace('%s', numberFormat.format(state.roomTemperature))
@@ -6069,24 +6157,25 @@ class NookButton extends PanelMenu.Button {
                 tile.value.text = modeText(value);
                 tile.icon.setName(MODE_GLYPHS[MODES[value]] ?? 'aircon');
             } else if (key === 'WdSpd') {
-                tile.value.text = value === 0 ? _('Auto') : `${value} / 5`;
-                tile.icon.setName(value >= 1 && value <= 5 ? `speed${value}` : 'fan');
-            } else if (key === 'SwUpDn') {
+                const fan = caps.fans.find(f => f.value === value);
+                tile.value.text = fan ? fanText(fan, caps)[1] : '–';
+                tile.icon.setName(fan?.level >= 1 && fan.level <= 5 ? `speed${fan.level}` : 'fan');
+            } else if (key === 'SwUpDn' && tile.choices) {
                 const choice = airflowChoice(value);
                 if (choice >= 2)
                     tile.value.text = `${choice - 1} / 5`;
                 else
                     tile.value.text = choice === 1 ? _('Swing') : _('Off');
                 tile.icon.setName(choice === 1 ? 'flow-swing' : `flow${Math.max(0, choice - 1)}`);
-            } else if (key === 'SwingLfRig') {
+            } else if (key === 'SwingLfRig' && tile.choices) {
                 if (value >= 2 && value <= 6)
                     tile.value.text = `${value - 1} / 5`;
                 else
                     tile.value.text = value === 1 ? _('Swing') : _('Off');
                 tile.icon.setName(value === 1 ? 'side-swing' : `side${value >= 2 && value <= 6 ? value - 1 : 0}`);
             } else {
-                tile.button.checked = value !== 0;
-                tile.value.text = value !== 0 ? _('On') : _('Off');
+                tile.button.checked = Boolean(value);
+                tile.value.text = value ? _('On') : _('Off');
             }
         }
         this._syncChoices();
@@ -7763,7 +7852,7 @@ class NookButton extends PanelMenu.Button {
             const e = result.reason;
             if (!e)
                 continue;
-            if ([XiaomiError, GLib.Error, TvError, GreeError, CastError, TapoError, SonoffError, EwelinkError, SpecError]
+            if ([XiaomiError, GLib.Error, TvError, ClimateError, CastError, TapoError, SonoffError, EwelinkError, SpecError]
                 .some(type => e instanceof type))
                 console.debug(`nook: top bar: ${e.message}`);
             else
@@ -8110,7 +8199,7 @@ class NookButton extends PanelMenu.Button {
     async _read() {
         if (this._tiles.length === 0)
             return;
-        for (const source of [this._gree, this._tapo, this._cast, this._tv, this._sonoff, this._ewelink, this._hue, this._hass, this._homekit, this._smartlife].filter(Boolean))
+        for (const source of [this._aircon, this._tapo, this._cast, this._tv, this._sonoff, this._ewelink, this._hue, this._hass, this._homekit, this._smartlife].filter(Boolean))
             source.readPrimary().then(() => this._syncTiles(source)).catch(logError);
         const home = this._home;
         if (!home)
