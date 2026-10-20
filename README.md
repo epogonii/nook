@@ -10,7 +10,7 @@
 </p>
 
 <p align="center">
-  <img src="docs/demo.gif" width="400" alt="Switching a light and a plug from their tiles, then changing a lamp's colour and brightness on its card">
+  <img src="docs/demo.gif" width="400" alt="Switching a light and a plug from their tiles, changing a lamp's colour and brightness, turning an air conditioner from cooling to heating, then boiling a kettle">
 </p>
 
 Nook is a GNOME Shell extension that brings the devices of your home into one menu, whatever
