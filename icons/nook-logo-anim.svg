@@ -2,15 +2,15 @@
 <!-- nook-logo.svg drawn on for the About page; the pen filter is baked into the lines because Gtk.Svg renders it wrong. -->
 <defs><clipPath id="tile"><rect width="256" height="256" rx="56.32"/></clipPath></defs>
 <g clip-path="url(#tile)">
-  <rect width="256" height="256" fill="#efe2da"/>
+  <rect width="256" height="256" fill="#ffffff"/>
   <g transform="translate(137 210)">
     <g opacity="0">
       <animate attributeName="opacity" values="0;1" begin="1.15s" dur=".25s" fill="freeze"/>
       <animateTransform attributeName="transform" type="scale" values=".6;1.06;1" keyTimes="0;.6;1" begin="1.15s" dur=".45s" fill="freeze"/>
-      <path d="M89 210V150C89 124 109 110 137 110C165 110 185 124 185 150V210Z" transform="translate(-137 -210)" fill="#d99a88"/>
+      <path d="M89 210V150C89 124 109 110 137 110C165 110 185 124 185 150V210Z" transform="translate(-137 -210)" fill="#141414"/>
     </g>
   </g>
-  <g fill="none" stroke="#2a1f1f" stroke-width="8" stroke-linecap="round" stroke-linejoin="round">
+  <g fill="none" stroke="#141414" stroke-width="8" stroke-linecap="round" stroke-linejoin="round">
     <path d="M44.5 120.7L46.8 118.8L49.1 116.9L51.4 115.0L53.7 113.1L56.0 111.1L58.3 109.0L60.5 106.9L62.7 104.8L64.9 102.6L67.1 100.5L69.2 98.4L71.4 96.3L73.5 94.3L75.7 92.3L77.8 90.3L79.9 88.4L82.1 86.5L84.2 84.5L86.4 82.6L88.5 80.6L90.7 78.6L92.9 76.6L95.1 74.7L97.3 72.7L99.5 70.8L101.7 69.0L104.0 67.2L106.2 65.4L108.4 63.6L110.6 61.8L112.8 60.0L115.0 58.1L117.2 56.2L119.4 54.3L121.5 52.3L123.7 50.3L125.8 48.2L127.9 46.2L130.0 48.3L132.1 50.3L134.2 52.3L136.4 54.4L138.6 56.4L140.9 58.4L143.2 60.4L145.6 62.4L147.9 64.4L150.2 66.3L152.4 68.2L154.7 70.2L156.8 72.0L159.0 73.9L161.3 75.8L163.5 77.7L165.8 79.6L168.1 81.4L170.4 83.3L172.7 85.2L175.0 87.1L177.2 89.0L179.4 91.0L181.5 92.9L183.6 94.9L185.6 96.8L187.6 98.8L189.7 100.8L191.8 102.9L193.9 104.9L196.1 106.9L198.3 108.9L200.5 110.9L202.7 112.9L204.9 114.9L207.1 116.8L209.2 118.8L211.3 120.7" pathLength="1" stroke-dasharray="1 2" stroke-dashoffset="1" visibility="hidden">
       <set attributeName="visibility" to="visible" begin="0s" fill="freeze"/>
       <animate attributeName="stroke-dashoffset" values="1;0" begin="0s" dur="0.55s" fill="freeze" calcMode="spline" keyTimes="0;1" keySplines=".6 0 .3 1"/>

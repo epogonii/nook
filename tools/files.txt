@@ -9,7 +9,9 @@ feed.js
 prefs.js
 LICENSE
 stylesheet.css
+icons/nook-logo-anim-dark.svg
 icons/nook-logo-anim.svg
+icons/nook-logo-dark.svg
 icons/nook-logo.svg
 icons/nook-symbolic.svg
 icons/nook-top-bar-symbolic.svg

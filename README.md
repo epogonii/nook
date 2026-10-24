@@ -1,5 +1,8 @@
 <p align="center">
-  <img src="icons/nook-logo-anim.svg" width="96" alt="">
+  <picture>
+    <source media="(prefers-color-scheme: dark)" srcset="icons/nook-logo-anim-dark.svg">
+    <img src="icons/nook-logo-anim.svg" width="96" alt="">
+  </picture>
 </p>
 
 <h1 align="center">Nook</h1>

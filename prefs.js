@@ -56,7 +56,9 @@ const QR_DIR = 'icons/qr';
 const WALLET_QR_SIZE = 168;
 
 const LOGO_FILE = 'icons/nook-logo.svg';
+const LOGO_FILE_DARK = 'icons/nook-logo-dark.svg';
 const LOGO_ANIMATION = 'icons/nook-logo-anim.svg';
+const LOGO_ANIMATION_DARK = 'icons/nook-logo-anim-dark.svg';
 const LOGO_SIZE = 96;
 
 // Xiaomi's QR image is 480 px; shown smaller, never upscaled, so phones can scan it.
@@ -3789,19 +3791,31 @@ export default class NookPreferences extends ExtensionPreferences {
 
     _logo() {
         const logo = new Gtk.Image({pixel_size: LOGO_SIZE});
+        const style = Adw.StyleManager.get_default();
         // Gtk.Svg (GTK 4.22, GNOME 50) plays SMIL; older GTK gets the still logo.
         if (typeof Gtk.Svg !== 'function' || !Gtk.Settings.get_default().gtk_enable_animations) {
-            logo.file = `${this.path}/${LOGO_FILE}`;
+            const show = () => (logo.file = `${this.path}/${style.dark ? LOGO_FILE_DARK : LOGO_FILE}`);
+            const handler = style.connect('notify::dark', show);
+            logo.connect('destroy', () => style.disconnect(handler));
+            show();
             return logo;
         }
-        const [, bytes] = Gio.File.new_for_path(`${this.path}/${LOGO_ANIMATION}`).load_contents(null);
+        const load = name => Gio.File.new_for_path(`${this.path}/${name}`).load_contents(null)[1];
+        const light = load(LOGO_ANIMATION);
+        const dark = load(LOGO_ANIMATION_DARK);
         // A finished Gtk.Svg does not replay, so each visit to the page draws a fresh one.
-        logo.connect('map', () => {
-            const svg = Gtk.Svg.new_from_bytes(new GLib.Bytes(bytes));
+        const play = () => {
+            const svg = Gtk.Svg.new_from_bytes(new GLib.Bytes(style.dark ? dark : light));
             svg.set_frame_clock(logo.get_frame_clock());
             logo.paintable = svg;
             svg.play();
+        };
+        logo.connect('map', play);
+        const handler = style.connect('notify::dark', () => {
+            if (logo.get_mapped())
+                play();
         });
+        logo.connect('destroy', () => style.disconnect(handler));
         return logo;
     }
 
