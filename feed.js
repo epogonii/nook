@@ -1,3 +1,4 @@
+#!@GJS@ -m
 // SPDX-License-Identifier: GPL-2.0-or-later
 
 // Separate process so the shell never blocks on RTSP or decoding. Writes raw RGB
