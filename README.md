@@ -10,7 +10,12 @@
 </p>
 
 <p align="center">
-  <a href="https://github.com/sponsors/epogonii"><img src="https://img.shields.io/badge/Sponsor-%E2%9D%A4-db61a2?style=for-the-badge&logo=githubsponsors&logoColor=white" alt="Sponsor"></a>
+  <img src="https://img.shields.io/badge/GNOME-46--51-4a86cf?style=for-the-badge&logo=gnome&logoColor=white" alt="GNOME 46 to 51">
+  <img src="https://img.shields.io/badge/dynamic/json?url=https%3A%2F%2Fraw.githubusercontent.com%2Fepogonii%2Fnook%2Fmain%2Fmetadata.json&query=%24%5B%27version-name%27%5D&label=version&style=for-the-badge&color=555" alt="Version">
+  <a href="LICENSE"><img src="https://img.shields.io/github/license/epogonii/nook?style=for-the-badge&color=555" alt="License"></a>
+  <a href="https://github.com/epogonii/nook/commits/main"><img src="https://img.shields.io/github/last-commit/epogonii/nook?style=for-the-badge&color=555" alt="Last commit"></a>
+  <br>
+  <a href="https://github.com/sponsors/epogonii"><img src="https://img.shields.io/badge/%E2%9D%A4%20Sponsor-db61a2?style=for-the-badge&logo=githubsponsors&logoColor=white" alt="Sponsor"></a>
   <a href="https://www.paypal.com/paypalme/pogonii"><img src="https://img.shields.io/badge/PayPal-003087?style=for-the-badge&logo=paypal&logoColor=white" alt="PayPal"></a>
 </p>
 
