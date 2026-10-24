@@ -10,6 +10,10 @@
 </p>
 
 <p align="center">
+  <a href="https://github.com/sponsors/epogonii"><img src="https://img.shields.io/badge/Sponsor-%E2%9D%A4-db61a2?style=for-the-badge&logo=githubsponsors&logoColor=white" alt="Sponsor"></a>
+</p>
+
+<p align="center">
   <img src="docs/demo.gif" width="400" alt="Switching a light and a plug from their tiles, changing a lamp's colour and brightness, turning an air conditioner from cooling to heating, boiling a kettle, following a robot vacuum on its map and a day of temperature and humidity">
 </p>
 
@@ -87,7 +91,22 @@ them, so something may not work on a real unit. If yours doesn't, please
 - While the screen is locked, Nook only listens on your network for a Xiaomi gateway's alerts.
   No menu, no cloud.
 
+## Support Nook
+
+If Nook makes your home nicer to live with, you can support its development.
+
+<p>
+  <a href="https://github.com/sponsors/epogonii"><img src="https://img.shields.io/badge/Sponsor_on_GitHub-%E2%9D%A4-db61a2?style=for-the-badge&logo=githubsponsors&logoColor=white" alt="Sponsor on GitHub"></a>
+</p>
+
+Or send crypto (the same addresses, with QR codes, are under **About** in Nook's settings):
+
+| | |
+|---|---|
+| **Bitcoin** | `bc1qe6fjj3uv23e2yx2ry3wwhyrl7s2pqshau7mga3` |
+| **Ethereum** | `0xDC9e1EfA0F8FAE71377F4018d4ff7D123369438e` |
+| **Solana** | `3sYQyR27CVz1VcwCfoDLUioaAHk8jspQaSDHXEvBALxg` |
+
 ## License
 
-[GPL-2.0-or-later](LICENSE). If Nook makes your home nicer to live with, you can
-[sponsor it](https://github.com/sponsors/epogonii).
+[GPL-2.0-or-later](LICENSE).
