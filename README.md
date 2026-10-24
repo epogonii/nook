@@ -15,7 +15,7 @@
   <a href="LICENSE"><img src="https://img.shields.io/github/license/epogonii/nook?style=for-the-badge&color=555" alt="License"></a>
   <a href="https://github.com/epogonii/nook/commits/main"><img src="https://img.shields.io/github/last-commit/epogonii/nook?style=for-the-badge&color=555" alt="Last commit"></a>
   <br>
-  <a href="https://github.com/sponsors/epogonii"><img src="https://img.shields.io/badge/%E2%9D%A4%20Sponsor-db61a2?style=for-the-badge&logo=githubsponsors&logoColor=white" alt="Sponsor"></a>
+  <a href="https://github.com/sponsors/epogonii"><img src="https://img.shields.io/badge/Sponsor-db61a2?style=for-the-badge&logo=githubsponsors&logoColor=white" alt="Sponsor"></a>
   <a href="https://www.paypal.com/paypalme/pogonii"><img src="https://img.shields.io/badge/PayPal-003087?style=for-the-badge&logo=paypal&logoColor=white" alt="PayPal"></a>
 </p>
 
