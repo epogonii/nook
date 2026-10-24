@@ -36,6 +36,18 @@ function roundRect(context, left, top, width, height, radius) {
     context.closePath();
 }
 
+// Top half of an ellipse, left to right, or right to left when reversed.
+function halfEllipse(context, centerX, centerY, radiusX, radiusY, reversed = false) {
+    context.save();
+    context.translate(centerX, centerY);
+    context.scale(radiusX, radiusY);
+    if (reversed)
+        context.arcNegative(0, 0, 1, TAU, TAU / 2);
+    else
+        context.arc(0, 0, 1, TAU / 2, TAU);
+    context.restore();
+}
+
 const GLYPHS = {
     fan(context) {
         dot(context, 8, 8, 1.25);
@@ -366,6 +378,14 @@ const GLYPHS = {
     // Nook's logo: a roof over an arched doorway with the light on. Filled shapes only, so
     // tools/icon.js can write it to icons/nook-symbolic.svg; see the note at the top.
     nook(context, paint) {
+        // The door sits up and right of its arch, as in icons/nook-logo.svg.
+        paint?.('light');
+        context.moveTo(5.3, 14.2);
+        halfEllipse(context, 9.4, 8.8, 4.1, 3.4);
+        context.lineTo(13.5, 14.2);
+        context.closePath();
+        context.fill();
+
         paint?.('house');
         context.moveTo(0.42, 6.63);
         context.lineTo(8, 0.23);
@@ -378,23 +398,16 @@ const GLYPHS = {
         dot(context, 0.9, 7.2, 0.75);
         dot(context, 15.1, 7.2, 0.75);
 
-        context.moveTo(2.85, 14.2);
-        context.arc(8, 9.6, 5.15, TAU / 2, TAU);
-        context.lineTo(13.15, 14.2);
-        context.lineTo(11.65, 14.2);
-        context.arcNegative(8, 9.6, 3.65, TAU, TAU / 2);
-        context.lineTo(4.35, 14.2);
+        context.moveTo(3.15, 14.2);
+        halfEllipse(context, 8, 9.9, 4.85, 4.15);
+        context.lineTo(12.85, 14.2);
+        context.lineTo(11.35, 14.2);
+        halfEllipse(context, 8, 9.9, 3.35, 2.65, true);
+        context.lineTo(4.65, 14.2);
         context.closePath();
         context.fill();
 
         roundRect(context, 0.5, 13.5, 15, 1.5, 0.75);
-        context.fill();
-
-        paint?.('light');
-        context.moveTo(5.9, 13.6);
-        context.arc(8, 10.3, 2.1, TAU / 2, TAU);
-        context.lineTo(10.1, 13.6);
-        context.closePath();
         context.fill();
     },
 
