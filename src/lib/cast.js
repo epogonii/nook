@@ -15,6 +15,7 @@ const CONNECTION = 'urn:x-cast:com.google.cast.tp.connection';
 const HEARTBEAT = 'urn:x-cast:com.google.cast.tp.heartbeat';
 const RECEIVER = 'urn:x-cast:com.google.cast.receiver';
 const MEDIA = 'urn:x-cast:com.google.cast.media';
+const MULTIZONE = 'urn:x-cast:com.google.cast.multizone';
 const PLATFORM = 'receiver-0';
 const SENDER = 'sender-nook';
 
@@ -27,6 +28,11 @@ const decoder = new TextDecoder();
 const MAX_MESSAGE = 1 << 20;
 
 export class CastError extends Error {}
+
+// mDNS gives "187c469c37cb…", multizone "187c469c-37cb-…".
+export function speakerId(id) {
+    return String(id ?? '').replaceAll('-', '').toLowerCase();
+}
 
 export function discover(timeout = 3000) {
     return new Promise((resolve, reject) => {
@@ -429,6 +435,19 @@ export class CastDevice {
 
     skip(by) {
         return this._command({type: by > 0 ? 'QUEUE_NEXT' : 'QUEUE_PREV'});
+    }
+
+    async stop() {
+        const app = this._app();
+        if (!app)
+            throw new CastError('nothing is playing');
+        await this._ask(PLATFORM, RECEIVER, {type: 'STOP', sessionId: app.sessionId});
+        this.media = null;
+    }
+
+    async members() {
+        const reply = await this._ask(PLATFORM, MULTIZONE, {type: 'GET_STATUS'});
+        return (reply.status?.devices ?? []).map(d => speakerId(d.deviceId));
     }
 
     close() {

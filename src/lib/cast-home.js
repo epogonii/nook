@@ -3,7 +3,7 @@
 import Gio from 'gi://Gio';
 import GLib from 'gi://GLib';
 
-import {CastDevice, CastError, discover} from './cast.js';
+import {CastDevice, CastError, discover, speakerId} from './cast.js';
 import {TvError, newSession, request} from './net.js';
 
 export function parseSpeakers(json) {
@@ -15,11 +15,22 @@ export function parseSpeakers(json) {
     }
 }
 
-const playing = state => state?.media?.state === 'PLAYING';
+const GROUP = 'Google Cast Group';
+
+// A speaker playing in a group runs a follower app without a media session; the group has it.
+const sessionless = state => Boolean(state?.app) && !state.media;
+const playing = state => state?.media?.state === 'PLAYING' || sessionless(state);
+
+function groupMedia(group) {
+    const state = group?.cast.state();
+    return state?.app ? state.media : null;
+}
 
 export class CastHome {
     constructor(speakers) {
         this._links = new Map();
+        this._groups = new Map();
+        this._finding = null;
         this._looking = null;
         this._rests = 0;
         this.onChange = null;
@@ -39,7 +50,7 @@ export class CastHome {
                 about: {ip: speaker.ip, model: speaker.model || null},
             };
             Object.defineProperty(device, 'source', {value: this, enumerable: false});
-            this._links.set(device.did, {speaker: {...speaker}, cast: null});
+            this._links.set(device.did, {speaker: {...speaker}, cast: null, raw: null, group: null});
             return device;
         });
     }
@@ -57,21 +68,69 @@ export class CastHome {
     }
 
     _show(device, state) {
-        device.state = state;
+        const link = this._links.get(device.did);
+        link.raw = state;
+        if (!sessionless(state))
+            link.group = null;
+        const media = groupMedia(link.group);
+        device.state = media ? {...state, media, group: link.group.speaker.name} : state;
         device.online = true;
-        device.values = [playing(state)];
+        device.values = [playing(device.state)];
     }
 
     _drop(device) {
         const link = this._links.get(device.did);
         link.cast?.close();
         link.cast = null;
+        link.group = null;
+    }
+
+    // Dynamic groups ("Google home mini 2 + 1") are never saved, so look for them.
+    async _leader(device, rests) {
+        this._finding ??= discover(2000).catch(() => []);
+        const found = await this._finding;
+        if (rests !== this._rests)
+            return null;
+        const groups = found.filter(s => s.model === GROUP).map(s => this._group(s));
+        const members = await Promise.all(groups.map(g => g.members));
+        if (rests !== this._rests)
+            return null;
+        const id = speakerId(this._links.get(device.did).speaker.id);
+        return groups.find((g, i) => members[i].includes(id) && groupMedia(g)) ?? null;
+    }
+
+    _group(speaker) {
+        let group = this._groups.get(speaker.id);
+        if (group)
+            return group;
+        const cast = new CastDevice(speaker.ip, speaker.port);
+        group = {speaker, cast};
+        group.members = cast.status().then(() => cast.members()).catch(e => {
+            if (!(e instanceof CastError) && !(e instanceof GLib.Error))
+                throw e;
+            return [];
+        });
+        cast.onChange = () => {
+            for (const device of this.devices) {
+                const link = this._links.get(device.did);
+                if (link.group !== group)
+                    continue;
+                this._show(device, link.raw);
+                this.onChange?.(device);
+            }
+        };
+        this._groups.set(speaker.id, group);
+        return group;
     }
 
     rest() {
         this._rests++;
         for (const device of this.devices)
             this._drop(device);
+        for (const group of this._groups.values())
+            group.cast.close();
+        this._groups.clear();
+        this._finding = null;
         this._looking = null;
         this._session?.abort();
         this._session = null;
@@ -127,10 +186,18 @@ export class CastHome {
         return true;
     }
 
+    async _status(device, rests) {
+        const state = await this._cast(device).status();
+        const link = this._links.get(device.did);
+        if (sessionless(state) && !groupMedia(link.group))
+            link.group = await this._leader(device, rests);
+        this._show(device, state);
+    }
+
     async _read(device) {
         const rests = this._rests;
         try {
-            this._show(device, await this._cast(device).status());
+            await this._status(device, rests);
             return;
         } catch (e) {
             if (!(e instanceof CastError) && !(e instanceof GLib.Error))
@@ -141,7 +208,7 @@ export class CastHome {
         }
         if (rests === this._rests && await this._relocate(device, rests)) {
             try {
-                this._show(device, await this._cast(device).status());
+                await this._status(device, rests);
                 return;
             } catch (e) {
                 if (!(e instanceof CastError) && !(e instanceof GLib.Error))
@@ -167,6 +234,16 @@ export class CastHome {
         this._show(device, cast.state());
     }
 
+    async _player(device, action) {
+        const link = this._links.get(device.did);
+        if (!groupMedia(link.group)) {
+            await this._do(device, action);
+            return;
+        }
+        await action(link.group.cast);
+        this._show(device, link.raw);
+    }
+
     setVolume(device, level) {
         return this._do(device, cast => cast.setVolume(level));
     }
@@ -176,15 +253,19 @@ export class CastHome {
     }
 
     play(device) {
-        return this._do(device, cast => cast.play());
+        return this._player(device, cast => cast.play());
     }
 
     pause(device) {
-        return this._do(device, cast => cast.pause());
+        return this._player(device, cast => cast.pause());
     }
 
     skip(device, by) {
-        return this._do(device, cast => cast.skip(by));
+        return this._player(device, cast => cast.skip(by));
+    }
+
+    stop(device) {
+        return this._do(device, cast => cast.stop());
     }
 }
 
