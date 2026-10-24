@@ -72,6 +72,11 @@ your network at once.
 Camera video needs GStreamer with RTSP and an H.264 decoder (`gst-plugins-good` and `gst-libav` or `openh264`).
 Pairing an Android TV needs `openssl`.
 
+I don't have every device listed above at home. Support for the ones I couldn't try is built
+from their public documentation and APIs, and from open source projects that already talk to
+them, so something may not work on a real unit. If yours doesn't, please
+[open an issue](https://github.com/epogonii/nook/issues).
+
 ## Privacy
 
 - Devices on your network are reached directly; nothing goes through a server of ours. A newer
