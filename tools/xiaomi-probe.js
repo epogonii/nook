@@ -30,8 +30,8 @@ function option(name) {
 async function getJson(url) {
     const msg = Soup.Message.new('GET', url);
     const bytes = await session.send_and_read_async(msg, GLib.PRIORITY_DEFAULT, null);
-    if (msg.get_status() !== Soup.Status.OK)
-        throw new Error(`${url}: HTTP ${msg.get_status()}`);
+    if (msg.status_code !== Soup.Status.OK)
+        throw new Error(`${url}: HTTP ${msg.status_code}`);
     return JSON.parse(decoder.decode(bytes.toArray()));
 }
 

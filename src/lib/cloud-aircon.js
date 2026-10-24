@@ -57,7 +57,7 @@ export async function call(session, method, url, {json = undefined, form = null,
         message.set_request_body_from_bytes('application/json', new GLib.Bytes(encoder.encode(JSON.stringify(json))));
     }
     const bytes = await session.send_and_read_async(message, GLib.PRIORITY_DEFAULT, cancellable);
-    const status = message.get_status();
+    const status = message.status_code;
     const text = decoder.decode(bytes.toArray());
     let reply = null;
     try {

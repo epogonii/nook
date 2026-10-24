@@ -203,7 +203,7 @@ async function describe(session, {ip, location}) {
             return null;
         const message = Soup.Message.new('GET', location);
         const bytes = await session.send_and_read_async(message, GLib.PRIORITY_DEFAULT, null);
-        if (message.get_status() !== Soup.Status.OK)
+        if (message.status_code !== Soup.Status.OK)
             return null;
         const xml = decoder.decode(bytes.toArray());
         return {

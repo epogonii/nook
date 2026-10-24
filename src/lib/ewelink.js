@@ -41,8 +41,8 @@ export class EwelinkError extends Error {
 const scrub = text => String(text).replace(/(Bearer|Sign)\s+[^\s"']+/gi, '$1 …');
 
 function answer(msg, bytes) {
-    if (msg.get_status() !== Soup.Status.OK)
-        throw new EwelinkError(`eWeLink answered HTTP ${msg.get_status()}`, msg.get_status());
+    if (msg.status_code !== Soup.Status.OK)
+        throw new EwelinkError(`eWeLink answered HTTP ${msg.status_code}`, msg.status_code);
     let reply;
     try {
         reply = JSON.parse(decoder.decode(bytes.toArray()));

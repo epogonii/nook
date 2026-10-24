@@ -86,7 +86,7 @@ export class HueBridge {
                 throw new SpecError('The Hue bridge answered with another certificate. Pair it again if it was replaced.', 'certificate');
             throw e;
         }
-        const status = message.get_status();
+        const status = message.status_code;
         let answer;
         try {
             answer = JSON.parse(decoder.decode(bytes.toArray()));

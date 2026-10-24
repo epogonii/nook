@@ -442,10 +442,10 @@ export class MiHome {
 
         const msg = Soup.Message.new('GET', `${SPEC_URL}${encodeURIComponent(urn)}`);
         const bytes = await this._session.send_and_read_async(msg, GLib.PRIORITY_DEFAULT, this._cancellable);
-        if (msg.get_status() === Soup.Status.NOT_FOUND)
+        if (msg.status_code === Soup.Status.NOT_FOUND)
             return [];
-        if (msg.get_status() !== Soup.Status.OK)
-            throw new XiaomiError(`miot-spec answered HTTP ${msg.get_status()}`);
+        if (msg.status_code !== Soup.Status.OK)
+            throw new XiaomiError(`miot-spec answered HTTP ${msg.status_code}`);
         let services;
         try {
             services = trimSpec(JSON.parse(decoder.decode(bytes.toArray())));
@@ -801,8 +801,8 @@ export class MiHome {
             return null;
         const msg = Soup.Message.new('GET', url.url);
         const bytes = await this._session.send_and_read_async(msg, GLib.PRIORITY_DEFAULT, this._cancellable);
-        if (msg.get_status() !== Soup.Status.OK)
-            throw new XiaomiError(`the map could not be downloaded (HTTP ${msg.get_status()})`, msg.get_status());
+        if (msg.status_code !== Soup.Status.OK)
+            throw new XiaomiError(`the map could not be downloaded (HTTP ${msg.status_code})`, msg.status_code);
         return {text: decoder.decode(bytes.toArray()), time: url.time};
     }
 

@@ -87,7 +87,7 @@ class Classic {
         if (!message)
             throw new DaikinError('not an address');
         const bytes = await this._session.send_and_read_async(message, GLib.PRIORITY_DEFAULT, null);
-        const status = message.get_status();
+        const status = message.status_code;
         if (status === Soup.Status.FORBIDDEN)
             throw new DaikinError('the adapter wants a key, which Nook does not support yet', 'key');
         if (status !== Soup.Status.OK)
@@ -258,8 +258,8 @@ class Dsiot {
             throw new DaikinError('not an address');
         message.set_request_body_from_bytes('application/json', new GLib.Bytes(encoder.encode(JSON.stringify(body))));
         const bytes = await this._session.send_and_read_async(message, GLib.PRIORITY_DEFAULT, null);
-        if (message.get_status() !== Soup.Status.OK)
-            throw new DaikinError(`the air conditioner answered HTTP ${message.get_status()}`);
+        if (message.status_code !== Soup.Status.OK)
+            throw new DaikinError(`the air conditioner answered HTTP ${message.status_code}`);
         try {
             return JSON.parse(decoder.decode(bytes.toArray()));
         } catch {
