@@ -45,6 +45,13 @@ Home Assistant knows comes in through Home Assistant.
   target temperature, positions, readings and device info.
 - **Rooms** come from your apps and turn into tabs.
 - **Top bar readings**: pin a thermometer or a door sensor and its value sits next to the icon.
+- **TVs** show the app or channel that is on; the card holds the volume, the inputs, the apps
+  and a remote.
+- **Speakers** show what is playing and the time left, with play, pause and next. A speaker
+  playing in a group shows the group's playback.
+- **Cameras** play live in their card, turn if they can, and save a snapshot to `Pictures/Nook`.
+- **Alerts**: a leak or smoke sensor behind a Xiaomi gateway becomes a notification the moment
+  it fires, also on the lock screen.
 - **Four layouts**: rooms as tabs, small tiles, tiles by room, or modules grouped by what things do.
 
 <p align="center">
@@ -75,6 +82,8 @@ Pairing an Android TV needs `openssl`.
 - Logins and pairing keys stay in the GNOME keyring, never in settings.
 - Cloud accounts are asked only when the menu opens, and every few minutes for readings shown in
   the top bar. Never while the screen is locked.
+- While the screen is locked, Nook only listens on your network for a Xiaomi gateway's alerts.
+  No menu, no cloud.
 
 ## License
 
