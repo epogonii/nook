@@ -2,11 +2,55 @@
   "spec_version": "2026-04-02",
   "known": [
     {
+      "rule_id": "EGO-L-003",
+      "paths": [
+        "extension.js"
+      ],
+      "snippets": [
+        "                draggable.connect('drag-begin', () => {\n                    this.opacity = DRAGGED_OPACITY;\n                    drop.begin();\n                })",
+        "                draggable.connect('drag-end', () => {\n                    drop.end();\n                    if (!this._gone)\n                        this.sync();\n                })",
+        "            made.button.connect('clicked', (_button, clicked) => {\n                if (clicked === 3) {\n                    this._toggleIn('extra-tiles', tile.extra);\n                    made.pin.visible = !made.pin.visible;\n                    return;\n                }\n                if (!opens) {",
+        "            notification.connect('destroy', () => {\n                if (this._last.get(did) === notification)\n                    this._last.delete(did);\n            })",
+        "            this._clickGesture?.connect('recognize', gesture =>\n                this._clicked(gesture.get_button?.() ?? Clutter.BUTTON_PRIMARY))",
+        "            this._source.connect('destroy', () => {\n                this._source = null;\n                this._last.clear();\n            })",
+        "            this._timeline.connect('new-frame', () => {\n                const now = GLib.get_monotonic_time();\n                if (now - last < 1e6 / Scenes.framesPerSecond(this._name) - 4000)\n                    return;\n                last = now;\n                this.queue_repaint();\n            }",
+        "            tile.button.connect('clicked', () => {\n                if (choices)\n                    this._chooseClimate(key);\n                else\n                    write(climateToggle(climateView(device)?.state ?? {}, key));\n            })",
+        "        flow.connect('destroy', () => {\n            gone = true;\n        })",
+        "        this._scroll.connect('captured-event', (_actor, event) => {\n            switch (event.type()) {\n            case Clutter.EventType.BUTTON_PRESS:\n            case Clutter.EventType.TOUCH_BEGIN:\n                this._pressed = true;\n                this._touchedAt = Date.now();\n               ",
+        "        this._scroll.connect('notify::vscrollbar-visible', () => {\n            if (this._scroll.vscrollbar_visible)\n                this._body.add_style_class_name('nook-body-scrolls');\n            else\n                this._body.remove_style_class_name('nook-body-scrolls');\n        })",
+        "entry.clutter_text.connect('activate', commit)",
+        "entry.clutter_text.connect('key-focus-out', commit)",
+        "h.dot.connect('notify::mapped', () => breathe(h.dot, h.listening))",
+        "h.tap.connect('clicked', toggle)",
+        "this.menu.actor.connect('captured-event', (actor, event) => this._holdOpen(actor, event))",
+        "this.menu.connect('open-state-changed', (_menu, open) => this._pauseMenuManager(open))"
+      ]
+    },
+    {
+      "rule_id": "EGO-L-008",
+      "paths": [
+        "electrolux.js",
+        "lg.js",
+        "melcloud.js",
+        "midea.js",
+        "smartthings.js"
+      ],
+      "snippets": [
+        "this._session = new Soup.Session({timeout: 10})",
+        "this._session = new Soup.Session({timeout: 15})",
+        "this._session = new Soup.Session({timeout: 15})",
+        "this._session = new Soup.Session({timeout: 15})",
+        "this._session = new Soup.Session({timeout: 15})"
+      ]
+    },
+    {
       "rule_id": "EGO-P-007",
       "paths": [
         "feed.js"
       ],
-      "snippets": []
+      "snippets": [
+        ""
+      ]
     }
   ]
 }
