@@ -5680,12 +5680,15 @@ class NookButton extends PanelMenu.Button {
         await source.readDevice(device);
         if (this._card !== device || source !== this._tv)
             return;
-        if (device.online !== false && device.state?.on && device.state.paired) {
+        this._fillTvCard(device);
+        // Lists come once per round, from some TVs only after ~20 s (Samsung's app lookups).
+        if (device.online !== false && device.state?.on && device.state.paired &&
+            (source.listed(device, 'sources') === null || source.listed(device, 'apps') === null)) {
             await Promise.all([source.sources(device), source.apps(device)].map(list => list.catch(() => [])));
             if (this._card !== device || source !== this._tv)
                 return;
+            this._fillTvCard(device);
         }
-        this._fillTvCard(device);
     }
 
     _fillTvCard(device) {
