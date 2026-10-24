@@ -8684,6 +8684,7 @@ export default class NookExtension extends Extension {
     // Stays enabled in unlock-dialog only for gateway leak/smoke alerts while locked;
     // the menu, and with it every cloud call, is dropped on lock and rebuilt on unlock.
     disable() {
+        Timers.removeAll();
         if (this._placing)
             GLib.source_remove(this._placing);
         this._placing = 0;
@@ -8700,6 +8701,5 @@ export default class NookExtension extends Extension {
         nameWords = null;
         clearPacing();
         Tapo.clearRefusals();
-        Timers.removeAll();
     }
 }
