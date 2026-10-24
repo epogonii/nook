@@ -4,6 +4,7 @@ import GLib from 'gi://GLib';
 
 import {cbcDecrypt, cbcEncrypt} from './aes.js';
 import {TvError, download, escape, newSession, readVolume, request, setMute, setVolume, soap, tag, wake} from './net.js';
+import {sleep} from './timers.js';
 
 const NRC = 'panasonic-com:service:p00NetworkControl:1';
 const PAC = 'panasonic-com:service:p00ProAVControlService:1';
@@ -47,11 +48,6 @@ const APPS = [
 
 // Seconds to wait for a woken TV to answer.
 const WAKE_WAIT = 20;
-
-const sleep = ms => new Promise(resolve => GLib.timeout_add(GLib.PRIORITY_DEFAULT, ms, () => {
-    resolve();
-    return GLib.SOURCE_REMOVE;
-}));
 
 // PAC input codes: TV or TVA, H1, V1, C1.
 function sourceId(code) {

@@ -10,6 +10,7 @@ import GObject from 'gi://GObject';
 
 import {TvError, wake} from './net.js';
 import {concat, decode, encode, message, number, readVarint, text, varint} from './protobuf.js';
+import {sleep} from './timers.js';
 
 Gio._promisify(Gio.SocketClient.prototype, 'connect_async');
 Gio._promisify(Gio.InputStream.prototype, 'read_bytes_async');
@@ -61,11 +62,6 @@ const HOME = new Set([
     'com.google.android.apps.tv.launcherx',
     'com.google.android.leanbacklauncher',
 ]);
-
-const sleep = ms => new Promise(resolve => GLib.timeout_add(GLib.PRIORITY_DEFAULT, ms, () => {
-    resolve();
-    return GLib.SOURCE_REMOVE;
-}));
 
 function sha256(data) {
     const hex = GLib.compute_checksum_for_bytes(GLib.ChecksumType.SHA256, new GLib.Bytes(data));

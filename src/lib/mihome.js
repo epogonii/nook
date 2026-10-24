@@ -165,8 +165,12 @@ export class DeviceError extends XiaomiError {
     }
 }
 
-// Module-level so pacing survives the new MiHome made on re-enable or screen lock.
+// Module-level so pacing survives the new MiHome made after a screen lock.
 const pacing = new Map();
+
+export function clearPacing() {
+    pacing.clear();
+}
 
 function pacingFor(userId) {
     if (!pacing.has(userId)) {

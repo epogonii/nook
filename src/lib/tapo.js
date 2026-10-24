@@ -9,6 +9,7 @@ import Gio from 'gi://Gio';
 import GLib from 'gi://GLib';
 
 import * as Onvif from './onvif.js';
+import * as Timers from './timers.js';
 
 const DISCOVERY = ['239.255.255.250', 3702];
 const RTSP_PORT = 554;
@@ -88,12 +89,15 @@ export function discover(timeout = 3000) {
         });
         source.attach(null);
 
-        GLib.timeout_add(GLib.PRIORITY_DEFAULT, timeout, () => {
+        const close = () => {
             source.destroy();
             socket.close();
+        };
+        Timers.timeout(timeout, () => {
+            close();
             resolve([...found.values()]);
             return GLib.SOURCE_REMOVE;
-        });
+        }, {cleanup: close});
     });
 }
 
@@ -135,6 +139,10 @@ function reach(address, cancellable) {
 
 // Module-level, not per device: devices are recreated on a menu reload.
 const refusedUntil = new Map();
+
+export function clearRefusals() {
+    refusedUntil.clear();
+}
 
 export class TapoHome {
     constructor(cameras) {

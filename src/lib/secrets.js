@@ -5,14 +5,11 @@
 
 import Secret from 'gi://Secret';
 
-// Created lazily: the shell imports this module before enable().
-let schema = null;
-
+// Made per call, not at import: the shell imports this module before enable().
 function getSchema() {
-    schema ??= new Secret.Schema('io.github.epogonii.nook', Secret.SchemaFlags.NONE, {
+    return new Secret.Schema('io.github.epogonii.nook', Secret.SchemaFlags.NONE, {
         service: Secret.SchemaAttributeType.STRING,
     });
-    return schema;
 }
 
 function settle(resolve, reject, finish) {

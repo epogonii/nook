@@ -5,6 +5,7 @@ import GLib from 'gi://GLib';
 
 import * as Secrets from './secrets.js';
 import {TvError} from './net.js';
+import {sleep} from './timers.js';
 import AndroidTv from './tv-android.js';
 import AppleTv from './tv-apple.js';
 import LgTv from './tv-lg.js';
@@ -70,11 +71,6 @@ const quiet = e => e instanceof TvError || e instanceof GLib.Error;
 
 // TVs report a power change seconds late, after Wake-on-LAN tens of seconds.
 const POWER_WAIT = 40000;
-
-const sleep = ms => new Promise(resolve => GLib.timeout_add(GLib.PRIORITY_DEFAULT, ms, () => {
-    resolve();
-    return GLib.SOURCE_REMOVE;
-}));
 
 export class TvHome {
     constructor(tvs) {

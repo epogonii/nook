@@ -6,6 +6,8 @@
 import Gio from 'gi://Gio';
 import GLib from 'gi://GLib';
 
+import * as Timers from './timers.js';
+
 const AVAHI = 'org.freedesktop.Avahi';
 const SERVICE = '_googlecast._tcp';
 const ANY = -1;
@@ -44,15 +46,17 @@ export function discover(timeout = 3000) {
         let pending = 0;
         let allForNow = false;
 
-        const finish = () => {
-            if (timer)
-                GLib.source_remove(timer);
+        const end = () => {
+            Timers.remove(timer);
             timer = 0;
             bus.signal_unsubscribe(subscription);
             if (path) {
                 bus.call(AVAHI, path, 'org.freedesktop.Avahi.ServiceBrowser', 'Free', null, null,
                     Gio.DBusCallFlags.NONE, -1, null, null);
             }
+        };
+        const finish = () => {
+            end();
             resolve([...found.values()]);
         };
         const settle = () => {
@@ -119,11 +123,11 @@ export function discover(timeout = 3000) {
                     if (early === path)
                         look(item);
                 }
-                timer = GLib.timeout_add(GLib.PRIORITY_DEFAULT, timeout, () => {
+                timer = Timers.timeout(timeout, () => {
                     timer = 0;
                     finish();
                     return GLib.SOURCE_REMOVE;
-                });
+                }, {cleanup: end});
             });
     });
 }

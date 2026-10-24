@@ -10,6 +10,7 @@ import GLib from 'gi://GLib';
 import * as Aes from './aes.js';
 import {ClimateError} from './climate.js';
 import {localNetworks} from './net.js';
+import * as Timers from './timers.js';
 
 export const PORT = 7000;
 
@@ -140,8 +141,7 @@ class Channel {
                     this._listener = null;
                     this._finish = null;
                 }
-                if (timer)
-                    GLib.source_remove(timer);
+                Timers.remove(timer);
                 timer = 0;
                 resolve(result);
             };
@@ -151,11 +151,14 @@ class Channel {
                 if (result !== undefined)
                     finish(result);
             };
-            timer = GLib.timeout_add(GLib.PRIORITY_DEFAULT, timeout, () => {
+            timer = Timers.timeout(timeout, () => {
                 timer = 0;
                 finish(undefined);
                 return GLib.SOURCE_REMOVE;
-            });
+            }, {cleanup: () => {
+                this._finish = null;
+                this.close();
+            }});
         });
     }
 }
@@ -170,7 +173,7 @@ export async function discover(broadcast = '255.255.255.255', timeout = 4000) {
     for (const target of targets.slice(1))
         channel.send(target, {t: 'scan'});
     let rounds = 0;
-    let again = GLib.timeout_add(GLib.PRIORITY_DEFAULT, 800, () => {
+    let again = Timers.timeout(800, () => {
         for (const target of targets)
             channel.send(target, {t: 'scan'});
         if (++rounds < 3)
@@ -205,8 +208,7 @@ export async function discover(broadcast = '255.255.255.255', timeout = 4000) {
             }
         }
     } finally {
-        if (again)
-            GLib.source_remove(again);
+        Timers.remove(again);
         channel.close();
     }
     return [...found.values()];
