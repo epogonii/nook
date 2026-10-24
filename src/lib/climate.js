@@ -7,8 +7,8 @@
 //   SwUpDn and SwingLfRig 1 swing, 2-6 fixed from top or left, 0 off or left to the unit;
 //   SvSt eco, SwhSlp sleep, Tur turbo, Quiet, Lig display, Health ionizer, Blo X-fan,
 //   StHt 8° heat, Air fresh air: 0/1, absent where the unit has no such thing.
-// caps: {range: [min, max, step], modes: [MODES index…], fans: [{value, word, level}…],
-//   airflows: [SwUpDn value…], sides: [SwingLfRig value…]}. A fan's word is one of
+// caps: {range: [min, max, step], modes: [MODES index...], fans: [{value, word, level}...],
+//   airflows: [SwUpDn value...], sides: [SwingLfRig value...]}. A fan's word is one of
 //   FAN_WORDS, or null for a numbered level; level is 0 for auto, else 1-5 slow to fast.
 
 export const MODES = ['auto', 'cool', 'dry', 'fan', 'heat'];

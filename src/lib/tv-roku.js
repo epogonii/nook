@@ -69,7 +69,7 @@ export default class RokuTv {
         });
     }
 
-    // <tv-channel><channel><number>14.3</number><name>getTV</name>…
+    // <tv-channel><channel><number>14.3</number><name>getTV</name>...
     async _channel() {
         const xml = await this._get('/query/tv-active-channel');
         return [tag(xml, 'number'), tag(xml, 'name')].filter(Boolean).join(' ') || null;

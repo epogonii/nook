@@ -6,12 +6,9 @@
 import Gio from 'gi://Gio';
 import GLib from 'gi://GLib';
 
-import * as Timers from './timers.js';
+import {browse} from './finder.js';
 
-const AVAHI = 'org.freedesktop.Avahi';
 const SERVICE = '_googlecast._tcp';
-const ANY = -1;
-const IPV4 = 0;
 
 const CONNECTION = 'urn:x-cast:com.google.cast.tp.connection';
 const HEARTBEAT = 'urn:x-cast:com.google.cast.tp.heartbeat';
@@ -31,105 +28,24 @@ const MAX_MESSAGE = 1 << 20;
 
 export class CastError extends Error {}
 
-// mDNS gives "187c469c37cb…", multizone "187c469c-37cb-…".
+// mDNS gives "187c469c37cb...", multizone "187c469c-37cb-...".
 export function speakerId(id) {
     return String(id ?? '').replaceAll('-', '').toLowerCase();
 }
 
-export function discover(timeout = 3000) {
-    return new Promise((resolve, reject) => {
-        const bus = Gio.DBus.system;
-        const found = new Map();
-        const waiting = [];
-        let path = null;
-        let timer = 0;
-        let pending = 0;
-        let allForNow = false;
-
-        const end = () => {
-            Timers.remove(timer);
-            timer = 0;
-            bus.signal_unsubscribe(subscription);
-            if (path) {
-                bus.call(AVAHI, path, 'org.freedesktop.Avahi.ServiceBrowser', 'Free', null, null,
-                    Gio.DBusCallFlags.NONE, -1, null, null);
-            }
-        };
-        const finish = () => {
-            end();
-            resolve([...found.values()]);
-        };
-        const settle = () => {
-            if (allForNow && pending === 0 && timer)
-                finish();
-        };
-        const look = ([iface, protocol, name, type, domain]) => {
-            pending++;
-            bus.call(AVAHI, '/', 'org.freedesktop.Avahi.Server', 'ResolveService',
-                new GLib.Variant('(iisssiu)', [iface, protocol, name, type, domain, IPV4, 0]),
-                null, Gio.DBusCallFlags.NONE, timeout, null, (connection, result) => {
-                    pending--;
-                    try {
-                        const [, , , , , , , address, port, txt] = connection.call_finish(result).deepUnpack();
-                        const record = {};
-                        for (const entry of txt) {
-                            const text = decoder.decode(entry);
-                            const equals = text.indexOf('=');
-                            if (equals > 0)
-                                record[text.slice(0, equals)] = text.slice(equals + 1);
-                        }
-                        if (record.id && address && !address.includes(':')) {
-                            found.set(`${record.id}:${port}`, {
-                                id: record.id,
-                                name: record.fn || name,
-                                model: record.md || '',
-                                ip: address,
-                                port,
-                            });
-                        }
-                    } catch (e) {
-                        console.debug(`nook: cast: ${name}: ${e.message}`);
-                    }
-                    settle();
-                });
-        };
-
-        // Subscribe first: Avahi can emit ItemNew before ServiceBrowserNew returns the
-        // path, so early items are buffered until it is known.
-        const subscription = bus.signal_subscribe(AVAHI, 'org.freedesktop.Avahi.ServiceBrowser', null, null, null,
-            Gio.DBusSignalFlags.NONE, (_bus, _sender, signalPath, _iface, signal, params) => {
-                if (signal === 'ItemNew') {
-                    if (path === signalPath)
-                        look(params.deepUnpack());
-                    else if (!path)
-                        waiting.push([signalPath, params.deepUnpack()]);
-                } else if (signal === 'AllForNow' && signalPath === path) {
-                    allForNow = true;
-                    settle();
-                }
-            });
-
-        bus.call(AVAHI, '/', 'org.freedesktop.Avahi.Server', 'ServiceBrowserNew',
-            new GLib.Variant('(iissu)', [ANY, IPV4, SERVICE, '', 0]),
-            null, Gio.DBusCallFlags.NONE, -1, null, (connection, result) => {
-                try {
-                    [path] = connection.call_finish(result).deepUnpack();
-                } catch (e) {
-                    bus.signal_unsubscribe(subscription);
-                    reject(new CastError(`Avahi is not answering: ${e.message}`));
-                    return;
-                }
-                for (const [early, item] of waiting.splice(0)) {
-                    if (early === path)
-                        look(item);
-                }
-                timer = Timers.timeout(timeout, () => {
-                    timer = 0;
-                    finish();
-                    return GLib.SOURCE_REMOVE;
-                }, {cleanup: end});
-            });
-    });
+export async function discover(timeout = 3000) {
+    let services;
+    try {
+        services = await browse(timeout, [SERVICE], {quick: true});
+    } catch (e) {
+        throw new CastError(`Avahi is not answering: ${e.message}`);
+    }
+    const found = new Map();
+    for (const {name, ip, port, txt} of services) {
+        if (txt.id)
+            found.set(`${txt.id}:${port}`, {id: txt.id, name: txt.fn || name, model: txt.md || '', ip, port});
+    }
+    return [...found.values()];
 }
 
 // Minimal CastMessage protobuf: 1 protocol_version = 0, 2 source_id, 3 destination_id,

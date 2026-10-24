@@ -77,7 +77,7 @@ export default class SonyTv {
             // Errors while an app is in front (7, "Illegal State") or the screen is off; no
             // call says which app.
             const [playing] = await this._call('avContent', 'getPlayingContentInfo').catch(() => []);
-            // Live TV: {"source":"tv:dvbt","dispNum":"002","title":"ABC",…}; HDMI: {"uri":"extInput:hdmi?port=2",…}.
+            // Live TV: {"source":"tv:dvbt","dispNum":"002","title":"ABC",...}; HDMI: {"uri":"extInput:hdmi?port=2",...}.
             const tuner = playing?.source?.startsWith('tv:');
             const channel = tuner ? [playing.dispNum?.replace(/^0+(?=\d)/, ''), playing.title].filter(Boolean).join(' ') : '';
             return {
@@ -154,7 +154,7 @@ export default class SonyTv {
         return id === 'tv' ? this.press('tv') : this._call('avContent', 'setPlayContent', [{uri: id}]);
     }
 
-    // "icon": "http://<tv>/DIAL/icon/com.sony.dtv….png", or "" for none.
+    // "icon": "http://<tv>/DIAL/icon/com.sony.dtv.<app>.png", or "" for none.
     async apps() {
         const [apps = []] = await this._call('appControl', 'getApplicationList');
         const onTv = url => typeof url === 'string' && url.startsWith(`http://${this._tv.ip}/`);

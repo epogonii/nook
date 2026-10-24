@@ -219,7 +219,7 @@ export default class LgTv {
         this._drop();
     }
 
-    // {"channelNumber":"15","channelName":"BFM TV",…}. Errors off Live TV; with no channels
+    // {"channelNumber":"15","channelName":"BFM TV",...}. Errors off Live TV; with no channels
     // tuned the TV never answers.
     async _currentChannel() {
         const {channelNumber, channelName} = await this._ask('tv/getCurrentChannel', {}, 2000);
