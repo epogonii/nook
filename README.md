@@ -10,6 +10,7 @@
 </p>
 
 <p align="center">
+  <a href="https://extensions.gnome.org/extension/11453/nook/"><img alt="Get it on extensions.gnome.org" src="https://img.shields.io/badge/extensions.gnome.org-get%20it-4a86cf?logo=gnome&logoColor=white"></a>
   <img alt="GNOME Shell 46 to 51" src="https://img.shields.io/badge/GNOME%20Shell-46%20to%2051-5c5cf5?logo=gnome&logoColor=white">
   <img alt="Version" src="https://img.shields.io/badge/dynamic/json?url=https%3A%2F%2Fraw.githubusercontent.com%2Fepogonii%2Fnook%2Fmain%2Fmetadata.json&query=%24%5B%27version-name%27%5D&label=version&color=4a86cf">
   <a href="LICENSE"><img alt="License GPL-2.0-or-later" src="https://img.shields.io/badge/license-GPL--2.0--or--later-8f33c7"></a>
@@ -67,6 +68,10 @@ Home Assistant knows comes in through Home Assistant.
 ## Install
 
 Nook runs on GNOME 46 to 51.
+
+<a href="https://extensions.gnome.org/extension/11453/nook/"><img src="docs/get-it-on-ego.png" width="228" alt="Get it on GNOME Extensions"></a>
+
+Review takes its time, so the version there can sit behind this branch. To run the latest:
 
 ```sh
 git clone https://github.com/epogonii/nook.git
