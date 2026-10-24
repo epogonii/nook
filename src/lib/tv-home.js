@@ -68,6 +68,14 @@ export function keepSecret(tv, secret) {
 
 const quiet = e => e instanceof TvError || e instanceof GLib.Error;
 
+// TVs report a power change seconds late, after Wake-on-LAN tens of seconds.
+const POWER_WAIT = 40000;
+
+const sleep = ms => new Promise(resolve => GLib.timeout_add(GLib.PRIORITY_DEFAULT, ms, () => {
+    resolve();
+    return GLib.SOURCE_REMOVE;
+}));
+
 export class TvHome {
     constructor(tvs) {
         this._links = new Map();
@@ -194,8 +202,24 @@ export class TvHome {
         this.onChange?.(device);
     }
 
-    power(device, on) {
-        return this._do(device, driver => driver.power(on));
+    // Reads on until the TV reports the new state, so the card doesn't show the old one
+    // and a second press can't toggle it back meanwhile.
+    async power(device, on) {
+        const link = this._links.get(device.did);
+        const round = link.round;
+        await this._do(device, driver => driver.power(on));
+        const until = Date.now() + POWER_WAIT;
+        while (device.state?.on !== on && Date.now() < until) {
+            await sleep(1000);
+            if (link.round !== round)
+                return;
+            await this._read(device).catch(e => {
+                if (!quiet(e))
+                    throw e;
+            });
+            if (device.state?.on === on)
+                this.onChange?.(device);
+        }
     }
 
     setSwitch(device, on) {

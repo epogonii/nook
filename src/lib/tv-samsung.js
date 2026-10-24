@@ -157,23 +157,36 @@ export default class SamsungTv {
     }
 
     // visible is the app in front; running alone is one left in the background.
+    // The TV answers app lookups one at a time, ~1.3 s each, and queues every other
+    // request behind them, the power state included: ask in turn.
     async _visibleApp() {
         const listed = this._listed.length > 0 ? this._listed.slice(0, 12) : KNOWN_APPS.map(([id]) => id);
         const ids = [...new Set([this._shown?.id, ...listed].filter(Boolean))];
-        const states = await Promise.all(ids.map(id => this._appState(id)));
-        this._shown = states.find(state => state?.visible === true) ?? null;
-        return this._shown;
+        let shown = null;
+        for (const id of ids) {
+            if (this._closed)
+                return null;
+            const state = await this._appState(id);
+            if (state?.visible === true) {
+                shown = state;
+                break;
+            }
+            if (id === this._shown?.id)
+                this._shown = null;
+        }
+        this._shown = shown;
+        return shown;
     }
 
-    // Each lookup can take seconds; past 4 the last answer stands in for this read and
-    // the lookup still lands for the next.
+    // A walk takes up to ~15 s; past 2 the last answer stands in for this read and the
+    // walk still lands for the next. 2 s covers the check of the last shown app.
     _visibleAppSoon() {
         this._looking ??= this._visibleApp().finally(() => {
             this._looking = null;
         });
         let timer = 0;
         const late = new Promise(resolve => {
-            timer = GLib.timeout_add(GLib.PRIORITY_DEFAULT, 4000, () => {
+            timer = GLib.timeout_add(GLib.PRIORITY_DEFAULT, 2000, () => {
                 timer = 0;
                 resolve(this._shown);
                 return GLib.SOURCE_REMOVE;
@@ -185,17 +198,20 @@ export default class SamsungTv {
         });
     }
 
-    async status() {
-        let info;
+    // 'on', 'standby', or null when the TV doesn't answer. Older models have no
+    // PowerState and can't report standby.
+    async _powerState() {
         try {
-            info = await this._info();
+            return (await this._info()).PowerState ?? 'on';
         } catch (e) {
             if (e instanceof TvError || e instanceof GLib.Error || e instanceof SyntaxError)
-                return {on: false, volume: null, muted: null, source: null, app: null};
+                return null;
             throw e;
         }
-        // Older models have no PowerState and can't report standby.
-        const on = (info.PowerState ?? 'on') === 'on';
+    }
+
+    async status() {
+        const on = await this._powerState() === 'on';
         if (!on)
             return {on, volume: null, muted: null, source: null, app: null};
         const [sound, app] = await Promise.all([
@@ -226,23 +242,22 @@ export default class SamsungTv {
         });
     }
 
-    // Standby TVs still answer and wake on KEY_POWER; deeper sleep needs WoL first.
-    // KEY_POWER toggles, so two reads must agree the TV is the other way.
+    // KEY_POWER toggles: it goes only to a TV that answers it is the other way, never
+    // after a lost reply. In standby the TV answers and wakes on it; asleep, only WoL
+    // reaches it.
     async power(on) {
-        for (let ask = 0; ask < 2; ask++) {
-            const now = await this.status();
-            if (now.on === on)
-                return;
+        const now = await this._powerState();
+        if (!on) {
+            if (now === 'on')
+                await this.press('power');
+            return;
         }
-        if (on) {
-            wake(this._tv.mac);
-            try {
-                await this._info();
-            } catch {
-                return;
-            }
+        if (now === null) {
+            if (!wake(this._tv.mac))
+                throw new TvError('The TV is not answering', 'timeout');
+        } else if (now !== 'on') {
+            await this.press('power');
         }
-        await this.press('power');
     }
 
     sources() {
@@ -271,10 +286,17 @@ export default class SamsungTv {
             this._listed = apps.map(app => app.appId);
             return apps.map(app => ({id: app.appId, title: app.name, icon: app.icon || null}));
         }
-        const states = await Promise.all(KNOWN_APPS.map(([id]) => this._appState(id)));
-        const found = states.filter(Boolean);
-        this._listed = found.map(state => state.id);
-        return found.map(state => ({id: state.id, title: state.name || KNOWN_APPS.find(([id]) => id === state.id)[1]}));
+        // In turn, as in _visibleApp().
+        const found = [];
+        for (const [id, title] of KNOWN_APPS) {
+            if (this._closed)
+                throw new TvError('Closed', 'closed');
+            const state = await this._appState(id);
+            if (state)
+                found.push({id: state.id, title: state.name || title});
+        }
+        this._listed = found.map(app => app.id);
+        return found;
     }
 
     // {"event":"ed.apps.icon","data":{"iconPath":"/opt/share/…/250x250.png","imageBase64":"iVBOR…"}}
