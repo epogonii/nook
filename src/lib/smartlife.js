@@ -23,8 +23,9 @@ const SCHEMA = 'haauthorize';
 const LOGIN_URL = 'https://apigw.iotbing.com/v1.0/m/life/home-assistant/qrcode/tokens';
 const SIGNED = ['X-appKey', 'X-requestId', 'X-sid', 'X-time', 'X-token'];
 const NONCE_LETTERS = 'ABCDEFGHJKMNPQRSTWXYZabcdefhijkmnprstwxyz2345678';
-// Token errors: invalid, expired.
-const TOKEN_CODES = ['1010', '1011'];
+// Token errors: invalid, expired. A refresh token renewed elsewhere or revoked fails the
+// signature instead, as "sign invalid" under the generic code -9999999.
+const TOKEN_CODES = ['1010', '1011', 'sign'];
 const REFRESH_EARLY = 60 * 1000;
 const DETAILS_AT_ONCE = 20;
 
@@ -90,7 +91,8 @@ async function fetchJson(session, method, url, cancellable, {headers = {}, body 
     }
 }
 
-const trouble = answer => new SpecError(answer?.msg || 'Smart Life refused it', String(answer?.code ?? ''));
+const trouble = answer => new SpecError(answer?.msg || 'Smart Life refused it',
+    /sign invalid/i.test(answer?.msg ?? '') ? 'sign' : String(answer?.code ?? ''));
 
 // The QR code's text and the token to ask about it with.
 export async function startLogin(userCode, cancellable = null) {
