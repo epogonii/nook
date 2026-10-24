@@ -727,21 +727,21 @@
   height: 230px;
 }
 
-.nook-footer {
+.nook-header-quiet {
   padding-left: 2px;
 }
-.nook-footer .nook-title {
+.nook-header-quiet .nook-title {
   font-size: 0.85em;
   color: rgba(255, 255, 255, 0.55);
 }
-.nook-footer .nook-round-button {
+.nook-header-quiet .nook-round-button {
   width: 28px;
   height: 28px;
   color: rgba(255, 255, 255, 0.6);
   background-color: transparent;
 }
-.nook-footer .nook-round-button:hover,
-.nook-footer .nook-round-button:focus {
+.nook-header-quiet .nook-round-button:hover,
+.nook-header-quiet .nook-round-button:focus {
   color: #ffffff;
   background-color: rgba(255, 255, 255, 0.1);
 }

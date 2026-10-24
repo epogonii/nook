@@ -4898,19 +4898,16 @@ class NookButton extends PanelMenu.Button {
         this._pinButton.visible = on;
         this._hideButton.visible = on;
         this._refreshButton.visible = !on;
-        this._placeHeader(!on && readSetting(this._settings, 'view') === 'control');
+        this._quietHeader(!on && readSetting(this._settings, 'view') === 'control');
         if (on)
             this._syncCardHeader();
     }
 
-    // The module view keeps its title row at the bottom, like Control Center's
-    // Edit Controls; cards need it on top for the back button.
-    _placeHeader(below) {
-        this._panel.set_child_at_index(this._header, below ? this._panel.get_n_children() - 1 : 0);
-        if (below)
-            this._header.add_style_class_name('nook-footer');
+    _quietHeader(on) {
+        if (on)
+            this._header.add_style_class_name('nook-header-quiet');
         else
-            this._header.remove_style_class_name('nook-footer');
+            this._header.remove_style_class_name('nook-header-quiet');
     }
 
     _syncCardHeader() {
@@ -8080,7 +8077,7 @@ class NookButton extends PanelMenu.Button {
         this._clear();
 
         const view = readSetting(this._settings, 'view');
-        this._placeHeader(view === 'control');
+        this._quietHeader(view === 'control');
         this._title.text = this._home?.homeName ?? _('Nook');
 
         const choices = this._choices();
