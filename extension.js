@@ -811,7 +811,7 @@ function stateText(device) {
     if (primary.kind === 'media') {
         const media = device.state?.media;
         if (playingNow(device))
-            return media.title ?? device.state.app ?? _('Playing');
+            return media?.title ?? device.state.app ?? _('Playing');
         if (media?.state === 'PAUSED')
             return _('Paused');
         return device.state?.app ?? _('Idle');
