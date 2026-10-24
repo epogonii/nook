@@ -101,6 +101,11 @@ export class TvHome {
                 refused: null,
                 // Bumped by rest(); list results from an earlier round are dropped.
                 round: 0,
+                // {on} while power() waits for the TV to report it.
+                powering: null,
+                // Read numbers: an answer to an earlier read never replaces a later one.
+                reads: 0,
+                shown: 0,
                 lists: {},
                 listed: {},
                 titles: new Map(),
@@ -138,14 +143,22 @@ export class TvHome {
         console.warn(`nook: tv: ${link.tv.id} no longer takes its pairing`);
     }
 
+    // Returns what the TV said, also when that isn't shown.
     async _read(device) {
+        const link = this._links.get(device.did);
         const driver = await this._driver(device);
+        const read = ++link.reads;
         let state;
         try {
             state = await driver.status();
         } finally {
             this._checkRefused(device, driver);
         }
+        // The TV reports a power press seconds late; meanwhile a switch already flipped
+        // would flip back for a moment.
+        if (read < link.shown || (link.powering && state.on !== link.powering.on))
+            return state;
+        link.shown = read;
         device.state = {
             ...state,
             paired: driver.paired,
@@ -155,6 +168,7 @@ export class TvHome {
         };
         device.online = true;
         device.values = [state.on];
+        return state;
     }
 
     async readPrimary() {
@@ -202,24 +216,44 @@ export class TvHome {
         this.onChange?.(device);
     }
 
-    // Reads on until the TV reports the new state, so the card doesn't show the old one
-    // and a second press can't toggle it back meanwhile.
+    // Reads on until the TV reports the new state, so a second press can't toggle it
+    // back meanwhile.
     async power(device, on) {
         const link = this._links.get(device.did);
         const round = link.round;
-        await this._do(device, driver => driver.power(on));
-        const until = Date.now() + POWER_WAIT;
-        while (device.state?.on !== on && Date.now() < until) {
-            await sleep(1000);
-            if (link.round !== round)
-                return;
+        const driver = await this._driver(device);
+        const wait = {on};
+        link.powering = wait;
+        let state;
+        try {
+            try {
+                await driver.power(on);
+            } finally {
+                this._checkRefused(device, driver);
+            }
+            const until = Date.now() + POWER_WAIT;
+            do {
+                await sleep(1000);
+                if (link.round !== round)
+                    return;
+                state = await this._read(device).catch(e => {
+                    if (!quiet(e))
+                        throw e;
+                    return null;
+                });
+            } while (state?.on !== on && Date.now() < until);
+        } finally {
+            if (link.powering === wait)
+                link.powering = null;
+        }
+        // Never reported: show what it says now.
+        if (state?.on !== on && link.round === round) {
             await this._read(device).catch(e => {
                 if (!quiet(e))
                     throw e;
             });
-            if (device.state?.on === on)
-                this.onChange?.(device);
         }
+        this.onChange?.(device);
     }
 
     setSwitch(device, on) {
