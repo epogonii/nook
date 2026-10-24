@@ -125,7 +125,7 @@ export default class SonyTv {
             await this._call('system', 'setPowerStatus', [{status: false}]);
             return;
         }
-        wake(this._tv.mac);
+        await wake(this._tv.mac);
         for (let ask = 1; ; ask++) {
             try {
                 await this._call('system', 'setPowerStatus', [{status: true}]);

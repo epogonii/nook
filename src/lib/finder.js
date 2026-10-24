@@ -4,7 +4,7 @@ import Gio from 'gi://Gio';
 import GLib from 'gi://GLib';
 import Soup from 'gi://Soup?version=3.0';
 
-import {localNetworks, tag} from './net.js';
+import {localNetworks, readText, tag} from './net.js';
 
 const AVAHI = 'org.freedesktop.Avahi';
 const ANY = -1;
@@ -122,7 +122,10 @@ export function browse(timeout, types = Object.keys(SERVICES)) {
 }
 
 // Up to 6 answers per IP: a TV is several UPnP devices, not all naming the maker alike.
-function search(timeout) {
+async function search(timeout) {
+    // One socket per local address: with a VPN on the default route, an unbound
+    // search would go out through the VPN.
+    const local = (await localNetworks()).map(network => network.address);
     return new Promise(resolve => {
         const request = encoder.encode([
             'M-SEARCH * HTTP/1.1',
@@ -158,9 +161,6 @@ function search(timeout) {
             return GLib.SOURCE_CONTINUE;
         };
 
-        // One socket per local address: with a VPN on the default route, an unbound
-        // search would go out through the VPN.
-        const local = localNetworks().map(network => network.address);
         const open = [];
         for (const address of local.length > 0 ? local : ['0.0.0.0']) {
             let socket;
@@ -238,11 +238,11 @@ export function brandOf({maker = '', model = '', type = '', location = ''}) {
 }
 
 // MACs from the kernel ARP table. Call after describe(): its requests populate it.
-function neighbours() {
+async function neighbours() {
     const table = new Map();
     try {
-        const [, bytes] = GLib.file_get_contents('/proc/net/arp');
-        for (const line of decoder.decode(bytes).split('\n').slice(1)) {
+        const text = await readText('/proc/net/arp');
+        for (const line of text.split('\n').slice(1)) {
             const [ip, , flags, mac] = line.trim().split(/\s+/);
             if ((parseInt(flags, 16) & 0x2) && mac && mac !== '00:00:00:00:00:00')
                 table.set(ip, mac.toLowerCase());
@@ -327,7 +327,7 @@ export async function survey(timeout = 3000) {
         else if (device.androidTv)
             device.tv = {brand: 'androidtv', model: device.model, udn: `mdns:${device.androidTv.name}`};
     }
-    const macs = neighbours();
+    const macs = await neighbours();
     return [...devices.values()]
         .filter(d => d.kinds.size > 0)
         .map(d => ({

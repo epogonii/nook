@@ -253,7 +253,7 @@ export default class SamsungTv {
             return;
         }
         if (now === null) {
-            if (!wake(this._tv.mac))
+            if (!await wake(this._tv.mac))
                 throw new TvError('The TV is not answering', 'timeout');
         } else if (now !== 'on') {
             await this.press('power');

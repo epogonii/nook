@@ -6,6 +6,7 @@ import Soup from 'gi://Soup?version=3.0';
 
 Gio._promisify(Soup.Session.prototype, 'send_and_read_async');
 Gio._promisify(Soup.Session.prototype, 'websocket_connect_async', 'websocket_connect_finish');
+Gio._promisify(Gio.File.prototype, 'load_contents_async');
 
 const decoder = new TextDecoder();
 const encoder = new TextEncoder();
@@ -167,14 +168,19 @@ function routeNumber(hex) {
 
 const dotted = n => [n >>> 24, (n >>> 16) & 0xff, (n >>> 8) & 0xff, n & 0xff].join('.');
 
+export async function readText(path) {
+    const [contents] = await Gio.File.new_for_path(path).load_contents_async(null);
+    return decoder.decode(contents);
+}
+
 /**
  * Directly attached IPv4 networks, from /proc/net/route. Multicast and broadcast
  * go out per network: a VPN holding the default route would carry them off.
  */
-export function localNetworks() {
+export async function localNetworks() {
     let text;
     try {
-        text = decoder.decode(GLib.file_get_contents('/proc/net/route')[1]);
+        text = await readText('/proc/net/route');
     } catch {
         return [];
     }
@@ -189,7 +195,7 @@ export function localNetworks() {
             continue;
         let flags;
         try {
-            flags = Number.parseInt(decoder.decode(GLib.file_get_contents(`/sys/class/net/${name}/flags`)[1]), 16);
+            flags = Number.parseInt(await readText(`/sys/class/net/${name}/flags`), 16);
         } catch {
             continue;
         }
@@ -217,9 +223,9 @@ export function localNetworks() {
  * A broadcast also goes to each local network's own broadcast address. localPort is for
  * units that answer to a fixed port; a busy one falls back to any.
  */
-export function probe(packet, ports, {address = '255.255.255.255', timeout = 3000, localPort = 0, take}) {
+export async function probe(packet, ports, {address = '255.255.255.255', timeout = 3000, localPort = 0, take}) {
     const targets = address === '255.255.255.255'
-        ? [address, ...localNetworks().map(network => network.broadcast)] : [address];
+        ? [address, ...(await localNetworks()).map(network => network.broadcast)] : [address];
     const socket = Gio.Socket.new(Gio.SocketFamily.IPV4, Gio.SocketType.DATAGRAM, Gio.SocketProtocol.UDP);
     socket.set_blocking(false);
     socket.set_broadcast(true);
@@ -266,7 +272,7 @@ export function probe(packet, ports, {address = '255.255.255.255', timeout = 300
     if (sent === 0) {
         source.destroy();
         socket.close();
-        return Promise.reject(new TvError(`Nothing could be sent to ${address}`));
+        throw new TvError(`Nothing could be sent to ${address}`);
     }
     let rounds = 1;
     let again = GLib.timeout_add(GLib.PRIORITY_DEFAULT, 800, () => {
@@ -288,7 +294,7 @@ export function probe(packet, ports, {address = '255.255.255.255', timeout = 300
     });
 }
 
-export function wake(mac) {
+export async function wake(mac) {
     const parts = String(mac ?? '').split(/[:-]/);
     if (parts.length !== 6 || !parts.every(part => /^[0-9a-f]{1,2}$/i.test(part)))
         return false;
@@ -296,7 +302,7 @@ export function wake(mac) {
     const packet = new Uint8Array(102).fill(0xff);
     for (let i = 1; i <= 16; i++)
         packet.set(address, i * 6);
-    const broadcasts = localNetworks().map(network => network.broadcast);
+    const broadcasts = (await localNetworks()).map(network => network.broadcast);
     let sent = false;
     const socket = Gio.Socket.new(Gio.SocketFamily.IPV4, Gio.SocketType.DATAGRAM, Gio.SocketProtocol.UDP);
     try {
