@@ -11,6 +11,7 @@
 
 <p align="center">
   <a href="https://github.com/sponsors/epogonii"><img src="https://img.shields.io/badge/Sponsor-%E2%9D%A4-db61a2?style=for-the-badge&logo=githubsponsors&logoColor=white" alt="Sponsor"></a>
+  <a href="https://www.paypal.com/paypalme/pogonii"><img src="https://img.shields.io/badge/PayPal-003087?style=for-the-badge&logo=paypal&logoColor=white" alt="PayPal"></a>
 </p>
 
 <p align="center">
@@ -97,12 +98,14 @@ If Nook makes your home nicer to live with, you can support its development.
 
 <p>
   <a href="https://github.com/sponsors/epogonii"><img src="https://img.shields.io/badge/Sponsor_on_GitHub-%E2%9D%A4-db61a2?style=for-the-badge&logo=githubsponsors&logoColor=white" alt="Sponsor on GitHub"></a>
+  <a href="https://www.paypal.com/paypalme/pogonii"><img src="https://img.shields.io/badge/PayPal-003087?style=for-the-badge&logo=paypal&logoColor=white" alt="PayPal"></a>
 </p>
 
-Or send crypto (the same addresses, with QR codes, are under **About** in Nook's settings):
+The same links, and the crypto addresses with QR codes, are under **About** in Nook's settings:
 
 | | |
 |---|---|
+| **PayPal** | [paypal.me/pogonii](https://www.paypal.com/paypalme/pogonii) |
 | **Bitcoin** | `bc1qe6fjj3uv23e2yx2ry3wwhyrl7s2pqshau7mga3` |
 | **Ethereum** | `0xDC9e1EfA0F8FAE71377F4018d4ff7D123369438e` |
 | **Solana** | `3sYQyR27CVz1VcwCfoDLUioaAHk8jspQaSDHXEvBALxg` |
