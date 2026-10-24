@@ -178,11 +178,6 @@
       <summary>Smart Life devices</summary>
       <description>A JSON list of the devices read from the Smart Life account: id, name, room, category, model, channel, and the data points Nook shows with their limits.</description>
     </key>
-    <key name="colored-icon" type="b">
-      <default>true</default>
-      <summary>Colour the top bar icon</summary>
-      <description>Draws the logo in cream with a clay doorway; off, it is monochrome in the colour of the other icons in the top bar.</description>
-    </key>
     <key name="hidden-rooms" type="as">
       <default>[]</default>
       <summary>Room tabs left out</summary>

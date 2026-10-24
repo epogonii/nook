@@ -119,10 +119,6 @@ export default class Probe extends Extension {
             settings.set_value('names', new GLib.Variant('a{ss}', {[fryer.did]: 'Аэрогриль'}));
         await sleep(3000);
         await shoot(`${dir}/bar.png`);
-        settings.set_boolean('colored-icon', true);
-        await sleep(500);
-        await shoot(`${dir}/bar-green.png`);
-        settings.set_boolean('colored-icon', false);
 
         for (const [view, colors] of SHOTS) {
             settings.set_string('view', view);

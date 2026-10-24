@@ -16,7 +16,7 @@
 # NOOK_SCHEME=prefer-dark selects the dark style. The window needs mutter-devkit.
 set -euo pipefail
 
-SHOTS='bar-green card-camera snapshot card-climate card-climate-warm bar tabs-type tabs-accent tabs-room grid-type rooms-type control-type card-fan card-vacuum card-vacuum-2 card-vacuum-3 card-speaker card-tv prefs prefs-Devices prefs-Accounts prefs-Find notify locked'
+SHOTS='card-camera snapshot card-climate card-climate-warm bar tabs-type tabs-accent tabs-room grid-type rooms-type control-type card-fan card-vacuum card-vacuum-2 card-vacuum-3 card-speaker card-tv prefs prefs-Devices prefs-Accounts prefs-Find notify locked'
 
 # Everything runs inside main() so bash parses the whole file first: this script is
 # often edited while a window it started is still open.

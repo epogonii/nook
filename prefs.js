@@ -4066,13 +4066,6 @@ export default class NookPreferences extends ExtensionPreferences {
         settings.bind('type-colors', colorRow, 'active', Gio.SettingsBindFlags.DEFAULT);
         group.add(colorRow);
 
-        const iconRow = new Adw.SwitchRow({
-            title: _('Coloured Top Bar Icon'),
-            subtitle: _('Cream with a clay doorway. Off: monochrome, in the colour of the other icons.'),
-        });
-        settings.bind('colored-icon', iconRow, 'active', Gio.SettingsBindFlags.DEFAULT);
-        group.add(iconRow);
-
         return group;
     }
 

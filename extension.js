@@ -104,7 +104,6 @@ const DEFAULTS = {
     'smartthings-devices': '[]',
     'melcloud-devices': '[]',
     'electrolux-devices': '[]',
-    'colored-icon': true,
     'hidden-rooms': [],
     'alerts': {},
     'sensor-rules': '{}',
@@ -119,8 +118,6 @@ const OFFLINE_OPACITY = 115;
 
 // µs; a middle press and its click gesture land within this and count as one click.
 const MIDDLE_TWICE = 250 * 1000;
-
-const MARK_COLORS = {house: [0.94, 0.93, 0.9], light: [0.85, 0.47, 0.34]};
 
 // Logical px; WrapLayout isn't styled, so callers multiply by the scale factor.
 const CHIP_SPACING = 6;
@@ -2958,8 +2955,7 @@ class Glyph extends St.DrawingArea {
         }
     }
 
-    // [r, g, b] in 0-1, {part: [r, g, b]} for multi-part glyphs, or null for the theme
-    // foreground.
+    // [r, g, b] in 0-1, or null for the theme foreground.
     setColor(color) {
         this._color = color;
         this.queue_repaint();
@@ -2973,20 +2969,13 @@ class Glyph extends St.DrawingArea {
     vfunc_repaint() {
         const cr = this.get_context();
         const [width, height] = this.get_surface_size();
-        let paint = null;
-        if (Array.isArray(this._color)) {
+        if (this._color)
             cr.setSourceRGB(...this._color);
-        } else if (this._color) {
-            // Parts the glyph does not name, cairo would otherwise draw black.
+        else
             this._ink(cr);
-            const parts = this._color;
-            paint = part => (parts[part] ? cr.setSourceRGB(...parts[part]) : this._ink(cr));
-        } else {
-            this._ink(cr);
-        }
         cr.scale(width / 16, height / 16);
         try {
-            Glyphs.draw(cr, this._name, paint);
+            Glyphs.draw(cr, this._name);
         } finally {
             cr.$dispose();
         }
@@ -4241,22 +4230,16 @@ class NookButton extends PanelMenu.Button {
             'changed::homekit-accessories', () => this.reload().catch(logError),
             'changed::smartlife-devices', () => this.reload().catch(logError),
             ...CLOUD_AIRCONS.flatMap(brand => [`changed::${brand.id}-devices`, () => this.reload().catch(logError)]),
-            'changed::colored-icon', () => this._syncMark(),
             'changed::extra-tiles', () => {
                 this._syncExtras();
                 this._render();
             },
             this);
-        this._syncMark();
         this._gone = false;
         this.connect('destroy', () => {
             this._gone = true;
             this.stop();
         });
-    }
-
-    _syncMark() {
-        this._mark.setColor(readSetting(this._settings, 'colored-icon') ? MARK_COLORS : null);
     }
 
     _watchMenu() {

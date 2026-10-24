@@ -3686,17 +3686,6 @@ msgid ""
 "accent colour."
 msgstr "Вентиляторы, свет и датчики получают свои цвета вместо акцентного."
 
-#: prefs.js:4055
-msgid "Coloured Top Bar Icon"
-msgstr "Цветной значок в панели"
-
-#: prefs.js:4056
-msgid ""
-"Cream with a clay doorway. Off: monochrome, in the colour of the other icons."
-msgstr ""
-"Кремовый, с терракотовой дверью. Выключено: монохромный, в цвет остальных "
-"значков."
-
 #: prefs.js:4067
 msgid "Room Tabs"
 msgstr "Вкладки комнат"
