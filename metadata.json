@@ -1,7 +1,7 @@
 {
   "uuid": "nook@epogonii.github.io",
   "name": "Nook",
-  "description": "Your smart home from the top bar: lights, plugs, sensors, cameras, air conditioners, TVs and speakers.\n\nWorks with Home Assistant, Philips Hue, HomeKit, Smart Life, Mi Home, eWeLink and air conditioner clouds; on the local network with Gree, Midea and Daikin air conditioners, Tapo cameras, Sonoff switches, Cast speakers and most smart TVs. Pairing an Android TV needs openssl.\n\nWhile the screen is locked Nook calls no clouds and only turns leak and smoke alerts from a Xiaomi gateway into notifications.\n\nThe copy button next to a donation address in the settings puts it on the clipboard; Nook reads nothing from it.",
+  "description": "Your smart home from the top bar: lights, plugs, sensors, cameras, air conditioners, TVs and speakers, from Home Assistant, Hue, HomeKit, Smart Life, Mi Home, eWeLink and the local network.\n\nWhile the screen is locked, Nook only turns Xiaomi gateway leak and smoke alerts into notifications. Pairing an Android TV needs openssl. The copy button for donation addresses uses the clipboard; nothing is read from it.",
   "shell-version": [
     "46",
     "47",
