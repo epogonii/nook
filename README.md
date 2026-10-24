@@ -10,13 +10,12 @@
 </p>
 
 <p align="center">
-  <img src="https://img.shields.io/badge/GNOME-46--51-4a86cf?style=for-the-badge&logo=gnome&logoColor=white" alt="GNOME 46 to 51">
-  <img src="https://img.shields.io/badge/dynamic/json?url=https%3A%2F%2Fraw.githubusercontent.com%2Fepogonii%2Fnook%2Fmain%2Fmetadata.json&query=%24%5B%27version-name%27%5D&label=version&style=for-the-badge&color=555" alt="Version">
-  <a href="LICENSE"><img src="https://img.shields.io/github/license/epogonii/nook?style=for-the-badge&color=555" alt="License"></a>
-  <a href="https://github.com/epogonii/nook/commits/main"><img src="https://img.shields.io/github/last-commit/epogonii/nook?style=for-the-badge&color=555" alt="Last commit"></a>
-  <br>
-  <a href="https://github.com/sponsors/epogonii"><img src="https://img.shields.io/badge/Sponsor-db61a2?style=for-the-badge&logo=githubsponsors&logoColor=white" alt="Sponsor"></a>
-  <a href="https://www.paypal.com/paypalme/pogonii"><img src="https://img.shields.io/badge/PayPal-003087?style=for-the-badge&logo=paypal&logoColor=white" alt="PayPal"></a>
+  <img alt="GNOME Shell 46 to 51" src="https://img.shields.io/badge/GNOME%20Shell-46%20to%2051-5c5cf5?logo=gnome&logoColor=white">
+  <img alt="Version" src="https://img.shields.io/badge/dynamic/json?url=https%3A%2F%2Fraw.githubusercontent.com%2Fepogonii%2Fnook%2Fmain%2Fmetadata.json&query=%24%5B%27version-name%27%5D&label=version&color=4a86cf">
+  <a href="LICENSE"><img alt="License" src="https://img.shields.io/github/license/epogonii/nook?color=8f33c7"></a>
+  <a href="https://github.com/epogonii/nook/commits/main"><img alt="Last commit" src="https://img.shields.io/github/last-commit/epogonii/nook?color=2e9e6b"></a>
+  <a href="https://github.com/sponsors/epogonii"><img alt="Sponsor" src="https://img.shields.io/badge/sponsor-GitHub-ea4aaa?logo=githubsponsors&logoColor=white"></a>
+  <a href="https://www.paypal.com/paypalme/pogonii"><img alt="PayPal" src="https://img.shields.io/badge/donate-PayPal-003087?logo=paypal&logoColor=white"></a>
 </p>
 
 <p align="center">
