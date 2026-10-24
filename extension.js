@@ -44,12 +44,13 @@ import {HueHome} from './lib/hue-home.js';
 import {parseBridges as parseHueBridges, parseDevices as parseHueDevices} from './lib/hue.js';
 import {SmartLifeHome, parseDevices as parseSmartLifeDevices} from './lib/smartlife-home.js';
 import {SpecError} from './lib/spec-home.js';
-import {MiHome, cachedDevices} from './lib/mihome.js';
+import {MiHome, cachedDevices, clearPacing} from './lib/mihome.js';
 import {MapError, decodeMap, parsePath} from './lib/vacuum-map.js';
 import {OnvifError} from './lib/onvif.js';
 import * as Tapo from './lib/tapo.js';
 import {CameraApi, TapoError, WRONG_PASSWORD} from './lib/tapo-local.js';
 import {XiaomiCloud, XiaomiError} from './lib/xiaomi.js';
+import * as Timers from './lib/timers.js';
 
 const SECRET_LABEL = 'Nook: Xiaomi account';
 
@@ -2691,12 +2692,19 @@ class CameraView extends St.Widget {
         // Credentials go over stdin, never argv. If the helper already exited, the write
         // fails and wait_async below reports the exit.
         const stdin = process.get_stdin_pipe();
-        try {
-            if (account)
-                stdin.write_all(new TextEncoder().encode(`${JSON.stringify(account)}\n`), null);
-            stdin.close(null);
-        } catch (e) {
-            console.debug(`nook: camera: ${e.message}`);
+        const close = () => stdin.close_async(GLib.PRIORITY_DEFAULT, null, null);
+        if (account) {
+            const input = new GLib.Bytes(new TextEncoder().encode(`${JSON.stringify(account)}\n`));
+            stdin.write_bytes_async(input, GLib.PRIORITY_DEFAULT, null, (_stdin, result) => {
+                try {
+                    stdin.write_bytes_finish(result);
+                } catch (e) {
+                    console.debug(`nook: camera: ${e.message}`);
+                }
+                close();
+            });
+        } else {
+            close();
         }
 
         process.wait_async(cancellable, (_process, result) => {
@@ -5191,12 +5199,6 @@ class NookButton extends PanelMenu.Button {
         try {
             const pictures = GLib.get_user_special_dir(GLib.UserDirectory.DIRECTORY_PICTURES) ?? GLib.get_home_dir();
             const folder = Gio.File.new_for_path(GLib.build_filenamev([pictures, 'Nook']));
-            try {
-                folder.make_directory_with_parents(null);
-            } catch (e) {
-                if (!e.matches(Gio.IOErrorEnum, Gio.IOErrorEnum.EXISTS))
-                    throw e;
-            }
             const stamp = GLib.DateTime.new_now_local().format('%Y-%m-%d %H-%M-%S');
             const file = folder.get_child(`${name.replaceAll('/', '-')} ${stamp}.jpg`);
             const argv = ['gjs', '-m', `${this._path}/feed.js`, '--still', file.get_path()];
@@ -5204,16 +5206,11 @@ class NookButton extends PanelMenu.Button {
                 argv.push('--test');
             const process = Gio.Subprocess.new(argv, Gio.SubprocessFlags.STDIN_PIPE |
                 Gio.SubprocessFlags.STDOUT_SILENCE | Gio.SubprocessFlags.STDERR_SILENCE);
-            const stdin = process.get_stdin_pipe();
-            if (account) {
-                const still = {...account, url: account.still};
-                stdin.write_all(new TextEncoder().encode(`${JSON.stringify(still)}\n`), null);
-            }
-            stdin.close(null);
+            const input = account ? `${JSON.stringify({...account, url: account.still})}\n` : null;
             await new Promise((resolve, reject) => {
-                process.wait_async(null, (_process, result) => {
+                process.communicate_utf8_async(input, null, (_process, result) => {
                     try {
-                        resolve(process.wait_finish(result));
+                        resolve(process.communicate_utf8_finish(result));
                     } catch (e) {
                         reject(e);
                     }
@@ -7140,10 +7137,7 @@ class NookButton extends PanelMenu.Button {
             try {
                 if (view.working && view.request && !view.live) {
                     await this._home.requestMap(view.device, view.siid, view.request.aiid, view.request.piid);
-                    await new Promise(resolve => GLib.timeout_add_seconds(GLib.PRIORITY_DEFAULT, 3, () => {
-                        resolve();
-                        return GLib.SOURCE_REMOVE;
-                    }));
+                    await Timers.sleep(3000);
                 }
                 file = await this._home.mapFile(view.device, view.siid, view.piid);
                 map = file ? decodeMap(file.text) : null;
@@ -7209,10 +7203,7 @@ class NookButton extends PanelMenu.Button {
             for (const [i, {time, value}] of frames.entries()) {
                 // Yield to the main loop every 100 frames so the shell doesn't stall.
                 if (i % 100 === 99) {
-                    await new Promise(resolve => GLib.idle_add(GLib.PRIORITY_DEFAULT_IDLE, () => {
-                        resolve();
-                        return GLib.SOURCE_REMOVE;
-                    }));
+                    await Timers.sleep(0, GLib.PRIORITY_DEFAULT_IDLE);
                 }
                 let frame;
                 try {
@@ -7710,8 +7701,7 @@ class NookButton extends PanelMenu.Button {
 
     async _fillHistory(home, device, eventKeys, {charts, log, token}) {
         const keys = historyKeys(device);
-        let series = [];
-        let entries = [];
+        let series, entries;
         try {
             [series, entries] = await this._readHistory(home, device, eventKeys);
         } catch (e) {
@@ -8704,5 +8694,12 @@ export default class NookExtension extends Extension {
         this._alerts = null;
         this._settings = null;
         beacons.clear();
+        units = null;
+        choiceWords = null;
+        fanWords = null;
+        nameWords = null;
+        clearPacing();
+        Tapo.clearRefusals();
+        Timers.removeAll();
     }
 }

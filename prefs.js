@@ -1548,7 +1548,7 @@ class CredentialRows {
 
     async sync() {
         const saved = await Secrets.lookup(this._service);
-        let user = '';
+        let user;
         try {
             user = saved ? JSON.parse(saved).user ?? '' : '';
         } catch {

@@ -73,5 +73,6 @@ lib/secrets.js
 lib/sonoff.js
 lib/tapo.js
 lib/tapo-local.js
+lib/timers.js
 lib/xiaomi.js
 schemas/org.gnome.shell.extensions.nook.gschema.xml

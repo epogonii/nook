@@ -137,6 +137,7 @@ function saveStill(sample) {
         // Rows can be padded to 4-byte multiples; take rowstride from the buffer size.
         const pixbuf = GdkPixbuf.Pixbuf.new_from_bytes(new GLib.Bytes(info.data),
             GdkPixbuf.Colorspace.RGB, false, 8, width, height, info.data.length / height);
+        GLib.mkdir_with_parents(GLib.path_get_dirname(still), 0o755);
         pixbuf.savev(still, 'jpeg', ['quality'], ['92']);
     } finally {
         buffer.unmap(info);
