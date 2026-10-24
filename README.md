@@ -1,5 +1,5 @@
 <p align="center">
-  <img src="icons/nook-logo-anim.svg" width="96" alt="">
+  <img src="icons/nook-logo-anim-dark.svg#gh-light-mode-only" width="96" alt=""><img src="icons/nook-logo-anim.svg#gh-dark-mode-only" width="96" alt="">
 </p>
 
 <h1 align="center">Nook</h1>
