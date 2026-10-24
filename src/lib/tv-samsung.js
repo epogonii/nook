@@ -58,7 +58,8 @@ export default class SamsungTv {
         this._linking = null;
         this._appTypes = new Map();
         this._listed = [];
-        this._visible = null;
+        this._shown = null;
+        this._looking = null;
         this._closed = false;
         this.refused = false;
         this.onSecret = null;
@@ -158,11 +159,30 @@ export default class SamsungTv {
     // visible is the app in front; running alone is one left in the background.
     async _visibleApp() {
         const listed = this._listed.length > 0 ? this._listed.slice(0, 12) : KNOWN_APPS.map(([id]) => id);
-        const ids = [...new Set([this._visible, ...listed].filter(Boolean))];
+        const ids = [...new Set([this._shown?.id, ...listed].filter(Boolean))];
         const states = await Promise.all(ids.map(id => this._appState(id)));
-        const app = states.find(state => state?.visible === true) ?? null;
-        this._visible = app?.id ?? null;
-        return app;
+        this._shown = states.find(state => state?.visible === true) ?? null;
+        return this._shown;
+    }
+
+    // Each lookup can take seconds; past 4 the last answer stands in for this read and
+    // the lookup still lands for the next.
+    _visibleAppSoon() {
+        this._looking ??= this._visibleApp().finally(() => {
+            this._looking = null;
+        });
+        let timer = 0;
+        const late = new Promise(resolve => {
+            timer = GLib.timeout_add(GLib.PRIORITY_DEFAULT, 4000, () => {
+                timer = 0;
+                resolve(this._shown);
+                return GLib.SOURCE_REMOVE;
+            });
+        });
+        return Promise.race([this._looking, late]).finally(() => {
+            if (timer)
+                GLib.source_remove(timer);
+        });
     }
 
     async status() {
@@ -184,7 +204,7 @@ export default class SamsungTv {
                     throw e;
                 return {volume: null, muted: null};
             }),
-            this._visibleApp(),
+            this._visibleAppSoon(),
         ]);
         // Tizen tells no input locally, only SmartThings does.
         return {on, ...sound, source: null, app: app?.id ?? null, title: app?.name ?? null};
