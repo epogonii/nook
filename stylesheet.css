@@ -746,9 +746,6 @@
   background-color: rgba(255, 255, 255, 0.1);
 }
 
-.nook-cc-playing-box {
-  spacing: 8px;
-}
 .nook-cc-module {
   border-radius: 14px;
   background-color: rgba(255, 255, 255, 0.08);
@@ -844,6 +841,9 @@
 
 .nook-cc-playing {
   padding: 10px;
+  spacing: 10px;
+}
+.nook-cc-playing-row {
   spacing: 4px;
 }
 .nook-cc-open {
@@ -888,12 +888,7 @@
   color: rgba(255, 255, 255, 0.3);
 }
 .nook-cc-volume {
-  padding: 10px 12px 12px;
-  spacing: 8px;
-}
-.nook-cc-volume-title {
-  font-weight: bold;
-  font-size: 0.85em;
+  padding: 0 2px 2px;
 }
 .nook-cc-volume .slider {
   height: 22px;

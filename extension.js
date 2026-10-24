@@ -931,7 +931,28 @@ const SPEAKER = [0.66, 0.46, 0.95];
 const SILENT = [0.4, 0.44, 0.52];
 
 function playingNow(device) {
-    return ['PLAYING', 'BUFFERING'].includes(device.state?.media?.state);
+    return ['PLAYING', 'BUFFERING'].includes(device.state?.media?.state) || onlyStops(device);
+}
+
+// An app with no media session and no playing group takes no pause, only a receiver STOP.
+function onlyStops(device) {
+    return Boolean(device.state?.app) && !device.state.media;
+}
+
+function castToggle(home, device) {
+    if (onlyStops(device))
+        return home.stop(device);
+    return playingNow(device) ? home.pause(device) : home.play(device);
+}
+
+function showCastPlay(button, device) {
+    let look = ['media-playback-start-symbolic', _('Play')];
+    if (onlyStops(device))
+        look = ['media-playback-stop-symbolic', _('Stop')];
+    else if (playingNow(device))
+        look = ['media-playback-pause-symbolic', _('Pause')];
+    [button.child.icon_name, button.accessible_name] = look;
+    button.reactive = Boolean(device.state?.media) || onlyStops(device);
 }
 
 // Cast supportedMediaCommands bits: 64 next, 128 previous. A media status
@@ -3705,19 +3726,19 @@ class Tile extends St.Button {
     }
 });
 
-// Now Playing and Sound modules of the module view, for the speaker playing or paused.
+// Now Playing module of the module view, with the volume, for the speaker playing or paused.
 // Hides that speaker's row in the speaker list below.
 const NowPlaying = GObject.registerClass(
 class NowPlaying extends St.BoxLayout {
     // rows: the speakers' tiles, each in a module's grid.
     _init(speakers, rows, {nameOf, openCard, act}) {
-        super._init({...VERTICAL, style_class: 'nook-cc-playing-box', x_expand: true});
+        super._init({...VERTICAL, style_class: 'nook-cc-module nook-cc-playing', x_expand: true});
         this._speakers = speakers;
         this._rows = rows;
         this._nameOf = nameOf;
         this._device = speakers[0];
 
-        const module = new St.BoxLayout({style_class: 'nook-cc-module nook-cc-playing', x_expand: true});
+        const row = new St.BoxLayout({style_class: 'nook-cc-playing-row', x_expand: true});
         const opener = new St.BoxLayout({style_class: 'nook-cc-open-box', x_expand: true});
         this._glyph = new Glyph('speaker');
         this._glyph.setColor(WHITE);
@@ -3733,26 +3754,25 @@ class NowPlaying extends St.BoxLayout {
         opener.add_child(text);
         this._open = new St.Button({style_class: 'nook-cc-open', child: opener, x_expand: true, can_focus: true});
         this._open.connect('clicked', () => openCard(this._device));
-        module.add_child(this._open);
-        this._play = this._control(() => act(this._device,
-            home => (playingNow(this._device) ? home.pause(this._device) : home.play(this._device))));
-        module.add_child(this._play);
+        row.add_child(this._open);
+        this._play = this._control(() => act(this._device, home => castToggle(home, this._device)));
+        row.add_child(this._play);
         this._next = this._control(() => act(this._device, home => home.skip(this._device, 1)));
         this._next.child.icon_name = 'media-skip-forward-symbolic';
         this._next.accessible_name = _('Next');
-        module.add_child(this._next);
-        this.add_child(module);
+        row.add_child(this._next);
+        this.add_child(row);
 
-        this._sound = new St.BoxLayout({...VERTICAL, style_class: 'nook-cc-module nook-cc-volume', x_expand: true});
-        this._soundTitle = new St.Label({style_class: 'nook-cc-volume-title'});
-        this._soundTitle.clutter_text.ellipsize = Pango.EllipsizeMode.END;
-        this._sound.add_child(this._soundTitle);
-        const track = new St.Widget({layout_manager: new Clutter.BinLayout(), x_expand: true});
+        this._sound = new St.Widget({
+            layout_manager: new Clutter.BinLayout(),
+            style_class: 'nook-cc-volume',
+            x_expand: true,
+        });
         this._slider = new VolumeSlider(
             level => this._showLevel(level),
             level => act(this._device, home => home.setVolume(this._device, level)));
         this._slider.accessible_name = _('Volume');
-        track.add_child(this._slider);
+        this._sound.add_child(this._slider);
         // Within the handle at zero volume, so it always sits on white.
         this._volumeIcon = new St.Icon({
             style_class: 'nook-cc-volume-icon',
@@ -3761,8 +3781,7 @@ class NowPlaying extends St.BoxLayout {
             x_align: Clutter.ActorAlign.START,
             y_align: Clutter.ActorAlign.CENTER,
         });
-        track.add_child(this._volumeIcon);
-        this._sound.add_child(track);
+        this._sound.add_child(this._volumeIcon);
         this.add_child(this._sound);
         this.sync();
     }
@@ -3801,23 +3820,20 @@ class NowPlaying extends St.BoxLayout {
         this._device = device;
         const state = device.state ?? {};
         const media = state.media;
-        const playing = playingNow(device);
         const name = this._nameOf(device);
         this._song.text = media?.title ?? state.app ?? _('Nothing playing');
-        this._from.text = media?.state === 'PAUSED' ? `${name} · ${_('Paused')}` : name;
+        const paused = media?.state === 'PAUSED' ? _('Paused') : null;
+        this._from.text = [state.group ?? name, paused].filter(Boolean).join(' · ');
         this._open.accessible_name = name;
         this._glyph.setName(Glyphs.kindOf(deviceType(device), device.primary.props[0]?.service, device.model)[0]);
         const shade = share => mediaColor(device).map(v => Math.round(v * 255 * share)).join(', ');
         this._art.style = 'background-gradient-direction: vertical; ' +
             `background-gradient-start: rgb(${shade(1)}); background-gradient-end: rgb(${shade(0.7)});`;
-        this._play.child.icon_name = playing ? 'media-playback-pause-symbolic' : 'media-playback-start-symbolic';
-        this._play.accessible_name = playing ? _('Pause') : _('Play');
-        this._play.reactive = Boolean(media);
+        showCastPlay(this._play, device);
         this._next.reactive = castAllows(media, 64);
         this._sound.visible = typeof state.volume === 'number';
         if (!this._sound.visible)
             return;
-        this._soundTitle.text = name;
         this._slider.showLevel(state.volume);
         this._showLevel(state.volume);
     }
@@ -5510,7 +5526,7 @@ class NookButton extends PanelMenu.Button {
         m.previous = this._addRoundButton(controls, 'media-skip-backward-symbolic', _('Previous'),
             () => this._castDo(device, () => home.skip(device, -1)));
         m.play = this._addRoundButton(controls, 'media-playback-start-symbolic', _('Play'),
-            () => this._castDo(device, () => (playingNow(device) ? home.pause(device) : home.play(device))));
+            () => this._castDo(device, () => castToggle(home, device)));
         m.play.add_style_class_name('nook-play');
         m.play.child.icon_size = 22;
         m.next = this._addRoundButton(controls, 'media-skip-forward-symbolic', _('Next'),
@@ -5571,7 +5587,7 @@ class NookButton extends PanelMenu.Button {
         }
         m.artist.visible = m.artist.text !== '';
         const paused = media?.state === 'PAUSED' ? _('Paused') : null;
-        m.app.text = [state.app, paused].filter(Boolean).join(' · ') || _('Ready');
+        m.app.text = [state.group, state.app, paused].filter(Boolean).join(' · ') || _('Ready');
         if (playing)
             m.dot.add_style_pseudo_class('checked');
         else
@@ -5582,9 +5598,7 @@ class NookButton extends PanelMenu.Button {
         m.box.style = 'background-gradient-direction: vertical; ' +
             `background-gradient-start: rgb(${shade(0.5)}); background-gradient-end: rgb(${shade(0.24)});`;
 
-        m.play.child.icon_name = playing ? 'media-playback-pause-symbolic' : 'media-playback-start-symbolic';
-        m.play.accessible_name = playing ? _('Pause') : _('Play');
-        m.play.reactive = Boolean(media);
+        showCastPlay(m.play, m.device);
         m.next.reactive = castAllows(media, 64);
         m.previous.reactive = castAllows(media, 128);
 
@@ -5625,7 +5639,7 @@ class NookButton extends PanelMenu.Button {
         position = Math.min(duration, position);
         m.progress.show({share: position / duration});
         m.elapsed.text = clock(position);
-        m.length.text = clock(duration);
+        m.length.text = `-${clock(duration - position)}`;
     }
 
     async _castDo(device, action) {
