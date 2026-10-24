@@ -8619,8 +8619,6 @@ class NookIndicator extends QuickSettings.SystemIndicator {
 });
 
 export default class NookExtension extends Extension {
-    // Stays enabled in unlock-dialog only for gateway leak/smoke alerts while locked;
-    // the menu, and with it every cloud call, is dropped on lock and rebuilt on unlock.
     enable() {
         this._settings = this.getSettings();
         this._alerts = new Alerts(this._settings, this.path);
@@ -8693,6 +8691,8 @@ export default class NookExtension extends Extension {
         this._indicator = null;
     }
 
+    // Stays enabled in unlock-dialog only for gateway leak/smoke alerts while locked;
+    // the menu, and with it every cloud call, is dropped on lock and rebuilt on unlock.
     disable() {
         if (this._placing)
             GLib.source_remove(this._placing);

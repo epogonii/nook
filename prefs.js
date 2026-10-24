@@ -793,7 +793,7 @@ class AirconGroup extends FoldGroup {
     }
 
     _toast(title) {
-        this._window.add_toast?.(new Adw.Toast({title, timeout: 6}));
+        this._window.add_toast(new Adw.Toast({title, timeout: 6}));
     }
 
     async _drop(unit) {
@@ -1004,7 +1004,7 @@ class SpeakersGroup extends FoldGroup {
     }
 
     _toast(title) {
-        this._window.add_toast?.(new Adw.Toast({title, timeout: 6}));
+        this._window.add_toast(new Adw.Toast({title, timeout: 6}));
     }
 
     _drop(id) {
@@ -1157,7 +1157,7 @@ class SonoffGroup extends FoldGroup {
     }
 
     _toast(title) {
-        this._window.add_toast?.(new Adw.Toast({title, timeout: 6}));
+        this._window.add_toast(new Adw.Toast({title, timeout: 6}));
     }
 
     async _find(quiet = false) {
@@ -1384,7 +1384,7 @@ class TvsGroup extends FoldGroup {
     }
 
     _toast(title) {
-        this._window.add_toast?.(new Adw.Toast({title, timeout: 6}));
+        this._window.add_toast(new Adw.Toast({title, timeout: 6}));
     }
 
     // One driver for the whole pairing: it holds the state between steps (Panasonic's
@@ -1740,7 +1740,7 @@ class CamerasGroup extends FoldGroup {
             this._save([...cameras, ...fresh]);
             if (quiet)
                 return {added, found: found.map(c => this._entry(c))};
-            this._window.add_toast?.(new Adw.Toast({
+            this._window.add_toast(new Adw.Toast({
                 title: found.length === 0
                     ? _('No camera answered. A camera answers only once its camera account exists.')
                     : added > 0 ? _('Cameras added.') : _('Nothing new found.'),
@@ -1749,7 +1749,7 @@ class CamerasGroup extends FoldGroup {
             return {added};
         } catch (e) {
             if (!quiet)
-                this._window.add_toast?.(new Adw.Toast({title: e.message, timeout: 6}));
+                this._window.add_toast(new Adw.Toast({title: e.message, timeout: 6}));
             if (!(e instanceof GLib.Error))
                 logError(e);
             return {added: 0, failed: true};
@@ -1851,7 +1851,7 @@ class FindGroup extends FoldGroup {
                 title = ngettext('%d new device added.', '%d new devices added.', added).format(added);
             else if (failed)
                 title = _('Part of the search failed. Try again in a moment.');
-            this._window.add_toast?.(new Adw.Toast({title, timeout: 6}));
+            this._window.add_toast(new Adw.Toast({title, timeout: 6}));
         } finally {
             setSearching(this._button, false);
         }
@@ -2041,7 +2041,7 @@ class EwelinkGroup extends FoldGroup {
     }
 
     _toast(title) {
-        this._window.add_toast?.(new Adw.Toast({title, timeout: 6}));
+        this._window.add_toast(new Adw.Toast({title, timeout: 6}));
     }
 
     async _sync() {
@@ -2359,7 +2359,7 @@ class HueGroup extends FoldGroup {
     }
 
     _toast(title) {
-        this._window.add_toast?.(new Adw.Toast({title, timeout: 6}));
+        this._window.add_toast(new Adw.Toast({title, timeout: 6}));
     }
 
     async _fill() {
@@ -2695,7 +2695,7 @@ class HassGroup extends FoldGroup {
     }
 
     _toast(title) {
-        this._window.add_toast?.(new Adw.Toast({title, timeout: 6}));
+        this._window.add_toast(new Adw.Toast({title, timeout: 6}));
     }
 
     async _account() {
@@ -2859,7 +2859,7 @@ class CloudAirconGroup extends FoldGroup {
     }
 
     _toast(title) {
-        this._window.add_toast?.(new Adw.Toast({title, timeout: 6}));
+        this._window.add_toast(new Adw.Toast({title, timeout: 6}));
     }
 
     async _sync() {
@@ -3094,7 +3094,7 @@ class HomeKitGroup extends FoldGroup {
     }
 
     _toast(title) {
-        this._window.add_toast?.(new Adw.Toast({title, timeout: 6}));
+        this._window.add_toast(new Adw.Toast({title, timeout: 6}));
     }
 
     _button(props, onClick) {
@@ -3391,7 +3391,7 @@ class SmartLifeGroup extends FoldGroup {
     }
 
     _toast(title) {
-        this._window.add_toast?.(new Adw.Toast({title, timeout: 6}));
+        this._window.add_toast(new Adw.Toast({title, timeout: 6}));
     }
 
     // The keyring is authoritative; smartlife-user only signals the shell, so resync it.
@@ -3616,7 +3616,7 @@ class XiaomiGroup extends FoldGroup {
             if (!e.matches?.(Gio.IOErrorEnum, Gio.IOErrorEnum.CANCELLED)) {
                 if (!(e instanceof XiaomiError))
                     logError(e);
-                this._window.add_toast?.(new Adw.Toast({title: e.message, timeout: 6}));
+                this._window.add_toast(new Adw.Toast({title: e.message, timeout: 6}));
             }
         } finally {
             cloud.abort();
@@ -3934,7 +3934,7 @@ export default class NookPreferences extends ExtensionPreferences {
             value.set_string(wallet);
             Gdk.Display.get_default()?.get_clipboard().set_value(value);
             if (!this._closed)
-                this._window.add_toast?.(new Adw.Toast({title: _('%s address copied').format(name), timeout: 6}));
+                this._window.add_toast(new Adw.Toast({title: _('%s address copied').format(name), timeout: 6}));
         });
     }
 
