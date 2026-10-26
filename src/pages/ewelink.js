@@ -282,7 +282,7 @@ class EwelinkGroup extends FoldGroup {
             setSkipped(this._settings, [`ewelink:${id}`], false);
     }
 
-    _entry({ewelink: id, name, model, ip}) {
+    _entryFor({ewelink: id, name, model, ip}) {
         return {
             kind: 'eWeLink',
             name,
@@ -301,7 +301,7 @@ class EwelinkGroup extends FoldGroup {
     async _find(quiet, looking) {
         try {
             const seen = (await looking).filter(d => d.ewelink);
-            const found = seen.map(d => this._entry(d));
+            const found = seen.map(d => this._entryFor(d));
             const known = new Set(this._devices().map(d => d.id));
             const skipped = skippedIn(this._settings, quiet);
             const ids = [...new Set(seen.map(d => d.ewelink).filter(id => !known.has(id) && !skipped.has(`ewelink:${id}`)))];
