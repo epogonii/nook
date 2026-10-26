@@ -7,7 +7,7 @@ cd "$(dirname "$0")/.."
 xgettext --from-code=UTF-8 --language=JavaScript --package-name=nook \
     --keyword=_ --keyword=ngettext:1,2 --keyword=pgettext:1c,2 \
     --add-comments=Translators --output=po/nook.pot \
-    extension.js prefs.js lib/*.js
+    extension.js prefs.js lib/*.js ui/*.js prefs/*.js
 
 for po in po/*.po; do
     [ -e "$po" ] || continue
