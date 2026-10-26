@@ -357,7 +357,7 @@ class Tile extends St.Button {
                 state = this._key in (this._device.extra ?? {}) ? booleanText(this._extra.name, on) : '…';
             this._state.text = state === '…' ? '\u00a0' : `${state} · ${this._deviceName}`;
         } else {
-            state = this._awaits?.(this._device) ? '…' : stateText(this._device);
+            state = this._awaits(this._device) ? '…' : stateText(this._device);
             this._state.text = state === '…' ? '\u00a0' : state;
         }
         this._skeleton.visible = state === '…';
