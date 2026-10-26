@@ -16,6 +16,15 @@ import {VERTICAL} from './text.js';
 // Wheel scrolls the card instead of moving the slider and sending the new value.
 export const CardSlider = GObject.registerClass(
 class CardSlider extends Slider.Slider {
+    _init(value) {
+        super._init(value);
+        // GNOME 51 sliders take the wheel in actions, which stop the event.
+        for (const action of this.get_actions()) {
+            if (Clutter.ScrollController && action instanceof Clutter.ScrollController)
+                this.remove_action(action);
+        }
+    }
+
     vfunc_scroll_event() {
         return Clutter.EVENT_PROPAGATE;
     }
