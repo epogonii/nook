@@ -16,7 +16,7 @@ import GioUnix from 'gi://GioUnix';
 import GLib from 'gi://GLib';
 import System from 'system';
 
-// Must match NO_GSTREAMER, REFUSED and NO_PLUGIN in extension.js.
+// Must match NO_GSTREAMER, REFUSED and NO_PLUGIN in ui/camera.js.
 const NO_GSTREAMER = 2;
 const REFUSED = 3;
 const NO_PLUGIN = 4;
