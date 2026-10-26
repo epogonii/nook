@@ -107,10 +107,15 @@ class TemperatureSlider extends CardSlider {
 
 export const VolumeSlider = GObject.registerClass(
 class VolumeSlider extends CardSlider {
-    _init(preview, set) {
+    // knob: the handle has the bar's colour, so outline it while hovered or dragged.
+    _init(preview, set, knob = false) {
         super._init(0);
         this.x_expand = true;
         this._dragging = false;
+        this._knob = knob;
+        // GNOME 46 sliders don't track hover.
+        if (knob)
+            this.track_hover = true;
         this.connect('notify::value', () => {
             if (this._dragging)
                 preview(this.value);
@@ -121,12 +126,36 @@ class VolumeSlider extends CardSlider {
         this.connect('drag-end', () => {
             this._dragging = false;
             set(this.value);
+            this.queue_repaint();
         });
     }
 
     showLevel(level) {
         if (!this._dragging)
             this.value = level;
+    }
+
+    vfunc_repaint() {
+        super.vfunc_repaint();
+        if (!this._knob || !(this.hover || this._dragging))
+            return;
+        const cr = this.get_context();
+        const [width, height] = this.get_surface_size();
+        const radius = Math.round(2 * this.get_theme_node().get_length('-slider-handle-radius')) / 2;
+        let x = radius + (width - 2 * radius) * this.value / (this.maximum_value || 1);
+        if (this.get_text_direction() === Clutter.TextDirection.RTL)
+            x = width - x;
+        const scale = St.ThemeContext.get_for_stage(global.stage).scale_factor || 1;
+        cr.setSourceRGBA(0, 0, 0, 0.12);
+        cr.arc(x, height / 2, radius, 0, 2 * Math.PI);
+        cr.fill();
+        cr.setSourceRGBA(0, 0, 0, 0.2);
+        cr.arc(x, height / 2, radius - scale, 0, 2 * Math.PI);
+        cr.fill();
+        cr.setSourceColor(this.get_theme_node().get_foreground_color());
+        cr.arc(x, height / 2, radius - 2 * scale, 0, 2 * Math.PI);
+        cr.fill();
+        cr.$dispose();
     }
 });
 

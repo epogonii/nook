@@ -493,7 +493,7 @@ class NowPlaying extends St.BoxLayout {
         });
         this._slider = new VolumeSlider(
             level => this._showLevel(level),
-            level => act(this._device, home => home.setVolume(this._device, level)));
+            level => act(this._device, home => home.setVolume(this._device, level)), true);
         this._slider.accessible_name = _('Volume');
         this._sound.add_child(this._slider);
         // Within the handle at zero volume, so it always sits on white.
