@@ -96,11 +96,9 @@ export default class NookExtension extends Extension {
         }
         if (this._button)
             return;
-        // Rejects while the prefs window is already open; not worth surfacing.
         const openPreferences = (target = '') => {
             this._settings.set_string('prefs-target', target);
-            Main.extensionManager.openExtensionPrefs(this.uuid, '', {})
-                ?.catch?.(e => console.debug(`nook: preferences: ${e.message}`));
+            Main.extensionManager.openExtensionPrefs(this.uuid, '', {});
         };
         this._button = new NookButton(this._settings, openPreferences, this.path, this._alerts);
         if (readSetting(this._settings, 'location') === 'quick-settings') {
