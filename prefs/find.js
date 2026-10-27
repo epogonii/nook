@@ -11,6 +11,7 @@ import {parseSpeakers} from '../lib/cast-home.js';
 import {survey} from '../lib/finder.js';
 import * as EwelinkHome from '../lib/ewelink-home.js';
 import {didOf as airconDid, parseAircons, parseUnits} from '../lib/aircon-home.js';
+import * as Shelly from '../lib/shelly.js';
 import * as Sonoff from '../lib/sonoff.js';
 import * as Tapo from '../lib/tapo.js';
 import {parseTvs} from '../lib/tv-home.js';
@@ -24,6 +25,8 @@ function verdict(device, known) {
         return _('Comes with the Mi Home account');
     if (device.kinds.includes('eWeLink'))
         return _('With the eWeLink account, or in Sonoff DIY mode');
+    if (device.kinds.includes('Shelly'))
+        return _('Add it under Shelly');
     if (device.kinds.includes('Philips Hue'))
         return _('Pair it under Philips Hue');
     if (device.kinds.includes('Home Assistant'))
@@ -65,7 +68,7 @@ class FindGroup extends FoldGroup {
         this._button.connect('clicked', () => this._search().catch(logError));
         search.add_suffix(this._button);
         this.add(search);
-        this._handlers = ['names', 'xiaomi-user-id', 'gree-units', 'aircons', 'tapo-cameras', 'cast-speakers', 'tvs', 'sonoff-switches',
+        this._handlers = ['names', 'xiaomi-user-id', 'gree-units', 'aircons', 'tapo-cameras', 'cast-speakers', 'tvs', 'sonoff-switches', 'shelly-devices',
             'ewelink-devices', 'hue-bridges', 'homekit-accessories']
             .map(key => settings.connect(`changed::${key}`, () => {
                 if (this._last)
@@ -175,6 +178,8 @@ class FindGroup extends FoldGroup {
                 .map(t => ({did: airconDid(t), name: t.name, ip: t.ip, mac: macOf(t.mac)})),
             ...Sonoff.parseSwitches(this._settings.get_string('sonoff-switches'))
                 .map(t => ({did: Sonoff.channels(t)[0].did, name: t.name || t.id, ip: t.ip, mac: null})),
+            ...Shelly.parseDevices(this._settings.get_string('shelly-devices')).filter(t => t.channels.length > 0)
+                .map(t => ({did: Shelly.didOf(t, t.channels[0].key), name: t.name || t.model, ip: t.ip, mac: t.id})),
         ];
         const clouded = EwelinkHome.parseDevices(this._settings.get_string('ewelink-devices'))
             .map(t => ({did: EwelinkHome.channels(t)[0].did, name: t.name || t.id, id: t.id}));

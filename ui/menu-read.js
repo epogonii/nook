@@ -15,6 +15,7 @@ import * as Glyphs from '../lib/glyphs.js';
 import {AirconHome, ClimateError, parseAircons, parseUnits} from '../lib/aircon-home.js';
 import {CloudAirconHome, parseEntries} from '../lib/cloud-aircon.js';
 import * as Secrets from '../lib/secrets.js';
+import {ShellyHome, parseDevices as parseShelly} from '../lib/shelly.js';
 import {SonoffError, SonoffHome, parseSwitches} from '../lib/sonoff.js';
 import {EwelinkError} from '../lib/ewelink.js';
 import {EwelinkHome, parseDevices as parseEwelinkDevices} from '../lib/ewelink-home.js';
@@ -116,6 +117,8 @@ export class MenuRead {
         this._tv = null;
         this._sonoff?.abort();
         this._sonoff = null;
+        this._shelly?.abort();
+        this._shelly = null;
         this._ewelink?.abort();
         this._ewelink = null;
         this._hue?.abort();
@@ -160,6 +163,16 @@ export class MenuRead {
         const switches = parseSwitches(readSetting(this._settings, 'sonoff-switches'));
         if (switches.length > 0)
             this._sonoff = new SonoffHome(switches);
+        const shellies = parseShelly(readSetting(this._settings, 'shelly-devices'));
+        if (shellies.length > 0) {
+            const shelly = this._shelly = new ShellyHome(shellies);
+            shelly.onExpired = () => {
+                if (this._shelly !== shelly)
+                    return;
+                this._loginNote = {text: _('A Shelly needs its password again.'), target: 'accounts-shelly'};
+                this._render();
+            };
+        }
         const ewelinkDevices = parseEwelinkDevices(readSetting(this._settings, 'ewelink-devices'));
         if (ewelinkDevices.length > 0 && readSetting(this._settings, 'ewelink-region')) {
             const ewelink = this._ewelink = new EwelinkHome(ewelinkDevices);
@@ -403,7 +416,7 @@ export class MenuRead {
     async _read() {
         if (this._tiles.length === 0)
             return;
-        for (const source of [this._aircon, this._tapo, this._cast, this._tv, this._sonoff, this._ewelink, this._hue, this._hass,
+        for (const source of [this._aircon, this._tapo, this._cast, this._tv, this._sonoff, this._shelly, this._ewelink, this._hue, this._hass,
             this._homekit, this._smartlife, this._miScenes, ...this._clouds].filter(Boolean))
             source.readPrimary().then(() => this._syncTiles(source)).catch(logError);
         const home = this._home;
@@ -469,6 +482,7 @@ export class MenuRead {
     reconnect() {
         this._hass?.reconnect();
         this._hue?.reconnect();
+        this._lightUpStep();
     }
 
     // The top bar stays in view under an open card.

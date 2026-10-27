@@ -24,6 +24,7 @@ ui/events.js
 ui/hero.js
 ui/humanize.js
 ui/layouts.js
+ui/menu-lights.js
 ui/menu-read.js
 ui/menu-view.js
 ui/menu.js
@@ -45,6 +46,7 @@ prefs/fold.js
 prefs/hass.js
 prefs/homekit.js
 prefs/hue.js
+prefs/shelly.js
 prefs/smartlife.js
 prefs/sonoff.js
 prefs/speakers.js
@@ -114,6 +116,7 @@ lib/mihome.js
 lib/onvif.js
 lib/scenes.js
 lib/secrets.js
+lib/shelly.js
 lib/sonoff.js
 lib/tapo.js
 lib/tapo-local.js

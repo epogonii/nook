@@ -32,6 +32,31 @@
       <summary>Scenes folded away</summary>
       <description>The scene section or module shows only its heading. Clicking the heading in the menu sets it.</description>
     </key>
+    <key name="login-lights" type="as">
+      <default>[]</default>
+      <summary>Lights switched on at login</summary>
+      <description>Device ids switched on each time the session starts.</description>
+    </key>
+    <key name="notify-lights" type="as">
+      <default>[]</default>
+      <summary>Lights that flash for notifications</summary>
+      <description>Device ids that show notify-color for a moment when an app in notify-apps sends a notification, then go back as they were.</description>
+    </key>
+    <key name="notify-color" type="u">
+      <default>3507428</default>
+      <summary>Colour of the notification flash</summary>
+      <description>As 0xRRGGBB. Lights without colour blink instead.</description>
+    </key>
+    <key name="shelly-devices" type="s">
+      <default>'[]'</default>
+      <summary>Shelly devices</summary>
+      <description>JSON list of Shelly units on this network, each with its address, generation, model and channels. Their passwords are in the keyring.</description>
+    </key>
+    <key name="notify-apps" type="as">
+      <default>[]</default>
+      <summary>Apps whose notifications flash the lights</summary>
+      <description>Application ids: their desktop file names without .desktop.</description>
+    </key>
     <key name="room" type="s">
       <default>''</default>
       <summary>Room tab last chosen</summary>

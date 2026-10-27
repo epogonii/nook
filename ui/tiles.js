@@ -151,7 +151,7 @@ export const sceneCount = count => ngettext('%d scene', '%d scenes', count).repl
 const sceneRunning = device => device.scene?.running === true || device.source.isRunning(device);
 
 // Raises what no device would throw; the rest is a message for the user.
-function troubleText(device, e) {
+export function troubleText(device, e) {
     if (!(e instanceof XiaomiError) && !(e instanceof TvError) && !(e instanceof ClimateError) &&
         !(e instanceof SonoffError) && !(e instanceof EwelinkError) && !(e instanceof SpecError) &&
         !(e instanceof GLib.Error))

@@ -7,7 +7,7 @@ import GLib from 'gi://GLib';
 import GObject from 'gi://GObject';
 import Gtk from 'gi://Gtk';
 
-import {gettext as _} from 'resource:///org/gnome/Shell/Extensions/js/extensions/prefs.js';
+import {gettext as _, ngettext} from 'resource:///org/gnome/Shell/Extensions/js/extensions/prefs.js';
 
 import {arrange, move} from '../lib/arrange.js';
 import * as Glyphs from '../lib/glyphs.js';
@@ -18,6 +18,7 @@ import {parseEntries} from '../lib/cloud-aircon.js';
 import * as Hass from '../lib/hass.js';
 import * as HomeKit from '../lib/homekit.js';
 import * as SmartLifeHome from '../lib/smartlife-home.js';
+import * as Shelly from '../lib/shelly.js';
 import * as Sonoff from '../lib/sonoff.js';
 import * as Tapo from '../lib/tapo.js';
 import {BRANDS, parseTvs} from '../lib/tv-home.js';
@@ -155,6 +156,31 @@ function iconButton(settings, did, parent) {
     return button;
 }
 
+const rgbaOf = rgb => new Gdk.RGBA({red: ((rgb >> 16) & 255) / 255, green: ((rgb >> 8) & 255) / 255, blue: (rgb & 255) / 255, alpha: 1});
+const rgbOf = ({red, green, blue}) => (Math.round(red * 255) << 16) | (Math.round(green * 255) << 8) | Math.round(blue * 255);
+
+// Apps that have sent a notification: GNOME keeps settings for each of them. Their ids
+// are what a notification source's policy calls them.
+function notifyingApps() {
+    const schemas = Gio.SettingsSchemaSource.get_default();
+    if (!schemas?.lookup('org.gnome.desktop.notifications', true) || !schemas.lookup('org.gnome.desktop.notifications.application', true))
+        return [];
+    const children = new Gio.Settings({schema_id: 'org.gnome.desktop.notifications'}).get_strv('application-children');
+    // Gio.AppInfo rather than DesktopAppInfo, which moved to GioUnix in newer GLib.
+    const installed = new Map(Gio.AppInfo.get_all().map(info => [info.get_id(), info]));
+    const apps = [];
+    for (const child of children) {
+        const desktop = new Gio.Settings({
+            schema_id: 'org.gnome.desktop.notifications.application',
+            path: `/org/gnome/desktop/notifications/application/${child}/`,
+        }).get_string('application-id');
+        const info = installed.get(desktop);
+        if (info)
+            apps.push({id: desktop.replace(/\.desktop$/, ''), name: info.get_display_name(), icon: info.get_icon()});
+    }
+    return apps.sort((a, b) => a.name.localeCompare(b.name));
+}
+
 export const DevicesPage = GObject.registerClass(
 class DevicesPage extends Adw.PreferencesPage {
     _init(settings, find) {
@@ -184,7 +210,7 @@ class DevicesPage extends Adw.PreferencesPage {
 
         this._groups = [];
         this._focusables = new Map();
-        this._handlers = ['pinned', 'order', 'hidden', 'panel-sensors', 'names', 'icons', 'xiaomi-user-id', 'gree-units', 'aircons', 'tapo-cameras', 'cast-speakers', 'tvs', 'sonoff-switches', 'ewelink-devices',
+        this._handlers = ['pinned', 'order', 'hidden', 'panel-sensors', 'names', 'icons', 'xiaomi-user-id', 'gree-units', 'aircons', 'tapo-cameras', 'cast-speakers', 'tvs', 'sonoff-switches', 'shelly-devices', 'ewelink-devices',
             'hue-bridges', 'hue-devices', 'hass-devices', 'homekit-accessories', 'smartlife-devices',
             ...CLOUD_AIRCONS().map(({id}) => `${id}-devices`)]
             .map(key => settings.connect(`changed::${key}`, () => this._fill()));
@@ -260,38 +286,52 @@ class DevicesPage extends Adw.PreferencesPage {
                 did,
                 name,
                 room: unit.room ?? null,
+                type: 'switch',
                 primary: {kind: 'switch', props: []},
+            })));
+        const shellies = Shelly.parseDevices(this._settings.get_string('shelly-devices')).flatMap(unit =>
+            unit.channels.map(channel => ({
+                did: Shelly.didOf(unit, channel.key),
+                name: Shelly.channelName(unit, channel),
+                room: unit.room ?? null,
+                type: Shelly.typeOf(unit, channel.key),
+                primary: {kind: channel.key.startsWith('cover:') ? 'reading' : 'switch', props: []},
             })));
         const ewelink = EwelinkHome.parseDevices(this._settings.get_string('ewelink-devices')).flatMap(unit =>
             EwelinkHome.channels(unit).map(({did, name}) => ({
                 did,
                 name,
                 room: unit.room ?? null,
+                type: 'switch',
                 primary: {kind: 'switch', props: []},
             })));
         const hue = hueDevices(this._settings).map(entry => ({
             did: `hue:${entry.id}`,
             name: entry.name || entry.model || 'Hue',
             room: entry.room ?? null,
+            type: {light: 'light', plug: 'outlet'}[entry.kind] ?? 'sensor',
             primary: {kind: entry.kind === 'sensor' ? 'reading' : 'switch', props: []},
         }));
         const hass = Hass.parseDevices(this._settings.get_string('hass-devices')).map(entry => ({
             did: `hass:${entry.id}`,
             name: entry.name || entry.id,
             room: entry.room ?? null,
-            primary: {kind: entry.type.endsWith('sensor') ? 'reading' : 'switch', props: []},
+            type: entry.type,
+            primary: {kind: entry.type === 'scene' ? 'scene' : entry.type.endsWith('sensor') ? 'reading' : 'switch', props: []},
         }));
         const homekit = HomeKit.parseHosts(this._settings.get_string('homekit-accessories')).flatMap(host =>
             host.accessories.map(accessory => ({
                 did: `homekit:${host.id}/${accessory.aid}`,
                 name: accessory.name || host.name || 'HomeKit',
                 room: null,
+                type: ['light', 'outlet', 'switch'].find(kind => accessory.services.some(s => s.kind === kind)) ?? null,
                 primary: {kind: accessory.services.some(s => ['light', 'outlet', 'switch', 'fan', 'fan2', 'thermostat', 'heater-cooler', 'humidifier', 'purifier'].includes(s.kind)) ? 'switch' : 'reading', props: []},
             })));
         const smartlife = SmartLifeHome.parseDevices(this._settings.get_string('smartlife-devices')).map(entry => ({
             did: SmartLifeHome.didOf(entry),
             name: entry.name,
             room: entry.room ?? null,
+            type: SmartLifeHome.typeOf(entry),
             primary: {kind: SmartLifeHome.typeOf(entry).endsWith('sensor') ? 'reading' : 'switch', props: []},
         }));
         const clouds = CLOUD_AIRCONS().flatMap(({id}) => parseEntries(this._settings.get_string(`${id}-devices`)).map(entry => ({
@@ -300,7 +340,7 @@ class DevicesPage extends Adw.PreferencesPage {
             room: entry.room ?? null,
             primary: {kind: 'switch', props: []},
         })));
-        const devices = arrange([...cachedDevices(this._settings.get_string('xiaomi-user-id')), ...conditioners, ...cameras, ...speakers, ...tvs, ...switches, ...ewelink, ...hue, ...hass, ...homekit, ...smartlife,
+        const devices = arrange([...cachedDevices(this._settings.get_string('xiaomi-user-id')), ...conditioners, ...cameras, ...speakers, ...tvs, ...switches, ...shellies, ...ewelink, ...hue, ...hass, ...homekit, ...smartlife,
             ...clouds], {
             pinned: this._list('pinned'),
             order: this._list('order'),
@@ -317,6 +357,8 @@ class DevicesPage extends Adw.PreferencesPage {
             this._groups.push(group);
             return;
         }
+        this._addLightGroups(devices);
+        const lightGroups = this._groups.length;
 
         const sources = [
             ['mihome', _('Mi Home'), d => !d.did.includes(':')],
@@ -325,6 +367,7 @@ class DevicesPage extends Adw.PreferencesPage {
             ['cast', _('Speakers'), d => d.did.startsWith('cast:')],
             ['tv', _('TVs'), d => d.did.startsWith('tv:')],
             ['sonoff', _('Sonoff'), d => d.did.startsWith('sonoff:')],
+            ['shelly', _('Shelly'), d => d.did.startsWith('shelly:')],
             ['ewelink', _('eWeLink'), d => d.did.startsWith('ewelink:')],
             ['hue', _('Philips Hue'), d => d.did.startsWith('hue:')],
             ['hass', _('Home Assistant'), d => d.did.startsWith('hass:')],
@@ -337,7 +380,7 @@ class DevicesPage extends Adw.PreferencesPage {
             const own = devices.filter(belongs);
             if (own.length === 0)
                 continue;
-            const group = new FoldGroup({title, description: this._groups.length === 0 ? help : null});
+            const group = new FoldGroup({title, description: this._groups.length === lightGroups ? help : null});
             setGroupIcon(group, id);
             for (const device of own)
                 group.add(this._row(device, ids));
@@ -349,6 +392,89 @@ class DevicesPage extends Adw.PreferencesPage {
 
     _names() {
         return this._settings.get_value('names').deepUnpack();
+    }
+
+    // Lights switched on at login and lights flashed for notifications: what the menu's
+    // Lights section would hold, plugs included.
+    _addLightGroups(devices) {
+        const lights = devices.filter(d => d.primary.kind === 'switch' && ['bulb', 'rocker', 'plug'].includes(
+            Glyphs.kindOf(d.type ?? d.urn?.split(':')[3], d.primary.props?.[0]?.service ?? null, d.model ?? '')[0]));
+        if (lights.length === 0)
+            return;
+        const names = this._names();
+        const pick = (key, device, then = () => {}) => {
+            const row = new Adw.SwitchRow({
+                title: GLib.markup_escape_text(names[device.did] ?? device.name, -1),
+                subtitle: GLib.markup_escape_text(device.room ?? _('No room'), -1),
+                active: this._list(key).includes(device.did),
+            });
+            row.connect('notify::active', () => {
+                this._toggle(key, device.did, row.active);
+                then();
+            });
+            return row;
+        };
+        const chosen = key => {
+            const count = this._list(key).filter(did => lights.some(d => d.did === did)).length;
+            return count > 0 ? ngettext('%d light', '%d lights', count).format(count) : _('None');
+        };
+
+        const login = new FoldGroup({
+            title: _('Lights at Login'),
+            description: _('Switched on each time you log in.'),
+        });
+        for (const device of lights)
+            login.add(pick('login-lights', device));
+        this._focusables.set('group login-lights', login.foldable(this._settings, 'login-lights', () => chosen('login-lights')));
+        this.add(login);
+        this._groups.push(login);
+
+        const notify = new FoldGroup({
+            title: _('Notification Light'),
+            description: _('When one of the apps below sends a notification, the lights show the colour for a moment, then go back as they were. Lights without colour blink. Not with Do Not Disturb on or the screen locked.'),
+        });
+        const colorRow = new Adw.ActionRow({title: _('Colour')});
+        const colorButton = new Gtk.ColorDialogButton({
+            dialog: new Gtk.ColorDialog({with_alpha: false}),
+            rgba: rgbaOf(this._settings.get_uint('notify-color')),
+            valign: Gtk.Align.CENTER,
+        });
+        colorButton.connect('notify::rgba', () => this._settings.set_uint('notify-color', rgbOf(colorButton.rgba)));
+        colorRow.add_suffix(colorButton);
+        colorRow.activatable_widget = colorButton;
+        notify.add(colorRow);
+        const lightRows = new Adw.ExpanderRow({title: _('Lights')});
+        const appRows = new Adw.ExpanderRow({title: _('Apps')});
+        const apps = notifyingApps();
+        // A switch here leaves the page as it is, so the counts follow by hand.
+        const sync = () => {
+            lightRows.subtitle = chosen('notify-lights');
+            const picked = apps.filter(app => this._list('notify-apps').includes(app.id));
+            appRows.subtitle = picked.length > 0 ? GLib.markup_escape_text(picked.map(app => app.name).join(', '), -1) : _('None');
+        };
+        for (const device of lights)
+            lightRows.add_row(pick('notify-lights', device, sync));
+        notify.add(lightRows);
+        if (apps.length === 0)
+            appRows.add_row(new Adw.ActionRow({title: _('No app has sent a notification yet')}));
+        for (const app of apps) {
+            const row = new Adw.SwitchRow({
+                title: GLib.markup_escape_text(app.name, -1),
+                active: this._list('notify-apps').includes(app.id),
+            });
+            if (app.icon)
+                row.add_prefix(new Gtk.Image({gicon: app.icon, icon_size: Gtk.IconSize.LARGE}));
+            row.connect('notify::active', () => {
+                this._toggle('notify-apps', app.id, row.active);
+                sync();
+            });
+            appRows.add_row(row);
+        }
+        sync();
+        notify.add(appRows);
+        this._focusables.set('group notify-light', notify.foldable(this._settings, 'notify-light', () => chosen('notify-lights')));
+        this.add(notify);
+        this._groups.push(notify);
     }
 
     _row(device, ids) {

@@ -28,6 +28,7 @@ import {HassGroup} from './prefs/hass.js';
 import {HomeKitGroup} from './prefs/homekit.js';
 import {HueGroup} from './prefs/hue.js';
 import {SmartLifeGroup} from './prefs/smartlife.js';
+import {ShellyGroup} from './prefs/shelly.js';
 import {SonoffGroup} from './prefs/sonoff.js';
 import {SpeakersGroup} from './prefs/speakers.js';
 import {TvsGroup} from './prefs/tvs.js';
@@ -85,6 +86,7 @@ export default class NookPreferences extends ExtensionPreferences {
         const speakers = new SpeakersGroup(settings, window);
         const tvs = new TvsGroup(settings, window);
         const sonoff = new SonoffGroup(settings, window);
+        const shelly = new ShellyGroup(settings, window);
         const ewelink = new EwelinkGroup(settings, window);
         const hue = new HueGroup(settings, window);
         const hass = new HassGroup(settings, window);
@@ -102,6 +104,8 @@ export default class NookPreferences extends ExtensionPreferences {
                 find: looking => tvs._find(true, looking), survey: true},
             {name: _('Sonoff Switches'), about: _('Switches in DIY mode, by mDNS.'),
                 find: () => sonoff._find(true)},
+            {name: _('Shelly'), about: _('Shelly relays, plugs, lights and covers of every generation, by mDNS.'),
+                find: () => shelly._find(true)},
             {name: _('eWeLink Devices'), about: _('By mDNS, once the eWeLink account is logged in. Their device IDs are sent to that account.'),
                 find: looking => ewelink._find(true, looking), survey: true},
             {name: _('Philips Hue'), about: _('Hue bridges, by mDNS.'),
@@ -150,6 +154,7 @@ export default class NookPreferences extends ExtensionPreferences {
         accounts.add(speakers);
         accounts.add(tvs);
         accounts.add(sonoff);
+        accounts.add(shelly);
         accounts.add(ewelink);
         accounts.add(hue);
         accounts.add(hass);
@@ -163,6 +168,7 @@ export default class NookPreferences extends ExtensionPreferences {
             speakers.forget();
             tvs.forget();
             sonoff.forget();
+            shelly.forget();
             ewelink.forget();
             hue.forget();
             hass.forget();
@@ -175,7 +181,7 @@ export default class NookPreferences extends ExtensionPreferences {
         window.add(accounts);
         this._goTo(window, settings, accounts, new Map([
             ['accounts-mihome', xiaomi], ['accounts-gree', gree], ['accounts-tapo', cameras], ['accounts-cast', speakers],
-            ['accounts-tv', tvs], ['accounts-sonoff', sonoff], ['accounts-ewelink', ewelink], ['accounts-hue', hue],
+            ['accounts-tv', tvs], ['accounts-sonoff', sonoff], ['accounts-shelly', shelly], ['accounts-ewelink', ewelink], ['accounts-hue', hue],
             ['accounts-hass', hass], ['accounts-homekit', homekit], ['accounts-smartlife', smartlife],
             ...clouds.map((cloud, i) => [`accounts-${CLOUD_AIRCONS()[i].id}`, cloud]),
         ]));

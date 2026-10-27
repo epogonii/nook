@@ -78,7 +78,23 @@ export default class NookExtension extends Extension {
         Main.sessionMode.connectObject('updated', () => this._syncButton(), this);
         this._networking = 0;
         Gio.NetworkMonitor.get_default().connectObject('network-changed', () => this._networkChanged(), this);
+        // Extensions are enabled before it at login, not when switched on later.
+        Main.layoutManager.connectObject('startup-complete',
+            () => this._button?.lightUp(readSetting(this._settings, 'login-lights')), this);
+        const watch = source => source.connectObject('notification-added', () => this._notified(source), this);
+        Main.messageTray.getSources().forEach(watch);
+        Main.messageTray.connectObject('source-added', (_tray, source) => watch(source), this);
         this._syncButton();
+    }
+
+    // The source's policy already answers for Do Not Disturb and the app's own banner
+    // setting. While locked there is no button, so nothing flashes.
+    _notified(source) {
+        const lights = readSetting(this._settings, 'notify-lights');
+        if (!this._button || lights.length === 0 || !source.policy?.showBanners ||
+            !readSetting(this._settings, 'notify-apps').includes(source.policy.id))
+            return;
+        this._button.flash(lights, readSetting(this._settings, 'notify-color'));
     }
 
     // A move means rebuilding the button (addToStatusArea() takes a role once), which
@@ -152,6 +168,10 @@ export default class NookExtension extends Extension {
             GLib.source_remove(this._networking);
         this._networking = 0;
         Gio.NetworkMonitor.get_default().disconnectObject(this);
+        Main.layoutManager.disconnectObject(this);
+        Main.messageTray.disconnectObject(this);
+        for (const source of Main.messageTray.getSources())
+            source.disconnectObject(this);
         Main.sessionMode.disconnectObject(this);
         this._settings?.disconnectObject(this);
         this._dropButton();

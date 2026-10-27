@@ -26,6 +26,7 @@ import {Card} from './card.js';
 import {TileDrop} from './drop.js';
 import {WrapLayout} from './layouts.js';
 import {MenuRead} from './menu-read.js';
+import {MenuLights} from './menu-lights.js';
 import {MenuView} from './menu-view.js';
 import {isBluetooth} from './rows.js';
 import {CHIP_SPACING, CLOUD_AIRCONS, VERTICAL, readSetting} from './text.js';
@@ -60,6 +61,7 @@ class NookButton extends PanelMenu.Button {
         this._cast = null;
         this._tv = null;
         this._sonoff = null;
+        this._shelly = null;
         this._ewelink = null;
         this._hue = null;
         this._hass = null;
@@ -250,6 +252,7 @@ class NookButton extends PanelMenu.Button {
             },
             'changed::tvs', () => this.reload().catch(logError),
             'changed::sonoff-switches', () => this.reload().catch(logError),
+            'changed::shelly-devices', () => this.reload().catch(logError),
             'changed::ewelink-devices', () => this.reload().catch(logError),
             'changed::hue-bridges', () => this.reload().catch(logError),
             'changed::hue-devices', () => this.reload().catch(logError),
@@ -475,6 +478,7 @@ class NookButton extends PanelMenu.Button {
     stop() {
         this._drop.stop();
         this._stopRetry();
+        this._stopLightUp();
         this._stopBeacons();
         this._stopCardTimer();
         this._cameraApi?.abort();
@@ -514,6 +518,8 @@ class NookButton extends PanelMenu.Button {
         this._tv = null;
         this._sonoff?.abort();
         this._sonoff = null;
+        this._shelly?.abort();
+        this._shelly = null;
         this._ewelink?.abort();
         this._ewelink = null;
         this._hue?.abort();
@@ -645,6 +651,7 @@ class NookButton extends PanelMenu.Button {
             ...this._cast?.devices ?? [],
             ...this._tv?.devices ?? [],
             ...this._sonoff?.devices ?? [],
+            ...this._shelly?.devices ?? [],
             ...this._ewelink?.devices ?? [],
             ...this._hue?.devices ?? [],
             ...this._hass?.devices ?? [],
@@ -660,7 +667,7 @@ class NookButton extends PanelMenu.Button {
     }
 
     _sources() {
-        return [this._home, this._aircon, this._tapo, this._cast, this._tv, this._sonoff, this._ewelink, this._hue, this._hass,
+        return [this._home, this._aircon, this._tapo, this._cast, this._tv, this._sonoff, this._shelly, this._ewelink, this._hue, this._hass,
             this._homekit, this._smartlife, this._miScenes, ...this._clouds];
     }
 
@@ -703,7 +710,7 @@ class NookButton extends PanelMenu.Button {
 
 // The cards and data reads are in ui/card-*.js and ui/menu-*.js as plain classes that
 // are never constructed; their methods go on NookButton here.
-for (const part of [MenuRead, MenuView, Card, SpecCard, HistoryCard, CameraCard, MediaCard, TvCard, ClimateCard, ControlsCard, VacuumCard]) {
+for (const part of [MenuRead, MenuView, MenuLights, Card, SpecCard, HistoryCard, CameraCard, MediaCard, TvCard, ClimateCard, ControlsCard, VacuumCard]) {
     for (const name of Object.getOwnPropertyNames(part.prototype)) {
         if (name !== 'constructor')
             Object.defineProperty(NookButton.prototype, name, Object.getOwnPropertyDescriptor(part.prototype, name));
