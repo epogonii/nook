@@ -63,7 +63,7 @@ class NookButton extends PanelMenu.Button {
         this._ewelink = null;
         this._hue = null;
         this._hass = null;
-        this._hassSync = 0;
+        this._pushSync = 0;
         this._homekit = null;
         this._smartlife = null;
         this._clouds = [];
@@ -524,9 +524,9 @@ class NookButton extends PanelMenu.Button {
         for (const cloud of this._clouds)
             cloud.abort();
         this._clouds = [];
-        if (this._hassSync)
-            GLib.source_remove(this._hassSync);
-        this._hassSync = 0;
+        if (this._pushSync)
+            GLib.source_remove(this._pushSync);
+        this._pushSync = 0;
     }
 
     _clear() {

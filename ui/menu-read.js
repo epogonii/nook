@@ -121,9 +121,9 @@ export class MenuRead {
         this._hue = null;
         this._hass?.abort();
         this._hass = null;
-        if (this._hassSync)
-            GLib.source_remove(this._hassSync);
-        this._hassSync = 0;
+        if (this._pushSync)
+            GLib.source_remove(this._pushSync);
+        this._pushSync = 0;
         this._homekit?.abort();
         this._homekit = null;
         this._smartlife?.abort();
@@ -176,6 +176,7 @@ export class MenuRead {
                 this._loginNote = {text: _('A Hue bridge needs to be paired again.'), target: 'accounts-hue'};
                 this._render();
             };
+            hue.onChange = () => this._pushed(hue);
         }
         const hassDevices = parseHassDevices(readSetting(this._settings, 'hass-devices'));
         if (hassDevices.length > 0 && readSetting(this._settings, 'hass-server')) {
@@ -186,7 +187,7 @@ export class MenuRead {
                 this._loginNote = {text: _('Home Assistant refused the access token.'), target: 'accounts-hass'};
                 this._render();
             };
-            hass.onChange = () => this._hassChanged(hass);
+            hass.onChange = () => this._pushed(hass);
         }
         const accessories = parseHomeKitHosts(readSetting(this._settings, 'homekit-accessories'));
         if (accessories.length > 0) {
@@ -442,23 +443,26 @@ export class MenuRead {
         this._retry = 0;
     }
 
-    // Home Assistant pushes every change; a power sensor can report each second.
-    _hassChanged(hass) {
-        if (this._hassSync || this._hass !== hass)
+    // Home Assistant and Hue push every change; a power sensor can report each second.
+    _pushed(source) {
+        if (this._pushSync || !this._sources().includes(source))
             return;
-        this._hassSync = GLib.timeout_add(GLib.PRIORITY_DEFAULT, 500, () => {
-            this._hassSync = 0;
-            this._syncTiles(hass);
+        this._pushSync = GLib.timeout_add(GLib.PRIORITY_DEFAULT, 500, () => {
+            this._pushSync = 0;
+            this._syncTiles(source);
             return GLib.SOURCE_REMOVE;
         });
     }
 
+    // The top bar stays in view under an open card.
     _syncTiles(source) {
-        if (this._card || !this._sources().includes(source))
+        if (!this._sources().includes(source))
+            return;
+        this._syncReadings();
+        if (this._card)
             return;
         for (const tile of this._tiles)
             tile.sync();
-        this._syncReadings();
     }
 
     // Scan only while the menu is open: scanning keeps the radio busy.
