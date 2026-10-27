@@ -506,35 +506,7 @@ class NookButton extends PanelMenu.Button {
         this._settings.disconnectObject(this);
         this._cancellable?.cancel();
         this._cancellable = null;
-        this._home?.abort();
-        this._home = null;
-        this._aircon?.abort();
-        this._aircon = null;
-        this._tapo?.abort();
-        this._tapo = null;
-        this._cast?.abort();
-        this._cast = null;
-        this._tv?.abort();
-        this._tv = null;
-        this._sonoff?.abort();
-        this._sonoff = null;
-        this._shelly?.abort();
-        this._shelly = null;
-        this._ewelink?.abort();
-        this._ewelink = null;
-        this._hue?.abort();
-        this._hue = null;
-        this._hass?.abort();
-        this._hass = null;
-        this._homekit?.abort();
-        this._homekit = null;
-        this._smartlife?.abort();
-        this._smartlife = null;
-        this._miScenes?.abort();
-        this._miScenes = null;
-        for (const cloud of this._clouds)
-            cloud.abort();
-        this._clouds = [];
+        this._dropSources();
         if (this._pushSync)
             GLib.source_remove(this._pushSync);
         this._pushSync = 0;

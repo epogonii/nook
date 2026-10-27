@@ -13,6 +13,8 @@ import {troubleText} from './tiles.js';
 const LIGHT_UP_TRIES = 12;
 const LIGHT_UP_EVERY = 10;
 const FLASH_MS = 2000;
+// Longest a dropped source is kept for a flash to put its light back.
+const RESTORE_MS = 10000;
 
 const switchable = device => device.primary.kind === 'switch' && typeof device.source?.setSwitch === 'function';
 
@@ -132,19 +134,46 @@ export class MenuLights {
     // One flash per light at a time: a second would read the first one's colour as the
     // light's own.
     flash(dids, rgb) {
-        this._flashing ??= new Set();
-        const flashing = this._flashing;
+        this._flashes ??= new Map();
+        const flashes = this._flashes;
         for (const device of this._devices().filter(d => dids.includes(d.did) && switchable(d))) {
-            if (flashing.has(device.did))
+            if (flashes.has(device.did))
                 continue;
-            flashing.add(device.did);
-            flashLight(device, rgb).catch(e => report(device, e)).finally(() => {
-                flashing.delete(device.did);
+            const done = flashLight(device, rgb).catch(e => report(device, e)).finally(() => {
+                flashes.delete(device.did);
+                if (this._gone)
+                    return;
                 for (const tile of this._tiles) {
                     if (tile.device?.did === device.did)
                         tile.sync();
                 }
-            }).catch(logError);
+            });
+            flashes.set(device.did, {source: device.source, done});
+            done.catch(logError);
         }
+    }
+
+    // Aborted at once, the source of a light mid-flash (screen locked, settings changed)
+    // would leave it in the notification's colour. disable() aborts it at once anyway.
+    _abortAfterFlash(source) {
+        const flashes = [...this._flashes?.values() ?? []].filter(f => f.source === source);
+        if (flashes.length === 0) {
+            source.abort();
+            return;
+        }
+        let aborted = false;
+        const abort = () => {
+            if (!aborted)
+                source.abort();
+            aborted = true;
+        };
+        const deadline = Timers.timeout(RESTORE_MS, () => {
+            abort();
+            return GLib.SOURCE_REMOVE;
+        }, {cleanup: abort});
+        Promise.allSettled(flashes.map(f => f.done)).then(() => {
+            Timers.remove(deadline);
+            abort();
+        }).catch(logError);
     }
 }

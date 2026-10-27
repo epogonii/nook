@@ -78,21 +78,43 @@ export default class NookExtension extends Extension {
         Main.sessionMode.connectObject('updated', () => this._syncButton(), this);
         this._networking = 0;
         Gio.NetworkMonitor.get_default().connectObject('network-changed', () => this._networkChanged(), this);
-        // Extensions are enabled before it at login, not when switched on later.
-        Main.layoutManager.connectObject('startup-complete',
-            () => this._button?.lightUp(readSetting(this._settings, 'login-lights')), this);
-        const watch = source => source.connectObject('notification-added', () => this._notified(source), this);
+        // GNOME doesn't wait for extensions before startup-complete, so one enabled after it
+        // lights up at once. Only the first enable in this shell counts: GNOME re-enables
+        // extensions when one before them in the list is switched off.
+        const startingUp = Main.layoutManager._startingUp;
+        if (startingUp)
+            Main.layoutManager.connectObject('startup-complete', () => this._lightUp(), this);
+        // A source stays alive while its app's notifications are switched off, out of the
+        // tray, and comes back with source-added when they are switched on again.
+        this._watched = new Set();
+        const watch = source => {
+            if (this._watched.has(source))
+                return;
+            this._watched.add(source);
+            source.connectObject(
+                'notification-added', () => this._notified(source),
+                'destroy', () => this._watched?.delete(source),
+                this);
+        };
         Main.messageTray.getSources().forEach(watch);
         Main.messageTray.connectObject('source-added', (_tray, source) => watch(source), this);
         this._syncButton();
+        if (!startingUp && !this._litUp)
+            this._lightUp();
     }
 
-    // The source's policy already answers for Do Not Disturb and the app's own banner
-    // setting. While locked there is no button, so nothing flashes.
+    _lightUp() {
+        this._litUp = true;
+        this._button?.lightUp(readSetting(this._settings, 'login-lights'));
+    }
+
+    // The source's policy already answers for Do Not Disturb and the app's own notification
+    // and banner settings. While locked there is no button, so nothing flashes.
     _notified(source) {
+        if (!this._button || !source.policy?.enable || !source.policy.showBanners)
+            return;
         const lights = readSetting(this._settings, 'notify-lights');
-        if (!this._button || lights.length === 0 || !source.policy?.showBanners ||
-            !readSetting(this._settings, 'notify-apps').includes(source.policy.id))
+        if (lights.length === 0 || !readSetting(this._settings, 'notify-apps').includes(source.policy.id))
             return;
         this._button.flash(lights, readSetting(this._settings, 'notify-color'));
     }
@@ -160,7 +182,6 @@ export default class NookExtension extends Extension {
     // Stays enabled in unlock-dialog only for gateway leak/smoke alerts while locked;
     // the menu, and with it every cloud call, is dropped on lock and rebuilt on unlock.
     disable() {
-        Timers.removeAll();
         if (this._placing)
             GLib.source_remove(this._placing);
         this._placing = 0;
@@ -170,13 +191,16 @@ export default class NookExtension extends Extension {
         Gio.NetworkMonitor.get_default().disconnectObject(this);
         Main.layoutManager.disconnectObject(this);
         Main.messageTray.disconnectObject(this);
-        for (const source of Main.messageTray.getSources())
+        for (const source of this._watched ?? [])
             source.disconnectObject(this);
+        this._watched = null;
         Main.sessionMode.disconnectObject(this);
         this._settings?.disconnectObject(this);
         this._dropButton();
         this._alerts?.stop();
         this._alerts = null;
+        // After the button: the sources it keeps for a light mid-flash are aborted here.
+        Timers.removeAll();
         this._settings = null;
         beacons.clear();
         clearWords();

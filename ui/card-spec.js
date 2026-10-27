@@ -557,7 +557,8 @@ export class SpecCard {
         return device.source.setSwitch(device, on);
     }
 
-    // A picked colour turns the light on too, as in Mi Home.
+    // A picked colour turns the light on too, as in Mi Home. On first: some bridges (Hue)
+    // don't take a colour while the light is off.
     _paintWrite(device, h, value) {
         const {service, color, temperature} = h.paint;
         const home = device.source;
@@ -565,12 +566,12 @@ export class SpecCard {
         const kelvin = value === WHITE && !color.choices?.length && temperature
             ? Math.min(temperature.range[1], Math.max(temperature.range[0], 4000)) : null;
         this._cardWrite(device, async () => {
+            if (!this._lit(device, h))
+                await this._paintSwitch(device, h, true);
             if (kelvin)
                 await home.setProperty(device, service.siid, temperature.piid, kelvin);
             else
                 await home.setProperty(device, service.siid, color.piid, value);
-            if (!this._lit(device, h))
-                await this._paintSwitch(device, h, true);
         }).catch(logError);
     }
 

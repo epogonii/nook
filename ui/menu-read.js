@@ -36,6 +36,9 @@ import {CLOUD_AIRCONS, deviceType, formatValue, numberFormat, readSetting, tvSho
 import {Glyph, skeletonBar} from './widgets.js';
 
 const SECRET_LABEL = 'Nook: Xiaomi account';
+// The button's device sources besides this._clouds; each has abort().
+const SOURCES = ['_home', '_aircon', '_tapo', '_cast', '_tv', '_sonoff', '_shelly', '_ewelink', '_hue', '_hass',
+    '_homekit', '_smartlife', '_miScenes'];
 
 // extra-tiles entry: "did/siid/piid/name". Neither a did nor a property name has '/'.
 function parseExtra(entry) {
@@ -105,38 +108,10 @@ export class MenuRead {
         this._stopReadings();
         this._readings.destroy_all_children();
         this._cancellable?.cancel();
-        this._home?.abort();
-        this._home = null;
-        this._aircon?.abort();
-        this._aircon = null;
-        this._tapo?.abort();
-        this._tapo = null;
-        this._cast?.abort();
-        this._cast = null;
-        this._tv?.abort();
-        this._tv = null;
-        this._sonoff?.abort();
-        this._sonoff = null;
-        this._shelly?.abort();
-        this._shelly = null;
-        this._ewelink?.abort();
-        this._ewelink = null;
-        this._hue?.abort();
-        this._hue = null;
-        this._hass?.abort();
-        this._hass = null;
+        this._dropSources();
         if (this._pushSync)
             GLib.source_remove(this._pushSync);
         this._pushSync = 0;
-        this._homekit?.abort();
-        this._homekit = null;
-        this._smartlife?.abort();
-        this._smartlife = null;
-        this._miScenes?.abort();
-        this._miScenes = null;
-        for (const cloud of this._clouds)
-            cloud.abort();
-        this._clouds = [];
         this._loginNote = null;
         const cancellable = this._cancellable = new Gio.Cancellable();
         this._title.text = _('Nook');
@@ -170,6 +145,12 @@ export class MenuRead {
                 if (this._shelly !== shelly)
                     return;
                 this._loginNote = {text: _('A Shelly needs its password again.'), target: 'accounts-shelly'};
+                this._render();
+            };
+            shelly.onBack = () => {
+                if (this._shelly !== shelly || this._loginNote?.target !== 'accounts-shelly')
+                    return;
+                this._loginNote = null;
                 this._render();
             };
         }
@@ -289,7 +270,7 @@ export class MenuRead {
         if (cancellable.is_cancelled())
             return;
 
-        const scenes = this._miScenes = new MiScenes(cloud, home);
+        const scenes = this._miScenes = new MiScenes(cloud, home, _('Scene'));
         scenes.onDevices = () => {
             if (this._miScenes === scenes)
                 this._render();
@@ -483,6 +464,17 @@ export class MenuRead {
         this._hass?.reconnect();
         this._hue?.reconnect();
         this._lightUpStep();
+    }
+
+    _dropSources() {
+        for (const name of SOURCES) {
+            if (this[name])
+                this._abortAfterFlash(this[name]);
+            this[name] = null;
+        }
+        for (const cloud of this._clouds)
+            this._abortAfterFlash(cloud);
+        this._clouds = [];
     }
 
     // The top bar stays in view under an open card.

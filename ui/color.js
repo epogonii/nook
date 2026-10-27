@@ -109,16 +109,20 @@ class Disk extends St.DrawingArea {
         this._pick = pick;
         this._value = null;
         this._on = false;
+        this._shown = {value: null, on: false};
         this._grab = null;
         this._sequence = null;
         this.connect('destroy', () => this._release());
     }
 
     show(value, on) {
-        if (this._grab)
-            return;
-        this._value = typeof value === 'number' ? value : null;
-        this._on = on;
+        this._shown = {value: typeof value === 'number' ? value : null, on};
+        if (!this._grab)
+            this._redraw();
+    }
+
+    _redraw() {
+        ({value: this._value, on: this._on} = this._shown);
         this.queue_repaint();
     }
 
@@ -258,8 +262,14 @@ class Disk extends St.DrawingArea {
             this._move(this._at(...this._local(event), true));
             return Clutter.EVENT_STOP;
         }
-        if (type === Clutter.EventType.TOUCH_END || type === Clutter.EventType.TOUCH_CANCEL)
+        if (type === Clutter.EventType.TOUCH_END)
             return this._end();
+        // Taken by a system gesture: nothing is picked.
+        if (type === Clutter.EventType.TOUCH_CANCEL) {
+            this._release();
+            this._redraw();
+            return Clutter.EVENT_STOP;
+        }
         return Clutter.EVENT_PROPAGATE;
     }
 });

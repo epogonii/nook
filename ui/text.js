@@ -368,6 +368,8 @@ export function specTrouble(e) {
         return _('The device did not answer in time.');
     case 'closed':
         return _('The connection closed. Try again.');
+    case 'gone':
+        return _('This scene is no longer in Mi Home.');
     default:
         return e.message;
     }
