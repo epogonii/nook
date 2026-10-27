@@ -235,6 +235,7 @@ export class HassHome extends SpecHome {
         this._aborted = false;
         // Set when HA refused the token: every retry would be a failed login on its side.
         this._refused = false;
+        this._open = false;
         this._entities = new Map();
         this._entries = new Map();
         this._layouts = new Map();
@@ -270,9 +271,26 @@ export class HassHome extends SpecHome {
             return;
         this._retry = GLib.timeout_add_seconds(GLib.PRIORITY_LOW, RECONNECT, () => {
             this._retry = 0;
-            this._refresh().then(() => this.onChange?.()).catch(e => console.debug(`nook: Home Assistant: ${e.message}`));
+            this._reconnect();
             return GLib.SOURCE_REMOVE;
         });
+    }
+
+    _reconnect() {
+        this._refresh().then(() => this.onChange?.()).catch(e => console.debug(`nook: Home Assistant: ${e.message}`));
+    }
+
+    // After a network change an open socket can hang on a dead connection until TCP gives
+    // up. A connection still being made is left to its own timeout: closing it here would
+    // race its failure handler.
+    reconnect() {
+        if (this._open)
+            this._client.close();
+        if (!this._retry)
+            return;
+        GLib.source_remove(this._retry);
+        this._retry = 0;
+        this._reconnect();
     }
 
     _layout(device) {
@@ -305,6 +323,7 @@ export class HassHome extends SpecHome {
                     return;
                 this._client = null;
                 this._connecting = null;
+                this._open = false;
                 for (const device of this.devices)
                     device.online = false;
                 this.onChange?.();
@@ -321,6 +340,7 @@ export class HassHome extends SpecHome {
                     this._client = null;
                 throw e;
             }
+            this._open = true;
             return client;
         })().catch(e => {
             this._connecting = null;

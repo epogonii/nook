@@ -105,12 +105,19 @@ export class HueBridge {
         this._session = new Soup.Session({timeout: 8, idle_timeout: 30});
         this._events = new Soup.Session({timeout: QUIET});
         this._cancellable = new Gio.Cancellable();
+        this._listening = null;
     }
 
     abort() {
         this._cancellable.cancel();
+        this._listening?.cancel();
         this._session.abort();
         this._events.abort();
+    }
+
+    // Ends the event stream alone: listen() throws CANCELLED.
+    hangUp() {
+        this._listening?.cancel();
     }
 
     _accept(certificate) {
@@ -169,9 +176,12 @@ export class HueBridge {
         message.get_request_headers().append('Accept', 'text/event-stream');
         // Stays on HTTP/1.1, where the session timeout ends a quiet read, even if the bridge offers h2.
         message.set_force_http1(true);
+        const cancellable = this._listening = new Gio.Cancellable();
+        if (this._cancellable.is_cancelled())
+            cancellable.cancel();
         let input;
         try {
-            input = await this._events.send_async(message, GLib.PRIORITY_DEFAULT, this._cancellable);
+            input = await this._events.send_async(message, GLib.PRIORITY_DEFAULT, cancellable);
         } catch (e) {
             throw this._failed(e);
         }
@@ -183,7 +193,7 @@ export class HueBridge {
             let rest = new Uint8Array(0);
             let data = [];
             for (;;) {
-                const bytes = await input.read_bytes_async(8192, GLib.PRIORITY_DEFAULT, this._cancellable);
+                const bytes = await input.read_bytes_async(8192, GLib.PRIORITY_DEFAULT, cancellable);
                 if (bytes.get_size() === 0)
                     return;
                 const chunk = bytes.toArray();

@@ -106,7 +106,7 @@ export class HueHome extends SpecHome {
         // change can have been missed since. stream: the open stream's number, 0 if none.
         this._bridges = new Map(bridges.map(bridge => [bridge.id, {
             bridge, client: null, loading: null, resources: null, fetching: null, held: null,
-            synced: false, listening: false, stream: 0, streams: 0, writes: 0, failures: 0, retry: 0,
+            synced: false, listening: false, restart: false, stream: 0, streams: 0, writes: 0, failures: 0, retry: 0,
         }]));
         this._entries = new Map();
         this._layouts = new Map();
@@ -136,6 +136,24 @@ export class HueHome extends SpecHome {
             if (slot.retry)
                 GLib.source_remove(slot.retry);
             slot.retry = 0;
+        }
+    }
+
+    // After a network change a stream can hang on a dead connection until QUIET runs
+    // out, and one waiting to retry may get through now.
+    reconnect() {
+        for (const [id, slot] of this._bridges) {
+            if (this._aborted || !slot.client)
+                continue;
+            slot.failures = 0;
+            if (slot.listening) {
+                slot.restart = true;
+                slot.client.hangUp();
+            } else if (slot.retry) {
+                GLib.source_remove(slot.retry);
+                slot.retry = 0;
+                this._listen(id, slot.client).catch(logError);
+            }
         }
     }
 
@@ -242,10 +260,12 @@ export class HueHome extends SpecHome {
             slot.stream = 0;
             slot.synced = false;
         }
+        const restart = slot.restart;
+        slot.restart = false;
         if (this._aborted || slot.client !== client)
             return;
-        if (timedOut) {
-            this._listen(id, client, true).catch(logError);
+        if (timedOut || restart) {
+            this._listen(id, client, !restart).catch(logError);
             return;
         }
         slot.retry = GLib.timeout_add_seconds(GLib.PRIORITY_LOW, Math.min(RETRY * 2 ** slot.failures++, MAX_RETRY), () => {
