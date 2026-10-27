@@ -11,6 +11,7 @@ import * as Main from 'resource:///org/gnome/shell/ui/main.js';
 
 import * as Secrets from '../lib/secrets.js';
 import {OnvifError} from '../lib/onvif.js';
+import {parseCameras} from '../lib/tapo.js';
 import {CameraApi, TapoError, WRONG_PASSWORD} from '../lib/tapo-local.js';
 import {CameraView, NO_GSTREAMER, NO_PLUGIN, Panner, REFUSED, panButtons} from './camera.js';
 import {VERTICAL, readSetting} from './text.js';
@@ -345,5 +346,19 @@ export class CameraCard {
         // After adding buttons: Clutter passes text direction to children only when set.
         pad.set_text_direction(Clutter.TextDirection.LTR);
         row.insert_child_above(pad, info);
+    }
+
+    // A camera found at a new address keeps it, without reloading the menu.
+    _keepCameras(tapo, moved) {
+        if (tapo !== this._tapo)
+            return;
+        const cameras = parseCameras(readSetting(this._settings, 'tapo-cameras'))
+            .map(camera => ({...camera, ...moved.find(m => m.id === camera.id)}));
+        this._keepingCameras = true;
+        try {
+            this._settings.set_string('tapo-cameras', JSON.stringify(cameras));
+        } finally {
+            this._keepingCameras = false;
+        }
     }
 }

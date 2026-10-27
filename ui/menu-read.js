@@ -95,6 +95,9 @@ function panelText(device) {
 }
 
 const LISTEN_SECONDS = 20;
+// A Bluetooth device not heard this long into a scan (off, out of range) stops showing
+// as loading, on later scans too, until it is heard.
+const HEAR_SECONDS = 15;
 
 function setBeacon(device, beacon) {
     beacons.set(device.did, beacon);
@@ -122,8 +125,10 @@ export class MenuRead {
         if (aircons.length > 0)
             this._aircon = new AirconHome(aircons);
         const cameras = Tapo.parseCameras(readSetting(this._settings, 'tapo-cameras'));
-        if (cameras.length > 0)
-            this._tapo = new Tapo.TapoHome(cameras);
+        if (cameras.length > 0) {
+            const tapo = this._tapo = new Tapo.TapoHome(cameras);
+            tapo.onMoved = moved => this._keepCameras(tapo, moved);
+        }
         const speakers = parseSpeakers(readSetting(this._settings, 'cast-speakers'));
         if (speakers.length > 0) {
             const cast = this._cast = new CastHome(speakers);
@@ -499,6 +504,7 @@ export class MenuRead {
                 return;
             const before = stateText(device);
             const waited = this._awaits(device);
+            this._unheard.delete(device.did);
             // Adverts may carry only some readings; keep the rest from earlier ones.
             setBeacon(device, {...beaconOf(device), ...beacon, time: Math.floor(Date.now() / 1000)});
             this._syncHeard(device);
@@ -522,6 +528,15 @@ export class MenuRead {
                     scan.keys.set(address, key);
             }).catch(e => console.debug(`nook: beacon key: ${e.message}`));
         };
+        this._hearing = GLib.timeout_add_seconds(GLib.PRIORITY_LOW, HEAR_SECONDS, () => {
+            this._hearing = 0;
+            for (const device of this._home?.devices ?? []) {
+                if (this._awaits(device))
+                    this._unheard.add(device.did);
+            }
+            this._syncListening();
+            return GLib.SOURCE_REMOVE;
+        });
         this._syncListening();
         scan.start()
             .then(() => this._syncListening())
@@ -537,7 +552,8 @@ export class MenuRead {
 
     // Scanning, and nothing fresh heard from it yet.
     _awaits(device) {
-        if (!isBluetooth(device) || device.online === true || !this._beacons || this._beacons.off)
+        if (!isBluetooth(device) || device.online === true || !this._beacons || this._beacons.off ||
+            this._unheard.has(device.did))
             return false;
         const time = beaconOf(device)?.time;
         return !time || Date.now() / 1000 - time >= BEACON_FRESH;
@@ -553,6 +569,9 @@ export class MenuRead {
     }
 
     _stopBeacons() {
+        if (this._hearing)
+            GLib.source_remove(this._hearing);
+        this._hearing = 0;
         this._beacons?.stop();
         this._beacons = null;
     }

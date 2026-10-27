@@ -52,6 +52,8 @@ class NookButton extends PanelMenu.Button {
         this._path = path;
         this._alerts = alerts;
         this._beacons = null;
+        this._hearing = 0;
+        this._unheard = new Set();
         alerts.onReport = (sid, data) => this._heardFromGateway(sid, data);
         this._openPreferences = openPreferences;
         this._cancellable = null;
@@ -71,6 +73,7 @@ class NookButton extends PanelMenu.Button {
         this._miScenes = null;
         this._clouds = [];
         this._keepingSpeaker = false;
+        this._keepingCameras = false;
         this._loginNote = null;
         this._tiles = [];
         // Offline devices when the tiles were last drawn; null while something else shows.
@@ -245,7 +248,10 @@ class NookButton extends PanelMenu.Button {
             'changed::icons', () => this._render(),
             'changed::gree-units', () => this.reload().catch(logError),
             'changed::aircons', () => this.reload().catch(logError),
-            'changed::tapo-cameras', () => this.reload().catch(logError),
+            'changed::tapo-cameras', () => {
+                if (!this._keepingCameras)
+                    this.reload().catch(logError);
+            },
             'changed::cast-speakers', () => {
                 if (!this._keepingSpeaker)
                     this.reload().catch(logError);

@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: nook\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-10-27 20:21+0200\n"
+"POT-Creation-Date: 2026-10-27 20:36+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -18,7 +18,7 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=INTEGER; plural=EXPRESSION;\n"
 
-#: extension.js:28 ui/menu.js:50 ui/menu.js:107 ui/menu-read.js:117
+#: extension.js:28 ui/menu.js:50 ui/menu.js:110 ui/menu-read.js:120
 #: ui/menu-view.js:40
 msgid "Nook"
 msgstr ""
@@ -462,11 +462,11 @@ msgid ""
 "for a while after too many tries."
 msgstr ""
 
-#: ui/camera.js:329 ui/card-camera.js:150
+#: ui/camera.js:329 ui/card-camera.js:151
 msgid "GStreamer is needed to show the picture."
 msgstr ""
 
-#: ui/camera.js:331 ui/card-camera.js:152
+#: ui/camera.js:331 ui/card-camera.js:153
 msgid "The picture needs a GStreamer plugin that is not installed."
 msgstr ""
 
@@ -474,78 +474,78 @@ msgstr ""
 msgid "The camera stopped sending its picture."
 msgstr ""
 
-#: ui/card-camera.js:28 ui/card-camera.js:201 ui/card-tv.js:149
+#: ui/card-camera.js:29 ui/card-camera.js:202 ui/card-tv.js:149
 msgid "Settings…"
 msgstr ""
 
-#: ui/card-camera.js:35
+#: ui/card-camera.js:36
 msgid ""
 "Search for cameras again in Settings, under Cameras, so Nook learns how to "
 "reach this one."
 msgstr ""
 
-#: ui/card-camera.js:48
+#: ui/card-camera.js:49
 msgid "Add the camera account from the Tapo app in Settings, under Cameras."
 msgstr ""
 
-#: ui/card-camera.js:49
+#: ui/card-camera.js:50
 msgid "Add the login of this camera in Settings, under Cameras."
 msgstr ""
 
-#: ui/card-camera.js:56
+#: ui/card-camera.js:57
 msgid ""
 "The saved camera account could not be read. Save it again in Settings, under "
 "Cameras."
 msgstr ""
 
-#: ui/card-camera.js:84
+#: ui/card-camera.js:85
 msgid "Take a Snapshot"
 msgstr ""
 
-#: ui/card-camera.js:158
+#: ui/card-camera.js:159
 msgid "The camera sent no picture to save."
 msgstr ""
 
-#: ui/card-camera.js:185
+#: ui/card-camera.js:186
 msgid "Camera"
 msgstr ""
 
-#: ui/card-camera.js:200
+#: ui/card-camera.js:201
 msgid ""
 "Privacy mode, the light, night vision and the siren need your TP-Link "
 "password, in Settings under Cameras."
 msgstr ""
 
-#: ui/card-camera.js:222
+#: ui/card-camera.js:223
 msgid "The TP-Link password in Settings is not the one this camera knows."
 msgstr ""
 
-#: ui/card-camera.js:241
+#: ui/card-camera.js:242
 msgid "Privacy Mode"
 msgstr ""
 
-#: ui/card-camera.js:242
+#: ui/card-camera.js:243
 msgid "Status Light"
 msgstr ""
 
-#: ui/card-camera.js:243
+#: ui/card-camera.js:244
 msgid "Motion Detection"
 msgstr ""
 
-#: ui/card-camera.js:244
+#: ui/card-camera.js:245
 msgid "Siren on Motion"
 msgstr ""
 
-#: ui/card-camera.js:256
+#: ui/card-camera.js:257
 msgid "Night Vision"
 msgstr ""
 
-#: ui/card-camera.js:258 ui/climate.js:47 ui/climate.js:129 ui/text.js:161
+#: ui/card-camera.js:259 ui/climate.js:47 ui/climate.js:129 ui/text.js:161
 #: ui/text.js:401
 msgid "Auto"
 msgstr ""
 
-#: ui/card-camera.js:258 ui/card-climate.js:400 ui/card-climate.js:436
+#: ui/card-camera.js:259 ui/card-climate.js:400 ui/card-climate.js:436
 #: ui/card-controls.js:42 ui/card-controls.js:176 ui/card-controls.js:335
 #: ui/card-spec.js:312 ui/card-tv.js:73 ui/card-tv.js:115 ui/hero.js:287
 #: ui/hero.js:333 ui/hero.js:364 ui/hero.js:381 ui/hero.js:464 ui/hero.js:478
@@ -554,7 +554,7 @@ msgstr ""
 msgid "On"
 msgstr ""
 
-#: ui/card-camera.js:258 ui/card-climate.js:400 ui/card-climate.js:426
+#: ui/card-camera.js:259 ui/card-climate.js:400 ui/card-climate.js:426
 #: ui/card-climate.js:432 ui/card-climate.js:436 ui/card-controls.js:42
 #: ui/card-controls.js:92 ui/card-controls.js:103 ui/card-controls.js:176
 #: ui/card-controls.js:335 ui/card-history.js:142 ui/card-spec.js:312
@@ -566,24 +566,24 @@ msgstr ""
 msgid "Off"
 msgstr ""
 
-#: ui/card-camera.js:277 ui/card-camera.js:294 ui/card-camera.js:314
+#: ui/card-camera.js:278 ui/card-camera.js:295 ui/card-camera.js:315
 msgid "Sound the Siren"
 msgstr ""
 
-#: ui/card-camera.js:290
+#: ui/card-camera.js:291
 msgid "Click Again to Sound It"
 msgstr ""
 
-#: ui/card-camera.js:314
+#: ui/card-camera.js:315
 msgid "Stop the Siren"
 msgstr ""
 
-#: ui/card-camera.js:338
+#: ui/card-camera.js:339
 #, javascript-format
 msgid "Could not turn the camera: %s"
 msgstr ""
 
-#: ui/card-camera.js:344
+#: ui/card-camera.js:345
 msgid "Turn to the Home Position"
 msgstr ""
 
@@ -860,7 +860,7 @@ msgstr ""
 msgid "Unpin"
 msgstr ""
 
-#: ui/card.js:51 ui/menu.js:116 prefs/devices-page.js:500
+#: ui/card.js:51 ui/menu.js:119 prefs/devices-page.js:500
 msgid "Pin"
 msgstr ""
 
@@ -868,7 +868,7 @@ msgstr ""
 msgid "Show in the Menu"
 msgstr ""
 
-#: ui/card.js:53 ui/menu.js:118
+#: ui/card.js:53 ui/menu.js:121
 msgid "Hide from the Menu"
 msgstr ""
 
@@ -876,7 +876,7 @@ msgstr ""
 msgid "Take Off the Top Bar"
 msgstr ""
 
-#: ui/card.js:57 ui/menu.js:113
+#: ui/card.js:57 ui/menu.js:116
 msgid "Show in the Top Bar"
 msgstr ""
 
@@ -1148,7 +1148,7 @@ msgstr ""
 msgid "Arrows, OK"
 msgstr ""
 
-#: ui/card-tv.js:243 ui/menu.js:103
+#: ui/card-tv.js:243 ui/menu.js:106
 msgid "Back"
 msgstr ""
 
@@ -1221,7 +1221,7 @@ msgstr ""
 msgid "Play a Sound"
 msgstr ""
 
-#: ui/card-vacuum.js:267 ui/menu.js:122
+#: ui/card-vacuum.js:267 ui/menu.js:125
 msgid "Settings"
 msgstr ""
 
@@ -2016,27 +2016,27 @@ msgctxt "action"
 msgid "Run"
 msgstr ""
 
-#: ui/menu.js:120
+#: ui/menu.js:123
 msgid "Find Devices Again"
 msgstr ""
 
-#: ui/menu.js:595 ui/menu.js:607
+#: ui/menu.js:601 ui/menu.js:613
 msgid "Log In…"
 msgstr ""
 
-#: ui/menu.js:597
+#: ui/menu.js:603
 msgid "Add an account or a device in Settings, and your home shows up here."
 msgstr ""
 
-#: ui/menu.js:597
+#: ui/menu.js:603
 msgid "Open Settings…"
 msgstr ""
 
-#: ui/menu.js:650 ui/menu-read.js:418
+#: ui/menu.js:656 ui/menu-read.js:423
 msgid "The Mi Home login has expired."
 msgstr ""
 
-#: ui/menu.js:652
+#: ui/menu.js:658
 msgid "Try Again"
 msgstr ""
 
@@ -2044,45 +2044,45 @@ msgstr ""
 msgid "Idle"
 msgstr ""
 
-#: ui/menu-read.js:147
+#: ui/menu-read.js:152
 msgid "A Shelly needs its password again."
 msgstr ""
 
-#: ui/menu-read.js:163
+#: ui/menu-read.js:168
 msgid "The eWeLink login has expired."
 msgstr ""
 
-#: ui/menu-read.js:173
+#: ui/menu-read.js:178
 msgid "A Hue bridge needs to be paired again."
 msgstr ""
 
-#: ui/menu-read.js:184 ui/text.js:364 prefs/common.js:248
+#: ui/menu-read.js:189 ui/text.js:364 prefs/common.js:248
 msgid "Home Assistant refused the access token."
 msgstr ""
 
-#: ui/menu-read.js:195
+#: ui/menu-read.js:200
 msgid "A HomeKit accessory needs to be paired again."
 msgstr ""
 
-#: ui/menu-read.js:205 ui/text.js:366 prefs/common.js:256
+#: ui/menu-read.js:210 ui/text.js:366 prefs/common.js:256
 msgid "The Smart Life login has expired."
 msgstr ""
 
-#: ui/menu-read.js:217 ui/text.js:366
+#: ui/menu-read.js:222 ui/text.js:366
 #, javascript-format
 msgid "The %s login has expired."
 msgstr ""
 
-#: ui/menu-read.js:236
+#: ui/menu-read.js:241
 #, javascript-format
 msgid "The keyring could not be read: %s"
 msgstr ""
 
-#: ui/menu-read.js:250
+#: ui/menu-read.js:255
 msgid "The saved Mi Home login could not be read."
 msgstr ""
 
-#: ui/menu-read.js:273 prefs/common.js:46
+#: ui/menu-read.js:278 prefs/common.js:46
 msgid "Scene"
 msgstr ""
 
