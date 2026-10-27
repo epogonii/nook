@@ -20,18 +20,34 @@ import {SpecError} from '../lib/spec-home.js';
 // Xiaomi's QR image is 480 px; shown smaller, never upscaled, so phones can scan it.
 export const QR_SIZE = 240;
 
+function readCache(name) {
+    const path = GLib.build_filenamev([GLib.get_user_cache_dir(), 'nook', name]);
+    try {
+        const [, contents] = GLib.file_get_contents(path);
+        return JSON.parse(new TextDecoder().decode(contents));
+    } catch {
+        return null;
+    }
+}
+
 // From the menu's cache; prefs never call the cloud. Empty until the menu is opened once.
 export function cachedDevices(userId) {
     if (!userId)
         return [];
-    const path = GLib.build_filenamev([GLib.get_user_cache_dir(), 'nook', `xiaomi-${userId}.json`]);
-    try {
-        const [, contents] = GLib.file_get_contents(path);
-        const cached = JSON.parse(new TextDecoder().decode(contents));
-        return cached?.version === CACHE_VERSION ? cached.devices ?? [] : [];
-    } catch {
-        return [];
-    }
+    const cached = readCache(`xiaomi-${userId}.json`);
+    return cached?.version === CACHE_VERSION ? cached.devices ?? [] : [];
+}
+
+// Mi Home scenes as lib/mi-scenes.js lists them.
+export function cachedScenes(userId) {
+    const scenes = userId ? readCache(`xiaomi-scenes-${userId}.json`)?.scenes : null;
+    return Array.isArray(scenes) ? scenes.map(scene => ({
+        did: `miscene:${scene.id}`,
+        name: scene.name || _('Scene'),
+        room: null,
+        type: 'scene',
+        primary: {kind: 'scene', props: []},
+    })) : [];
 }
 
 const GROUP_LOOKS = {

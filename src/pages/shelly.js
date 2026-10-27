@@ -193,7 +193,11 @@ class ShellyGroup extends FoldGroup {
             const found = await Shelly.discover(3000);
             const byId = new Map(found.map(u => [u.id, u]));
             const saved = this._units();
-            this._save(saved.map(u => (byId.has(u.id) ? {...u, ip: byId.get(u.id).ip} : u)));
+            // A password may have been set or taken off since it was added.
+            this._save(saved.map(u => {
+                const now = byId.get(u.id);
+                return now ? {...u, ip: now.ip, gen: now.gen, model: now.model ?? u.model, auth: now.auth} : u;
+            }));
             const known = new Set(saved.map(u => u.id));
             const skipped = skippedIn(this._settings, quiet);
             const fresh = found.filter(u => !known.has(u.id) && !skipped.has(`shelly:${u.id}`));

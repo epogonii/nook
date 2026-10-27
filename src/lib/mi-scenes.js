@@ -15,10 +15,12 @@ const asSpec = e => (e instanceof XiaomiError ? new SpecError(e.message, 'cloud'
 
 export class MiScenes extends SpecHome {
     // home: the MiHome whose homes the scenes are read from, and whose turns the calls take.
-    constructor(cloud, home) {
+    // unnamed: the translated name of a scene without one.
+    constructor(cloud, home, unnamed) {
         super('Mi Home', {gap: GAP, fresh: GAP});
         this._cloud = cloud;
         this._home = home;
+        this._unnamed = unnamed;
         this._scenes = new Map();
         this._aborted = false;
         this.onDevices = null;
@@ -55,9 +57,10 @@ export class MiScenes extends SpecHome {
         const before = listed();
         this.devices = this.devices.filter(d => fresh.has(d.did));
         for (const [did, scene] of fresh) {
+            const name = scene.name || this._unnamed;
             const device = this.devices.find(d => d.did === did) ??
-                this._add({did, name: scene.name, model: 'mi-scene', urn: 'urn:nook:device:scene:0', about: {model: null}});
-            device.name = scene.name;
+                this._add({did, name, model: 'mi-scene', urn: 'urn:nook:device:scene:0', about: {model: null}});
+            device.name = name;
             device.scene ??= {running: false, ranAt: null};
             this._keep(device, {}, answered?.has(scene.homeId) ?? true);
         }
@@ -72,7 +75,7 @@ export class MiScenes extends SpecHome {
         const results = await Promise.allSettled(homes.map(({server, homeId, ownerId}) => this._home.guarded(async () =>
             (await this._cloud.scenes(server, {homeId, ownerId})).map(scene => ({
                 id: String(scene.scene_id),
-                name: scene.name || 'Scene',
+                name: scene.name ?? '',
                 server,
                 homeId,
                 ownerId,
@@ -94,6 +97,9 @@ export class MiScenes extends SpecHome {
 
     async _send(device) {
         const scene = this._scenes.get(device.did);
+        // Deleted in Mi Home while its card was open.
+        if (!scene)
+            throw new SpecError(`${device.name} is no longer in Mi Home`, 'gone');
         try {
             await this._home.guarded(() => this._cloud.runScene(scene.server, scene, scene.id), {extra: true});
         } catch (e) {

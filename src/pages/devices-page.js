@@ -22,7 +22,7 @@ import * as Shelly from '../lib/shelly.js';
 import * as Sonoff from '../lib/sonoff.js';
 import * as Tapo from '../lib/tapo.js';
 import {BRANDS, parseTvs} from '../lib/tv-home.js';
-import {CLOUD_AIRCONS, cachedDevices, deviceCount, findScrolled, hueDevices, renameButton, setGroupIcon} from './common.js';
+import {CLOUD_AIRCONS, cachedDevices, cachedScenes, deviceCount, findScrolled, hueDevices, renameButton, setGroupIcon} from './common.js';
 import {FoldGroup} from './fold.js';
 
 function iconToggle(icons, tooltip, active, onToggled) {
@@ -340,7 +340,8 @@ class DevicesPage extends Adw.PreferencesPage {
             room: entry.room ?? null,
             primary: {kind: 'switch', props: []},
         })));
-        const devices = arrange([...cachedDevices(this._settings.get_string('xiaomi-user-id')), ...conditioners, ...cameras, ...speakers, ...tvs, ...switches, ...shellies, ...ewelink, ...hue, ...hass, ...homekit, ...smartlife,
+        const xiaomi = this._settings.get_string('xiaomi-user-id');
+        const devices = arrange([...cachedDevices(xiaomi), ...cachedScenes(xiaomi), ...conditioners, ...cameras, ...speakers, ...tvs, ...switches, ...shellies, ...ewelink, ...hue, ...hass, ...homekit, ...smartlife,
             ...clouds], {
             pinned: this._list('pinned'),
             order: this._list('order'),
@@ -361,7 +362,7 @@ class DevicesPage extends Adw.PreferencesPage {
         const lightGroups = this._groups.length;
 
         const sources = [
-            ['mihome', _('Mi Home'), d => !d.did.includes(':')],
+            ['mihome', _('Mi Home'), d => !d.did.includes(':') || d.did.startsWith('miscene:')],
             ['gree', _('Air Conditioners'), d => /^(gree|midea|daikin):/.test(d.did)],
             ['tapo', _('Cameras'), d => d.did.startsWith('tapo:')],
             ['cast', _('Speakers'), d => d.did.startsWith('cast:')],
