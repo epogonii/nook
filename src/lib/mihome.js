@@ -28,6 +28,25 @@ const READINGS = [
 
 const BATCH = 20;
 
+// Their miot spec has only the light's on/off; brightness and colour go over miIO as
+// (brightness << 24) | rgb, 0 while off. Given to the card as two more properties.
+const RGB_GATEWAYS = ['lumi.gateway.v2', 'lumi.gateway.v3', 'lumi.gateway.mieu01'];
+const RGB_BRIGHTNESS = 101;
+const RGB_COLOR = 102;
+const isRgb = (device, piid) => RGB_GATEWAYS.includes(device.model) && [RGB_BRIGHTNESS, RGB_COLOR].includes(piid);
+
+function withRgb(services) {
+    return services.map(s => (s.name !== 'light' || s.properties.some(p => p.name === 'color') ? s : {
+        ...s,
+        properties: [
+            ...s.properties,
+            {piid: RGB_BRIGHTNESS, name: 'brightness', format: 'uint8', access: ['read', 'write'], unit: 'percentage',
+                range: [1, 100, 1]},
+            {piid: RGB_COLOR, name: 'color', format: 'uint32', access: ['read', 'write'], range: [1, 0xffffff, 1]},
+        ],
+    }));
+}
+
 // Pace requests to look like a phone opening Mi Home now and then, never a poller: full
 // reads at least READ_GAP apart, failures back off doubling up to MAX_BACKOFF, discovery
 // at most once per DISCOVER_GAP.
@@ -183,6 +202,8 @@ function pacingFor(userId) {
             backoff: READ_GAP,
             events: new Map(),
             lastEvents: new Map(),
+            // Gateway light as last seen on: get_rgb gives 0 while it is off.
+            lights: new Map(),
         });
     }
     return pacing.get(userId);
@@ -586,17 +607,22 @@ export class MiHome {
             return [];
         if (!this._services.has(device.urn))
             this._services.set(device.urn, await this._spec(device.urn));
-        return this._services.get(device.urn);
+        const services = this._services.get(device.urn);
+        return RGB_GATEWAYS.includes(device.model) ? withRgb(services) : services;
     }
 
-    async readProperties(device, props) {
-        if (props.length === 0)
+    async readProperties(device, asked) {
+        if (asked.length === 0)
             return new Map();
+        const rgb = asked.find(p => isRgb(device, p.piid));
+        const props = asked.filter(p => !isRgb(device, p.piid));
         // An offline-listed device can stall until timeout; flag it as extra so that
         // doesn't trigger backoff.
         return this._guarded(async () => {
             const values = new Map();
             let unsupported = 0;
+            if (rgb)
+                await this._readRgb(device, rgb.siid, values);
             for (let i = 0; i < props.length; i += BATCH) {
                 const batch = props.slice(i, i + BATCH).map(p => ({did: device.did, siid: p.siid, piid: p.piid}));
                 for (const r of await this._cloud.getProperties(device.server, batch) ?? []) {
@@ -610,6 +636,44 @@ export class MiHome {
             device.online = device.listed !== false && (values.size > 0 || device.unreadable);
             return values;
         }, {extra: device.listed === false});
+    }
+
+    async _readRgb(device, siid, values) {
+        let rgb;
+        try {
+            [rgb] = await this._cloud.call(device.server, `/home/rpc/${device.did}`, {method: 'get_rgb', params: []}) ?? [];
+        } catch (e) {
+            // The cloud's word about the device (offline, timed out) only leaves it unknown.
+            if (!(e instanceof XiaomiError) || e.code >= 400)
+                throw e;
+            console.debug(`nook: ${device.name}: get_rgb: ${e.message}`);
+            return;
+        }
+        if (typeof rgb === 'number' && rgb > 0)
+            this._pace.lights.set(device.did, {brightness: Math.floor(rgb / 2 ** 24), color: rgb & 0xffffff});
+        const light = this._pace.lights.get(device.did);
+        if (light) {
+            values.set(`${siid}/${RGB_BRIGHTNESS}`, light.brightness);
+            values.set(`${siid}/${RGB_COLOR}`, light.color);
+        }
+    }
+
+    _setRgb(device, piid, value) {
+        return this._guarded(async () => {
+            const light = {brightness: 100, color: 0xffffff, ...this._pace.lights.get(device.did)};
+            if (piid === RGB_BRIGHTNESS)
+                light.brightness = Math.min(100, Math.max(1, Math.round(value)));
+            else
+                light.color = value & 0xffffff || 0xffffff;
+            const [answer] = await this._cloud.call(device.server, `/home/rpc/${device.did}`,
+                {method: 'set_rgb', params: [light.brightness * 2 ** 24 + light.color]}) ?? [];
+            if (answer !== 'ok')
+                throw new DeviceError(`${device.name} did not take it`);
+            this._pace.lights.set(device.did, light);
+            // set_rgb also turns the light on.
+            device.values = device.primary.props.map((p, i) =>
+                (p.service === 'light' && p.name === 'on' ? true : device.values?.[i] ?? null));
+        });
     }
 
     async readEvents(device, keys) {
@@ -760,6 +824,8 @@ export class MiHome {
     }
 
     setProperty(device, siid, piid, value) {
+        if (isRgb(device, piid))
+            return this._setRgb(device, piid, value);
         return this._guarded(async () => {
             const [result] = await this._cloud.setProperties(device.server,
                 [{did: device.did, siid, piid, value}]);

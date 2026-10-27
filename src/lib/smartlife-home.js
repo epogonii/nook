@@ -6,7 +6,7 @@
 import Gio from 'gi://Gio';
 
 import {SmartLifeCloud, storeAccount} from './smartlife.js';
-import {RO, SpecError, SpecHome, WHITE, colorProp, layout, nearestColor, prop, rgbToHsv} from './spec-home.js';
+import {RO, SpecError, SpecHome, WHITE, colorProp, hsvToRgb, layout, prop, rgbToHsv} from './spec-home.js';
 
 // Product categories (Tuya's own short codes) by device type.
 const TYPES = {
@@ -247,7 +247,7 @@ function groupsOf(entry) {
                 if (codes.work_mode && s.status.get('work_mode') === 'white')
                     return WHITE;
                 const now = hsv(s);
-                return typeof now?.h === 'number' && typeof now?.s === 'number' ? nearestColor(now.h * 360 / hMax, now.s / sMax) : null;
+                return typeof now?.h === 'number' && typeof now?.s === 'number' ? hsvToRgb(now.h * 360 / hMax, now.s / sMax) : null;
             }, (v, s) => {
                 if (v === WHITE && codes.work_mode?.w)
                     return command('work_mode', 'white');

@@ -9,7 +9,7 @@ import GLib from 'gi://GLib';
 
 import {HueBridge, applyEvents, secretService} from './hue.js';
 import * as Secrets from './secrets.js';
-import {RO, RW, SpecError, SpecHome, WHITE, clamp, colorProp, layout, nearestRgb, prop, rgbToXy, unixTime, xyToRgb}
+import {RO, RW, SpecError, SpecHome, WHITE, clamp, colorProp, layout, prop, rgbToXy, unixTime, xyToRgb}
     from './spec-home.js';
 
 const kelvin = mirek => Math.round(1e6 / mirek);
@@ -57,7 +57,7 @@ function lightGroups(entry) {
             if (white(s.light))
                 return WHITE;
             const xy = s.light.color?.xy;
-            return xy ? nearestRgb(xyToRgb(xy.x, xy.y)) : null;
+            return xy ? xyToRgb(xy.x, xy.y) : null;
         }, v => {
             if (v === WHITE && entry.ct)
                 return write({color_temperature: {mirek: clamp(NEUTRAL, low, high)}});

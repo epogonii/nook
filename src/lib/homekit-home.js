@@ -5,7 +5,7 @@
 
 import * as Secrets from './secrets.js';
 import {HapHost, UNREACHABLE, secretService} from './homekit.js';
-import {RW, SpecError, SpecHome, WHITE, clamp, colorProp, layout, nearestColor, prop, rgbToHsv} from './spec-home.js';
+import {RW, SpecError, SpecHome, WHITE, clamp, colorProp, hsvToRgb, layout, prop, rgbToHsv} from './spec-home.js';
 
 export {parseHosts} from './homekit.js';
 
@@ -96,7 +96,9 @@ function serviceProps(aid, service) {
         if (colored) {
             props.push([colorProp(hue.iid), s => {
                 const [h, sat] = [number(get(hue)(s)), number(get(saturation)(s))];
-                return h === null || sat === null ? null : nearestColor(h, sat / 100);
+                if (h === null || sat === null)
+                    return null;
+                return white(s) ? WHITE : hsvToRgb(h, sat / 100);
             }, v => {
                 if (v === WHITE && writable(ct))
                     return put(ct, clamp(250, ct.min ?? 140, ct.max ?? 500));

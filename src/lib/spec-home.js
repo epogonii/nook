@@ -52,10 +52,10 @@ export function unixTime(text) {
     return GLib.DateTime.new_from_iso8601(text, null)?.to_unix() ?? null;
 }
 
-// A light shows one of these; any other colour reads as the nearest. White is the
-// white (colour temperature) mode where a light has one.
+// Quick picks beside the colour wheel. White is the white (colour temperature) mode
+// where a light has one.
 export const WHITE = 0xffffff;
-const PRESETS = [
+export const PRESETS = [
     ['White', WHITE],
     ['Red', 0xff0000],
     ['Orange', 0xff8000],
@@ -90,6 +90,14 @@ export function rgbToHsv(rgb) {
     else if (span > 0)
         h = 60 * ((r - g) / span + 4);
     return [(h + 360) % 360, max > 0 ? span / max : 0, max];
+}
+
+export function hsvToRgb(h, s, v = 1) {
+    const channel = n => {
+        const k = (n + h / 60) % 6;
+        return v - v * s * clamp(Math.min(k, 4 - k), 0, 1);
+    };
+    return pack([channel(5), channel(3), channel(1)]);
 }
 
 // Hue's own conversion (wide gamut, D65); the bridge clamps to each lamp's gamut.
