@@ -18,6 +18,7 @@ ui/card-vacuum.js
 ui/card.js
 ui/chart.js
 ui/climate.js
+ui/color.js
 ui/drop.js
 ui/events.js
 ui/hero.js

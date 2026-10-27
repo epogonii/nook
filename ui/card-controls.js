@@ -166,7 +166,7 @@ export class ControlsCard {
             ['gateway', 'guard-mode', _('Guard'), 'shield'],
         ]) {
             const f = found(serviceName, name);
-            if (f?.prop.format !== 'bool' || !f.prop.access.includes('write'))
+            if (f?.prop.format !== 'bool' || !f.prop.access.includes('write') || covered.has(f.key))
                 continue;
             covered.add(f.key);
             tiles.push({

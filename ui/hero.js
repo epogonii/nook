@@ -8,7 +8,9 @@ import {gettext as _} from 'resource:///org/gnome/shell/extensions/extension.js'
 
 import * as Glyphs from '../lib/glyphs.js';
 import * as Scenes from '../lib/scenes.js';
+import {WHITE} from '../lib/spec-home.js';
 import {climateLook, climateMode} from './climate.js';
+import {colorName, rgbOf} from './color.js';
 import {whenText} from './events.js';
 import {BEACON_FRESH, beaconOf, eventText, kettleStatus, liveText, onlyStops, playingNow, stateText} from './rows.js';
 import {booleanText, choiceText, deviceType, formatValue, numberFormat, statusWorking} from './text.js';
@@ -351,16 +353,18 @@ export function heroOf(device, services, values) {
         const brightness = find('brightness')?.value;
         const kelvin = find('color-temperature')?.value;
         const rgb = find('color')?.value;
+        const colored = typeof rgb === 'number' && rgb > 0 && rgb !== WHITE && !(kelvin > 0);
         let color = [1, 0.84, 0.55];
         if (typeof kelvin === 'number' && kelvin > 0)
             color = Scenes.kelvinColor(kelvin);
         else if (typeof rgb === 'number' && rgb > 0)
-            color = [(rgb >> 16) & 255, (rgb >> 8) & 255, rgb & 255].map(v => v / 255);
+            color = rgbOf(rgb);
         hero.state = {on, color, brightness: typeof brightness === 'number' ? brightness : 100};
-        hero.color = on ? Scenes.mix([0.97, 0.66, 0.26], color, 0.3) : RESTING;
+        hero.color = on ? Scenes.mix(color, [0.97, 0.66, 0.26], 0.2) : RESTING;
         hero.big = on ? _('On') : _('Off');
         if (on) {
             hero.small = [
+                colored ? colorName(rgb) : null,
                 typeof brightness === 'number' ? _('Brightness %s %').replace('%s', brightness) : null,
                 typeof kelvin === 'number' && kelvin > 0 ? `${kelvin} K` : null,
             ].filter(Boolean).join(' · ') || null;
@@ -420,9 +424,16 @@ export function heroOf(device, services, values) {
     }
     case 'gateway': {
         const light = device.values?.[0] === true;
-        hero.state = {light};
+        const rgb = find('color')?.value;
+        const brightness = find('brightness')?.value;
+        const known = typeof rgb === 'number' && rgb > 0;
+        hero.state = known ? {light, color: rgbOf(rgb)} : {light};
         hero.big = light ? _('Light on') : _('Light off');
-        hero.color = light ? [0.97, 0.62, 0.26] : [0.45, 0.5, 0.58];
+        hero.color = light ? (known ? Scenes.mix(rgbOf(rgb), [0.97, 0.66, 0.26], 0.2) : [0.97, 0.62, 0.26]) : [0.45, 0.5, 0.58];
+        if (light && known) {
+            hero.small = [colorName(rgb),
+                typeof brightness === 'number' ? _('Brightness %s %').replace('%s', brightness) : null].filter(Boolean).join(' · ');
+        }
         break;
     }
     case 'repeater': {

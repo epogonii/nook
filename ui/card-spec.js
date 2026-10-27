@@ -9,6 +9,8 @@ import {gettext as _, pgettext} from 'resource:///org/gnome/shell/extensions/ext
 import * as PopupMenu from 'resource:///org/gnome/shell/ui/popupMenu.js';
 
 import * as Scenes from '../lib/scenes.js';
+import {WHITE} from '../lib/spec-home.js';
+import {ColorWheel, paintOf, rgbOf, swatchRow} from './color.js';
 import {sensorKind, whenText} from './events.js';
 import {ALARM, freeze, heroOf, wordLabel} from './hero.js';
 import {NUMBER_FORMATS, humanize} from './humanize.js';
@@ -136,6 +138,12 @@ function ownSwitch(device) {
     return device.primary.kind === 'switch' && !(prop.service === 'light' && deviceType(device) !== 'light');
 }
 
+// The colour wheel's light has a switch of its own when it isn't the device's (a socket's ring).
+function lightSwitch(device, {service, on}) {
+    const [primary] = device.primary.kind === 'switch' ? device.primary.props : [];
+    return on && !(primary?.siid === service.siid && primary?.piid === on.piid) ? on : null;
+}
+
 const SLIDER_SETTLE = 700;
 
 export class SpecCard {
@@ -146,10 +154,12 @@ export class SpecCard {
         const h = this._hero;
         // Keys already shown by the kind's own controls or the hero power button.
         const covered = new Set();
-        if (h.power) {
+        if (h.power || (h.wheel && !lightSwitch(device, h.paint) && device.primary.kind === 'switch')) {
             const [prop] = device.primary.props;
             covered.add(`${prop.siid}/${prop.piid}`);
         }
+        if (h.wheel)
+            this._addColorControls(device, h, values, covered);
         // Vacuum, fryer and gateway controls call Mi Home itself (maps, histories).
         const mi = home === this._home;
         if (mi && deviceType(device) === 'vacuum' && !device.unreadable)
@@ -383,15 +393,22 @@ export class SpecCard {
             const on = device.values?.[0] === true;
             this._cardWrite(device, () => device.source.setSwitch(device, !on)).catch(logError);
         };
-        if (ownSwitch(device)) {
+        h.paint = isBluetooth(device) ? null : paintOf(services);
+        if (ownSwitch(device) && !h.paint) {
             h.power = this._addRoundButton(top, 'system-shutdown-symbolic', _('Power'), toggle);
             h.power.add_style_class_name('nook-power');
         }
         h.box.add_child(top);
 
         h.middle = new St.BoxLayout({...VERTICAL, style_class: 'nook-stage-middle'});
-        h.scene = new Scene('glyph', 'nook-stage-scene');
-        if (h.power) {
+        h.scene = h.paint ? null : new Scene('glyph', 'nook-stage-scene');
+        if (h.paint) {
+            const switched = lightSwitch(device, h.paint) || device.primary.kind === 'switch';
+            h.wheel = new ColorWheel(value => this._paintWrite(device, h, value),
+                switched ? () => this._cardWrite(device, () => this._paintSwitch(device, h, !this._lit(device, h))).catch(logError)
+                    : null);
+            h.middle.add_child(h.wheel);
+        } else if (h.power) {
             h.middle.add_child(this._powerScene(h.scene, h.power));
         } else if (device.primary.kind === 'switch') {
             // A light that isn't the device's power, as on a gateway: no power button, but
@@ -439,7 +456,7 @@ export class SpecCard {
         const h = this._hero;
         if (!h)
             return;
-        if (!beside || !(h.big.visible || h.small.visible || h.wait.visible)) {
+        if (!beside || h.wheel || !(h.big.visible || h.small.visible || h.wait.visible)) {
             h.controls.add_child(h.facts);
             return;
         }
@@ -517,8 +534,70 @@ export class SpecCard {
         h.box.style = 'background-gradient-direction: vertical; ' +
             `background-gradient-start: rgb(${shade(0.5)}); background-gradient-end: rgb(${shade(0.24)});`;
 
+        if (h.wheel) {
+            const {service, color} = h.paint;
+            h.wheel.show(h.values.get(`${service.siid}/${color.piid}`), this._lit(device, h), !offline);
+            return;
+        }
         h.scene.setScene(hero.scene, hero.state);
         h.scene.run(Scenes.moves(hero.scene, hero.state) && this._menu.isOpen);
+    }
+
+    _lit(device, h) {
+        const own = lightSwitch(device, h.paint);
+        if (own)
+            return h.values.get(`${h.paint.service.siid}/${own.piid}`) === true;
+        return device.values?.[0] === true;
+    }
+
+    _paintSwitch(device, h, on) {
+        const own = lightSwitch(device, h.paint);
+        if (own)
+            return device.source.setProperty(device, h.paint.service.siid, own.piid, on);
+        return device.source.setSwitch(device, on);
+    }
+
+    // A picked colour turns the light on too, as in Mi Home.
+    _paintWrite(device, h, value) {
+        const {service, color, temperature} = h.paint;
+        const home = device.source;
+        // Mi Home lights have no white sentinel; their white is a colour temperature.
+        const kelvin = value === WHITE && !color.choices?.length && temperature
+            ? Math.min(temperature.range[1], Math.max(temperature.range[0], 4000)) : null;
+        this._cardWrite(device, async () => {
+            if (kelvin)
+                await home.setProperty(device, service.siid, temperature.piid, kelvin);
+            else
+                await home.setProperty(device, service.siid, color.piid, value);
+            if (!this._lit(device, h))
+                await this._paintSwitch(device, h, true);
+        }).catch(logError);
+    }
+
+    _addColorControls(device, h, values, covered) {
+        const {service, color, brightness, temperature} = h.paint;
+        const home = device.source;
+        const key = prop => `${service.siid}/${prop.piid}`;
+        covered.add(key(color));
+        const own = lightSwitch(device, h.paint);
+        if (own)
+            covered.add(key(own));
+        const value = values.get(key(color));
+        this._stageAdd(swatchRow(value, preset => this._paintWrite(device, h, preset)));
+        const kelvin = temperature ? values.get(key(temperature)) : null;
+        let tint = [1, 0.84, 0.55];
+        if (typeof kelvin === 'number' && kelvin > 0)
+            tint = Scenes.kelvinColor(kelvin);
+        else if (typeof value === 'number' && value > 0 && value !== WHITE)
+            tint = rgbOf(value);
+        for (const [prop, paint] of [[brightness, () => [tint]], [temperature, () => temperature.range.slice(0, 2).map(Scenes.kelvinColor)]]) {
+            if (!prop || !values.has(key(prop)))
+                continue;
+            covered.add(key(prop));
+            const write = v => this._cardWrite(device, () => home.setProperty(device, service.siid, prop.piid, v)).catch(logError);
+            this._stageAdd(this._sliderRow(specTitle(service, prop, deviceType(device)), prop, values.get(key(prop)), write,
+                true, null, paint()));
+        }
     }
 
     _syncControls() {
@@ -624,7 +703,7 @@ export class SpecCard {
         return row;
     }
 
-    _sliderRow(title, prop, value, write, steps = false, lead = null) {
+    _sliderRow(title, prop, value, write, steps = false, lead = null, paint = null) {
         const [min, max, step] = prop.range;
         const row = new St.BoxLayout({...VERTICAL, style_class: 'nook-card-row'});
         const top = new St.BoxLayout();
@@ -639,6 +718,8 @@ export class SpecCard {
         row.add_child(top);
         const slider = new CardSlider(typeof value === 'number' ? (value - min) / (max - min) : 0);
         slider.x_expand = true;
+        if (paint)
+            slider.setPaint(paint);
         const pick = () => {
             const raw = min + slider.value * (max - min);
             return Math.min(max, Math.max(min, min + Math.round((raw - min) / (step || 1)) * (step || 1)));

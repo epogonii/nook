@@ -28,6 +28,58 @@ class CardSlider extends Slider.Slider {
     vfunc_scroll_event() {
         return Clutter.EVENT_PROPAGATE;
     }
+
+    // [[r, g, b]] fills the done part in that colour; more colours paint the whole bar
+    // as a gradient, with the colour under the handle in its middle.
+    setPaint(colors) {
+        this._paint = colors;
+        const [r, g, b] = colors[0].map(v => Math.round(v * 255));
+        this.style = colors.length === 1 ? `-barlevel-active-background-color: rgb(${r}, ${g}, ${b});` : null;
+        this.queue_repaint();
+    }
+
+    vfunc_repaint() {
+        if (!(this._paint?.length > 1)) {
+            super.vfunc_repaint();
+            return;
+        }
+        const cr = this.get_context();
+        try {
+            const node = this.get_theme_node();
+            const [width, height] = this.get_surface_size();
+            const scale = St.ThemeContext.get_for_stage(global.stage).scale_factor || 1;
+            const bar = node.get_length('-barlevel-height') || 6;
+            const radius = Math.round(2 * node.get_length('-slider-handle-radius')) / 2 || 10;
+            const rtl = this.get_text_direction() === Clutter.TextDirection.RTL;
+            const share = this.value / (this.maximum_value || 1);
+            const x = radius + (width - 2 * radius) * (rtl ? 1 - share : share);
+            const y = height / 2;
+            const colors = rtl ? [...this._paint].reverse() : this._paint;
+            const gradient = new Cairo.LinearGradient(radius, 0, width - radius, 0);
+            colors.forEach((color, i) => gradient.addColorStopRGB(i / (colors.length - 1), ...color));
+            cr.setLineCap(Cairo.LineCap.ROUND);
+            cr.setLineWidth(bar);
+            cr.setSource(gradient);
+            cr.moveTo(radius, y);
+            cr.lineTo(width - radius, y);
+            cr.stroke();
+
+            const step = share * (this._paint.length - 1);
+            const at = Math.min(Math.floor(step), this._paint.length - 2);
+            const under = Scenes.mix(this._paint[at], this._paint[at + 1], step - at);
+            cr.setSourceRGBA(0, 0, 0, 0.25);
+            cr.arc(x, y + scale, radius, 0, 2 * Math.PI);
+            cr.fill();
+            cr.setSourceRGB(1, 1, 1);
+            cr.arc(x, y, radius, 0, 2 * Math.PI);
+            cr.fill();
+            cr.setSourceRGB(...under);
+            cr.arc(x, y, radius * 0.55, 0, 2 * Math.PI);
+            cr.fill();
+        } finally {
+            cr.$dispose();
+        }
+    }
 });
 
 export const TemperatureSlider = GObject.registerClass(

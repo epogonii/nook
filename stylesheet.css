@@ -414,6 +414,51 @@
 .nook-stage-scene {
   height: 104px;
 }
+.nook-wheel {
+  width: 208px;
+  height: 208px;
+}
+.nook-wheel-power {
+  width: 64px;
+  height: 64px;
+  border-radius: 999px;
+  color: #ffffff;
+  background-color: #2c2c32;
+  box-shadow: 0 3px 10px rgba(0, 0, 0, 0.35);
+}
+.nook-wheel-power:hover,
+.nook-wheel-power:focus {
+  background-color: #3a3a42;
+}
+.nook-wheel-power:checked {
+  color: #1c1c21;
+  background-color: #ffffff;
+}
+.nook-wheel-power .nook-glyph {
+  width: 24px;
+  height: 24px;
+}
+.nook-swatches {
+  padding: 2px 0;
+}
+.nook-swatch {
+  width: 30px;
+  height: 30px;
+  border-radius: 999px;
+  border: 2px solid transparent;
+}
+.nook-swatch:hover,
+.nook-swatch:focus {
+  border-color: rgba(255, 255, 255, 0.45);
+}
+.nook-swatch:checked {
+  border-color: #ffffff;
+}
+.nook-swatch-dot {
+  width: 22px;
+  height: 22px;
+  border-radius: 999px;
+}
 .nook-stage-beside .nook-stage-middle {
   spacing: 12px;
 }

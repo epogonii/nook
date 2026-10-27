@@ -487,7 +487,7 @@ class NookButton extends PanelMenu.Button {
         if (this._climate?.nudging)
             GLib.source_remove(this._climate.nudging);
         this._climate?.scene.run(false);
-        this._hero?.scene.run(false);
+        this._hero?.scene?.run(false);
         this._forgetMedia();
         this._forgetMap();
         this._card = null;
@@ -544,7 +544,7 @@ class NookButton extends PanelMenu.Button {
         this._climate = null;
         this._tvCard?.scene.run(false);
         this._tvCard = null;
-        this._hero?.scene.run(false);
+        this._hero?.scene?.run(false);
         this._hero = null;
         this._forgetMedia();
         this._forgetMap();
