@@ -18,6 +18,9 @@ const ONVIF_PORT = 2020;
 // Back off after a refused login: each try on a locked account restarts its lockout.
 const REFUSED_WAIT = 30 * 60 * 1000;
 const REACH_TIMEOUT = 4;
+// A camera gone from its address may have a new one from DHCP: WS-Discovery finds it
+// by id, at most this often.
+const RELOCATE_GAP = 10 * 60 * 1000;
 
 const encoder = new TextEncoder();
 const decoder = new TextDecoder();
@@ -168,6 +171,9 @@ export class TapoHome {
             Object.defineProperty(device, 'source', {value: this, enumerable: false});
             return device;
         });
+        this._nextRelocate = 0;
+        // Called with [{id, ip, xaddr}] of cameras found at a new address.
+        this.onMoved = null;
     }
 
     abort() {
@@ -181,7 +187,29 @@ export class TapoHome {
             device.online = device.test || await reach(address, this._cancellable) ||
                 await reach(address, this._cancellable);
         }));
+        if (this.devices.some(d => d.online === false) && Date.now() >= this._nextRelocate) {
+            this._nextRelocate = Date.now() + RELOCATE_GAP;
+            await this._relocate().catch(e => console.debug(`nook: camera discovery: ${e.message}`));
+        }
         return this.devices.length > 0;
+    }
+
+    async _relocate() {
+        const found = new Map((await discover(3000)).map(camera => [camera.id, camera]));
+        const moved = [];
+        for (const device of this.devices) {
+            const camera = found.get(device.id);
+            if (device.online !== false || !camera || camera.ip === device.ip || this._cancellable.is_cancelled())
+                continue;
+            device.ip = camera.ip;
+            device.about.ip = camera.ip;
+            device.xaddr = camera.xaddr ?? device.xaddr;
+            device.streams = undefined;
+            device.online = await reach(this._address(device), this._cancellable);
+            moved.push({id: device.id, ip: device.ip, xaddr: device.xaddr});
+        }
+        if (moved.length > 0 && !this._cancellable.is_cancelled())
+            this.onMoved?.(moved);
     }
 
     _address(device) {
