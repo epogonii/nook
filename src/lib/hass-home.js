@@ -163,6 +163,10 @@ function controlProps(entity, attributes, fahrenheit) {
         if (has(attributes, 16))
             actions.push([4, 'start-charge', () => call('return_to_base')]);
         break;
+    case 'scene':
+    case 'script':
+        actions.push([1, 'run-scene', () => call('turn_on')]);
+        break;
     case 'media_player':
         if (has(attributes, 128) && has(attributes, 256)) {
             props.push([prop(1, 'on', 'bool', RW), s => (state(s) && state(s).s !== 'unavailable' ? !['off', 'standby'].includes(state(s).s) : null),
@@ -224,6 +228,16 @@ function groupsOf(entry) {
     if (readings.length > 0)
         groups.push([3, 'sensor', readings]);
     return groups;
+}
+
+// A scene's state is when it last ran; a script is on while it runs.
+function sceneOf(id, state) {
+    const script = id.startsWith('script.');
+    const time = Date.parse((script ? state?.a?.last_triggered : state?.s) ?? '');
+    return {
+        running: script && state?.s === 'on',
+        ranAt: Number.isFinite(time) ? Math.floor(time / 1000) : null,
+    };
 }
 
 export class HassHome extends SpecHome {
@@ -383,6 +397,8 @@ export class HassHome extends SpecHome {
             const lead = this._entries.get(device.did).entities[0].id;
             const state = this._entities.get(lead);
             this._keep(device, this._entities, Boolean(state) && state.s !== 'unavailable');
+            if (device.primary.kind === 'scene')
+                device.scene = sceneOf(lead, state);
         }
     }
 

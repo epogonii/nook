@@ -81,11 +81,11 @@ const short = urn => urn?.split(':')[3] ?? '';
 
 const propKey = p => `${p.did}/${p.siid}/${p.piid}`;
 
-function cacheFile(...parts) {
+export function cacheFile(...parts) {
     return Gio.File.new_for_path(GLib.build_filenamev([GLib.get_user_cache_dir(), 'nook', ...parts]));
 }
 
-async function readJson(file) {
+export async function readJson(file) {
     try {
         const [contents] = await file.load_contents_async(null);
         return JSON.parse(decoder.decode(contents));
@@ -97,7 +97,7 @@ async function readJson(file) {
 }
 
 // Owner-only: the device list holds IP addresses, rooms and home names.
-async function writeJson(file, data) {
+export async function writeJson(file, data) {
     GLib.mkdir_with_parents(file.get_parent().get_path(), 0o700);
     await file.replace_contents_bytes_async(new GLib.Bytes(encoder.encode(JSON.stringify(data))),
         null, false, Gio.FileCreateFlags.REPLACE_DESTINATION | Gio.FileCreateFlags.PRIVATE, null);
@@ -489,6 +489,11 @@ export class MiHome {
     // queue behind the ones a card or a tap waits on.
     _guarded(task, {extra = false, background = false} = {}) {
         return this._inTurn(() => this._attempt(task, extra), {background});
+    }
+
+    // Other calls for this account (its scenes) wait their turn and keep to the pacing.
+    guarded(task, options) {
+        return this._guarded(task, options);
     }
 
     // The slot passes straight to the next in line, so nothing slips in between.

@@ -385,6 +385,27 @@ export class XiaomiCloud {
         return homes;
     }
 
+    // The manual scenes of a home, the ones the app runs with a tap (get_type 2).
+    async scenes(server, home) {
+        const result = await this.call(server, '/appgateway/miot/appsceneservice/AppSceneService/GetSimpleSceneList', {
+            app_version: 12,
+            get_type: 2,
+            home_id: String(home.homeId),
+            owner_uid: Number(home.ownerId),
+        });
+        return result?.manual_scene_info_list ?? [];
+    }
+
+    runScene(server, home, sceneId) {
+        return this.call(server, '/appgateway/miot/appsceneservice/AppSceneService/NewRunScene', {
+            scene_id: sceneId,
+            scene_type: 2,
+            phone_id: 'null',
+            home_id: String(home.homeId),
+            owner_uid: Number(home.ownerId),
+        });
+    }
+
     async devices(server, home) {
         const result = await this.call(server, '/v2/home/home_device_list', {
             home_owner: Number(home.ownerId),
