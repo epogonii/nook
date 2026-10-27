@@ -1,9 +1,13 @@
 // SPDX-License-Identifier: GPL-2.0-or-later
 
 // Hue lights and sensors, read from their bridges. prefs keeps the lists; the key of
-// each bridge is read from the keyring on first use.
+// each bridge is read from the keyring on first use. After the first read an event
+// stream per bridge keeps its resources current between full reads.
 
-import {HueBridge, secretService} from './hue.js';
+import Gio from 'gi://Gio';
+import GLib from 'gi://GLib';
+
+import {HueBridge, applyEvents, secretService} from './hue.js';
 import * as Secrets from './secrets.js';
 import {RO, RW, SpecError, SpecHome, WHITE, clamp, colorProp, layout, nearestRgb, prop, rgbToXy, unixTime, xyToRgb}
     from './spec-home.js';
@@ -11,6 +15,16 @@ import {RO, RW, SpecError, SpecHome, WHITE, clamp, colorProp, layout, nearestRgb
 const kelvin = mirek => Math.round(1e6 / mirek);
 // 4000 K: the white a colour light takes when White is picked.
 const NEUTRAL = 250;
+// Seconds before a broken event stream is opened again, doubling up to MAX_RETRY.
+const RETRY = 5;
+const MAX_RETRY = 300;
+
+function report(e) {
+    if (e instanceof SpecError || e instanceof GLib.Error)
+        console.debug(`nook: Hue: ${e.message}`);
+    else
+        logError(e);
+}
 
 function typeOf(entry) {
     if (entry.kind === 'plug')
@@ -88,10 +102,16 @@ function sensorGroups(entry) {
 export class HueHome extends SpecHome {
     constructor(bridges, entries) {
         super('Hue', {gap: 2000, fresh: 2000, assumed: 3000});
-        this._bridges = new Map(bridges.map(bridge => [bridge.id, {bridge, client: null, loading: null}]));
+        // resources: id to resource, as last read and updated by the stream. synced: no
+        // change can have been missed since. stream: the open stream's number, 0 if none.
+        this._bridges = new Map(bridges.map(bridge => [bridge.id, {
+            bridge, client: null, loading: null, resources: null, fetching: null, held: null,
+            synced: false, listening: false, stream: 0, streams: 0, writes: 0, failures: 0, retry: 0,
+        }]));
         this._entries = new Map();
         this._layouts = new Map();
         this._aborted = false;
+        this.onChange = null;
         for (const entry of entries.filter(e => this._bridges.has(e.bridge))) {
             const did = `hue:${entry.id}`;
             if (this._entries.has(did))
@@ -111,8 +131,12 @@ export class HueHome extends SpecHome {
 
     abort() {
         this._aborted = true;
-        for (const slot of this._bridges.values())
+        for (const slot of this._bridges.values()) {
             slot.client?.abort();
+            if (slot.retry)
+                GLib.source_remove(slot.retry);
+            slot.retry = 0;
+        }
     }
 
     _layout(device) {
@@ -149,25 +173,112 @@ export class HueHome extends SpecHome {
             throw failed[0].reason;
     }
 
+    _mine(id) {
+        return this.devices.filter(d => this._entries.get(d.did).bridge === id);
+    }
+
     async _read(id) {
-        const mine = this.devices.filter(d => this._entries.get(d.did).bridge === id);
-        let data;
         try {
-            data = await (await this._client(id)).resources();
+            if (!this._bridges.get(id).synced)
+                await this._fetch(id);
         } catch (e) {
-            for (const device of mine)
+            for (const device of this._mine(id))
                 device.online = false;
             this._troubled(id, e);
             throw e;
         }
-        const byId = new Map(data.map(r => [r.id, r]));
+        this._apply(id);
+    }
+
+    // One full read at a time per bridge; what the stream brings meanwhile is applied after it.
+    _fetch(id) {
+        const slot = this._bridges.get(id);
+        slot.fetching ??= (async () => {
+            const client = await this._client(id);
+            const {stream, writes} = slot;
+            slot.held = [];
+            try {
+                const data = await client.resources();
+                slot.resources = new Map(data.map(r => [r.id, r]));
+                for (const events of slot.held)
+                    applyEvents(slot.resources, events);
+                // Only a stream open through the whole read has everything that came after
+                // it, and a write made meanwhile may postdate the answer.
+                slot.synced = stream !== 0 && stream === slot.stream && writes === slot.writes;
+            } finally {
+                slot.held = null;
+            }
+            // Not before the bridge took the key: a refused one would get two requests per read.
+            this._listen(id, client).catch(logError);
+        })().finally(() => {
+            slot.fetching = null;
+        });
+        return slot.fetching;
+    }
+
+    // quiet: reopened after a silent stream timed out, which most likely missed nothing.
+    async _listen(id, client, quiet = false) {
+        const slot = this._bridges.get(id);
+        if (slot.listening || slot.retry || this._aborted)
+            return;
+        slot.listening = true;
+        let timedOut = false;
+        try {
+            await client.listen(() => {
+                slot.stream = ++slot.streams;
+                // What changed while no stream was open only a full read brings.
+                if (!quiet)
+                    this._read(id).catch(report).finally(() => this.onChange?.());
+            }, events => {
+                slot.failures = 0;
+                this._heard(id, events);
+            });
+        } catch (e) {
+            timedOut = e instanceof GLib.Error && e.matches(Gio.IOErrorEnum, Gio.IOErrorEnum.TIMED_OUT);
+            report(e);
+            this._troubled(id, e);
+        } finally {
+            slot.listening = false;
+            slot.stream = 0;
+            slot.synced = false;
+        }
+        if (this._aborted || slot.client !== client)
+            return;
+        if (timedOut) {
+            this._listen(id, client, true).catch(logError);
+            return;
+        }
+        slot.retry = GLib.timeout_add_seconds(GLib.PRIORITY_LOW, Math.min(RETRY * 2 ** slot.failures++, MAX_RETRY), () => {
+            slot.retry = 0;
+            this._listen(id, client).catch(logError);
+            return GLib.SOURCE_REMOVE;
+        });
+    }
+
+    _heard(id, events) {
+        const slot = this._bridges.get(id);
+        if (this._aborted)
+            return;
+        if (slot.held) {
+            slot.held.push(events);
+            return;
+        }
+        if (!slot.resources)
+            return;
+        applyEvents(slot.resources, events);
+        this._apply(id);
+        this.onChange?.();
+    }
+
+    _apply(id) {
+        const byId = this._bridges.get(id).resources;
         const owned = new Map();
-        for (const r of data.filter(each => each.owner?.rid)) {
+        for (const r of [...byId.values()].filter(each => each.owner?.rid)) {
             if (!owned.has(r.owner.rid))
                 owned.set(r.owner.rid, {});
             owned.get(r.owner.rid)[r.type] ??= r;
         }
-        for (const device of mine) {
+        for (const device of this._mine(id)) {
             const entry = this._entries.get(device.did);
             const light = entry.kind === 'sensor' ? null : byId.get(entry.id);
             const owner = entry.kind === 'sensor' ? entry.id : light?.owner?.rid;
@@ -195,6 +306,10 @@ export class HueHome extends SpecHome {
             this._troubled(id, e);
             throw e;
         }
+        // A stream can die without an error; the next look reads the write back in full.
+        const slot = this._bridges.get(id);
+        slot.writes++;
+        slot.synced = false;
     }
 
     // The keyring is read again next time: pairing again in the settings may have fixed it.
@@ -205,6 +320,10 @@ export class HueHome extends SpecHome {
         slot.client?.abort();
         slot.client = null;
         slot.loading = null;
+        slot.synced = false;
+        if (slot.retry)
+            GLib.source_remove(slot.retry);
+        slot.retry = 0;
         this._expired();
     }
 }
