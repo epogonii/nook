@@ -11,7 +11,7 @@
     "51"
   ],
   "url": "https://github.com/epogonii/nook",
-  "version-name": "1.1.2",
+  "version-name": "1.2",
   "settings-schema": "org.gnome.shell.extensions.nook",
   "gettext-domain": "nook",
   "session-modes": [
