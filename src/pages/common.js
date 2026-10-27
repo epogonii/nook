@@ -43,6 +43,7 @@ const GROUP_LOOKS = {
     cast: Glyphs.kindOf('speaker'),
     tv: Glyphs.kindOf(null, null, 'tv'),
     sonoff: Glyphs.kindOf(null, null, 'sonoff'),
+    shelly: ['rocker', [0.16, 0.48, 0.78]],
     hue: Glyphs.kindOf('light'),
     hass: ['hub', [0.09, 0.74, 0.95]],
     homekit: ['home', [0.98, 0.62, 0.2]],
