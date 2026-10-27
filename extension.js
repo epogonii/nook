@@ -18,6 +18,9 @@ import {NookButton} from './ui/menu.js';
 import {beacons} from './ui/rows.js';
 import {clearWords, readSetting} from './ui/text.js';
 
+// ms without network-changed before connections are renewed.
+const NETWORK_SETTLE = 3000;
+
 const NookToggle = GObject.registerClass(
 class NookToggle extends QuickSettings.QuickMenuToggle {
     _init(path) {
@@ -73,6 +76,8 @@ export default class NookExtension extends Extension {
             'changed::panel-index', placeInPanel,
             this);
         Main.sessionMode.connectObject('updated', () => this._syncButton(), this);
+        this._networking = 0;
+        Gio.NetworkMonitor.get_default().connectObject('network-changed', () => this._networkChanged(), this);
         this._syncButton();
     }
 
@@ -120,6 +125,22 @@ export default class NookExtension extends Extension {
         this._indicator = null;
     }
 
+    // A new network leaves open sockets on a dead connection and the gateway alerts in
+    // the old interface's multicast group. network-changed comes in bursts while a
+    // connection comes up, so this waits for it to settle.
+    _networkChanged() {
+        if (this._networking)
+            GLib.source_remove(this._networking);
+        this._networking = GLib.timeout_add(GLib.PRIORITY_DEFAULT, NETWORK_SETTLE, () => {
+            this._networking = 0;
+            if (Gio.NetworkMonitor.get_default().network_available) {
+                this._alerts.start();
+                this._button?.reconnect();
+            }
+            return GLib.SOURCE_REMOVE;
+        });
+    }
+
     // Stays enabled in unlock-dialog only for gateway leak/smoke alerts while locked;
     // the menu, and with it every cloud call, is dropped on lock and rebuilt on unlock.
     disable() {
@@ -127,6 +148,10 @@ export default class NookExtension extends Extension {
         if (this._placing)
             GLib.source_remove(this._placing);
         this._placing = 0;
+        if (this._networking)
+            GLib.source_remove(this._networking);
+        this._networking = 0;
+        Gio.NetworkMonitor.get_default().disconnectObject(this);
         Main.sessionMode.disconnectObject(this);
         this._settings?.disconnectObject(this);
         this._dropButton();

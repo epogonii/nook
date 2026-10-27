@@ -454,6 +454,12 @@ export class MenuRead {
         });
     }
 
+    // The network changed: the sources that keep a connection open start a new one.
+    reconnect() {
+        this._hass?.reconnect();
+        this._hue?.reconnect();
+    }
+
     // The top bar stays in view under an open card.
     _syncTiles(source) {
         if (!this._sources().includes(source))
