@@ -164,6 +164,12 @@ export function stateText(device) {
     if (primary.kind === 'camera')
         return _('Online');
 
+    if (primary.kind === 'scene') {
+        if (device.scene?.running || device.source?.isRunning?.(device))
+            return _('Running…');
+        return device.scene?.ranAt ? _('Ran · %s').replace('%s', shortWhen(device.scene.ranAt)) : device.source?.label ?? '';
+    }
+
     if (primary.kind === 'climate') {
         const {Pow: power, Mod: mode, SetTem: target} = device.state;
         return power === 1 ? `${modeText(mode)} · ${numberFormat.format(target)}°` : _('Off');

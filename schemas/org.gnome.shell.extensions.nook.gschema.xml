@@ -22,6 +22,16 @@
       <summary>Colour tiles by device type</summary>
       <description>Each kind of device gets a colour of its own. When off, everything uses the accent colour.</description>
     </key>
+    <key name="scenes-compact" type="b">
+      <default>false</default>
+      <summary>Show scenes as a row of buttons</summary>
+      <description>Scenes sit in one line of buttons under the header instead of a section or module of their own.</description>
+    </key>
+    <key name="scenes-folded" type="b">
+      <default>false</default>
+      <summary>Scenes folded away</summary>
+      <description>The scene section or module shows only its heading. Clicking the heading in the menu sets it.</description>
+    </key>
     <key name="room" type="s">
       <default>''</default>
       <summary>Room tab last chosen</summary>

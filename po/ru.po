@@ -5,7 +5,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: nook\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-10-26 16:50+0200\n"
+"POT-Creation-Date: 2026-10-27 15:08+0200\n"
 "PO-Revision-Date: 2026-10-14 12:00+0300\n"
 "Last-Translator: \n"
 "Language-Team: Russian\n"
@@ -16,8 +16,8 @@ msgstr ""
 "Plural-Forms: nplurals=3; plural=(n%10==1 && n%100!=11 ? 0 : n%10>=2 && "
 "n%10<=4 && (n%100<10 || n%100>=20) ? 1 : 2);\n"
 
-#: extension.js:25 ui/menu.js:49 ui/menu.js:104 ui/menu-read.js:136
-#: ui/menu-view.js:37
+#: extension.js:28 ui/menu.js:49 ui/menu.js:105 ui/menu-read.js:139
+#: ui/menu-view.js:40
 msgid "Nook"
 msgstr "Nook"
 
@@ -34,7 +34,7 @@ msgid "Gree, Midea and Daikin units, by a broadcast on this network."
 msgstr ""
 "Кондиционеры Gree, Midea и Daikin, широковещательным запросом в этой сети."
 
-#: prefs.js:97 ui/menu-view.js:97 ui/tiles.js:94 prefs/cameras.js:21
+#: prefs.js:97 ui/menu-view.js:113 ui/tiles.js:96 prefs/cameras.js:21
 #: prefs/devices-page.js:324
 msgid "Cameras"
 msgstr "Камеры"
@@ -46,7 +46,7 @@ msgstr ""
 "Камеры Tapo, через ONVIF. Камера отвечает, только когда у неё есть учётная "
 "запись камеры."
 
-#: prefs.js:99 ui/menu-view.js:95 prefs/devices-page.js:325
+#: prefs.js:99 ui/menu-view.js:111 prefs/devices-page.js:325
 #: prefs/speakers.js:18
 msgid "Speakers"
 msgstr "Колонки"
@@ -55,7 +55,7 @@ msgstr "Колонки"
 msgid "Google Cast speakers and displays, by mDNS."
 msgstr "Колонки и дисплеи Google Cast, через mDNS."
 
-#: prefs.js:101 ui/menu-view.js:96 prefs/devices-page.js:326 prefs/tvs.js:70
+#: prefs.js:101 ui/menu-view.js:112 prefs/devices-page.js:326 prefs/tvs.js:70
 msgid "TVs"
 msgstr "Телевизоры"
 
@@ -160,7 +160,7 @@ msgstr "Nook %s"
 msgid "Cryptocurrency"
 msgstr "Криптовалюта"
 
-#: prefs.js:331 ui/card-spec.js:53 ui/card-spec.js:76
+#: prefs.js:331 ui/card-spec.js:55 ui/card-spec.js:78
 msgid "Address"
 msgstr "Адрес"
 
@@ -299,30 +299,40 @@ msgid ""
 "accent colour."
 msgstr "Вентиляторы, свет и датчики получают свои цвета вместо акцентного."
 
-#: prefs.js:507
+#: prefs.js:502
+msgid "Compact Scenes"
+msgstr "Компактные сцены"
+
+#: prefs.js:503
+msgid ""
+"Scenes as one row of buttons under the header, instead of a section of their "
+"own."
+msgstr "Сцены одной строкой кнопок под заголовком, а не отдельным разделом."
+
+#: prefs.js:514
 msgid "Room Tabs"
 msgstr "Вкладки комнат"
 
-#: prefs.js:508
+#: prefs.js:515
 msgid ""
 "The tabs shown over the tiles. A room left out keeps its devices under All."
 msgstr ""
 "Вкладки над плитками. Устройства комнаты без вкладки остаются во вкладке "
 "«Все»."
 
-#: prefs.js:528 ui/menu-view.js:54 ui/menu-view.js:70 ui/menu-view.js:93
+#: prefs.js:535 ui/menu-view.js:65 ui/menu-view.js:85 ui/menu-view.js:108
 msgid "Pinned"
 msgstr "Закреплённые"
 
-#: prefs.js:529 ui/menu-view.js:64 ui/menu-view.js:78
+#: prefs.js:536 ui/menu-view.js:79 ui/menu-view.js:93
 msgid "Other"
 msgstr "Другие"
 
-#: prefs.js:563
+#: prefs.js:570
 msgid "Show All"
 msgstr "Показать все"
 
-#: prefs.js:563
+#: prefs.js:570
 msgid "Hide All"
 msgstr "Скрыть все"
 
@@ -541,29 +551,29 @@ msgstr "Сирена при движении"
 msgid "Night Vision"
 msgstr "Ночное видение"
 
-#: ui/card-camera.js:258 ui/climate.js:47 ui/climate.js:129 ui/text.js:154
-#: ui/text.js:392
+#: ui/card-camera.js:258 ui/climate.js:47 ui/climate.js:129 ui/text.js:156
+#: ui/text.js:394
 msgid "Auto"
 msgstr "Авто"
 
 #: ui/card-camera.js:258 ui/card-climate.js:400 ui/card-climate.js:436
 #: ui/card-controls.js:42 ui/card-controls.js:176 ui/card-controls.js:335
-#: ui/card-spec.js:302 ui/card-tv.js:73 ui/card-tv.js:115 ui/hero.js:285
-#: ui/hero.js:331 ui/hero.js:361 ui/hero.js:377 ui/hero.js:453 ui/hero.js:467
-#: ui/hero.js:482 ui/hero.js:504 ui/menu-read.js:61 ui/menu-read.js:77
-#: ui/rows.js:186 ui/rows.js:195 ui/text.js:126 ui/text.js:139
+#: ui/card-spec.js:312 ui/card-tv.js:73 ui/card-tv.js:115 ui/hero.js:287
+#: ui/hero.js:333 ui/hero.js:364 ui/hero.js:381 ui/hero.js:464 ui/hero.js:478
+#: ui/hero.js:493 ui/hero.js:515 ui/menu-read.js:62 ui/menu-read.js:78
+#: ui/rows.js:192 ui/rows.js:201 ui/text.js:128 ui/text.js:141
 msgid "On"
 msgstr "Вкл."
 
 #: ui/card-camera.js:258 ui/card-climate.js:400 ui/card-climate.js:426
 #: ui/card-climate.js:432 ui/card-climate.js:436 ui/card-controls.js:42
 #: ui/card-controls.js:92 ui/card-controls.js:103 ui/card-controls.js:176
-#: ui/card-controls.js:335 ui/card-history.js:142 ui/card-spec.js:302
-#: ui/card-tv.js:73 ui/card-tv.js:115 ui/climate.js:73 ui/hero.js:285
-#: ui/hero.js:331 ui/hero.js:361 ui/hero.js:377 ui/hero.js:453 ui/hero.js:467
-#: ui/hero.js:482 ui/hero.js:504 ui/menu-read.js:61 ui/menu-read.js:66
-#: ui/menu-read.js:76 ui/rows.js:169 ui/rows.js:185 ui/rows.js:195
-#: ui/text.js:126 ui/text.js:138
+#: ui/card-controls.js:335 ui/card-history.js:142 ui/card-spec.js:312
+#: ui/card-tv.js:73 ui/card-tv.js:115 ui/climate.js:73 ui/hero.js:287
+#: ui/hero.js:333 ui/hero.js:364 ui/hero.js:381 ui/hero.js:464 ui/hero.js:478
+#: ui/hero.js:493 ui/hero.js:515 ui/menu-read.js:62 ui/menu-read.js:67
+#: ui/menu-read.js:77 ui/rows.js:175 ui/rows.js:191 ui/rows.js:201
+#: ui/text.js:128 ui/text.js:140
 msgid "Off"
 msgstr "Выкл."
 
@@ -610,7 +620,7 @@ msgstr "Вверх-вниз"
 msgid "Left and right"
 msgstr "Влево-вправо"
 
-#: ui/card-climate.js:178 ui/card-controls.js:65 ui/card-spec.js:387
+#: ui/card-climate.js:178 ui/card-controls.js:65 ui/card-spec.js:398
 #: ui/humanize.js:73
 msgid "Power"
 msgstr "Питание"
@@ -623,7 +633,7 @@ msgstr "Холоднее"
 msgid "Warmer"
 msgstr "Теплее"
 
-#: ui/card-climate.js:398 ui/hero.js:334
+#: ui/card-climate.js:398 ui/hero.js:336
 #, javascript-format
 msgid "Room %s°"
 msgstr "В комнате %s°"
@@ -632,11 +642,11 @@ msgstr "В комнате %s°"
 msgid "Room temperature unknown"
 msgstr "Температура в комнате неизвестна"
 
-#: ui/card-climate.js:406 ui/card-spec.js:507 ui/card-tv.js:91
+#: ui/card-climate.js:406 ui/card-spec.js:524 ui/card-tv.js:91 ui/color.js:292
 msgid "Turn Off"
 msgstr "Выключить"
 
-#: ui/card-climate.js:406 ui/card-spec.js:507 ui/card-tv.js:91
+#: ui/card-climate.js:406 ui/card-spec.js:524 ui/card-tv.js:91 ui/color.js:292
 msgid "Turn On"
 msgstr "Включить"
 
@@ -667,7 +677,7 @@ msgid "Angle"
 msgstr "Угол"
 
 #: ui/card-controls.js:90 ui/card-controls.js:298 ui/card-history.js:149
-#: ui/rows.js:104 ui/text.js:261
+#: ui/rows.js:104 ui/text.js:263
 #, javascript-format
 msgid "%s min"
 msgstr "%s мин"
@@ -682,7 +692,7 @@ msgstr "%s ч"
 msgid "Timer"
 msgstr "Таймер"
 
-#: ui/card-controls.js:108 ui/card-controls.js:165 ui/card-spec.js:125
+#: ui/card-controls.js:108 ui/card-controls.js:165 ui/card-spec.js:127
 #: ui/humanize.js:15
 msgid "Light"
 msgstr "Свет"
@@ -699,11 +709,11 @@ msgstr "Защита от детей"
 msgid "Turn the Head"
 msgstr "Поворот головы"
 
-#: ui/card-controls.js:131 ui/card-tv.js:245 ui/text.js:167
+#: ui/card-controls.js:131 ui/card-tv.js:245 ui/text.js:169
 msgid "Left"
 msgstr "Влево"
 
-#: ui/card-controls.js:132 ui/card-tv.js:246 ui/text.js:168
+#: ui/card-controls.js:132 ui/card-tv.js:246 ui/text.js:170
 msgid "Right"
 msgstr "Вправо"
 
@@ -736,7 +746,7 @@ msgid "Time to turn the food over."
 msgstr "Пора перевернуть еду."
 
 #: ui/card-controls.js:267 ui/card-tv.js:250 ui/card-vacuum.js:109
-#: ui/hero.js:88 ui/humanize.js:147
+#: ui/hero.js:90 ui/humanize.js:147
 msgid "Pause"
 msgstr "Пауза"
 
@@ -748,7 +758,7 @@ msgstr "Продолжить"
 msgid "Start"
 msgstr "Старт"
 
-#: ui/card-controls.js:273 ui/card-vacuum.js:111 ui/hero.js:86
+#: ui/card-controls.js:273 ui/card-vacuum.js:111 ui/hero.js:88
 #: ui/humanize.js:146 ui/humanize.js:151 ui/humanize.js:152
 msgid "Stop"
 msgstr "Стоп"
@@ -862,7 +872,7 @@ msgstr ""
 msgid "Unpin"
 msgstr "Открепить"
 
-#: ui/card.js:51 ui/menu.js:113 prefs/devices-page.js:373
+#: ui/card.js:51 ui/menu.js:114 prefs/devices-page.js:373
 msgid "Pin"
 msgstr "Закрепить"
 
@@ -870,7 +880,7 @@ msgstr "Закрепить"
 msgid "Show in the Menu"
 msgstr "Показывать в меню"
 
-#: ui/card.js:53 ui/menu.js:115
+#: ui/card.js:53 ui/menu.js:116
 msgid "Hide from the Menu"
 msgstr "Скрыть из меню"
 
@@ -878,15 +888,15 @@ msgstr "Скрыть из меню"
 msgid "Take Off the Top Bar"
 msgstr "Убрать из верхней панели"
 
-#: ui/card.js:57 ui/menu.js:110
+#: ui/card.js:57 ui/menu.js:111
 msgid "Show in the Top Bar"
 msgstr "Показывать в верхней панели"
 
-#: ui/card.js:416 ui/card-spec.js:693
+#: ui/card.js:417 ui/card-spec.js:774
 msgid "Less"
 msgstr "Меньше"
 
-#: ui/card.js:418 ui/card-spec.js:697
+#: ui/card.js:419 ui/card-spec.js:778
 msgid "More"
 msgstr "Больше"
 
@@ -898,11 +908,11 @@ msgstr "Колонка не отвечает. Она в той же сети?"
 msgid "Previous"
 msgstr "Предыдущий"
 
-#: ui/card-media.js:96 ui/card-tv.js:248 ui/hero.js:84
+#: ui/card-media.js:96 ui/card-tv.js:248 ui/hero.js:86
 msgid "Play"
 msgstr "Играть"
 
-#: ui/card-media.js:100 ui/humanize.js:173 ui/tiles.js:485
+#: ui/card-media.js:100 ui/humanize.js:174 ui/tiles.js:598
 msgid "Next"
 msgstr "Следующий"
 
@@ -911,12 +921,12 @@ msgstr "Следующий"
 msgid "Mute"
 msgstr "Выключить звук"
 
-#: ui/card-media.js:153 ui/hero.js:344 ui/tiles.js:547
+#: ui/card-media.js:153 ui/hero.js:346 ui/tiles.js:660
 msgid "Nothing playing"
 msgstr "Ничего не играет"
 
-#: ui/card-media.js:157 ui/menu-read.js:71 ui/rows.js:177 ui/text.js:143
-#: ui/tiles.js:548
+#: ui/card-media.js:157 ui/menu-read.js:72 ui/rows.js:183 ui/text.js:145
+#: ui/tiles.js:661
 msgid "Paused"
 msgstr "Пауза"
 
@@ -928,186 +938,186 @@ msgstr "Готова"
 msgid "Unmute"
 msgstr "Включить звук"
 
-#: ui/card-spec.js:27
+#: ui/card-spec.js:29
 msgid "Water"
 msgstr "Вода"
 
-#: ui/card-spec.js:27 ui/card-spec.js:119 ui/humanize.js:96 ui/humanize.js:108
+#: ui/card-spec.js:29 ui/card-spec.js:121 ui/humanize.js:96 ui/humanize.js:108
 #: ui/props.js:182
 msgid "Temperature"
 msgstr "Температура"
 
-#: ui/card-spec.js:31 ui/humanize.js:89 ui/humanize.js:90
+#: ui/card-spec.js:33 ui/humanize.js:89 ui/humanize.js:90
 msgid "Status"
 msgstr "Состояние"
 
-#: ui/card-spec.js:33 ui/card-spec.js:121 ui/humanize.js:97 ui/props.js:183
+#: ui/card-spec.js:35 ui/card-spec.js:123 ui/humanize.js:97 ui/props.js:183
 msgid "Humidity"
 msgstr "Влажность"
 
-#: ui/card-spec.js:35 ui/card-spec.js:127 ui/humanize.js:22 ui/humanize.js:100
+#: ui/card-spec.js:37 ui/card-spec.js:129 ui/humanize.js:22 ui/humanize.js:100
 msgid "Battery"
 msgstr "Батарея"
 
-#: ui/card-spec.js:37 ui/card-spec.js:49 ui/card-spec.js:74
+#: ui/card-spec.js:39 ui/card-spec.js:51 ui/card-spec.js:76
 msgid "Signal"
 msgstr "Сигнал"
 
-#: ui/card-spec.js:37 ui/card-spec.js:49 ui/card-spec.js:74
+#: ui/card-spec.js:39 ui/card-spec.js:51 ui/card-spec.js:76
 msgctxt "unit"
 msgid "dBm"
 msgstr "дБм"
 
-#: ui/card-spec.js:39
+#: ui/card-spec.js:41
 msgid "Heard"
 msgstr "Последний сигнал"
 
-#: ui/card-spec.js:47 ui/card-spec.js:72
+#: ui/card-spec.js:49 ui/card-spec.js:74
 msgid "Network"
 msgstr "Сеть"
 
-#: ui/card-spec.js:51
+#: ui/card-spec.js:53
 msgid "Devices connected"
 msgstr "Подключено устройств"
 
-#: ui/card-spec.js:55 ui/card-spec.js:82 ui/humanize.js:122 ui/humanize.js:123
+#: ui/card-spec.js:57 ui/card-spec.js:84 ui/humanize.js:122 ui/humanize.js:123
 msgid "Firmware"
 msgstr "Прошивка"
 
-#: ui/card-spec.js:57 ui/card-spec.js:88
+#: ui/card-spec.js:59 ui/card-spec.js:90
 msgid "Up for"
 msgstr "Работает"
 
-#: ui/card-spec.js:70 ui/humanize.js:18
+#: ui/card-spec.js:72 ui/humanize.js:18
 msgid "Gateway"
 msgstr "Шлюз"
 
-#: ui/card-spec.js:78
+#: ui/card-spec.js:80
 msgid "Bluetooth address"
 msgstr "Адрес Bluetooth"
 
-#: ui/card-spec.js:78
+#: ui/card-spec.js:80
 msgid "MAC address"
 msgstr "MAC-адрес"
 
-#: ui/card-spec.js:84
+#: ui/card-spec.js:86
 msgid "MCU firmware"
 msgstr "Прошивка MCU"
 
-#: ui/card-spec.js:86
+#: ui/card-spec.js:88
 msgid "Hardware"
 msgstr "Аппаратная версия"
 
-#: ui/card-spec.js:91 ui/humanize.js:125
+#: ui/card-spec.js:93 ui/humanize.js:125
 msgid "Model"
 msgstr "Модель"
 
-#: ui/card-spec.js:93
+#: ui/card-spec.js:95
 msgid "Last online"
 msgstr "Был в сети"
 
-#: ui/card-spec.js:113 ui/humanize.js:17
+#: ui/card-spec.js:115 ui/humanize.js:17
 msgid "Alarm"
 msgstr "Тревога"
 
-#: ui/card-spec.js:114 ui/text.js:169 ui/text.js:170
+#: ui/card-spec.js:116 ui/text.js:171 ui/text.js:172
 msgid "None"
 msgstr "Нет"
 
-#: ui/card-spec.js:114 ui/tiles.js:132
+#: ui/card-spec.js:116 ui/tiles.js:136
 msgid "Alarm!"
 msgstr "Тревога!"
 
-#: ui/card-spec.js:114 ui/humanize.js:92 ui/rows.js:118
+#: ui/card-spec.js:116 ui/humanize.js:92 ui/rows.js:118
 msgid "Fault"
 msgstr "Неисправность"
 
-#: ui/card-spec.js:117
+#: ui/card-spec.js:119
 msgid "Density"
 msgstr "Плотность"
 
-#: ui/card-spec.js:123 ui/humanize.js:165 ui/props.js:184
+#: ui/card-spec.js:125 ui/humanize.js:165 ui/props.js:184
 msgid "Pressure"
 msgstr "Давление"
 
-#: ui/card-spec.js:125 ui/text.js:82
+#: ui/card-spec.js:127 ui/text.js:84
 msgctxt "unit"
 msgid "lx"
 msgstr "лк"
 
-#: ui/card-spec.js:128 ui/text.js:91
+#: ui/card-spec.js:130 ui/text.js:93
 msgctxt "unit"
 msgid "V"
 msgstr "В"
 
-#: ui/card-spec.js:196
+#: ui/card-spec.js:206
 msgid "Its settings show once it is back online."
 msgstr "Настройки появятся, когда устройство снова будет в сети."
 
-#: ui/card-spec.js:202
+#: ui/card-spec.js:212
 msgid "Last 24 Hours"
 msgstr "За 24 часа"
 
-#: ui/card-spec.js:208
+#: ui/card-spec.js:218
 msgid "History"
 msgstr "История"
 
-#: ui/card-spec.js:224
+#: ui/card-spec.js:234
 msgid "Online, with nothing more to show."
 msgstr "В сети, больше показать нечего."
 
-#: ui/card-spec.js:224
+#: ui/card-spec.js:234
 msgid "Offline."
 msgstr "Не в сети."
 
-#: ui/card-spec.js:233 ui/card-spec.js:237
+#: ui/card-spec.js:243 ui/card-spec.js:247
 msgid "Device Info"
 msgstr "Об устройстве"
 
-#: ui/card-spec.js:478
+#: ui/card-spec.js:495
 #, javascript-format
 msgid "Heard %s"
 msgstr "Сигнал %s"
 
-#: ui/card-spec.js:480
+#: ui/card-spec.js:497
 msgid "Bluetooth is off, so it cannot be heard."
 msgstr "Bluetooth выключен, поэтому сигнал не слышен."
 
-#: ui/card-spec.js:480
+#: ui/card-spec.js:497
 msgid "Listening for it nearby…"
 msgstr "Слушаю эфир поблизости…"
 
-#: ui/card-spec.js:483 ui/card-tv.js:69 ui/menu-view.js:99 ui/rows.js:162
-#: ui/tiles.js:355
+#: ui/card-spec.js:500 ui/card-tv.js:69 ui/menu-view.js:115 ui/rows.js:162
+#: ui/tiles.js:410
 msgid "Offline"
 msgstr "Не в сети"
 
-#: ui/card-spec.js:483 ui/rows.js:165 ui/rows.js:199 ui/rows.js:204
-#: ui/rows.js:211
+#: ui/card-spec.js:500 ui/rows.js:165 ui/rows.js:205 ui/rows.js:210
+#: ui/rows.js:217
 msgid "Online"
 msgstr "В сети"
 
-#: ui/card-spec.js:576
+#: ui/card-spec.js:655
 msgid "Remove Its Tile"
 msgstr "Убрать плитку"
 
-#: ui/card-spec.js:576
+#: ui/card-spec.js:655
 msgid "Give It a Tile"
 msgstr "Добавить плитку"
 
-#: ui/card-tv.js:22 ui/text.js:313
+#: ui/card-tv.js:22 ui/text.js:315
 msgid "TV"
 msgstr "Телевизор"
 
-#: ui/card-tv.js:60 ui/text.js:377
+#: ui/card-tv.js:60 ui/text.js:379
 msgid "The TV is not answering. Is it on the same network?"
 msgstr "Телевизор не отвечает. Он в той же сети?"
 
-#: ui/card-tv.js:71 ui/menu-read.js:74 ui/rows.js:183 prefs/hue.js:134
+#: ui/card-tv.js:71 ui/menu-read.js:75 ui/rows.js:189 prefs/hue.js:134
 msgid "Not paired"
 msgstr "Не сопряжён"
 
-#: ui/card-tv.js:120 ui/menu-read.js:77 ui/rows.js:186
+#: ui/card-tv.js:120 ui/menu-read.js:78 ui/rows.js:192
 msgid "Muted"
 msgstr "Без звука"
 
@@ -1116,14 +1126,14 @@ msgstr "Без звука"
 msgid "Volume %s"
 msgstr "Громкость %s"
 
-#: ui/card-tv.js:145 ui/text.js:371
+#: ui/card-tv.js:145 ui/text.js:373
 msgid "Pair it in Settings, under TVs, to control it from here."
 msgstr ""
 "Чтобы управлять им отсюда, выполните сопряжение в настройках, в разделе "
 "«Телевизоры»."
 
 #: ui/card-tv.js:169 ui/card-tv.js:177 ui/card-vacuum.js:254 ui/humanize.js:106
-#: ui/tiles.js:497
+#: ui/tiles.js:610
 msgid "Volume"
 msgstr "Громкость"
 
@@ -1151,7 +1161,7 @@ msgstr "Пульт"
 msgid "Arrows, OK"
 msgstr "Стрелки, OK"
 
-#: ui/card-tv.js:243 ui/menu.js:100
+#: ui/card-tv.js:243 ui/menu.js:101
 msgid "Back"
 msgstr "Назад"
 
@@ -1224,7 +1234,7 @@ msgstr "Не беспокоить"
 msgid "Play a Sound"
 msgstr "Подать звук"
 
-#: ui/card-vacuum.js:267 ui/menu.js:119
+#: ui/card-vacuum.js:267 ui/menu.js:120
 msgid "Settings"
 msgstr "Настройки"
 
@@ -1240,20 +1250,20 @@ msgstr "Убирает"
 msgid "Cleaned"
 msgstr "Убрано"
 
-#: ui/climate.js:24 ui/text.js:251
+#: ui/climate.js:24 ui/text.js:253
 msgid "Eco"
 msgstr "Эко"
 
-#: ui/climate.js:25 ui/text.js:155
+#: ui/climate.js:25 ui/text.js:157
 msgid "Sleep"
 msgstr "Сон"
 
-#: ui/climate.js:26 ui/climate.js:53 ui/text.js:178 ui/text.js:181
-#: ui/text.js:182
+#: ui/climate.js:26 ui/climate.js:53 ui/text.js:180 ui/text.js:183
+#: ui/text.js:184
 msgid "Turbo"
 msgstr "Турбо"
 
-#: ui/climate.js:27 ui/climate.js:48 ui/text.js:175 ui/text.js:179
+#: ui/climate.js:27 ui/climate.js:48 ui/text.js:177 ui/text.js:181
 msgid "Quiet"
 msgstr "Тихий"
 
@@ -1277,15 +1287,15 @@ msgstr "Обогрев 8°"
 msgid "Fresh air"
 msgstr "Свежий воздух"
 
-#: ui/climate.js:49 ui/text.js:157
+#: ui/climate.js:49 ui/text.js:159
 msgid "Low"
 msgstr "Низкий"
 
-#: ui/climate.js:50 ui/text.js:158 ui/text.js:159 ui/text.js:177 ui/text.js:253
+#: ui/climate.js:50 ui/text.js:160 ui/text.js:161 ui/text.js:179 ui/text.js:255
 msgid "Medium"
 msgstr "Средний"
 
-#: ui/climate.js:51 ui/text.js:160
+#: ui/climate.js:51 ui/text.js:162
 msgid "High"
 msgstr "Высокий"
 
@@ -1309,12 +1319,16 @@ msgstr "Осушение"
 msgid "Fan only"
 msgstr "Только вентилятор"
 
+#: ui/color.js:108 ui/humanize.js:95
+msgid "Colour"
+msgstr "Цвет"
+
 #: ui/drop.js:257
 #, javascript-format
 msgid "Group %s"
 msgstr "Группа %s"
 
-#: ui/events.js:12 ui/humanize.js:160 ui/text.js:120
+#: ui/events.js:12 ui/humanize.js:160 ui/text.js:122
 msgid "Leak"
 msgstr "Протечка"
 
@@ -1334,7 +1348,7 @@ msgstr "Двойное нажатие"
 msgid "Held"
 msgstr "Удержание"
 
-#: ui/events.js:14 ui/humanize.js:103 ui/text.js:118
+#: ui/events.js:14 ui/humanize.js:103 ui/text.js:120
 msgid "Motion"
 msgstr "Движение"
 
@@ -1342,7 +1356,7 @@ msgstr "Движение"
 msgid "Opened"
 msgstr "Открыто"
 
-#: ui/events.js:15 ui/hero.js:516 ui/text.js:116 ui/text.js:152 ui/text.js:153
+#: ui/events.js:15 ui/hero.js:527 ui/text.js:118 ui/text.js:154 ui/text.js:155
 msgid "Closed"
 msgstr "Закрыто"
 
@@ -1356,224 +1370,224 @@ msgstr "сегодня, %s"
 msgid "yesterday, %s"
 msgstr "вчера, %s"
 
-#: ui/hero.js:138
+#: ui/hero.js:140
 msgid "The wheels are off the floor"
 msgstr "Колёса на весу"
 
-#: ui/hero.js:139
+#: ui/hero.js:141
 msgid "A cliff sensor is dirty or blocked"
 msgstr "Датчик перепада загрязнён или закрыт"
 
-#: ui/hero.js:140
+#: ui/hero.js:142
 msgid "The bumper is stuck"
 msgstr "Бампер застрял"
 
-#: ui/hero.js:141
+#: ui/hero.js:143
 msgid "The robot is tilted"
 msgstr "Робот наклонён"
 
-#: ui/hero.js:142
+#: ui/hero.js:144
 msgid "The bumper keeps getting stuck"
 msgstr "Бампер застревает снова и снова"
 
-#: ui/hero.js:143
+#: ui/hero.js:145
 msgid "The wheels keep coming off the floor"
 msgstr "Колёса снова и снова на весу"
 
-#: ui/hero.js:144
+#: ui/hero.js:146
 msgid "The floor sensor underneath is dirty"
 msgstr "Датчик пола снизу загрязнён"
 
-#: ui/hero.js:145
+#: ui/hero.js:147
 msgid "The dust bin is missing"
 msgstr "Нет контейнера для пыли"
 
-#: ui/hero.js:146
+#: ui/hero.js:148
 msgid "The water tank is missing"
 msgstr "Нет бака для воды"
 
-#: ui/hero.js:147
+#: ui/hero.js:149
 msgid "The water tank is empty"
 msgstr "Бак для воды пуст"
 
-#: ui/hero.js:148
+#: ui/hero.js:150
 msgid "The dust bin is full"
 msgstr "Контейнер для пыли полон"
 
-#: ui/hero.js:149
+#: ui/hero.js:151
 msgid "The main brush is stuck"
 msgstr "Основная щётка застряла"
 
-#: ui/hero.js:150
+#: ui/hero.js:152
 msgid "The side brush is stuck"
 msgstr "Боковая щётка застряла"
 
-#: ui/hero.js:151
+#: ui/hero.js:153
 msgid "The fan is blocked"
 msgstr "Вентилятор заблокирован"
 
-#: ui/hero.js:152
+#: ui/hero.js:154
 msgid "The left wheel is stuck"
 msgstr "Левое колесо застряло"
 
-#: ui/hero.js:153
+#: ui/hero.js:155
 msgid "The right wheel is stuck"
 msgstr "Правое колесо застряло"
 
-#: ui/hero.js:154
+#: ui/hero.js:156
 msgid "The robot is stuck and cannot turn"
 msgstr "Робот застрял и не может развернуться"
 
-#: ui/hero.js:155
+#: ui/hero.js:157
 msgid "The robot is stuck and cannot go on"
 msgstr "Робот застрял и не может ехать дальше"
 
-#: ui/hero.js:156
+#: ui/hero.js:158
 msgid "The robot cannot find its dock"
 msgstr "Робот не может найти базу"
 
-#: ui/hero.js:157
+#: ui/hero.js:159
 msgid "The battery is low"
 msgstr "Батарея разряжена"
 
-#: ui/hero.js:158
+#: ui/hero.js:160
 msgid "It is not charging"
 msgstr "Не заряжается"
 
-#: ui/hero.js:159
+#: ui/hero.js:161
 msgid "The battery is too low to start"
 msgstr "Слишком мало заряда, чтобы начать"
 
-#: ui/hero.js:160
+#: ui/hero.js:162
 msgid "Something is wrong inside the robot"
 msgstr "Внутренняя ошибка робота"
 
-#: ui/hero.js:161
+#: ui/hero.js:163
 msgid "The camera is covered"
 msgstr "Камера закрыта"
 
-#: ui/hero.js:162
+#: ui/hero.js:164
 msgid "The camera does not work"
 msgstr "Камера не работает"
 
-#: ui/hero.js:163
+#: ui/hero.js:165
 msgid "Something is wrong with the battery"
 msgstr "Ошибка батареи"
 
-#: ui/hero.js:164
+#: ui/hero.js:166
 msgid "The front sensor is dirty"
 msgstr "Передний датчик загрязнён"
 
-#: ui/hero.js:165
+#: ui/hero.js:167
 msgid "The gyroscope does not work"
 msgstr "Гироскоп не работает"
 
-#: ui/hero.js:228
+#: ui/hero.js:230
 msgid "Humidity %s %"
 msgstr "Влажность %s %"
 
-#: ui/hero.js:240
+#: ui/hero.js:242
 #, javascript-format
 msgid "Last seen %s"
 msgstr "Замечено %s"
 
-#: ui/hero.js:250
+#: ui/hero.js:252
 #, javascript-format
 msgid "Since %s"
 msgstr "Изменилось: %s"
 
-#: ui/hero.js:272 ui/rows.js:117 ui/text.js:124
+#: ui/hero.js:274 ui/rows.js:117 ui/text.js:126
 msgid "Gas!"
 msgstr "Газ!"
 
-#: ui/hero.js:272 ui/rows.js:115 ui/text.js:124
+#: ui/hero.js:274 ui/rows.js:115 ui/text.js:126
 msgid "No gas"
 msgstr "Газа нет"
 
-#: ui/hero.js:274 ui/rows.js:117 ui/text.js:122
+#: ui/hero.js:276 ui/rows.js:117 ui/text.js:124
 msgid "Smoke!"
 msgstr "Дым!"
 
-#: ui/hero.js:274 ui/rows.js:115 ui/text.js:122
+#: ui/hero.js:276 ui/rows.js:115 ui/text.js:124
 msgid "No smoke"
 msgstr "Дыма нет"
 
-#: ui/hero.js:278
+#: ui/hero.js:280
 #, javascript-format
 msgid "Smoke %s"
 msgstr "Дым %s"
 
-#: ui/hero.js:292
+#: ui/hero.js:294
 #, javascript-format
 msgid "Speed %s"
 msgstr "Скорость %s"
 
-#: ui/hero.js:333 ui/hero.js:418 ui/hero.js:484 ui/hero.js:506
+#: ui/hero.js:335 ui/hero.js:422 ui/hero.js:495 ui/hero.js:517
 #, javascript-format
 msgid "Set to %s"
 msgstr "Задано %s"
 
-#: ui/hero.js:344 ui/menu-read.js:70 ui/rows.js:175 ui/text.js:241
+#: ui/hero.js:346 ui/menu-read.js:71 ui/rows.js:181 ui/text.js:243
 msgid "Playing"
 msgstr "Играет"
 
-#: ui/hero.js:346
+#: ui/hero.js:348
 msgid "Volume %s %"
 msgstr "Громкость %s %"
 
-#: ui/hero.js:364
+#: ui/hero.js:368 ui/hero.js:435
 msgid "Brightness %s %"
 msgstr "Яркость %s %"
 
-#: ui/hero.js:379
+#: ui/hero.js:383
 #, javascript-format
 msgid "Drawing %s"
 msgstr "Потребляет %s"
 
-#: ui/hero.js:400
+#: ui/hero.js:404
 msgid "Battery %s %"
 msgstr "Батарея %s %"
 
-#: ui/hero.js:402
+#: ui/hero.js:406
 msgid "Battery %s %, needs charging"
 msgstr "Батарея %s %, нужна зарядка"
 
-#: ui/hero.js:424 ui/rows.js:194
+#: ui/hero.js:431 ui/rows.js:200
 msgid "Light on"
 msgstr "Свет включён"
 
-#: ui/hero.js:424 ui/rows.js:194
+#: ui/hero.js:431 ui/rows.js:200
 msgid "Light off"
 msgstr "Свет выключен"
 
-#: ui/hero.js:433
+#: ui/hero.js:444
 #, javascript-format
 msgid "Signal %s dBm"
 msgstr "Сигнал %s дБм"
 
-#: ui/hero.js:456
+#: ui/hero.js:467
 #, javascript-format
 msgid "%s left"
 msgstr "Осталось %s"
 
-#: ui/hero.js:469
+#: ui/hero.js:480
 msgid "Filter %s %"
 msgstr "Фильтр %s %"
 
-#: ui/hero.js:514 ui/text.js:116 ui/text.js:151
+#: ui/hero.js:525 ui/text.js:118 ui/text.js:153
 msgid "Open"
 msgstr "Открыто"
 
-#: ui/hero.js:518
+#: ui/hero.js:529
 msgid "Open %s %"
 msgstr "Открыто на %s %"
 
-#: ui/hero.js:537
+#: ui/hero.js:548
 #, javascript-format
 msgid "Freezer %s"
 msgstr "Морозилка %s"
 
-#: ui/hero.js:550
+#: ui/hero.js:561
 msgid "Soil %s %"
 msgstr "Почва %s %"
 
@@ -1617,7 +1631,7 @@ msgstr "Среда"
 msgid "Vacuum"
 msgstr "Пылесос"
 
-#: ui/humanize.js:28 ui/text.js:141 ui/text.js:142
+#: ui/humanize.js:28 ui/text.js:143 ui/text.js:144
 msgid "Cleaning"
 msgstr "Уборка"
 
@@ -1801,10 +1815,6 @@ msgstr "Яркость"
 msgid "Colour temperature"
 msgstr "Цветовая температура"
 
-#: ui/humanize.js:95
-msgid "Colour"
-msgstr "Цвет"
-
 #: ui/humanize.js:98
 msgid "Target humidity"
 msgstr "Целевая влажность"
@@ -1861,11 +1871,11 @@ msgstr "Текстура"
 msgid "Turn reminder"
 msgstr "Переворот"
 
-#: ui/humanize.js:119 ui/text.js:213
+#: ui/humanize.js:119 ui/text.js:215
 msgid "Turn the food"
 msgstr "Перевернуть"
 
-#: ui/humanize.js:120 ui/text.js:146
+#: ui/humanize.js:120 ui/text.js:148
 msgid "Charging"
 msgstr "Зарядка"
 
@@ -2014,91 +2024,108 @@ msgctxt "action"
 msgid "Play"
 msgstr "Играть"
 
-#: ui/menu.js:117
+#: ui/humanize.js:173
+msgctxt "action"
+msgid "Run"
+msgstr "Запустить"
+
+#: ui/menu.js:118
 msgid "Find Devices Again"
 msgstr "Найти устройства заново"
 
-#: ui/menu.js:611 ui/menu.js:623
+#: ui/menu.js:617 ui/menu.js:629
 msgid "Log In…"
 msgstr "Войти…"
 
-#: ui/menu.js:613
+#: ui/menu.js:619
 msgid "Add an account or a device in Settings, and your home shows up here."
 msgstr ""
 "Добавьте аккаунт или устройство в настройках — и ваш дом появится здесь."
 
-#: ui/menu.js:613
+#: ui/menu.js:619
 msgid "Open Settings…"
 msgstr "Открыть настройки…"
 
-#: ui/menu.js:664 ui/menu-read.js:413
+#: ui/menu.js:671 ui/menu-read.js:424
 msgid "The Mi Home login has expired."
 msgstr "Вход в Mi Home истёк."
 
-#: ui/menu.js:666
+#: ui/menu.js:673
 msgid "Try Again"
 msgstr "Повторить"
 
-#: ui/menu-read.js:71 ui/rows.js:51 ui/rows.js:178 ui/text.js:140
+#: ui/menu-read.js:72 ui/rows.js:51 ui/rows.js:184 ui/text.js:142
 msgid "Idle"
 msgstr "Ожидание"
 
-#: ui/menu-read.js:166
+#: ui/menu-read.js:169
 msgid "The eWeLink login has expired."
 msgstr "Вход в eWeLink истёк."
 
-#: ui/menu-read.js:176
+#: ui/menu-read.js:179
 msgid "A Hue bridge needs to be paired again."
 msgstr "Мост Hue нужно сопрячь заново."
 
-#: ui/menu-read.js:186 ui/text.js:357 prefs/common.js:231
+#: ui/menu-read.js:190 ui/text.js:359 prefs/common.js:231
 msgid "Home Assistant refused the access token."
 msgstr "Home Assistant не принял токен доступа."
 
-#: ui/menu-read.js:197
+#: ui/menu-read.js:201
 msgid "A HomeKit accessory needs to be paired again."
 msgstr "Аксессуар HomeKit нужно сопрячь заново."
 
-#: ui/menu-read.js:207 ui/text.js:359 prefs/common.js:239
+#: ui/menu-read.js:211 ui/text.js:361 prefs/common.js:239
 msgid "The Smart Life login has expired."
 msgstr "Вход в Smart Life истёк."
 
-#: ui/menu-read.js:219 ui/text.js:359
+#: ui/menu-read.js:223 ui/text.js:361
 #, javascript-format
 msgid "The %s login has expired."
 msgstr "Вход в %s истёк."
 
-#: ui/menu-read.js:238
+#: ui/menu-read.js:242
 #, javascript-format
 msgid "The keyring could not be read: %s"
 msgstr "Не удалось прочитать связку ключей: %s"
 
-#: ui/menu-read.js:252
+#: ui/menu-read.js:256
 msgid "The saved Mi Home login could not be read."
 msgstr "Не удалось прочитать сохранённый вход в Mi Home."
 
-#: ui/menu-view.js:44
+#: ui/menu-view.js:46
 msgid "No devices in this Mi Home account."
 msgstr "В этом аккаунте Mi Home нет устройств."
 
-#: ui/menu-view.js:45
+#: ui/menu-view.js:47
 msgid "No devices to show. Add them, or show hidden ones, in Settings."
 msgstr ""
 "Нет устройств для показа. Добавьте их или верните скрытые в настройках."
 
-#: ui/menu-view.js:78
+#: ui/menu-view.js:63 ui/menu-view.js:109 ui/menu-view.js:177 ui/tiles.js:92
+msgid "Scenes"
+msgstr "Сцены"
+
+#: ui/menu-view.js:93
 msgid "All"
 msgstr "Все"
 
-#: ui/menu-view.js:94
+#: ui/menu-view.js:110
 msgid "Controls"
 msgstr "Управление"
 
-#: ui/menu-view.js:98
+#: ui/menu-view.js:114
 msgid "Sensors"
 msgstr "Датчики"
 
-#: ui/menu-view.js:273
+#: ui/menu-view.js:168
+msgid "Show Scenes"
+msgstr "Показать сцены"
+
+#: ui/menu-view.js:168
+msgid "Hide Scenes"
+msgstr "Скрыть сцены"
+
+#: ui/menu-view.js:396
 msgid "Rename Group"
 msgstr "Переименовать группу"
 
@@ -2106,7 +2133,7 @@ msgstr "Переименовать группу"
 msgid "Cooling down"
 msgstr "Остывает"
 
-#: ui/rows.js:51 ui/text.js:190
+#: ui/rows.js:51 ui/text.js:192
 msgid "Keeping warm"
 msgstr "Подогрев"
 
@@ -2127,422 +2154,431 @@ msgstr "Протечки нет"
 msgid "Bluetooth"
 msgstr "Bluetooth"
 
-#: ui/text.js:84
+#: ui/rows.js:169 ui/tiles.js:141 ui/tiles.js:417
+msgid "Running…"
+msgstr "Выполняется…"
+
+#: ui/rows.js:170
+#, javascript-format
+msgid "Ran · %s"
+msgstr "Запуск · %s"
+
+#: ui/text.js:86
 msgctxt "unit"
 msgid "s"
 msgstr "с"
 
-#: ui/text.js:85
+#: ui/text.js:87
 msgctxt "unit"
 msgid "min"
 msgstr "мин"
 
-#: ui/text.js:86
+#: ui/text.js:88
 msgctxt "unit"
 msgid "h"
 msgstr "ч"
 
-#: ui/text.js:87
+#: ui/text.js:89
 msgctxt "unit"
 msgid "d"
 msgstr "дн"
 
-#: ui/text.js:90
+#: ui/text.js:92
 msgctxt "unit"
 msgid "W"
 msgstr "Вт"
 
-#: ui/text.js:92
+#: ui/text.js:94
 msgctxt "unit"
 msgid "A"
 msgstr "А"
 
-#: ui/text.js:93
+#: ui/text.js:95
 msgctxt "unit"
 msgid "kWh"
 msgstr "кВт·ч"
 
-#: ui/text.js:94
+#: ui/text.js:96
 msgctxt "unit"
 msgid "Pa"
 msgstr "Па"
 
-#: ui/text.js:118
+#: ui/text.js:120
 msgid "No motion"
 msgstr "Нет движения"
 
-#: ui/text.js:120
+#: ui/text.js:122
 msgid "Dry"
 msgstr "Сухо"
 
-#: ui/text.js:144 ui/text.js:145
+#: ui/text.js:146 ui/text.js:147
 msgid "Error"
 msgstr "Ошибка"
 
-#: ui/text.js:147
+#: ui/text.js:149
 msgid "Not charging"
 msgstr "Не заряжается"
 
-#: ui/text.js:148
+#: ui/text.js:150
 msgid "Returning to dock"
 msgstr "Едет на базу"
 
-#: ui/text.js:149
+#: ui/text.js:151
 msgid "Charged"
 msgstr "Заряжен"
 
-#: ui/text.js:150
+#: ui/text.js:152
 msgid "Busy"
 msgstr "Занят"
 
-#: ui/text.js:156
+#: ui/text.js:158
 msgid "Favourite"
 msgstr "Любимый"
 
-#: ui/text.js:161
+#: ui/text.js:163
 msgid "Normal"
 msgstr "По умолчанию"
 
-#: ui/text.js:162
+#: ui/text.js:164
 msgid "Very low"
 msgstr "Очень низкий"
 
-#: ui/text.js:163 ui/text.js:394
+#: ui/text.js:165 ui/text.js:396
 msgid "Cool"
 msgstr "Холод"
 
-#: ui/text.js:164 ui/text.js:400
+#: ui/text.js:166 ui/text.js:402
 msgid "Heat"
 msgstr "Тепло"
 
-#: ui/text.js:165 ui/text.js:396
+#: ui/text.js:167 ui/text.js:398
 msgctxt "mode"
 msgid "Dry"
 msgstr "Осушение"
 
-#: ui/text.js:166 ui/text.js:398
+#: ui/text.js:168 ui/text.js:400
 msgctxt "mode"
 msgid "Fan"
 msgstr "Обдув"
 
-#: ui/text.js:171
+#: ui/text.js:173
 msgid "No faults"
 msgstr "Нет неисправностей"
 
-#: ui/text.js:172
+#: ui/text.js:174
 msgid "Straight wind"
 msgstr "Прямой поток"
 
-#: ui/text.js:173
+#: ui/text.js:175
 msgid "Natural wind"
 msgstr "Естественный поток"
 
-#: ui/text.js:176 ui/text.js:180
+#: ui/text.js:178 ui/text.js:182
 msgid "Standard"
 msgstr "Стандарт"
 
-#: ui/text.js:183
+#: ui/text.js:185
 msgid "Waiting to start"
 msgstr "Ждёт старта"
 
-#: ui/text.js:184
+#: ui/text.js:186
 msgid "Cooking"
 msgstr "Готовит"
 
-#: ui/text.js:185
+#: ui/text.js:187
 msgid "Preheating"
 msgstr "Разогрев"
 
-#: ui/text.js:186
+#: ui/text.js:188
 msgid "Done"
 msgstr "Готово"
 
-#: ui/text.js:187
+#: ui/text.js:189
 msgid "Preheated"
 msgstr "Разогрет"
 
-#: ui/text.js:188
+#: ui/text.js:190
 msgid "Preheat paused"
 msgstr "Разогрев на паузе"
 
-#: ui/text.js:189
+#: ui/text.js:191
 msgid "Paused to turn the food"
 msgstr "Пауза, чтобы перевернуть"
 
-#: ui/text.js:191
+#: ui/text.js:193
 msgid "Keeping warm, paused"
 msgstr "Подогрев на паузе"
 
-#: ui/text.js:192
+#: ui/text.js:194
 msgid "Kept warm"
 msgstr "Подогрев окончен"
 
-#: ui/text.js:193
+#: ui/text.js:195
 msgid "Crispy roast"
 msgstr "Хрустящая корочка"
 
-#: ui/text.js:194
+#: ui/text.js:196
 msgid "Tender roast"
 msgstr "Нежное запекание"
 
-#: ui/text.js:195
+#: ui/text.js:197
 msgid "Less fat"
 msgstr "Меньше жира"
 
-#: ui/text.js:196
+#: ui/text.js:198
 msgid "Sensor disconnected"
 msgstr "Датчик отключён"
 
-#: ui/text.js:197
+#: ui/text.js:199
 msgid "Sensor short circuit"
 msgstr "Замыкание датчика"
 
-#: ui/text.js:198
+#: ui/text.js:200
 msgid "Sensor failure"
 msgstr "Сбой датчика"
 
-#: ui/text.js:199
+#: ui/text.js:201
 msgid "French fries"
 msgstr "Картофель фри"
 
-#: ui/text.js:200
+#: ui/text.js:202
 msgid "Chicken wings"
 msgstr "Куриные крылышки"
 
-#: ui/text.js:201
+#: ui/text.js:203
 msgid "Steak"
 msgstr "Стейк"
 
-#: ui/text.js:202
+#: ui/text.js:204
 msgid "Lamb chops"
 msgstr "Бараньи рёбрышки"
 
-#: ui/text.js:203
+#: ui/text.js:205
 msgid "Fish"
 msgstr "Рыба"
 
-#: ui/text.js:204
+#: ui/text.js:206
 msgid "Shrimp"
 msgstr "Креветки"
 
-#: ui/text.js:205
+#: ui/text.js:207
 msgid "Vegetables"
 msgstr "Овощи"
 
-#: ui/text.js:206
+#: ui/text.js:208
 msgid "Cake"
 msgstr "Выпечка"
 
-#: ui/text.js:207
+#: ui/text.js:209
 msgid "Pizza"
 msgstr "Пицца"
 
-#: ui/text.js:208
+#: ui/text.js:210
 msgid "Defrost"
 msgstr "Разморозка"
 
-#: ui/text.js:209
+#: ui/text.js:211
 msgid "Dried fruit"
 msgstr "Сухофрукты"
 
-#: ui/text.js:210
+#: ui/text.js:212
 msgid "Yoghurt"
 msgstr "Йогурт"
 
-#: ui/text.js:211
+#: ui/text.js:213
 msgid "Manual"
 msgstr "Вручную"
 
-#: ui/text.js:212
+#: ui/text.js:214
 msgid "No need to turn"
 msgstr "Не переворачивать"
 
-#: ui/text.js:214
+#: ui/text.js:216
 msgid "One layer"
 msgstr "Один слой"
 
-#: ui/text.js:215
+#: ui/text.js:217
 msgid "Two layers"
 msgstr "Два слоя"
 
-#: ui/text.js:216
+#: ui/text.js:218
 msgid "Half a basket"
 msgstr "Полкорзины"
 
-#: ui/text.js:217
+#: ui/text.js:219
 msgid "Full basket"
 msgstr "Полная корзина"
 
-#: ui/text.js:218
+#: ui/text.js:220
 msgid "Kilograms"
 msgstr "Килограммы"
 
-#: ui/text.js:219
+#: ui/text.js:221
 msgid "Pounds"
 msgstr "Фунты"
 
-#: ui/text.js:220
+#: ui/text.js:222
 msgid "Battery fine"
 msgstr "Батарея в норме"
 
-#: ui/text.js:221
+#: ui/text.js:223
 msgid "Battery low"
 msgstr "Батарея садится"
 
-#: ui/text.js:222
+#: ui/text.js:224
 msgid "Battery very low"
 msgstr "Батарея почти села"
 
-#: ui/text.js:223
+#: ui/text.js:225
 msgid "White"
 msgstr "Белый"
 
-#: ui/text.js:224
+#: ui/text.js:226
 msgid "Red"
 msgstr "Красный"
 
-#: ui/text.js:225
+#: ui/text.js:227
 msgid "Orange"
 msgstr "Оранжевый"
 
-#: ui/text.js:226
+#: ui/text.js:228
 msgid "Yellow"
 msgstr "Жёлтый"
 
-#: ui/text.js:227
+#: ui/text.js:229
 msgid "Green"
 msgstr "Зелёный"
 
-#: ui/text.js:228
+#: ui/text.js:230
 msgid "Cyan"
 msgstr "Голубой"
 
-#: ui/text.js:229
+#: ui/text.js:231
 msgid "Blue"
 msgstr "Синий"
 
-#: ui/text.js:230
+#: ui/text.js:232
 msgid "Purple"
 msgstr "Фиолетовый"
 
-#: ui/text.js:231
+#: ui/text.js:233
 msgid "Pink"
 msgstr "Розовый"
 
-#: ui/text.js:232
+#: ui/text.js:234
 msgid "Heat and cool"
 msgstr "Нагрев и охлаждение"
 
-#: ui/text.js:233
+#: ui/text.js:235
 msgid "Opening"
 msgstr "Открывается"
 
-#: ui/text.js:234
+#: ui/text.js:236
 msgid "Closing"
 msgstr "Закрывается"
 
-#: ui/text.js:235
+#: ui/text.js:237
 msgid "Stopped"
 msgstr "Остановлено"
 
-#: ui/text.js:236
+#: ui/text.js:238
 msgid "Locked"
 msgstr "Заперт"
 
-#: ui/text.js:237
+#: ui/text.js:239
 msgid "Unlocked"
 msgstr "Открыт"
 
-#: ui/text.js:238
+#: ui/text.js:240
 msgid "Locking"
 msgstr "Запирается"
 
-#: ui/text.js:239
+#: ui/text.js:241
 msgid "Unlocking"
 msgstr "Отпирается"
 
-#: ui/text.js:240
+#: ui/text.js:242
 msgid "Jammed"
 msgstr "Заклинило"
 
-#: ui/text.js:242
+#: ui/text.js:244
 msgid "Standby"
 msgstr "Ожидание"
 
-#: ui/text.js:243
+#: ui/text.js:245
 msgid "Buffering"
 msgstr "Загрузка"
 
-#: ui/text.js:244
+#: ui/text.js:246
 msgid "Humidify"
 msgstr "Увлажнение"
 
-#: ui/text.js:245
+#: ui/text.js:247
 msgid "Dehumidify"
 msgstr "Осушение"
 
-#: ui/text.js:246
+#: ui/text.js:248
 msgid "Excellent"
 msgstr "Отличный"
 
-#: ui/text.js:247
+#: ui/text.js:249
 msgid "Good"
 msgstr "Хороший"
 
-#: ui/text.js:248
+#: ui/text.js:250
 msgid "Fair"
 msgstr "Средний"
 
-#: ui/text.js:249
+#: ui/text.js:251
 msgid "Inferior"
 msgstr "Плохой"
 
-#: ui/text.js:250
+#: ui/text.js:252
 msgid "Poor"
 msgstr "Очень плохой"
 
-#: ui/text.js:252
+#: ui/text.js:254
 msgid "Smart"
 msgstr "Умный"
 
-#: ui/text.js:258
+#: ui/text.js:260
 #, javascript-format
 msgid "Level %s"
 msgstr "Уровень %s"
 
-#: ui/text.js:331
+#: ui/text.js:333
 msgid "The switch is not in DIY mode."
 msgstr "Выключатель не в режиме DIY."
 
-#: ui/text.js:331
+#: ui/text.js:333
 msgid "The switch did not take the command."
 msgstr "Выключатель не принял команду."
 
-#: ui/text.js:333
+#: ui/text.js:335
 msgid "The switch is not answering. Is it on and on this network?"
 msgstr "Выключатель не отвечает. Он включён и в этой сети?"
 
-#: ui/text.js:341 prefs/common.js:211
+#: ui/text.js:343 prefs/common.js:211
 msgid "The device is busy. Try again in a moment."
 msgstr "Устройство занято. Попробуйте чуть позже."
 
-#: ui/text.js:343 prefs/common.js:213
+#: ui/text.js:345 prefs/common.js:213
 msgid "The accessory cannot be reached."
 msgstr "Аксессуар недоступен."
 
-#: ui/text.js:345 prefs/common.js:215
+#: ui/text.js:347 prefs/common.js:215
 msgid "The device refused it."
 msgstr "Устройство отказало."
 
-#: ui/text.js:347 prefs/common.js:217
+#: ui/text.js:349 prefs/common.js:217
 msgid "The device sent an answer Nook cannot read."
 msgstr "Устройство прислало ответ, который Nook не может прочитать."
 
-#: ui/text.js:349
+#: ui/text.js:351
 msgid "The device cannot do that."
 msgstr "Устройство так не умеет."
 
-#: ui/text.js:351 prefs/common.js:233
+#: ui/text.js:353 prefs/common.js:233
 msgid ""
 "The certificate of this Home Assistant is not trusted. Use its http:// "
 "address on this network, or give it a trusted certificate."
@@ -2550,30 +2586,30 @@ msgstr ""
 "Сертификату этого Home Assistant нет доверия. Используйте его адрес http:// "
 "в этой сети или выдайте ему доверенный сертификат."
 
-#: ui/text.js:353 prefs/common.js:227
+#: ui/text.js:355 prefs/common.js:227
 msgid "The device no longer knows Nook. Pair it again."
 msgstr "Устройство больше не знает Nook. Сопрягите его заново."
 
-#: ui/text.js:355 prefs/common.js:229
+#: ui/text.js:357 prefs/common.js:229
 msgid ""
 "The bridge answered with another certificate. Pair it again if it was "
 "replaced."
 msgstr ""
 "Мост ответил с другим сертификатом. Если его заменили, сопрягите заново."
 
-#: ui/text.js:361 prefs/common.js:235
+#: ui/text.js:363 prefs/common.js:235
 msgid "The device did not answer in time."
 msgstr "Устройство не ответило вовремя."
 
-#: ui/text.js:363 prefs/common.js:237
+#: ui/text.js:365 prefs/common.js:237
 msgid "The connection closed. Try again."
 msgstr "Соединение закрылось. Попробуйте ещё раз."
 
-#: ui/text.js:373 prefs/tvs.js:35
+#: ui/text.js:375 prefs/tvs.js:35
 msgid "The TV did not let Nook in."
 msgstr "Телевизор не пустил Nook."
 
-#: ui/text.js:375
+#: ui/text.js:377
 msgid ""
 "The TV did not wake up. Turn on network standby (Powered On by Apps) in its "
 "network settings."
@@ -2581,52 +2617,64 @@ msgstr ""
 "Телевизор не проснулся. Включите сетевой режим ожидания (Powered On by Apps) "
 "в его сетевых настройках."
 
-#: ui/tiles.js:91
+#: ui/tiles.js:93
 msgid "Lights"
 msgstr "Свет"
 
-#: ui/tiles.js:92
+#: ui/tiles.js:94
 msgid "Climate"
 msgstr "Климат"
 
-#: ui/tiles.js:93
+#: ui/tiles.js:95
 msgid "Media"
 msgstr "Медиа"
 
-#: ui/tiles.js:95
+#: ui/tiles.js:97
 msgid "Security"
 msgstr "Безопасность"
 
-#: ui/tiles.js:96
+#: ui/tiles.js:98
 msgid "Appliances"
 msgstr "Техника"
 
-#: ui/tiles.js:123
+#: ui/tiles.js:127
 #, javascript-format
 msgid "%s of %s online"
 msgstr "%s из %s в сети"
 
-#: ui/tiles.js:127 ui/tiles.js:138
+#: ui/tiles.js:131 ui/tiles.js:144
 #, javascript-format
 msgid "%s on"
 msgstr "Включено: %s"
 
-#: ui/tiles.js:133
+#: ui/tiles.js:137
 msgid "All quiet"
 msgstr "Всё спокойно"
 
-#: ui/tiles.js:135
+#: ui/tiles.js:139
 #, javascript-format
 msgid "%s working"
 msgstr "Работает: %s"
 
-#: ui/tiles.js:139
+#: ui/tiles.js:145
 msgid "All off"
 msgstr "Всё выключено"
 
-#: ui/tiles.js:237
+#: ui/tiles.js:149
+#, javascript-format
+msgid "%d scene"
+msgid_plural "%d scenes"
+msgstr[0] "%d сцена"
+msgstr[1] "%d сцены"
+msgstr[2] "%d сцен"
+
+#: ui/tiles.js:277
 msgid "Switch On or Off"
 msgstr "Включить или выключить"
+
+#: ui/tiles.js:290
+msgid "Run Scene"
+msgstr "Запустить сцену"
 
 #: prefs/aircons.js:24
 msgid ""

@@ -7,7 +7,7 @@ import GObject from 'gi://GObject';
 import Pango from 'gi://Pango';
 import St from 'gi://St';
 
-import {gettext as _} from 'resource:///org/gnome/shell/extensions/extension.js';
+import {gettext as _, ngettext} from 'resource:///org/gnome/shell/extensions/extension.js';
 import * as DND from 'resource:///org/gnome/shell/ui/dnd.js';
 import * as Main from 'resource:///org/gnome/shell/ui/main.js';
 
@@ -78,6 +78,7 @@ function alikeKind(device) {
 
 // Sections of the module view in display order, by the glyphs they take; the rest are appliances.
 export const SECTIONS = [
+    ['scenes', []],
     ['lights', ['bulb', 'rocker']],
     ['climate', ['aircon', 'fan', 'thermometer', 'heater', 'humidifier', 'dehumidifier', 'purifier', 'thermostat']],
     ['media', ['tv', 'speaker']],
@@ -88,6 +89,7 @@ export const SECTIONS = [
 
 export function sectionTitle(id) {
     return {
+        scenes: _('Scenes'),
         lights: _('Lights'),
         climate: _('Climate'),
         media: _('Media'),
@@ -99,6 +101,8 @@ export function sectionTitle(id) {
 
 // A glyph chosen in Settings moves the device along with its look.
 function sectionOf(device, icons) {
+    if (device.primary.kind === 'scene')
+        return 'scenes';
     if (device.primary.kind === 'camera')
         return 'cameras';
     const icon = icons[device.did];
@@ -133,6 +137,8 @@ export function sectionSummary(id, tiles) {
         return reachable.length > 0 ? _('All quiet') : '';
     case 'appliances':
         return on > 0 ? _('%s working').replace('%s', String(on)) : '';
+    case 'scenes':
+        return on > 0 ? _('Running…') : sceneCount(devices.length);
     default:
         if (on > 0)
             return _('%s on').replace('%s', String(on));
@@ -140,9 +146,41 @@ export function sectionSummary(id, tiles) {
     }
 }
 
-// Alike devices in one module go by room, unless renamed in Nook.
+export const sceneCount = count => ngettext('%d scene', '%d scenes', count).replace('%d', String(count));
+
+const sceneRunning = device => device.scene?.running === true || device.source.isRunning(device);
+
+// Raises what no device would throw; the rest is a message for the user.
+function troubleText(device, e) {
+    if (!(e instanceof XiaomiError) && !(e instanceof TvError) && !(e instanceof ClimateError) &&
+        !(e instanceof SonoffError) && !(e instanceof EwelinkError) && !(e instanceof SpecError) &&
+        !(e instanceof GLib.Error))
+        throw e;
+    return device.source instanceof TvHome ? tvTrouble(e)
+        : device.source instanceof SonoffHome ? sonoffTrouble(e)
+            : e instanceof SpecError ? specTrouble(e) : e.message;
+}
+
+// From a tile or a chip: busy(true) while it runs.
+async function runScene(device, name, busy, gone) {
+    busy(true);
+    try {
+        await device.source.runScene(device);
+    } catch (e) {
+        if (e.matches?.(Gio.IOErrorEnum, Gio.IOErrorEnum.CANCELLED))
+            return;
+        const text = troubleText(device, e);
+        if (!gone())
+            Main.notifyError(name, text);
+    } finally {
+        if (!gone())
+            busy(false);
+    }
+}
+
+// Alike devices in one module go by room, unless renamed in Nook. A scene keeps its name.
 export function roomLabels(items, names) {
-    const devices = items.filter(([, extra]) => !extra).map(([device]) => device);
+    const devices = items.filter(([device, extra]) => !extra && device.primary.kind !== 'scene').map(([device]) => device);
     const room = device => device.room?.toLocaleLowerCase();
     const labels = new Map();
     for (const device of devices) {
@@ -179,6 +217,7 @@ class Tile extends St.Button {
     _init(home, device, {shape, typeColors, name, label = null, icon = '', extra = null, openCard, awaits, drop = null,
         synced = null}) {
         const switchable = extra !== null || ['switch', 'climate', 'tv'].includes(device.primary.kind);
+        const runnable = !extra && device.primary.kind === 'scene';
         const modular = shape === 'row';
         super._init({
             style_class: modular ? `nook-cc-tile nook-cc-${shape}` : `nook-tile nook-tile-${shape}`,
@@ -198,6 +237,7 @@ class Tile extends St.Button {
         this._shape = shape;
         this._modular = modular;
         this._switchable = switchable;
+        this._runnable = runnable;
         this._busy = false;
         this._gone = false;
         this._picture = false;
@@ -242,6 +282,19 @@ class Tile extends St.Button {
                     this._openCard(device);
                 else if (!this._busy)
                     this._toggle().catch(logError);
+            });
+        } else if (runnable) {
+            this._bubble = new St.Button({
+                ...bubble,
+                style_class: 'nook-bubble nook-toggle',
+                accessible_name: _('Run Scene'),
+                can_focus: true,
+            });
+            this._bubble.connect('clicked', () => {
+                if (this._device.online === false)
+                    this._openCard(device);
+                else if (!this._busy)
+                    this._run().catch(logError);
             });
         } else {
             this._bubble = new St.Bin(bubble);
@@ -340,6 +393,8 @@ class Tile extends St.Button {
     }
 
     _isOn() {
+        if (this._runnable)
+            return this._busy || sceneRunning(this._device);
         if (this._extra)
             return this._device.extra?.[this._key] === true;
         if (this._switchable)
@@ -358,6 +413,8 @@ class Tile extends St.Button {
             this._state.text = state === '…' ? '\u00a0' : `${state} · ${this._deviceName}`;
         } else {
             state = this._awaits(this._device) ? '…' : stateText(this._device);
+            if (this._runnable && this._busy)
+                state = _('Running…');
             this._state.text = state === '…' ? '\u00a0' : state;
         }
         this._skeleton.visible = state === '…';
@@ -432,20 +489,76 @@ class Tile extends St.Button {
                 device.values = before;
             if (e.matches?.(Gio.IOErrorEnum, Gio.IOErrorEnum.CANCELLED))
                 return;
-            if (!(e instanceof XiaomiError) && !(e instanceof TvError) && !(e instanceof ClimateError) &&
-                !(e instanceof SonoffError) && !(e instanceof EwelinkError) && !(e instanceof SpecError) &&
-                !(e instanceof GLib.Error))
-                throw e;
-            if (!this._gone) {
-                Main.notifyError(this._deviceName, device.source instanceof TvHome ? tvTrouble(e)
-                    : device.source instanceof SonoffHome ? sonoffTrouble(e)
-                        : e instanceof SpecError ? specTrouble(e) : e.message);
-            }
+            const text = troubleText(device, e);
+            if (!this._gone)
+                Main.notifyError(this._deviceName, text);
         } finally {
             this._busy = false;
             if (!this._gone)
                 this.sync();
         }
+    }
+
+    _run() {
+        return runScene(this._device, this._deviceName, busy => {
+            this._busy = busy;
+            this.sync();
+        }, () => this._gone);
+    }
+});
+
+// A scene in the compact row, under the header: a chip that runs it. Its card, to pin or
+// hide it, is a secondary click away.
+export const SceneChip = GObject.registerClass(
+class SceneChip extends St.Button {
+    _init(device, name, openCard) {
+        const box = new St.BoxLayout({style_class: 'nook-scene-chip-box'});
+        box.add_child(new Glyph(Glyphs.kindOf(deviceType(device), null, device.model)[0]));
+        const label = new St.Label({text: name, y_align: Clutter.ActorAlign.CENTER});
+        // Whole names; the row scrolls instead.
+        label.clutter_text.ellipsize = Pango.EllipsizeMode.NONE;
+        box.add_child(label);
+        super._init({
+            style_class: 'nook-chip nook-scene-chip',
+            child: box,
+            accessible_name: name,
+            can_focus: true,
+            button_mask: PRIMARY_SECONDARY,
+        });
+        this._device = device;
+        this._name = name;
+        this._busy = false;
+        this._gone = false;
+        this.connect('clicked', (_chip, button) => {
+            if (button !== 1 || this._device.online === false)
+                openCard(this._device);
+            else if (!this._busy)
+                this._run().catch(logError);
+        });
+        this.connect('destroy', () => {
+            this._gone = true;
+        });
+        this.sync();
+    }
+
+    get device() {
+        return this._device;
+    }
+
+    get extra() {
+        return null;
+    }
+
+    sync() {
+        this.checked = this._busy || sceneRunning(this._device);
+        this.opacity = this._device.online === false ? OFFLINE_OPACITY : 255;
+    }
+
+    _run() {
+        return runScene(this._device, this._name, busy => {
+            this._busy = busy;
+            this.sync();
+        }, () => this._gone);
     }
 });
 

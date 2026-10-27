@@ -10,7 +10,8 @@ import {arrange} from '../lib/arrange.js';
 import {ColumnsLayout} from './layouts.js';
 import {isBluetooth} from './rows.js';
 import {VERTICAL, readSetting} from './text.js';
-import {NowPlaying, SECTIONS, Tile, groupRooms, roomLabels, sectionSummary, sectionTitle, tileSection} from './tiles.js';
+import {NowPlaying, SECTIONS, SceneChip, Tile, groupRooms, roomLabels, sceneCount, sectionSummary, sectionTitle, tileSection}
+    from './tiles.js';
 
 const BRAND = /^(Xiaomi Smart|Xiaomi|Mi Smart|Mi)\s+/;
 
@@ -20,6 +21,8 @@ function shortName(name) {
 }
 
 const PINNED = '@pinned';
+const SCENES = '@scenes';
+const isScene = device => device.primary.kind === 'scene';
 
 export class MenuView {
     _render() {
@@ -37,10 +40,9 @@ export class MenuView {
         this._title.text = this._home?.homeName ?? _('Nook');
 
         const choices = this._choices();
-        const devices = arrange(this._devices(), choices);
-        const pinned = devices.filter(d => choices.pinned.includes(d.did));
+        let devices = arrange(this._devices(), choices);
         if (devices.length === 0) {
-            const miOnly = this._home && !this._sources().some(source => source && source !== this._home);
+            const miOnly = this._home && !this._sources().some(source => source && source !== this._home && source !== this._miScenes);
             this._message(miOnly ? _('No devices in this Mi Home account.')
                 : _('No devices to show. Add them, or show hidden ones, in Settings.'));
             if (this._loginNote)
@@ -49,7 +51,16 @@ export class MenuView {
         }
         this._drawnOffline = this._offlineKey();
 
-        const rooms = groupRooms(view === 'rooms' ? devices.filter(d => !pinned.includes(d)) : devices);
+        if (devices.some(isScene) && readSetting(this._settings, 'scenes-compact')) {
+            this._addSceneRow(devices.filter(isScene));
+            devices = devices.filter(d => !isScene(d));
+        }
+        const pinned = devices.filter(d => choices.pinned.includes(d.did));
+        // Scenes are no room's devices: a group of their own, and no room tab.
+        const rooms = groupRooms(devices.filter(d => !isScene(d) && !(view === 'rooms' && pinned.includes(d))));
+        const scenes = devices.filter(d => isScene(d) && !pinned.includes(d));
+        if (view === 'rooms' && scenes.length > 0)
+            rooms.unshift({key: SCENES, name: _('Scenes'), devices: scenes});
         if (view === 'rooms' && pinned.length > 0)
             rooms.unshift({key: PINNED, name: _('Pinned'), devices: pinned});
 
@@ -59,6 +70,10 @@ export class MenuView {
             this._addSections(devices, pinned, 3, 'square');
         } else if (view === 'rooms') {
             for (const room of rooms) {
+                if (room.key === SCENES) {
+                    this._addFoldedScenes(room.devices, 2, 'compact');
+                    continue;
+                }
                 this._body.add_child(new St.Label({
                     style_class: 'nook-room',
                     text: room.name ?? _('Other'),
@@ -91,6 +106,7 @@ export class MenuView {
     _addSections(devices, pinned, columns, shape) {
         const sections = [
             [_('Pinned'), []],
+            [_('Scenes'), []],
             [_('Controls'), []],
             [_('Speakers'), []],
             [_('TVs'), []],
@@ -103,25 +119,123 @@ export class MenuView {
             if (pinned.includes(device))
                 index = 0;
             else if (device.online === false && !isBluetooth(device))
-                index = 6;
-            else if (['switch', 'climate'].includes(device.primary.kind))
+                index = 7;
+            else if (isScene(device))
                 index = 1;
-            else if (device.primary.kind === 'media')
+            else if (['switch', 'climate'].includes(device.primary.kind))
                 index = 2;
-            else if (device.primary.kind === 'tv')
+            else if (device.primary.kind === 'media')
                 index = 3;
-            else if (device.primary.kind === 'camera')
+            else if (device.primary.kind === 'tv')
                 index = 4;
-            else
+            else if (device.primary.kind === 'camera')
                 index = 5;
+            else
+                index = 6;
             sections[index][1].push(device);
         }
-        for (const [title, members] of sections) {
+        sections.forEach(([title, members], index) => {
             if (members.length === 0)
-                continue;
+                return;
+            if (index === 1) {
+                this._addFoldedScenes(members, columns, shape);
+                return;
+            }
             this._body.add_child(new St.Label({style_class: 'nook-room', text: title}));
             this._addTiles(members, columns, shape);
+        });
+    }
+
+    // Scenes fold away under their heading, the card's Device Info way; the choice holds
+    // for every view.
+    _foldButton(title, summary, styleClass) {
+        const folded = readSetting(this._settings, 'scenes-folded');
+        const rtl = Clutter.get_default_text_direction() === Clutter.TextDirection.RTL;
+        const line = new St.BoxLayout({style_class: 'nook-fold-line', x_expand: true});
+        line.add_child(title);
+        line.add_child(new St.Icon({
+            style_class: 'nook-fold-arrow',
+            icon_size: 12,
+            icon_name: folded ? `pan-${rtl ? 'start' : 'end'}-symbolic` : 'pan-down-symbolic',
+            y_align: Clutter.ActorAlign.CENTER,
+        }));
+        const box = new St.BoxLayout({x_expand: true});
+        box.add_child(line);
+        box.add_child(summary);
+        const button = new St.Button({
+            style_class: `${styleClass} nook-fold`,
+            child: box,
+            accessible_name: folded ? _('Show Scenes') : _('Hide Scenes'),
+            can_focus: true,
+            x_expand: true,
+        });
+        button.connect('clicked', () => this._settings.set_boolean('scenes-folded', !folded));
+        return [button, folded];
+    }
+
+    _addFoldedScenes(scenes, columns, shape) {
+        const title = new St.Label({text: _('Scenes'), y_align: Clutter.ActorAlign.CENTER});
+        const count = new St.Label({style_class: 'nook-fold-count', text: sceneCount(scenes.length), y_align: Clutter.ActorAlign.CENTER});
+        const [button, folded] = this._foldButton(title, count, 'nook-room');
+        this._body.add_child(button);
+        if (!folded)
+            this._addTiles(scenes, columns, shape);
+    }
+
+    // Compact scenes: one line of chips under the header.
+    _addSceneRow(scenes) {
+        const row = new St.BoxLayout({style_class: 'nook-scene-row'});
+        const scroll = new St.ScrollView({
+            style_class: 'nook-scene-scroll',
+            child: row,
+            hscrollbar_policy: St.PolicyType.EXTERNAL,
+            vscrollbar_policy: St.PolicyType.NEVER,
+            enable_mouse_scrolling: false,
+            x_expand: true,
+        });
+        for (const device of scenes) {
+            const chip = new SceneChip(device, this._nameOf(device), d => this._openCard(d).catch(logError));
+            // Keyboard focus brings a chip past either edge into view.
+            chip.connect('key-focus-in', () => {
+                const adjustment = scroll.hadjustment;
+                const {x1, x2} = chip.get_allocation_box();
+                if (x1 < adjustment.value)
+                    adjustment.value = x1;
+                else if (x2 > adjustment.value + adjustment.page_size)
+                    adjustment.value = x2 - adjustment.page_size;
+            });
+            this._tiles.push(chip);
+            row.add_child(chip);
         }
+        // The wheel moves the row while it has further to go; past either end, and when
+        // it all fits, the menu scrolls as usual. Steps as in St.ScrollView.
+        scroll.connect('scroll-event', (_actor, event) => {
+            const adjustment = scroll.hadjustment;
+            const end = adjustment.upper - adjustment.page_size;
+            let delta;
+            switch (event.get_scroll_direction()) {
+            case Clutter.ScrollDirection.UP:
+            case Clutter.ScrollDirection.LEFT:
+                delta = -1;
+                break;
+            case Clutter.ScrollDirection.DOWN:
+            case Clutter.ScrollDirection.RIGHT:
+                delta = 1;
+                break;
+            default: {
+                const [dx, dy] = event.get_scroll_delta();
+                delta = Math.abs(dx) > Math.abs(dy) ? dx : dy;
+            }
+            }
+            if (end <= adjustment.lower || (delta < 0 && adjustment.value <= adjustment.lower) || (delta > 0 && adjustment.value >= end))
+                return Clutter.EVENT_PROPAGATE;
+            // A wheel sends smooth events and discrete ones emulated from them: use one kind.
+            if (event.get_flags() & Clutter.EventFlags.FLAG_POINTER_EMULATED)
+                return Clutter.EVENT_STOP;
+            adjustment.value = Math.min(end, Math.max(adjustment.lower, adjustment.value + delta * adjustment.page_size ** (2 / 3)));
+            return Clutter.EVENT_STOP;
+        });
+        this._body.add_child(scroll);
     }
 
     _addChip(key, label, current) {
@@ -215,7 +329,7 @@ export class MenuView {
             });
             const box = new St.BoxLayout({...VERTICAL, style_class: 'nook-cc-module', x_expand: true});
             box.add_child(grid);
-            return [box, tiles];
+            return [box, tiles, grid];
         };
 
         for (const [name, items] of groups) {
@@ -234,9 +348,18 @@ export class MenuView {
             const sum = () => {
                 summary.text = sectionSummary(id, tiles);
             };
-            const [box, made] = module(sections.get(id), sum);
+            const [box, made, grid] = module(sections.get(id), sum);
             tiles.push(...made);
             sum();
+            if (id === 'scenes') {
+                const title = new St.Label({style_class: 'nook-cc-section', text: sectionTitle(id), y_align: Clutter.ActorAlign.CENTER});
+                const [button, folded] = this._foldButton(title, summary, 'nook-cc-head');
+                box.insert_child_at_index(button, 0);
+                // Folded, the tiles stay: they keep the summary current.
+                grid.visible = !folded;
+                boxes.set(id, box);
+                continue;
+            }
             const head = new St.BoxLayout({style_class: 'nook-cc-head', x_expand: true});
             head.add_child(new St.Label({
                 style_class: 'nook-cc-section',

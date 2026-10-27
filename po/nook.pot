@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: nook\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-10-26 16:50+0200\n"
+"POT-Creation-Date: 2026-10-27 15:08+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -18,8 +18,8 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=INTEGER; plural=EXPRESSION;\n"
 
-#: extension.js:25 ui/menu.js:49 ui/menu.js:104 ui/menu-read.js:136
-#: ui/menu-view.js:37
+#: extension.js:28 ui/menu.js:49 ui/menu.js:105 ui/menu-read.js:139
+#: ui/menu-view.js:40
 msgid "Nook"
 msgstr ""
 
@@ -35,7 +35,7 @@ msgstr ""
 msgid "Gree, Midea and Daikin units, by a broadcast on this network."
 msgstr ""
 
-#: prefs.js:97 ui/menu-view.js:97 ui/tiles.js:94 prefs/cameras.js:21
+#: prefs.js:97 ui/menu-view.js:113 ui/tiles.js:96 prefs/cameras.js:21
 #: prefs/devices-page.js:324
 msgid "Cameras"
 msgstr ""
@@ -45,7 +45,7 @@ msgid ""
 "Tapo cameras, by ONVIF. A camera answers only once its camera account exists."
 msgstr ""
 
-#: prefs.js:99 ui/menu-view.js:95 prefs/devices-page.js:325
+#: prefs.js:99 ui/menu-view.js:111 prefs/devices-page.js:325
 #: prefs/speakers.js:18
 msgid "Speakers"
 msgstr ""
@@ -54,7 +54,7 @@ msgstr ""
 msgid "Google Cast speakers and displays, by mDNS."
 msgstr ""
 
-#: prefs.js:101 ui/menu-view.js:96 prefs/devices-page.js:326 prefs/tvs.js:70
+#: prefs.js:101 ui/menu-view.js:112 prefs/devices-page.js:326 prefs/tvs.js:70
 msgid "TVs"
 msgstr ""
 
@@ -155,7 +155,7 @@ msgstr ""
 msgid "Cryptocurrency"
 msgstr ""
 
-#: prefs.js:331 ui/card-spec.js:53 ui/card-spec.js:76
+#: prefs.js:331 ui/card-spec.js:55 ui/card-spec.js:78
 msgid "Address"
 msgstr ""
 
@@ -292,28 +292,38 @@ msgid ""
 "accent colour."
 msgstr ""
 
-#: prefs.js:507
+#: prefs.js:502
+msgid "Compact Scenes"
+msgstr ""
+
+#: prefs.js:503
+msgid ""
+"Scenes as one row of buttons under the header, instead of a section of their "
+"own."
+msgstr ""
+
+#: prefs.js:514
 msgid "Room Tabs"
 msgstr ""
 
-#: prefs.js:508
+#: prefs.js:515
 msgid ""
 "The tabs shown over the tiles. A room left out keeps its devices under All."
 msgstr ""
 
-#: prefs.js:528 ui/menu-view.js:54 ui/menu-view.js:70 ui/menu-view.js:93
+#: prefs.js:535 ui/menu-view.js:65 ui/menu-view.js:85 ui/menu-view.js:108
 msgid "Pinned"
 msgstr ""
 
-#: prefs.js:529 ui/menu-view.js:64 ui/menu-view.js:78
+#: prefs.js:536 ui/menu-view.js:79 ui/menu-view.js:93
 msgid "Other"
 msgstr ""
 
-#: prefs.js:563
+#: prefs.js:570
 msgid "Show All"
 msgstr ""
 
-#: prefs.js:563
+#: prefs.js:570
 msgid "Hide All"
 msgstr ""
 
@@ -522,29 +532,29 @@ msgstr ""
 msgid "Night Vision"
 msgstr ""
 
-#: ui/card-camera.js:258 ui/climate.js:47 ui/climate.js:129 ui/text.js:154
-#: ui/text.js:392
+#: ui/card-camera.js:258 ui/climate.js:47 ui/climate.js:129 ui/text.js:156
+#: ui/text.js:394
 msgid "Auto"
 msgstr ""
 
 #: ui/card-camera.js:258 ui/card-climate.js:400 ui/card-climate.js:436
 #: ui/card-controls.js:42 ui/card-controls.js:176 ui/card-controls.js:335
-#: ui/card-spec.js:302 ui/card-tv.js:73 ui/card-tv.js:115 ui/hero.js:285
-#: ui/hero.js:331 ui/hero.js:361 ui/hero.js:377 ui/hero.js:453 ui/hero.js:467
-#: ui/hero.js:482 ui/hero.js:504 ui/menu-read.js:61 ui/menu-read.js:77
-#: ui/rows.js:186 ui/rows.js:195 ui/text.js:126 ui/text.js:139
+#: ui/card-spec.js:312 ui/card-tv.js:73 ui/card-tv.js:115 ui/hero.js:287
+#: ui/hero.js:333 ui/hero.js:364 ui/hero.js:381 ui/hero.js:464 ui/hero.js:478
+#: ui/hero.js:493 ui/hero.js:515 ui/menu-read.js:62 ui/menu-read.js:78
+#: ui/rows.js:192 ui/rows.js:201 ui/text.js:128 ui/text.js:141
 msgid "On"
 msgstr ""
 
 #: ui/card-camera.js:258 ui/card-climate.js:400 ui/card-climate.js:426
 #: ui/card-climate.js:432 ui/card-climate.js:436 ui/card-controls.js:42
 #: ui/card-controls.js:92 ui/card-controls.js:103 ui/card-controls.js:176
-#: ui/card-controls.js:335 ui/card-history.js:142 ui/card-spec.js:302
-#: ui/card-tv.js:73 ui/card-tv.js:115 ui/climate.js:73 ui/hero.js:285
-#: ui/hero.js:331 ui/hero.js:361 ui/hero.js:377 ui/hero.js:453 ui/hero.js:467
-#: ui/hero.js:482 ui/hero.js:504 ui/menu-read.js:61 ui/menu-read.js:66
-#: ui/menu-read.js:76 ui/rows.js:169 ui/rows.js:185 ui/rows.js:195
-#: ui/text.js:126 ui/text.js:138
+#: ui/card-controls.js:335 ui/card-history.js:142 ui/card-spec.js:312
+#: ui/card-tv.js:73 ui/card-tv.js:115 ui/climate.js:73 ui/hero.js:287
+#: ui/hero.js:333 ui/hero.js:364 ui/hero.js:381 ui/hero.js:464 ui/hero.js:478
+#: ui/hero.js:493 ui/hero.js:515 ui/menu-read.js:62 ui/menu-read.js:67
+#: ui/menu-read.js:77 ui/rows.js:175 ui/rows.js:191 ui/rows.js:201
+#: ui/text.js:128 ui/text.js:140
 msgid "Off"
 msgstr ""
 
@@ -591,7 +601,7 @@ msgstr ""
 msgid "Left and right"
 msgstr ""
 
-#: ui/card-climate.js:178 ui/card-controls.js:65 ui/card-spec.js:387
+#: ui/card-climate.js:178 ui/card-controls.js:65 ui/card-spec.js:398
 #: ui/humanize.js:73
 msgid "Power"
 msgstr ""
@@ -604,7 +614,7 @@ msgstr ""
 msgid "Warmer"
 msgstr ""
 
-#: ui/card-climate.js:398 ui/hero.js:334
+#: ui/card-climate.js:398 ui/hero.js:336
 #, javascript-format
 msgid "Room %s°"
 msgstr ""
@@ -613,11 +623,11 @@ msgstr ""
 msgid "Room temperature unknown"
 msgstr ""
 
-#: ui/card-climate.js:406 ui/card-spec.js:507 ui/card-tv.js:91
+#: ui/card-climate.js:406 ui/card-spec.js:524 ui/card-tv.js:91 ui/color.js:292
 msgid "Turn Off"
 msgstr ""
 
-#: ui/card-climate.js:406 ui/card-spec.js:507 ui/card-tv.js:91
+#: ui/card-climate.js:406 ui/card-spec.js:524 ui/card-tv.js:91 ui/color.js:292
 msgid "Turn On"
 msgstr ""
 
@@ -648,7 +658,7 @@ msgid "Angle"
 msgstr ""
 
 #: ui/card-controls.js:90 ui/card-controls.js:298 ui/card-history.js:149
-#: ui/rows.js:104 ui/text.js:261
+#: ui/rows.js:104 ui/text.js:263
 #, javascript-format
 msgid "%s min"
 msgstr ""
@@ -663,7 +673,7 @@ msgstr ""
 msgid "Timer"
 msgstr ""
 
-#: ui/card-controls.js:108 ui/card-controls.js:165 ui/card-spec.js:125
+#: ui/card-controls.js:108 ui/card-controls.js:165 ui/card-spec.js:127
 #: ui/humanize.js:15
 msgid "Light"
 msgstr ""
@@ -680,11 +690,11 @@ msgstr ""
 msgid "Turn the Head"
 msgstr ""
 
-#: ui/card-controls.js:131 ui/card-tv.js:245 ui/text.js:167
+#: ui/card-controls.js:131 ui/card-tv.js:245 ui/text.js:169
 msgid "Left"
 msgstr ""
 
-#: ui/card-controls.js:132 ui/card-tv.js:246 ui/text.js:168
+#: ui/card-controls.js:132 ui/card-tv.js:246 ui/text.js:170
 msgid "Right"
 msgstr ""
 
@@ -717,7 +727,7 @@ msgid "Time to turn the food over."
 msgstr ""
 
 #: ui/card-controls.js:267 ui/card-tv.js:250 ui/card-vacuum.js:109
-#: ui/hero.js:88 ui/humanize.js:147
+#: ui/hero.js:90 ui/humanize.js:147
 msgid "Pause"
 msgstr ""
 
@@ -729,7 +739,7 @@ msgstr ""
 msgid "Start"
 msgstr ""
 
-#: ui/card-controls.js:273 ui/card-vacuum.js:111 ui/hero.js:86
+#: ui/card-controls.js:273 ui/card-vacuum.js:111 ui/hero.js:88
 #: ui/humanize.js:146 ui/humanize.js:151 ui/humanize.js:152
 msgid "Stop"
 msgstr ""
@@ -842,7 +852,7 @@ msgstr ""
 msgid "Unpin"
 msgstr ""
 
-#: ui/card.js:51 ui/menu.js:113 prefs/devices-page.js:373
+#: ui/card.js:51 ui/menu.js:114 prefs/devices-page.js:373
 msgid "Pin"
 msgstr ""
 
@@ -850,7 +860,7 @@ msgstr ""
 msgid "Show in the Menu"
 msgstr ""
 
-#: ui/card.js:53 ui/menu.js:115
+#: ui/card.js:53 ui/menu.js:116
 msgid "Hide from the Menu"
 msgstr ""
 
@@ -858,15 +868,15 @@ msgstr ""
 msgid "Take Off the Top Bar"
 msgstr ""
 
-#: ui/card.js:57 ui/menu.js:110
+#: ui/card.js:57 ui/menu.js:111
 msgid "Show in the Top Bar"
 msgstr ""
 
-#: ui/card.js:416 ui/card-spec.js:693
+#: ui/card.js:417 ui/card-spec.js:774
 msgid "Less"
 msgstr ""
 
-#: ui/card.js:418 ui/card-spec.js:697
+#: ui/card.js:419 ui/card-spec.js:778
 msgid "More"
 msgstr ""
 
@@ -878,11 +888,11 @@ msgstr ""
 msgid "Previous"
 msgstr ""
 
-#: ui/card-media.js:96 ui/card-tv.js:248 ui/hero.js:84
+#: ui/card-media.js:96 ui/card-tv.js:248 ui/hero.js:86
 msgid "Play"
 msgstr ""
 
-#: ui/card-media.js:100 ui/humanize.js:173 ui/tiles.js:485
+#: ui/card-media.js:100 ui/humanize.js:174 ui/tiles.js:598
 msgid "Next"
 msgstr ""
 
@@ -891,12 +901,12 @@ msgstr ""
 msgid "Mute"
 msgstr ""
 
-#: ui/card-media.js:153 ui/hero.js:344 ui/tiles.js:547
+#: ui/card-media.js:153 ui/hero.js:346 ui/tiles.js:660
 msgid "Nothing playing"
 msgstr ""
 
-#: ui/card-media.js:157 ui/menu-read.js:71 ui/rows.js:177 ui/text.js:143
-#: ui/tiles.js:548
+#: ui/card-media.js:157 ui/menu-read.js:72 ui/rows.js:183 ui/text.js:145
+#: ui/tiles.js:661
 msgid "Paused"
 msgstr ""
 
@@ -908,186 +918,186 @@ msgstr ""
 msgid "Unmute"
 msgstr ""
 
-#: ui/card-spec.js:27
+#: ui/card-spec.js:29
 msgid "Water"
 msgstr ""
 
-#: ui/card-spec.js:27 ui/card-spec.js:119 ui/humanize.js:96 ui/humanize.js:108
+#: ui/card-spec.js:29 ui/card-spec.js:121 ui/humanize.js:96 ui/humanize.js:108
 #: ui/props.js:182
 msgid "Temperature"
 msgstr ""
 
-#: ui/card-spec.js:31 ui/humanize.js:89 ui/humanize.js:90
+#: ui/card-spec.js:33 ui/humanize.js:89 ui/humanize.js:90
 msgid "Status"
 msgstr ""
 
-#: ui/card-spec.js:33 ui/card-spec.js:121 ui/humanize.js:97 ui/props.js:183
+#: ui/card-spec.js:35 ui/card-spec.js:123 ui/humanize.js:97 ui/props.js:183
 msgid "Humidity"
 msgstr ""
 
-#: ui/card-spec.js:35 ui/card-spec.js:127 ui/humanize.js:22 ui/humanize.js:100
+#: ui/card-spec.js:37 ui/card-spec.js:129 ui/humanize.js:22 ui/humanize.js:100
 msgid "Battery"
 msgstr ""
 
-#: ui/card-spec.js:37 ui/card-spec.js:49 ui/card-spec.js:74
+#: ui/card-spec.js:39 ui/card-spec.js:51 ui/card-spec.js:76
 msgid "Signal"
 msgstr ""
 
-#: ui/card-spec.js:37 ui/card-spec.js:49 ui/card-spec.js:74
+#: ui/card-spec.js:39 ui/card-spec.js:51 ui/card-spec.js:76
 msgctxt "unit"
 msgid "dBm"
 msgstr ""
 
-#: ui/card-spec.js:39
+#: ui/card-spec.js:41
 msgid "Heard"
 msgstr ""
 
-#: ui/card-spec.js:47 ui/card-spec.js:72
+#: ui/card-spec.js:49 ui/card-spec.js:74
 msgid "Network"
 msgstr ""
 
-#: ui/card-spec.js:51
+#: ui/card-spec.js:53
 msgid "Devices connected"
 msgstr ""
 
-#: ui/card-spec.js:55 ui/card-spec.js:82 ui/humanize.js:122 ui/humanize.js:123
+#: ui/card-spec.js:57 ui/card-spec.js:84 ui/humanize.js:122 ui/humanize.js:123
 msgid "Firmware"
 msgstr ""
 
-#: ui/card-spec.js:57 ui/card-spec.js:88
+#: ui/card-spec.js:59 ui/card-spec.js:90
 msgid "Up for"
 msgstr ""
 
-#: ui/card-spec.js:70 ui/humanize.js:18
+#: ui/card-spec.js:72 ui/humanize.js:18
 msgid "Gateway"
 msgstr ""
 
-#: ui/card-spec.js:78
+#: ui/card-spec.js:80
 msgid "Bluetooth address"
 msgstr ""
 
-#: ui/card-spec.js:78
+#: ui/card-spec.js:80
 msgid "MAC address"
 msgstr ""
 
-#: ui/card-spec.js:84
+#: ui/card-spec.js:86
 msgid "MCU firmware"
 msgstr ""
 
-#: ui/card-spec.js:86
+#: ui/card-spec.js:88
 msgid "Hardware"
 msgstr ""
 
-#: ui/card-spec.js:91 ui/humanize.js:125
+#: ui/card-spec.js:93 ui/humanize.js:125
 msgid "Model"
 msgstr ""
 
-#: ui/card-spec.js:93
+#: ui/card-spec.js:95
 msgid "Last online"
 msgstr ""
 
-#: ui/card-spec.js:113 ui/humanize.js:17
+#: ui/card-spec.js:115 ui/humanize.js:17
 msgid "Alarm"
 msgstr ""
 
-#: ui/card-spec.js:114 ui/text.js:169 ui/text.js:170
+#: ui/card-spec.js:116 ui/text.js:171 ui/text.js:172
 msgid "None"
 msgstr ""
 
-#: ui/card-spec.js:114 ui/tiles.js:132
+#: ui/card-spec.js:116 ui/tiles.js:136
 msgid "Alarm!"
 msgstr ""
 
-#: ui/card-spec.js:114 ui/humanize.js:92 ui/rows.js:118
+#: ui/card-spec.js:116 ui/humanize.js:92 ui/rows.js:118
 msgid "Fault"
 msgstr ""
 
-#: ui/card-spec.js:117
+#: ui/card-spec.js:119
 msgid "Density"
 msgstr ""
 
-#: ui/card-spec.js:123 ui/humanize.js:165 ui/props.js:184
+#: ui/card-spec.js:125 ui/humanize.js:165 ui/props.js:184
 msgid "Pressure"
 msgstr ""
 
-#: ui/card-spec.js:125 ui/text.js:82
+#: ui/card-spec.js:127 ui/text.js:84
 msgctxt "unit"
 msgid "lx"
 msgstr ""
 
-#: ui/card-spec.js:128 ui/text.js:91
+#: ui/card-spec.js:130 ui/text.js:93
 msgctxt "unit"
 msgid "V"
 msgstr ""
 
-#: ui/card-spec.js:196
+#: ui/card-spec.js:206
 msgid "Its settings show once it is back online."
 msgstr ""
 
-#: ui/card-spec.js:202
+#: ui/card-spec.js:212
 msgid "Last 24 Hours"
 msgstr ""
 
-#: ui/card-spec.js:208
+#: ui/card-spec.js:218
 msgid "History"
 msgstr ""
 
-#: ui/card-spec.js:224
+#: ui/card-spec.js:234
 msgid "Online, with nothing more to show."
 msgstr ""
 
-#: ui/card-spec.js:224
+#: ui/card-spec.js:234
 msgid "Offline."
 msgstr ""
 
-#: ui/card-spec.js:233 ui/card-spec.js:237
+#: ui/card-spec.js:243 ui/card-spec.js:247
 msgid "Device Info"
 msgstr ""
 
-#: ui/card-spec.js:478
+#: ui/card-spec.js:495
 #, javascript-format
 msgid "Heard %s"
 msgstr ""
 
-#: ui/card-spec.js:480
+#: ui/card-spec.js:497
 msgid "Bluetooth is off, so it cannot be heard."
 msgstr ""
 
-#: ui/card-spec.js:480
+#: ui/card-spec.js:497
 msgid "Listening for it nearby…"
 msgstr ""
 
-#: ui/card-spec.js:483 ui/card-tv.js:69 ui/menu-view.js:99 ui/rows.js:162
-#: ui/tiles.js:355
+#: ui/card-spec.js:500 ui/card-tv.js:69 ui/menu-view.js:115 ui/rows.js:162
+#: ui/tiles.js:410
 msgid "Offline"
 msgstr ""
 
-#: ui/card-spec.js:483 ui/rows.js:165 ui/rows.js:199 ui/rows.js:204
-#: ui/rows.js:211
+#: ui/card-spec.js:500 ui/rows.js:165 ui/rows.js:205 ui/rows.js:210
+#: ui/rows.js:217
 msgid "Online"
 msgstr ""
 
-#: ui/card-spec.js:576
+#: ui/card-spec.js:655
 msgid "Remove Its Tile"
 msgstr ""
 
-#: ui/card-spec.js:576
+#: ui/card-spec.js:655
 msgid "Give It a Tile"
 msgstr ""
 
-#: ui/card-tv.js:22 ui/text.js:313
+#: ui/card-tv.js:22 ui/text.js:315
 msgid "TV"
 msgstr ""
 
-#: ui/card-tv.js:60 ui/text.js:377
+#: ui/card-tv.js:60 ui/text.js:379
 msgid "The TV is not answering. Is it on the same network?"
 msgstr ""
 
-#: ui/card-tv.js:71 ui/menu-read.js:74 ui/rows.js:183 prefs/hue.js:134
+#: ui/card-tv.js:71 ui/menu-read.js:75 ui/rows.js:189 prefs/hue.js:134
 msgid "Not paired"
 msgstr ""
 
-#: ui/card-tv.js:120 ui/menu-read.js:77 ui/rows.js:186
+#: ui/card-tv.js:120 ui/menu-read.js:78 ui/rows.js:192
 msgid "Muted"
 msgstr ""
 
@@ -1096,12 +1106,12 @@ msgstr ""
 msgid "Volume %s"
 msgstr ""
 
-#: ui/card-tv.js:145 ui/text.js:371
+#: ui/card-tv.js:145 ui/text.js:373
 msgid "Pair it in Settings, under TVs, to control it from here."
 msgstr ""
 
 #: ui/card-tv.js:169 ui/card-tv.js:177 ui/card-vacuum.js:254 ui/humanize.js:106
-#: ui/tiles.js:497
+#: ui/tiles.js:610
 msgid "Volume"
 msgstr ""
 
@@ -1129,7 +1139,7 @@ msgstr ""
 msgid "Arrows, OK"
 msgstr ""
 
-#: ui/card-tv.js:243 ui/menu.js:100
+#: ui/card-tv.js:243 ui/menu.js:101
 msgid "Back"
 msgstr ""
 
@@ -1202,7 +1212,7 @@ msgstr ""
 msgid "Play a Sound"
 msgstr ""
 
-#: ui/card-vacuum.js:267 ui/menu.js:119
+#: ui/card-vacuum.js:267 ui/menu.js:120
 msgid "Settings"
 msgstr ""
 
@@ -1218,20 +1228,20 @@ msgstr ""
 msgid "Cleaned"
 msgstr ""
 
-#: ui/climate.js:24 ui/text.js:251
+#: ui/climate.js:24 ui/text.js:253
 msgid "Eco"
 msgstr ""
 
-#: ui/climate.js:25 ui/text.js:155
+#: ui/climate.js:25 ui/text.js:157
 msgid "Sleep"
 msgstr ""
 
-#: ui/climate.js:26 ui/climate.js:53 ui/text.js:178 ui/text.js:181
-#: ui/text.js:182
+#: ui/climate.js:26 ui/climate.js:53 ui/text.js:180 ui/text.js:183
+#: ui/text.js:184
 msgid "Turbo"
 msgstr ""
 
-#: ui/climate.js:27 ui/climate.js:48 ui/text.js:175 ui/text.js:179
+#: ui/climate.js:27 ui/climate.js:48 ui/text.js:177 ui/text.js:181
 msgid "Quiet"
 msgstr ""
 
@@ -1255,15 +1265,15 @@ msgstr ""
 msgid "Fresh air"
 msgstr ""
 
-#: ui/climate.js:49 ui/text.js:157
+#: ui/climate.js:49 ui/text.js:159
 msgid "Low"
 msgstr ""
 
-#: ui/climate.js:50 ui/text.js:158 ui/text.js:159 ui/text.js:177 ui/text.js:253
+#: ui/climate.js:50 ui/text.js:160 ui/text.js:161 ui/text.js:179 ui/text.js:255
 msgid "Medium"
 msgstr ""
 
-#: ui/climate.js:51 ui/text.js:160
+#: ui/climate.js:51 ui/text.js:162
 msgid "High"
 msgstr ""
 
@@ -1287,12 +1297,16 @@ msgstr ""
 msgid "Fan only"
 msgstr ""
 
+#: ui/color.js:108 ui/humanize.js:95
+msgid "Colour"
+msgstr ""
+
 #: ui/drop.js:257
 #, javascript-format
 msgid "Group %s"
 msgstr ""
 
-#: ui/events.js:12 ui/humanize.js:160 ui/text.js:120
+#: ui/events.js:12 ui/humanize.js:160 ui/text.js:122
 msgid "Leak"
 msgstr ""
 
@@ -1312,7 +1326,7 @@ msgstr ""
 msgid "Held"
 msgstr ""
 
-#: ui/events.js:14 ui/humanize.js:103 ui/text.js:118
+#: ui/events.js:14 ui/humanize.js:103 ui/text.js:120
 msgid "Motion"
 msgstr ""
 
@@ -1320,7 +1334,7 @@ msgstr ""
 msgid "Opened"
 msgstr ""
 
-#: ui/events.js:15 ui/hero.js:516 ui/text.js:116 ui/text.js:152 ui/text.js:153
+#: ui/events.js:15 ui/hero.js:527 ui/text.js:118 ui/text.js:154 ui/text.js:155
 msgid "Closed"
 msgstr ""
 
@@ -1334,224 +1348,224 @@ msgstr ""
 msgid "yesterday, %s"
 msgstr ""
 
-#: ui/hero.js:138
+#: ui/hero.js:140
 msgid "The wheels are off the floor"
 msgstr ""
 
-#: ui/hero.js:139
+#: ui/hero.js:141
 msgid "A cliff sensor is dirty or blocked"
 msgstr ""
 
-#: ui/hero.js:140
+#: ui/hero.js:142
 msgid "The bumper is stuck"
 msgstr ""
 
-#: ui/hero.js:141
+#: ui/hero.js:143
 msgid "The robot is tilted"
 msgstr ""
 
-#: ui/hero.js:142
+#: ui/hero.js:144
 msgid "The bumper keeps getting stuck"
 msgstr ""
 
-#: ui/hero.js:143
+#: ui/hero.js:145
 msgid "The wheels keep coming off the floor"
 msgstr ""
 
-#: ui/hero.js:144
+#: ui/hero.js:146
 msgid "The floor sensor underneath is dirty"
 msgstr ""
 
-#: ui/hero.js:145
+#: ui/hero.js:147
 msgid "The dust bin is missing"
 msgstr ""
 
-#: ui/hero.js:146
+#: ui/hero.js:148
 msgid "The water tank is missing"
 msgstr ""
 
-#: ui/hero.js:147
+#: ui/hero.js:149
 msgid "The water tank is empty"
 msgstr ""
 
-#: ui/hero.js:148
+#: ui/hero.js:150
 msgid "The dust bin is full"
 msgstr ""
 
-#: ui/hero.js:149
+#: ui/hero.js:151
 msgid "The main brush is stuck"
 msgstr ""
 
-#: ui/hero.js:150
+#: ui/hero.js:152
 msgid "The side brush is stuck"
 msgstr ""
 
-#: ui/hero.js:151
+#: ui/hero.js:153
 msgid "The fan is blocked"
 msgstr ""
 
-#: ui/hero.js:152
+#: ui/hero.js:154
 msgid "The left wheel is stuck"
 msgstr ""
 
-#: ui/hero.js:153
+#: ui/hero.js:155
 msgid "The right wheel is stuck"
 msgstr ""
 
-#: ui/hero.js:154
+#: ui/hero.js:156
 msgid "The robot is stuck and cannot turn"
 msgstr ""
 
-#: ui/hero.js:155
+#: ui/hero.js:157
 msgid "The robot is stuck and cannot go on"
 msgstr ""
 
-#: ui/hero.js:156
+#: ui/hero.js:158
 msgid "The robot cannot find its dock"
 msgstr ""
 
-#: ui/hero.js:157
+#: ui/hero.js:159
 msgid "The battery is low"
 msgstr ""
 
-#: ui/hero.js:158
+#: ui/hero.js:160
 msgid "It is not charging"
 msgstr ""
 
-#: ui/hero.js:159
+#: ui/hero.js:161
 msgid "The battery is too low to start"
 msgstr ""
 
-#: ui/hero.js:160
+#: ui/hero.js:162
 msgid "Something is wrong inside the robot"
 msgstr ""
 
-#: ui/hero.js:161
+#: ui/hero.js:163
 msgid "The camera is covered"
 msgstr ""
 
-#: ui/hero.js:162
+#: ui/hero.js:164
 msgid "The camera does not work"
 msgstr ""
 
-#: ui/hero.js:163
+#: ui/hero.js:165
 msgid "Something is wrong with the battery"
 msgstr ""
 
-#: ui/hero.js:164
+#: ui/hero.js:166
 msgid "The front sensor is dirty"
 msgstr ""
 
-#: ui/hero.js:165
+#: ui/hero.js:167
 msgid "The gyroscope does not work"
 msgstr ""
 
-#: ui/hero.js:228
+#: ui/hero.js:230
 msgid "Humidity %s %"
 msgstr ""
 
-#: ui/hero.js:240
+#: ui/hero.js:242
 #, javascript-format
 msgid "Last seen %s"
 msgstr ""
 
-#: ui/hero.js:250
+#: ui/hero.js:252
 #, javascript-format
 msgid "Since %s"
 msgstr ""
 
-#: ui/hero.js:272 ui/rows.js:117 ui/text.js:124
+#: ui/hero.js:274 ui/rows.js:117 ui/text.js:126
 msgid "Gas!"
 msgstr ""
 
-#: ui/hero.js:272 ui/rows.js:115 ui/text.js:124
+#: ui/hero.js:274 ui/rows.js:115 ui/text.js:126
 msgid "No gas"
 msgstr ""
 
-#: ui/hero.js:274 ui/rows.js:117 ui/text.js:122
+#: ui/hero.js:276 ui/rows.js:117 ui/text.js:124
 msgid "Smoke!"
 msgstr ""
 
-#: ui/hero.js:274 ui/rows.js:115 ui/text.js:122
+#: ui/hero.js:276 ui/rows.js:115 ui/text.js:124
 msgid "No smoke"
 msgstr ""
 
-#: ui/hero.js:278
+#: ui/hero.js:280
 #, javascript-format
 msgid "Smoke %s"
 msgstr ""
 
-#: ui/hero.js:292
+#: ui/hero.js:294
 #, javascript-format
 msgid "Speed %s"
 msgstr ""
 
-#: ui/hero.js:333 ui/hero.js:418 ui/hero.js:484 ui/hero.js:506
+#: ui/hero.js:335 ui/hero.js:422 ui/hero.js:495 ui/hero.js:517
 #, javascript-format
 msgid "Set to %s"
 msgstr ""
 
-#: ui/hero.js:344 ui/menu-read.js:70 ui/rows.js:175 ui/text.js:241
+#: ui/hero.js:346 ui/menu-read.js:71 ui/rows.js:181 ui/text.js:243
 msgid "Playing"
 msgstr ""
 
-#: ui/hero.js:346
+#: ui/hero.js:348
 msgid "Volume %s %"
 msgstr ""
 
-#: ui/hero.js:364
+#: ui/hero.js:368 ui/hero.js:435
 msgid "Brightness %s %"
 msgstr ""
 
-#: ui/hero.js:379
+#: ui/hero.js:383
 #, javascript-format
 msgid "Drawing %s"
 msgstr ""
 
-#: ui/hero.js:400
+#: ui/hero.js:404
 msgid "Battery %s %"
 msgstr ""
 
-#: ui/hero.js:402
+#: ui/hero.js:406
 msgid "Battery %s %, needs charging"
 msgstr ""
 
-#: ui/hero.js:424 ui/rows.js:194
+#: ui/hero.js:431 ui/rows.js:200
 msgid "Light on"
 msgstr ""
 
-#: ui/hero.js:424 ui/rows.js:194
+#: ui/hero.js:431 ui/rows.js:200
 msgid "Light off"
 msgstr ""
 
-#: ui/hero.js:433
+#: ui/hero.js:444
 #, javascript-format
 msgid "Signal %s dBm"
 msgstr ""
 
-#: ui/hero.js:456
+#: ui/hero.js:467
 #, javascript-format
 msgid "%s left"
 msgstr ""
 
-#: ui/hero.js:469
+#: ui/hero.js:480
 msgid "Filter %s %"
 msgstr ""
 
-#: ui/hero.js:514 ui/text.js:116 ui/text.js:151
+#: ui/hero.js:525 ui/text.js:118 ui/text.js:153
 msgid "Open"
 msgstr ""
 
-#: ui/hero.js:518
+#: ui/hero.js:529
 msgid "Open %s %"
 msgstr ""
 
-#: ui/hero.js:537
+#: ui/hero.js:548
 #, javascript-format
 msgid "Freezer %s"
 msgstr ""
 
-#: ui/hero.js:550
+#: ui/hero.js:561
 msgid "Soil %s %"
 msgstr ""
 
@@ -1595,7 +1609,7 @@ msgstr ""
 msgid "Vacuum"
 msgstr ""
 
-#: ui/humanize.js:28 ui/text.js:141 ui/text.js:142
+#: ui/humanize.js:28 ui/text.js:143 ui/text.js:144
 msgid "Cleaning"
 msgstr ""
 
@@ -1779,10 +1793,6 @@ msgstr ""
 msgid "Colour temperature"
 msgstr ""
 
-#: ui/humanize.js:95
-msgid "Colour"
-msgstr ""
-
 #: ui/humanize.js:98
 msgid "Target humidity"
 msgstr ""
@@ -1839,11 +1849,11 @@ msgstr ""
 msgid "Turn reminder"
 msgstr ""
 
-#: ui/humanize.js:119 ui/text.js:213
+#: ui/humanize.js:119 ui/text.js:215
 msgid "Turn the food"
 msgstr ""
 
-#: ui/humanize.js:120 ui/text.js:146
+#: ui/humanize.js:120 ui/text.js:148
 msgid "Charging"
 msgstr ""
 
@@ -1992,89 +2002,106 @@ msgctxt "action"
 msgid "Play"
 msgstr ""
 
-#: ui/menu.js:117
+#: ui/humanize.js:173
+msgctxt "action"
+msgid "Run"
+msgstr ""
+
+#: ui/menu.js:118
 msgid "Find Devices Again"
 msgstr ""
 
-#: ui/menu.js:611 ui/menu.js:623
+#: ui/menu.js:617 ui/menu.js:629
 msgid "Log In…"
 msgstr ""
 
-#: ui/menu.js:613
+#: ui/menu.js:619
 msgid "Add an account or a device in Settings, and your home shows up here."
 msgstr ""
 
-#: ui/menu.js:613
+#: ui/menu.js:619
 msgid "Open Settings…"
 msgstr ""
 
-#: ui/menu.js:664 ui/menu-read.js:413
+#: ui/menu.js:671 ui/menu-read.js:424
 msgid "The Mi Home login has expired."
 msgstr ""
 
-#: ui/menu.js:666
+#: ui/menu.js:673
 msgid "Try Again"
 msgstr ""
 
-#: ui/menu-read.js:71 ui/rows.js:51 ui/rows.js:178 ui/text.js:140
+#: ui/menu-read.js:72 ui/rows.js:51 ui/rows.js:184 ui/text.js:142
 msgid "Idle"
 msgstr ""
 
-#: ui/menu-read.js:166
+#: ui/menu-read.js:169
 msgid "The eWeLink login has expired."
 msgstr ""
 
-#: ui/menu-read.js:176
+#: ui/menu-read.js:179
 msgid "A Hue bridge needs to be paired again."
 msgstr ""
 
-#: ui/menu-read.js:186 ui/text.js:357 prefs/common.js:231
+#: ui/menu-read.js:190 ui/text.js:359 prefs/common.js:231
 msgid "Home Assistant refused the access token."
 msgstr ""
 
-#: ui/menu-read.js:197
+#: ui/menu-read.js:201
 msgid "A HomeKit accessory needs to be paired again."
 msgstr ""
 
-#: ui/menu-read.js:207 ui/text.js:359 prefs/common.js:239
+#: ui/menu-read.js:211 ui/text.js:361 prefs/common.js:239
 msgid "The Smart Life login has expired."
 msgstr ""
 
-#: ui/menu-read.js:219 ui/text.js:359
+#: ui/menu-read.js:223 ui/text.js:361
 #, javascript-format
 msgid "The %s login has expired."
 msgstr ""
 
-#: ui/menu-read.js:238
+#: ui/menu-read.js:242
 #, javascript-format
 msgid "The keyring could not be read: %s"
 msgstr ""
 
-#: ui/menu-read.js:252
+#: ui/menu-read.js:256
 msgid "The saved Mi Home login could not be read."
 msgstr ""
 
-#: ui/menu-view.js:44
+#: ui/menu-view.js:46
 msgid "No devices in this Mi Home account."
 msgstr ""
 
-#: ui/menu-view.js:45
+#: ui/menu-view.js:47
 msgid "No devices to show. Add them, or show hidden ones, in Settings."
 msgstr ""
 
-#: ui/menu-view.js:78
+#: ui/menu-view.js:63 ui/menu-view.js:109 ui/menu-view.js:177 ui/tiles.js:92
+msgid "Scenes"
+msgstr ""
+
+#: ui/menu-view.js:93
 msgid "All"
 msgstr ""
 
-#: ui/menu-view.js:94
+#: ui/menu-view.js:110
 msgid "Controls"
 msgstr ""
 
-#: ui/menu-view.js:98
+#: ui/menu-view.js:114
 msgid "Sensors"
 msgstr ""
 
-#: ui/menu-view.js:273
+#: ui/menu-view.js:168
+msgid "Show Scenes"
+msgstr ""
+
+#: ui/menu-view.js:168
+msgid "Hide Scenes"
+msgstr ""
+
+#: ui/menu-view.js:396
 msgid "Rename Group"
 msgstr ""
 
@@ -2082,7 +2109,7 @@ msgstr ""
 msgid "Cooling down"
 msgstr ""
 
-#: ui/rows.js:51 ui/text.js:190
+#: ui/rows.js:51 ui/text.js:192
 msgid "Keeping warm"
 msgstr ""
 
@@ -2103,500 +2130,520 @@ msgstr ""
 msgid "Bluetooth"
 msgstr ""
 
-#: ui/text.js:84
-msgctxt "unit"
-msgid "s"
+#: ui/rows.js:169 ui/tiles.js:141 ui/tiles.js:417
+msgid "Running…"
 msgstr ""
 
-#: ui/text.js:85
-msgctxt "unit"
-msgid "min"
+#: ui/rows.js:170
+#, javascript-format
+msgid "Ran · %s"
 msgstr ""
 
 #: ui/text.js:86
 msgctxt "unit"
-msgid "h"
+msgid "s"
 msgstr ""
 
 #: ui/text.js:87
 msgctxt "unit"
-msgid "d"
+msgid "min"
 msgstr ""
 
-#: ui/text.js:90
+#: ui/text.js:88
 msgctxt "unit"
-msgid "W"
+msgid "h"
+msgstr ""
+
+#: ui/text.js:89
+msgctxt "unit"
+msgid "d"
 msgstr ""
 
 #: ui/text.js:92
 msgctxt "unit"
-msgid "A"
-msgstr ""
-
-#: ui/text.js:93
-msgctxt "unit"
-msgid "kWh"
+msgid "W"
 msgstr ""
 
 #: ui/text.js:94
 msgctxt "unit"
+msgid "A"
+msgstr ""
+
+#: ui/text.js:95
+msgctxt "unit"
+msgid "kWh"
+msgstr ""
+
+#: ui/text.js:96
+msgctxt "unit"
 msgid "Pa"
 msgstr ""
 
-#: ui/text.js:118
+#: ui/text.js:120
 msgid "No motion"
 msgstr ""
 
-#: ui/text.js:120
+#: ui/text.js:122
 msgid "Dry"
 msgstr ""
 
-#: ui/text.js:144 ui/text.js:145
+#: ui/text.js:146 ui/text.js:147
 msgid "Error"
 msgstr ""
 
-#: ui/text.js:147
+#: ui/text.js:149
 msgid "Not charging"
 msgstr ""
 
-#: ui/text.js:148
+#: ui/text.js:150
 msgid "Returning to dock"
 msgstr ""
 
-#: ui/text.js:149
+#: ui/text.js:151
 msgid "Charged"
 msgstr ""
 
-#: ui/text.js:150
+#: ui/text.js:152
 msgid "Busy"
 msgstr ""
 
-#: ui/text.js:156
+#: ui/text.js:158
 msgid "Favourite"
 msgstr ""
 
-#: ui/text.js:161
+#: ui/text.js:163
 msgid "Normal"
 msgstr ""
 
-#: ui/text.js:162
+#: ui/text.js:164
 msgid "Very low"
 msgstr ""
 
-#: ui/text.js:163 ui/text.js:394
+#: ui/text.js:165 ui/text.js:396
 msgid "Cool"
 msgstr ""
 
-#: ui/text.js:164 ui/text.js:400
+#: ui/text.js:166 ui/text.js:402
 msgid "Heat"
 msgstr ""
 
-#: ui/text.js:165 ui/text.js:396
+#: ui/text.js:167 ui/text.js:398
 msgctxt "mode"
 msgid "Dry"
 msgstr ""
 
-#: ui/text.js:166 ui/text.js:398
+#: ui/text.js:168 ui/text.js:400
 msgctxt "mode"
 msgid "Fan"
 msgstr ""
 
-#: ui/text.js:171
+#: ui/text.js:173
 msgid "No faults"
 msgstr ""
 
-#: ui/text.js:172
+#: ui/text.js:174
 msgid "Straight wind"
 msgstr ""
 
-#: ui/text.js:173
+#: ui/text.js:175
 msgid "Natural wind"
 msgstr ""
 
-#: ui/text.js:176 ui/text.js:180
+#: ui/text.js:178 ui/text.js:182
 msgid "Standard"
 msgstr ""
 
-#: ui/text.js:183
+#: ui/text.js:185
 msgid "Waiting to start"
 msgstr ""
 
-#: ui/text.js:184
+#: ui/text.js:186
 msgid "Cooking"
 msgstr ""
 
-#: ui/text.js:185
+#: ui/text.js:187
 msgid "Preheating"
 msgstr ""
 
-#: ui/text.js:186
+#: ui/text.js:188
 msgid "Done"
 msgstr ""
 
-#: ui/text.js:187
+#: ui/text.js:189
 msgid "Preheated"
 msgstr ""
 
-#: ui/text.js:188
+#: ui/text.js:190
 msgid "Preheat paused"
 msgstr ""
 
-#: ui/text.js:189
+#: ui/text.js:191
 msgid "Paused to turn the food"
 msgstr ""
 
-#: ui/text.js:191
+#: ui/text.js:193
 msgid "Keeping warm, paused"
 msgstr ""
 
-#: ui/text.js:192
+#: ui/text.js:194
 msgid "Kept warm"
 msgstr ""
 
-#: ui/text.js:193
+#: ui/text.js:195
 msgid "Crispy roast"
 msgstr ""
 
-#: ui/text.js:194
+#: ui/text.js:196
 msgid "Tender roast"
 msgstr ""
 
-#: ui/text.js:195
+#: ui/text.js:197
 msgid "Less fat"
 msgstr ""
 
-#: ui/text.js:196
+#: ui/text.js:198
 msgid "Sensor disconnected"
 msgstr ""
 
-#: ui/text.js:197
+#: ui/text.js:199
 msgid "Sensor short circuit"
 msgstr ""
 
-#: ui/text.js:198
+#: ui/text.js:200
 msgid "Sensor failure"
 msgstr ""
 
-#: ui/text.js:199
+#: ui/text.js:201
 msgid "French fries"
 msgstr ""
 
-#: ui/text.js:200
+#: ui/text.js:202
 msgid "Chicken wings"
 msgstr ""
 
-#: ui/text.js:201
+#: ui/text.js:203
 msgid "Steak"
 msgstr ""
 
-#: ui/text.js:202
+#: ui/text.js:204
 msgid "Lamb chops"
 msgstr ""
 
-#: ui/text.js:203
+#: ui/text.js:205
 msgid "Fish"
 msgstr ""
 
-#: ui/text.js:204
+#: ui/text.js:206
 msgid "Shrimp"
 msgstr ""
 
-#: ui/text.js:205
+#: ui/text.js:207
 msgid "Vegetables"
 msgstr ""
 
-#: ui/text.js:206
+#: ui/text.js:208
 msgid "Cake"
 msgstr ""
 
-#: ui/text.js:207
+#: ui/text.js:209
 msgid "Pizza"
 msgstr ""
 
-#: ui/text.js:208
+#: ui/text.js:210
 msgid "Defrost"
 msgstr ""
 
-#: ui/text.js:209
+#: ui/text.js:211
 msgid "Dried fruit"
 msgstr ""
 
-#: ui/text.js:210
+#: ui/text.js:212
 msgid "Yoghurt"
 msgstr ""
 
-#: ui/text.js:211
+#: ui/text.js:213
 msgid "Manual"
 msgstr ""
 
-#: ui/text.js:212
+#: ui/text.js:214
 msgid "No need to turn"
 msgstr ""
 
-#: ui/text.js:214
+#: ui/text.js:216
 msgid "One layer"
 msgstr ""
 
-#: ui/text.js:215
+#: ui/text.js:217
 msgid "Two layers"
 msgstr ""
 
-#: ui/text.js:216
+#: ui/text.js:218
 msgid "Half a basket"
 msgstr ""
 
-#: ui/text.js:217
+#: ui/text.js:219
 msgid "Full basket"
 msgstr ""
 
-#: ui/text.js:218
+#: ui/text.js:220
 msgid "Kilograms"
 msgstr ""
 
-#: ui/text.js:219
+#: ui/text.js:221
 msgid "Pounds"
 msgstr ""
 
-#: ui/text.js:220
+#: ui/text.js:222
 msgid "Battery fine"
 msgstr ""
 
-#: ui/text.js:221
+#: ui/text.js:223
 msgid "Battery low"
 msgstr ""
 
-#: ui/text.js:222
+#: ui/text.js:224
 msgid "Battery very low"
 msgstr ""
 
-#: ui/text.js:223
+#: ui/text.js:225
 msgid "White"
 msgstr ""
 
-#: ui/text.js:224
+#: ui/text.js:226
 msgid "Red"
 msgstr ""
 
-#: ui/text.js:225
+#: ui/text.js:227
 msgid "Orange"
 msgstr ""
 
-#: ui/text.js:226
+#: ui/text.js:228
 msgid "Yellow"
 msgstr ""
 
-#: ui/text.js:227
+#: ui/text.js:229
 msgid "Green"
 msgstr ""
 
-#: ui/text.js:228
+#: ui/text.js:230
 msgid "Cyan"
 msgstr ""
 
-#: ui/text.js:229
+#: ui/text.js:231
 msgid "Blue"
 msgstr ""
 
-#: ui/text.js:230
+#: ui/text.js:232
 msgid "Purple"
 msgstr ""
 
-#: ui/text.js:231
+#: ui/text.js:233
 msgid "Pink"
 msgstr ""
 
-#: ui/text.js:232
+#: ui/text.js:234
 msgid "Heat and cool"
 msgstr ""
 
-#: ui/text.js:233
+#: ui/text.js:235
 msgid "Opening"
 msgstr ""
 
-#: ui/text.js:234
+#: ui/text.js:236
 msgid "Closing"
 msgstr ""
 
-#: ui/text.js:235
+#: ui/text.js:237
 msgid "Stopped"
 msgstr ""
 
-#: ui/text.js:236
+#: ui/text.js:238
 msgid "Locked"
 msgstr ""
 
-#: ui/text.js:237
+#: ui/text.js:239
 msgid "Unlocked"
 msgstr ""
 
-#: ui/text.js:238
+#: ui/text.js:240
 msgid "Locking"
 msgstr ""
 
-#: ui/text.js:239
+#: ui/text.js:241
 msgid "Unlocking"
 msgstr ""
 
-#: ui/text.js:240
+#: ui/text.js:242
 msgid "Jammed"
 msgstr ""
 
-#: ui/text.js:242
+#: ui/text.js:244
 msgid "Standby"
 msgstr ""
 
-#: ui/text.js:243
+#: ui/text.js:245
 msgid "Buffering"
 msgstr ""
 
-#: ui/text.js:244
+#: ui/text.js:246
 msgid "Humidify"
 msgstr ""
 
-#: ui/text.js:245
+#: ui/text.js:247
 msgid "Dehumidify"
 msgstr ""
 
-#: ui/text.js:246
+#: ui/text.js:248
 msgid "Excellent"
 msgstr ""
 
-#: ui/text.js:247
+#: ui/text.js:249
 msgid "Good"
 msgstr ""
 
-#: ui/text.js:248
+#: ui/text.js:250
 msgid "Fair"
 msgstr ""
 
-#: ui/text.js:249
+#: ui/text.js:251
 msgid "Inferior"
 msgstr ""
 
-#: ui/text.js:250
+#: ui/text.js:252
 msgid "Poor"
 msgstr ""
 
-#: ui/text.js:252
+#: ui/text.js:254
 msgid "Smart"
 msgstr ""
 
-#: ui/text.js:258
+#: ui/text.js:260
 #, javascript-format
 msgid "Level %s"
 msgstr ""
 
-#: ui/text.js:331
+#: ui/text.js:333
 msgid "The switch is not in DIY mode."
 msgstr ""
 
-#: ui/text.js:331
+#: ui/text.js:333
 msgid "The switch did not take the command."
 msgstr ""
 
-#: ui/text.js:333
+#: ui/text.js:335
 msgid "The switch is not answering. Is it on and on this network?"
 msgstr ""
 
-#: ui/text.js:341 prefs/common.js:211
+#: ui/text.js:343 prefs/common.js:211
 msgid "The device is busy. Try again in a moment."
 msgstr ""
 
-#: ui/text.js:343 prefs/common.js:213
+#: ui/text.js:345 prefs/common.js:213
 msgid "The accessory cannot be reached."
 msgstr ""
 
-#: ui/text.js:345 prefs/common.js:215
+#: ui/text.js:347 prefs/common.js:215
 msgid "The device refused it."
 msgstr ""
 
-#: ui/text.js:347 prefs/common.js:217
+#: ui/text.js:349 prefs/common.js:217
 msgid "The device sent an answer Nook cannot read."
 msgstr ""
 
-#: ui/text.js:349
+#: ui/text.js:351
 msgid "The device cannot do that."
 msgstr ""
 
-#: ui/text.js:351 prefs/common.js:233
+#: ui/text.js:353 prefs/common.js:233
 msgid ""
 "The certificate of this Home Assistant is not trusted. Use its http:// "
 "address on this network, or give it a trusted certificate."
 msgstr ""
 
-#: ui/text.js:353 prefs/common.js:227
+#: ui/text.js:355 prefs/common.js:227
 msgid "The device no longer knows Nook. Pair it again."
 msgstr ""
 
-#: ui/text.js:355 prefs/common.js:229
+#: ui/text.js:357 prefs/common.js:229
 msgid ""
 "The bridge answered with another certificate. Pair it again if it was "
 "replaced."
 msgstr ""
 
-#: ui/text.js:361 prefs/common.js:235
+#: ui/text.js:363 prefs/common.js:235
 msgid "The device did not answer in time."
 msgstr ""
 
-#: ui/text.js:363 prefs/common.js:237
+#: ui/text.js:365 prefs/common.js:237
 msgid "The connection closed. Try again."
 msgstr ""
 
-#: ui/text.js:373 prefs/tvs.js:35
+#: ui/text.js:375 prefs/tvs.js:35
 msgid "The TV did not let Nook in."
 msgstr ""
 
-#: ui/text.js:375
+#: ui/text.js:377
 msgid ""
 "The TV did not wake up. Turn on network standby (Powered On by Apps) in its "
 "network settings."
 msgstr ""
 
-#: ui/tiles.js:91
+#: ui/tiles.js:93
 msgid "Lights"
 msgstr ""
 
-#: ui/tiles.js:92
+#: ui/tiles.js:94
 msgid "Climate"
 msgstr ""
 
-#: ui/tiles.js:93
+#: ui/tiles.js:95
 msgid "Media"
 msgstr ""
 
-#: ui/tiles.js:95
+#: ui/tiles.js:97
 msgid "Security"
 msgstr ""
 
-#: ui/tiles.js:96
+#: ui/tiles.js:98
 msgid "Appliances"
 msgstr ""
 
-#: ui/tiles.js:123
+#: ui/tiles.js:127
 #, javascript-format
 msgid "%s of %s online"
 msgstr ""
 
-#: ui/tiles.js:127 ui/tiles.js:138
+#: ui/tiles.js:131 ui/tiles.js:144
 #, javascript-format
 msgid "%s on"
 msgstr ""
 
-#: ui/tiles.js:133
+#: ui/tiles.js:137
 msgid "All quiet"
 msgstr ""
 
-#: ui/tiles.js:135
+#: ui/tiles.js:139
 #, javascript-format
 msgid "%s working"
 msgstr ""
 
-#: ui/tiles.js:139
+#: ui/tiles.js:145
 msgid "All off"
 msgstr ""
 
-#: ui/tiles.js:237
+#: ui/tiles.js:149
+#, javascript-format
+msgid "%d scene"
+msgid_plural "%d scenes"
+msgstr[0] ""
+msgstr[1] ""
+
+#: ui/tiles.js:277
 msgid "Switch On or Off"
+msgstr ""
+
+#: ui/tiles.js:290
+msgid "Run Scene"
 msgstr ""
 
 #: prefs/aircons.js:24

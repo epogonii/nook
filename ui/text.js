@@ -31,6 +31,8 @@ export const PRIMARY_SECONDARY = (St.ButtonMask.PRIMARY ?? St.ButtonMask.ONE) |
 const DEFAULTS = {
     'view': 'tabs',
     'type-colors': true,
+    'scenes-compact': false,
+    'scenes-folded': false,
     'room': '',
     'panel-sensors': [],
     'panel-interval': 5,

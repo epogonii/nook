@@ -66,6 +66,7 @@ class NookButton extends PanelMenu.Button {
         this._pushSync = 0;
         this._homekit = null;
         this._smartlife = null;
+        this._miScenes = null;
         this._clouds = [];
         this._keepingSpeaker = false;
         this._loginNote = null;
@@ -221,6 +222,8 @@ class NookButton extends PanelMenu.Button {
         settings.connectObject(
             'changed::view', () => this._render(),
             'changed::type-colors', () => this._render(),
+            'changed::scenes-compact', () => this._render(),
+            'changed::scenes-folded', () => this._render(),
             'changed::room', () => this._render(),
             'changed::panel-sensors', () => {
                 this._restartReadingsSoon();
@@ -521,6 +524,8 @@ class NookButton extends PanelMenu.Button {
         this._homekit = null;
         this._smartlife?.abort();
         this._smartlife = null;
+        this._miScenes?.abort();
+        this._miScenes = null;
         for (const cloud of this._clouds)
             cloud.abort();
         this._clouds = [];
@@ -596,8 +601,9 @@ class NookButton extends PanelMenu.Button {
     }
 
     // Mi Home is one source of many: only a login that was there and is lost gets a note.
+    // Its scenes come with the login, so they don't count.
     _showLogin(text = null) {
-        if (this._sources().some(source => source && source !== this._home)) {
+        if (this._sources().some(source => source && source !== this._home && source !== this._miScenes)) {
             if (text)
                 this._loginNote = {text, target: 'accounts-mihome'};
             this._render();
@@ -644,6 +650,7 @@ class NookButton extends PanelMenu.Button {
             ...this._hass?.devices ?? [],
             ...this._homekit?.devices ?? [],
             ...this._smartlife?.devices ?? [],
+            ...this._miScenes?.devices ?? [],
             ...this._clouds.flatMap(cloud => cloud.devices),
         ];
     }
@@ -654,7 +661,7 @@ class NookButton extends PanelMenu.Button {
 
     _sources() {
         return [this._home, this._aircon, this._tapo, this._cast, this._tv, this._sonoff, this._ewelink, this._hue, this._hass,
-            this._homekit, this._smartlife, ...this._clouds];
+            this._homekit, this._smartlife, this._miScenes, ...this._clouds];
     }
 
     _showFailure(home, e) {

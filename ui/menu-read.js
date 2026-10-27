@@ -25,6 +25,7 @@ import {parseBridges as parseHueBridges, parseDevices as parseHueDevices} from '
 import {SmartLifeHome, parseDevices as parseSmartLifeDevices} from '../lib/smartlife-home.js';
 import {SpecError} from '../lib/spec-home.js';
 import {MiHome} from '../lib/mihome.js';
+import {MiScenes} from '../lib/mi-scenes.js';
 import * as Tapo from '../lib/tapo.js';
 import {TapoError} from '../lib/tapo-local.js';
 import {XiaomiCloud, XiaomiError} from '../lib/xiaomi.js';
@@ -128,6 +129,8 @@ export class MenuRead {
         this._homekit = null;
         this._smartlife?.abort();
         this._smartlife = null;
+        this._miScenes?.abort();
+        this._miScenes = null;
         for (const cloud of this._clouds)
             cloud.abort();
         this._clouds = [];
@@ -273,6 +276,13 @@ export class MenuRead {
         if (cancellable.is_cancelled())
             return;
 
+        const scenes = this._miScenes = new MiScenes(cloud, home);
+        scenes.onDevices = () => {
+            if (this._miScenes === scenes)
+                this._render();
+        };
+        scenes.onChange = () => this._pushed(scenes);
+        scenes.load().catch(logError);
         this._syncExtras();
         this._render();
         this._startReadings();
@@ -394,7 +404,7 @@ export class MenuRead {
         if (this._tiles.length === 0)
             return;
         for (const source of [this._aircon, this._tapo, this._cast, this._tv, this._sonoff, this._ewelink, this._hue, this._hass,
-            this._homekit, this._smartlife, ...this._clouds].filter(Boolean))
+            this._homekit, this._smartlife, this._miScenes, ...this._clouds].filter(Boolean))
             source.readPrimary().then(() => this._syncTiles(source)).catch(logError);
         const home = this._home;
         if (!home)
@@ -443,7 +453,8 @@ export class MenuRead {
         this._retry = 0;
     }
 
-    // Home Assistant and Hue push every change; a power sensor can report each second.
+    // Home Assistant and Hue push every change, scenes their runs; a power sensor can
+    // report each second.
     _pushed(source) {
         if (this._pushSync || !this._sources().includes(source))
             return;

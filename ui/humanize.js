@@ -170,6 +170,7 @@ export function humanize(name) {
         'stop-cover': pgettext('action', 'Stop'),
         'lock-door': pgettext('action', 'Lock'),
         'play-media': pgettext('action', 'Play'),
+        'run-scene': pgettext('action', 'Run'),
         'next-track': _('Next'),
     };
     const word = nameWords[specKey(name)];

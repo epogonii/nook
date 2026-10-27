@@ -69,7 +69,8 @@ export class Card {
             device.primary.kind === 'camera' || device.listed === false)
             return;
         const now = Date.now();
-        const every = [this._home, this._ewelink, this._smartlife, ...this._clouds].includes(device.source) ? CARD_CLOUD : CARD_LOCAL;
+        const every = [this._home, this._ewelink, this._smartlife, this._miScenes, ...this._clouds].includes(device.source)
+            ? CARD_CLOUD : CARD_LOCAL;
         if (now - this._touchedAt < CARD_TOUCHED || now - this._cardReadAt < every)
             return;
         this._cardReading = true;

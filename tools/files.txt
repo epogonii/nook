@@ -108,6 +108,7 @@ lib/lg.js
 lib/melcloud.js
 lib/smartthings.js
 lib/daikin.js
+lib/mi-scenes.js
 lib/midea.js
 lib/mihome.js
 lib/onvif.js

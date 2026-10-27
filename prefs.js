@@ -498,6 +498,13 @@ export default class NookPreferences extends ExtensionPreferences {
         settings.bind('type-colors', colorRow, 'active', Gio.SettingsBindFlags.DEFAULT);
         group.add(colorRow);
 
+        const scenesRow = new Adw.SwitchRow({
+            title: _('Compact Scenes'),
+            subtitle: _('Scenes as one row of buttons under the header, instead of a section of their own.'),
+        });
+        settings.bind('scenes-compact', scenesRow, 'active', Gio.SettingsBindFlags.DEFAULT);
+        group.add(scenesRow);
+
         return group;
     }
 

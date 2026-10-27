@@ -947,3 +947,19 @@
   padding-left: 4px;
   color: #4a4a4f;
 }
+
+.nook-scene-row,
+.nook-scene-chip-box {
+  spacing: 6px;
+}
+.nook-fold-count {
+  font-weight: normal;
+  color: rgba(255, 255, 255, 0.42);
+}
+.nook-cc-head.nook-fold {
+  border-radius: 8px;
+}
+.nook-cc-head.nook-fold:hover,
+.nook-cc-head.nook-fold:focus {
+  background-color: rgba(255, 255, 255, 0.06);
+}
