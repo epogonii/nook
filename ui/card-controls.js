@@ -4,13 +4,14 @@ import Clutter from 'gi://Clutter';
 import St from 'gi://St';
 
 import {gettext as _, pgettext} from 'resource:///org/gnome/shell/extensions/extension.js';
+import * as PopupMenu from 'resource:///org/gnome/shell/ui/popupMenu.js';
 
 import * as Scenes from '../lib/scenes.js';
 import {choiceOf, wordLabel} from './hero.js';
 import {NUMBER_FORMATS} from './humanize.js';
 import {fillStats, statFlow} from './rows.js';
 import {VERTICAL, choiceText, formatValue, numberFormat, specKey} from './text.js';
-import {Scene} from './widgets.js';
+import {Glyph, Scene, optimistic} from './widgets.js';
 
 export class ControlsCard {
     _addFanControls(device, services, values, covered) {
@@ -160,7 +161,7 @@ export class ControlsCard {
             const key = prop ? `${service.siid}/${prop.piid}` : null;
             return prop && values.has(key) ? {service, prop, key, value: values.get(key)} : null;
         };
-        const tiles = [];
+        const box = new St.BoxLayout({...VERTICAL, style_class: 'nook-card-section nook-fan'});
         for (const [serviceName, name, title, glyph] of [
             ['light', 'on', _('Light'), 'bulb'],
             ['gateway', 'guard-mode', _('Guard'), 'shield'],
@@ -169,18 +170,9 @@ export class ControlsCard {
             if (f?.prop.format !== 'bool' || !f.prop.access.includes('write') || covered.has(f.key))
                 continue;
             covered.add(f.key);
-            tiles.push({
-                title,
-                glyph,
-                on: f.value === true,
-                text: f.value === true ? _('On') : _('Off'),
-                pick: on => this._cardWrite(device, () => home.setProperty(device, f.service.siid, f.prop.piid, on))
-                    .catch(logError),
-            });
+            box.add_child(this._stateStrip(title, glyph, f.value === true, on =>
+                this._cardWrite(device, () => home.setProperty(device, f.service.siid, f.prop.piid, on)).catch(logError)));
         }
-        const box = new St.BoxLayout({...VERTICAL, style_class: 'nook-card-section nook-fan'});
-        if (tiles.length > 0)
-            this._addTileGrid(box, tiles);
         // The siren stays a plain switch: a tile is too easy to hit.
         for (const [name, title] of [['alarm', _('Siren')], ['volume', _('Siren Volume')]]) {
             const f = found('alarm', name);
@@ -202,6 +194,38 @@ export class ControlsCard {
             this._stageAdd(box);
         else
             box.destroy();
+    }
+
+    // A lone tile in a row would stretch across the card.
+    _stateStrip(title, glyph, active, onToggle) {
+        const words = new St.BoxLayout({...VERTICAL, x_expand: true, y_align: Clutter.ActorAlign.CENTER});
+        words.add_child(new St.Label({style_class: 'nook-strip-title', text: title}));
+        const state = new St.Label({style_class: 'nook-strip-state'});
+        words.add_child(state);
+        // Not reactive, as in _propertyRow: the strip does the toggling.
+        const toggle = new PopupMenu.Switch(active);
+        toggle.reactive = false;
+        toggle.y_align = Clutter.ActorAlign.CENTER;
+        const box = new St.BoxLayout({style_class: 'nook-strip-box', x_expand: true});
+        box.add_child(new St.Bin({style_class: 'nook-strip-bubble', child: new Glyph(glyph), y_align: Clutter.ActorAlign.CENTER}));
+        box.add_child(words);
+        box.add_child(toggle);
+        const strip = new St.Button({
+            style_class: 'nook-strip',
+            child: box,
+            can_focus: true,
+            x_expand: true,
+            accessible_name: title,
+        });
+        const show = on => {
+            toggle.state = on;
+            strip.checked = on;
+            state.text = on ? _('On') : _('Off');
+        };
+        show(active);
+        const pick = optimistic(strip, active, show);
+        strip.connect('clicked', () => pick(!toggle.state, onToggle));
+        return strip;
     }
 
     _addFryerControls(device, services, values, covered) {

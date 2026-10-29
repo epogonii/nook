@@ -692,6 +692,46 @@
   spacing: 8px;
   padding: 2px 2px 0 4px;
 }
+.nook-strip {
+  border-radius: 14px;
+  padding: 8px 10px;
+  background-color: rgba(255, 255, 255, 0.07);
+}
+.nook-strip:hover,
+.nook-strip:focus {
+  background-color: rgba(255, 255, 255, 0.12);
+}
+.nook-strip:checked {
+  background-color: rgba(46, 194, 126, 0.16);
+  box-shadow: inset 0 0 0 1px rgba(46, 194, 126, 0.35);
+}
+.nook-strip:checked:hover,
+.nook-strip:checked:focus {
+  background-color: rgba(46, 194, 126, 0.24);
+}
+.nook-strip-box {
+  spacing: 10px;
+}
+.nook-strip-bubble {
+  width: 32px;
+  height: 32px;
+  border-radius: 999px;
+  background-color: rgba(255, 255, 255, 0.12);
+}
+.nook-strip:checked .nook-strip-bubble {
+  color: #10241a;
+  background-color: #2ec27e;
+}
+.nook-strip-title {
+  font-weight: bold;
+}
+.nook-strip-state {
+  font-size: 0.8em;
+  color: rgba(255, 255, 255, 0.7);
+}
+.nook-strip .toggle-switch:checked {
+  background-color: #2ec27e;
+}
 .nook-fryer {
   spacing: 10px;
   padding: 12px;
