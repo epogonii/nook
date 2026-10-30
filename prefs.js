@@ -511,6 +511,65 @@ export default class NookPreferences extends ExtensionPreferences {
         settings.bind('scenes-compact', scenesRow, 'active', Gio.SettingsBindFlags.DEFAULT);
         group.add(scenesRow);
 
+        group.add(this._choiceRow(settings, 'switcher-style', [
+            ['bar', _('Static')],
+            ['floating', _('Floating')],
+            ['none', _('None')],
+        ], {
+            title: _('Tabs at the Bottom'),
+            subtitle: _('Home and the sections chosen below, while they have devices.'),
+        }));
+
+        const sections = [
+            ['scenes', _('Scenes')],
+            ['lights', _('Lights')],
+            ['climate', _('Climate')],
+            ['media', _('Media')],
+            ['cameras', _('Cameras')],
+            ['security', _('Security')],
+            ['appliances', _('Appliances')],
+        ];
+        const tabRows = new Adw.ExpanderRow({title: _('Tabs')});
+        const autoRow = new Adw.SwitchRow({
+            title: _('Automatic'),
+            subtitle: _('Up to six sections with the most devices.'),
+        });
+        settings.bind('switcher-auto', autoRow, 'active', Gio.SettingsBindFlags.DEFAULT);
+        tabRows.add_row(autoRow);
+        const tabs = sections.map(([id, title]) => {
+            const row = new Adw.SwitchRow({title});
+            row.connect('notify::active', () => {
+                const chosen = settings.get_strv('switcher-tabs');
+                if (chosen.includes(id) !== row.active)
+                    settings.set_strv('switcher-tabs', row.active ? [...chosen, id] : chosen.filter(t => t !== id));
+            });
+            tabRows.add_row(row);
+            return [id, row];
+        });
+        group.add(tabRows);
+
+        const follow = () => {
+            const auto = settings.get_boolean('switcher-auto');
+            const chosen = settings.get_strv('switcher-tabs');
+            // The bar holds six tabs next to Home.
+            const full = chosen.filter(id => sections.some(([section]) => section === id)).length >= 6;
+            for (const [id, row] of tabs) {
+                row.active = chosen.includes(id);
+                row.visible = !auto;
+                row.sensitive = row.active || !full;
+            }
+            const titles = sections.filter(([id]) => chosen.includes(id)).map(([, title]) => title);
+            tabRows.subtitle = GLib.markup_escape_text(auto ? _('Automatic')
+                : titles.length > 0 ? titles.join(', ') : _('None'), -1);
+            const shown = settings.get_string('switcher-style') !== 'none';
+            tabRows.sensitive = shown;
+            // The Scenes tab takes the scenes out of Home; an automatic one may or may not be there.
+            scenesRow.sensitive = !shown || auto || !chosen.includes('scenes');
+        };
+        follow();
+        const handlers = ['changed::switcher-style', 'changed::switcher-auto', 'changed::switcher-tabs'].map(signal => settings.connect(signal, follow));
+        group.connect('destroy', () => handlers.forEach(handler => settings.disconnect(handler)));
+
         return group;
     }
 

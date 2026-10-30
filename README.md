@@ -50,7 +50,9 @@ Home Assistant knows comes in through Home Assistant.
 
 - **Tiles** switch with one click. A **card** holds the rest: brightness and colour, modes and
   target temperature, positions, readings and device info.
-- **Rooms** come from your apps and turn into tabs.
+- **Rooms** come from your apps; the room picker above the tiles shows one at a time.
+- **Tabs at the bottom**: Home and up to six sections such as lights, climate or cameras, picked
+  from the devices you have or by hand, as a bar or a floating pill.
 - **Top bar readings**: pin a thermometer or a door sensor and its value sits next to the icon.
 - **TVs** show the app or channel that is on; the card holds the volume, the inputs, the apps
   and a remote.
@@ -59,7 +61,8 @@ Home Assistant knows comes in through Home Assistant.
 - **Cameras** play live in their card, turn if they can, and save a snapshot to `Pictures/Nook`.
 - **Alerts**: a leak or smoke sensor behind a Xiaomi gateway becomes a notification the moment
   it fires, also on the lock screen.
-- **Four layouts**: rooms as tabs, small tiles, tiles by room, or modules grouped by what things do.
+- **Four layouts**: one room at a time, small tiles, tiles by room, or modules grouped by what things
+  do. Tiles keep the order set in Settings or go by name.
 
 <p align="center">
   <img src="docs/layouts.png" alt="The same home as rooms in tabs, as small tiles and as modules">

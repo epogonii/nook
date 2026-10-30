@@ -120,6 +120,10 @@ class NookButton extends PanelMenu.Button {
             () => this._togglePin(this._card.did));
         this._hideButton = this._addRoundButton(header, 'view-reveal-symbolic', _('Hide from the Menu'),
             () => this._toggleHidden(this._card.did));
+        this._sortButton = this._addRoundButton(header, 'view-sort-ascending-symbolic', _('Sort by Name'),
+            () => this._settings.set_boolean('sort-by-name', !readSetting(this._settings, 'sort-by-name')));
+        this._sortButton.add_style_class_name('nook-sort');
+        this._sortButton.visible = false;
         this._refreshButton = this._addRoundButton(header, 'view-refresh-symbolic', _('Find Devices Again'),
             () => this._discover().catch(logError));
         this._addRoundButton(header, 'emblem-system-symbolic', _('Settings'), () => {
@@ -127,6 +131,25 @@ class NookButton extends PanelMenu.Button {
             this._openPreferences();
         });
         this._panel.add_child(header);
+
+        // Room tabs view: the room picker folds the room chips out under this bar.
+        const bar = this._roomBar = new St.BoxLayout({style_class: 'nook-room-bar', visible: false});
+        this._roomLabel = new St.Label({y_align: Clutter.ActorAlign.CENTER});
+        this._roomLabel.clutter_text.ellipsize = Pango.EllipsizeMode.END;
+        this._roomArrow = new St.Icon({icon_name: 'pan-down-symbolic', icon_size: 12, y_align: Clutter.ActorAlign.CENTER});
+        const pick = new St.BoxLayout({style_class: 'nook-room-pick-box'});
+        pick.add_child(this._roomLabel);
+        pick.add_child(this._roomArrow);
+        this._roomPick = new St.Button({
+            style_class: 'nook-room-pick',
+            child: pick,
+            accessible_name: _('Choose a Room'),
+            can_focus: true,
+        });
+        this._roomPick.connect('clicked', () => this._foldRooms(!this._roomsOpen));
+        bar.add_child(this._roomPick);
+        this._panel.add_child(bar);
+        this._roomsOpen = false;
 
         const scale = St.ThemeContext.get_for_stage(global.stage).scale_factor || 1;
         this._chips = new St.Widget({
@@ -173,7 +196,14 @@ class NookButton extends PanelMenu.Button {
             else
                 this._body.remove_style_class_name('nook-body-scrolls');
         });
-        this._panel.add_child(this._scroll);
+        // BinLayout aligns only expanding children; the stack itself takes no more than it needs.
+        this._stack = new St.Widget({layout_manager: new Clutter.BinLayout(), y_expand: false});
+        this._scroll.set({x_expand: true, y_expand: true});
+        this._stack.add_child(this._scroll);
+        this._panel.add_child(this._stack);
+        this._switcher = null;
+        this._buildSwitcher();
+        this._pane = 'home';
         this._card = null;
         this._heardSection = null;
         this._heardShown = null;
@@ -201,8 +231,14 @@ class NookButton extends PanelMenu.Button {
                 this._stopRetry();
                 this._stopBeacons();
                 this._syncReadings();
+                // The next open starts at Home, rooms folded.
+                this._foldRooms(false);
+                const away = this._pane !== 'home';
+                this._pane = 'home';
                 if (this._card)
                     this._closeCard();
+                else if (away)
+                    this._render();
                 this._cast?.rest();
                 this._tv?.rest();
                 this._infoOpen.clear();
@@ -230,6 +266,19 @@ class NookButton extends PanelMenu.Button {
             'changed::scenes-compact', () => this._render(),
             'changed::scenes-folded', () => this._render(),
             'changed::room', () => this._render(),
+            'changed::sort-by-name', () => this._render(),
+            'changed::switcher-style', () => {
+                this._buildSwitcher();
+                this._render();
+            },
+            'changed::switcher-tabs', () => {
+                this._buildSwitcher();
+                this._render();
+            },
+            'changed::switcher-auto', () => {
+                this._buildSwitcher();
+                this._render();
+            },
             'changed::panel-sensors', () => {
                 this._restartReadingsSoon();
                 if (this._card)
@@ -543,6 +592,9 @@ class NookButton extends PanelMenu.Button {
         this._body.destroy_all_children();
         this._chips.destroy_all_children();
         this._chips.visible = false;
+        this._roomBar.visible = false;
+        this._switcher.visible = false;
+        this._sortButton.visible = false;
         this._tiles = [];
         this._drawnOffline = null;
     }

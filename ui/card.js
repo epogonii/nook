@@ -33,8 +33,11 @@ export class Card {
         this._hideButton.visible = on;
         this._refreshButton.visible = !on;
         this._quietHeader(!on && readSetting(this._settings, 'view') === 'control');
-        if (on)
+        // Off: the render that follows shows the sort button again.
+        if (on) {
+            this._sortButton.visible = false;
             this._syncCardHeader();
+        }
     }
 
     _quietHeader(on) {

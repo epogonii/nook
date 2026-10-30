@@ -37,6 +37,11 @@
   background-color: -st-accent-color;
 }
 
+/* Sorting by name is a view setting, not a device that is on: no accent. */
+.nook-sort:checked {
+  background-color: rgba(255, 255, 255, 0.24);
+}
+
 .nook-chip {
   padding: 5px 12px;
   border-radius: 999px;
@@ -53,6 +58,107 @@
   color: #ffffff;
   background-color: #3584e4;
   background-color: -st-accent-color;
+}
+
+.nook-room-bar {
+  spacing: 4px;
+}
+
+.nook-room-pick {
+  padding: 4px 8px 4px 4px;
+  border-radius: 8px;
+  font-weight: bold;
+}
+
+.nook-room-pick:hover,
+.nook-room-pick:focus,
+.nook-room-pick:checked {
+  background-color: rgba(255, 255, 255, 0.1);
+}
+
+.nook-room-pick-box {
+  spacing: 4px;
+}
+
+.nook-switcher {
+  spacing: 2px;
+  padding: 4px;
+  margin-bottom: 8px;
+  border-radius: 999px;
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  background-color: rgba(40, 40, 44, 0.94);
+  box-shadow: 0 4px 14px rgba(0, 0, 0, 0.45);
+}
+
+.nook-switcher-tab {
+  padding: 6px 12px;
+  border-radius: 999px;
+  font-size: 0.9em;
+  font-weight: bold;
+  color: rgba(255, 255, 255, 0.7);
+}
+
+.nook-switcher-tab:hover,
+.nook-switcher-tab:focus {
+  color: #ffffff;
+  background-color: rgba(255, 255, 255, 0.08);
+}
+
+.nook-switcher-tab:checked {
+  color: #ffffff;
+  background-color: #3584e4;
+  background-color: -st-accent-color;
+}
+
+.nook-switcher-box {
+  spacing: 6px;
+}
+
+.nook-switcher-room {
+  height: 48px;
+}
+
+.nook-tabbar {
+  padding-top: 6px;
+  border-top: 1px solid rgba(255, 255, 255, 0.08);
+}
+
+.nook-tabbar-tab {
+  padding: 4px 2px;
+  border-radius: 8px;
+  font-size: 0.75em;
+  color: rgba(255, 255, 255, 0.5);
+}
+
+.nook-tabbar-tab:hover,
+.nook-tabbar-tab:focus {
+  color: rgba(255, 255, 255, 0.85);
+}
+
+.nook-tabbar-tab:focus {
+  background-color: rgba(255, 255, 255, 0.08);
+}
+
+.nook-tabbar-tab:checked {
+  color: #ffffff;
+  font-weight: bold;
+}
+
+.nook-tabbar-box {
+  spacing: 3px;
+}
+
+.nook-tabbar-tab .nook-glyph {
+  width: 18px;
+  height: 18px;
+}
+
+.nook-tabbar-icons .nook-tabbar-tab {
+  padding: 7px 2px;
+}
+
+.nook-tabbar-icons .nook-tabbar-tab:checked {
+  background-color: rgba(255, 255, 255, 0.1);
 }
 
 .nook-body {
@@ -826,7 +932,8 @@
   background-color: transparent;
 }
 .nook-header-quiet .nook-round-button:hover,
-.nook-header-quiet .nook-round-button:focus {
+.nook-header-quiet .nook-round-button:focus,
+.nook-header-quiet .nook-sort:checked {
   color: #ffffff;
   background-color: rgba(255, 255, 255, 0.1);
 }

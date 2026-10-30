@@ -62,6 +62,31 @@
       <summary>Room tab last chosen</summary>
       <description>The lowercased room name, "@other" for devices in no room, or empty for all rooms.</description>
     </key>
+    <key name="sort-by-name" type="b">
+      <default>false</default>
+      <summary>Tiles in alphabetical order</summary>
+      <description>The menu sorts tiles by name instead of the order arranged in Settings. The arrows next to the room picker set it.</description>
+    </key>
+    <key name="switcher-style" type="s">
+      <choices>
+        <choice value="bar"/>
+        <choice value="floating"/>
+        <choice value="none"/>
+      </choices>
+      <default>'bar'</default>
+      <summary>Tabs at the bottom of the menu</summary>
+      <description>"bar" puts Home and the chosen tabs in a row under the tiles, "floating" in a pill over the bottom of the tiles, "none" shows no tabs.</description>
+    </key>
+    <key name="switcher-auto" type="b">
+      <default>true</default>
+      <summary>Tabs follow the devices</summary>
+      <description>The menu picks the tabs next to Home itself: up to six sections, those with the most devices. When off, "switcher-tabs" sets them.</description>
+    </key>
+    <key name="switcher-tabs" type="as">
+      <default>['scenes', 'lights', 'cameras']</default>
+      <summary>Tabs next to Home, chosen by hand</summary>
+      <description>Sections that get a tab of their own: "scenes", "lights", "climate", "media", "cameras", "security", "appliances". A tab shows while its section has devices; past six, only the six with the most devices show. With a Scenes tab, Home lists no scenes.</description>
+    </key>
     <key name="panel-sensors" type="as">
       <default>[]</default>
       <summary>Devices whose readings show in the top bar</summary>
