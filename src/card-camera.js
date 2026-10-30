@@ -367,7 +367,7 @@ export class CameraCard {
         try {
             account = await device.source.account(device);
         } catch (e) {
-            console.debug(`nook-app: keyring: ${e.message}`);
+            console.debug(`nook: keyring: ${e.message}`);
             account = 'none';
         }
         if (this._gone)
@@ -530,7 +530,7 @@ export class CameraCard {
             abilities = await device.source.abilities(device, this._controls, this._cancellable);
         } catch (e) {
             if (!e.matches?.(Gio.IOErrorEnum, Gio.IOErrorEnum.CANCELLED))
-                console.debug(`nook-app: ${device.did}: ${e.message}`);
+                console.debug(`nook: ${device.did}: ${e.message}`);
             return;
         }
         if (this._gone || !abilities.pan)
@@ -613,7 +613,7 @@ export class CameraCard {
                 try {
                     launcher.open_containing_folder_finish(result);
                 } catch (e) {
-                    console.debug(`nook-app: show in files: ${e.message}`);
+                    console.debug(`nook: show in files: ${e.message}`);
                 }
             });
         });

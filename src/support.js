@@ -113,7 +113,7 @@ class SupportDialog extends Adw.Dialog {
 export function aboutDialog(version) {
     const about = new Adw.AboutDialog({
         application_name: _('Nook'),
-        application_icon: 'io.github.epogonii.nook-app',
+        application_icon: 'io.github.epogonii.nook',
         developer_name: 'Evghenii Pogonii',
         version,
         website: PROJECT_URL,

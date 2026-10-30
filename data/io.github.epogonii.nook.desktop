@@ -1,8 +1,8 @@
 [Desktop Entry]
 Name=Nook
 Comment=Find, pair and sign in to the devices Nook shows in the top bar
-Exec=nook-app
-Icon=io.github.epogonii.nook-app
+Exec=nook
+Icon=io.github.epogonii.nook
 Terminal=false
 Type=Application
 Categories=Utility;

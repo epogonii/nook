@@ -1,11 +1,11 @@
-%global app_id io.github.epogonii.nook-app
+%global app_id io.github.epogonii.nook
 
-Name:           nook-app
+Name:           nook
 Version:        1.0.0
 Release:        1%{?dist}
 Summary:        Control your smart home
 License:        GPL-2.0-or-later
-URL:            https://github.com/epogonii/nook-app
+URL:            https://github.com/epogonii/nook
 Source0:        %{url}/archive/v%{version}/%{name}-%{version}.tar.gz
 BuildArch:      noarch
 
@@ -51,7 +51,7 @@ appstreamcli validate --no-net %{buildroot}%{_metainfodir}/%{app_id}.metainfo.xm
 %files -f %{app_id}.lang
 %license LICENSE
 %doc README.md
-%{_bindir}/nook-app
+%{_bindir}/nook
 %{_datadir}/%{app_id}/
 %{_datadir}/applications/%{app_id}.desktop
 %{_datadir}/dbus-1/services/%{app_id}.service

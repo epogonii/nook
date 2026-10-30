@@ -357,7 +357,7 @@ class DevicePage extends Adw.NavigationPage {
             this._read = true;
             this.sync();
         } catch (e) {
-            console.debug(`nook-app: ${device.did}: ${e.message}`);
+            console.debug(`nook: ${device.did}: ${e.message}`);
         } finally {
             this._reading = false;
         }

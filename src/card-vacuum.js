@@ -543,7 +543,7 @@ export class VacuumCard {
         } catch (e) {
             if (!(e instanceof XiaomiError) && !(e instanceof MapError) && !(e instanceof GLib.Error))
                 throw e;
-            console.debug(`nook-app: map: ${e.message}`);
+            console.debug(`nook: map: ${e.message}`);
         } finally {
             this._mapLoading = false;
         }
@@ -615,7 +615,7 @@ export class VacuumCard {
         } catch (e) {
             if (!(e instanceof XiaomiError) && !(e instanceof GLib.Error))
                 throw e;
-            console.debug(`nook-app: live map: ${e.message}`);
+            console.debug(`nook: live map: ${e.message}`);
         } finally {
             entry.following = false;
         }
@@ -653,7 +653,7 @@ export class VacuumCard {
         } catch (e) {
             if (!(e instanceof XiaomiError) && !(e instanceof GLib.Error))
                 throw e;
-            console.debug(`nook-app: this clean: ${e.message}`);
+            console.debug(`nook: this clean: ${e.message}`);
         }
         if (this._gone || token !== this._runToken)
             return;

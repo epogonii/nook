@@ -96,7 +96,7 @@ export class Service {
 
     _fail(invocation, e) {
         if (!(e instanceof BridgeError))
-            console.debug(`nook-app: ${e.message}`);
+            console.debug(`nook: ${e.message}`);
         invocation.return_dbus_error(ERROR, JSON.stringify(encode(e)));
     }
 
@@ -421,7 +421,7 @@ export class Service {
                     this._settings.set_value(key, value);
                     taken = true;
                 } catch (e) {
-                    console.warn(`nook-app: import ${key}: ${e.message}`);
+                    console.warn(`nook: import ${key}: ${e.message}`);
                 }
             }
             this._settings.set_boolean('imported', true);

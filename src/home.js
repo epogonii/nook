@@ -109,7 +109,7 @@ export const HomePage = GObject.registerClass({
         const add = new Gtk.Button({label: _('Add Devices'), halign: Gtk.Align.CENTER, css_classes: ['pill', 'suggested-action']});
         add.connect('clicked', () => this.emit('add-devices'));
         this._empty = new Adw.StatusPage({
-            icon_name: 'io.github.epogonii.nook-app-symbolic',
+            icon_name: 'io.github.epogonii.nook-symbolic',
             title: _('No Devices Yet'),
             description: _('Sign in to an account, or look for devices on this network.'),
             child: add,
@@ -238,7 +238,7 @@ export const HomePage = GObject.registerClass({
                 await home.discover();
         }
         this._collect();
-        await home.readAll().catch(e => console.debug(`nook-app: Mi Home: ${e.message}`));
+        await home.readAll().catch(e => console.debug(`nook: Mi Home: ${e.message}`));
         this._sync();
     }
 
@@ -258,7 +258,7 @@ export const HomePage = GObject.registerClass({
                     const jpeg = await device.source.still(device);
                     this._stills.set(device.did, Gdk.Texture.new_from_bytes(new GLib.Bytes(jpeg)));
                 } catch (e) {
-                    console.debug(`nook-app: still of ${device.did}: ${e.message}`);
+                    console.debug(`nook: still of ${device.did}: ${e.message}`);
                     continue;
                 }
                 this._tiles.find(tile => tile.device === device)?.setStill?.(this._stills.get(device.did));

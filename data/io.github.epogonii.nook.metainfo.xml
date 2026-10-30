@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!-- Copyright 2026 Evghenii Pogonii -->
 <component type="desktop-application">
-  <id>io.github.epogonii.nook-app</id>
+  <id>io.github.epogonii.nook</id>
   <metadata_license>CC0-1.0</metadata_license>
   <project_license>GPL-2.0-or-later</project_license>
 
@@ -34,15 +34,15 @@
   <screenshots>
     <screenshot type="default">
       <caption>Every device by section and room</caption>
-      <image>https://raw.githubusercontent.com/epogonii/nook-app/v1.0.0/screenshots/home.png</image>
+      <image>https://raw.githubusercontent.com/epogonii/nook/v1.0.0/screenshots/home.png</image>
     </screenshot>
     <screenshot environment="gnome:dark">
       <caption>The Home page in the dark style</caption>
-      <image>https://raw.githubusercontent.com/epogonii/nook-app/v1.0.0/screenshots/home-dark.png</image>
+      <image>https://raw.githubusercontent.com/epogonii/nook/v1.0.0/screenshots/home-dark.png</image>
     </screenshot>
     <screenshot>
       <caption>Accounts and pairing for each kind of device</caption>
-      <image>https://raw.githubusercontent.com/epogonii/nook-app/v1.0.0/screenshots/accounts.png</image>
+      <image>https://raw.githubusercontent.com/epogonii/nook/v1.0.0/screenshots/accounts.png</image>
     </screenshot>
   </screenshots>
 
@@ -51,12 +51,12 @@
     <color type="primary" scheme_preference="dark">#3d3d42</color>
   </branding>
 
-  <launchable type="desktop-id">io.github.epogonii.nook-app.desktop</launchable>
-  <translation type="gettext">io.github.epogonii.nook-app</translation>
+  <launchable type="desktop-id">io.github.epogonii.nook.desktop</launchable>
+  <translation type="gettext">io.github.epogonii.nook</translation>
 
-  <url type="homepage">https://github.com/epogonii/nook-app</url>
-  <url type="bugtracker">https://github.com/epogonii/nook-app/issues</url>
-  <url type="vcs-browser">https://github.com/epogonii/nook-app</url>
+  <url type="homepage">https://github.com/epogonii/nook</url>
+  <url type="bugtracker">https://github.com/epogonii/nook/issues</url>
+  <url type="vcs-browser">https://github.com/epogonii/nook</url>
   <url type="donation">https://github.com/sponsors/epogonii</url>
 
   <supports>

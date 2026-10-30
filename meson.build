@@ -1,6 +1,6 @@
 # SPDX-License-Identifier: GPL-2.0-or-later
 
-project('nook-app',
+project('nook',
   version: '1.0.0',
   license: 'GPL-2.0-or-later',
   meson_version: '>= 1.0',
@@ -9,7 +9,7 @@ project('nook-app',
 gnome = import('gnome')
 i18n = import('i18n')
 
-app_id = 'io.github.epogonii.nook-app'
+app_id = 'io.github.epogonii.nook'
 
 prefix = get_option('prefix')
 bindir = prefix / get_option('bindir')
@@ -19,13 +19,13 @@ pkgdatadir = datadir / app_id
 
 install_subdir('src',
   install_dir: pkgdatadir,
-  exclude_files: ['nook-app.in'],
+  exclude_files: ['nook.in'],
   strip_directory: true,
 )
 
 configure_file(
-  input: 'src/nook-app.in',
-  output: 'nook-app',
+  input: 'src/nook.in',
+  output: 'nook',
   configuration: {'pkgdatadir': pkgdatadir},
   install_dir: bindir,
   install_mode: 'rwxr-xr-x',

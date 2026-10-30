@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<schemalist gettext-domain="io.github.epogonii.nook-app">
-  <schema id="io.github.epogonii.nook-app" path="/io/github/epogonii/nook-app/">
+<schemalist gettext-domain="io.github.epogonii.nook">
+  <schema id="io.github.epogonii.nook" path="/io/github/epogonii/nook/">
     <key name="xiaomi-user-id" type="s">
       <default>''</default>
       <summary>Mi Home account the login in the keyring belongs to</summary>

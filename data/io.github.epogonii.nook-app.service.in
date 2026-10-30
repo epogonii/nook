@@ -1,3 +1,0 @@
-[D-BUS Service]
-Name=io.github.epogonii.nook-app
-Exec=@bindir@/nook-app --gapplication-service

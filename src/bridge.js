@@ -5,10 +5,10 @@
 import Gio from 'gi://Gio';
 import GLib from 'gi://GLib';
 
-export const BUS_NAME = 'io.github.epogonii.nook-app';
-export const OBJECT_PATH = '/io/github/epogonii/nook_app/Homes';
-export const INTERFACE = 'io.github.epogonii.NookApp.Homes';
-export const ERROR = 'io.github.epogonii.NookApp.Error';
+export const BUS_NAME = 'io.github.epogonii.nook';
+export const OBJECT_PATH = '/io/github/epogonii/nook/Homes';
+export const INTERFACE = 'io.github.epogonii.Nook.Homes';
+export const ERROR = 'io.github.epogonii.Nook.Error';
 
 export const INTERFACE_XML = `<node>
   <interface name="${INTERFACE}">

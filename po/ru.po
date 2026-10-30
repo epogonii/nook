@@ -1,9 +1,9 @@
 # Russian translation for the Nook app.
-# This file is distributed under the same license as the nook-app package.
+# This file is distributed under the same license as the nook package.
 #
 msgid ""
 msgstr ""
-"Project-Id-Version: io.github.epogonii.nook-app\n"
+"Project-Id-Version: io.github.epogonii.nook\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2026-10-30 16:35+0200\n"
 "PO-Revision-Date: 2026-10-14 12:00+0300\n"
@@ -1768,7 +1768,7 @@ msgid "Run"
 msgstr "Запустить"
 
 #: src/main.js:19 src/support.js:115 src/window.js:54
-#: data/io.github.epogonii.nook-app.desktop:2
+#: data/io.github.epogonii.nook.desktop:2
 msgid "Nook"
 msgstr "Nook"
 
@@ -3719,12 +3719,12 @@ msgstr "Добавить устройства…"
 msgid "About Nook"
 msgstr "О Nook"
 
-#: data/io.github.epogonii.nook-app.desktop:3
+#: data/io.github.epogonii.nook.desktop:3
 msgid "Find, pair and sign in to the devices Nook shows in the top bar"
 msgstr ""
 "Поиск, сопряжение и вход в аккаунты устройств, которые Nook показывает в "
 "верхней панели"
 
-#: data/io.github.epogonii.nook-app.desktop:9
+#: data/io.github.epogonii.nook.desktop:9
 msgid "smart home;lights;camera;Home Assistant;Hue;HomeKit;Mi Home;"
 msgstr "умный дом;свет;камера;Home Assistant;Hue;HomeKit;Mi Home;"

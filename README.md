@@ -14,14 +14,14 @@ it under Background Apps.
 
 ## Installing
 
-From [Flathub](https://flathub.org/apps/io.github.epogonii.nook-app):
+From [Flathub](https://flathub.org/apps/io.github.epogonii.nook):
 
-    flatpak install flathub io.github.epogonii.nook-app
+    flatpak install flathub io.github.epogonii.nook
 
-On Fedora, from [COPR](https://copr.fedorainfracloud.org/coprs/swink/nook-app/):
+On Fedora, from [COPR](https://copr.fedorainfracloud.org/coprs/swink/nook/):
 
-    sudo dnf copr enable swink/nook-app
-    sudo dnf install nook-app
+    sudo dnf copr enable swink/nook
+    sudo dnf install nook
 
 Logins are kept in the keyring through the Secret portal. The ones the extension
 saved before this app existed are handed over once, the first time it starts it.
