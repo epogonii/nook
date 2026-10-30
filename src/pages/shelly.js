@@ -5,12 +5,13 @@ import GLib from 'gi://GLib';
 import GObject from 'gi://GObject';
 import Gtk from 'gi://Gtk';
 
-import {gettext as _, ngettext} from 'resource:///org/gnome/Shell/Extensions/js/extensions/prefs.js';
+import {gettext as _, ngettext} from 'gettext';
 
 import * as Secrets from '../lib/secrets.js';
 import * as Shelly from '../lib/shelly.js';
 import {SpecError} from '../lib/spec-home.js';
-import {deviceCount, renameButton, setGroupIcon, setSearching, setSkipped, skippedIn} from './common.js';
+import {dropShelly} from '../remove.js';
+import {deviceCount, setGroupIcon, setSearching, setSkipped, skippedIn} from './common.js';
 import {FoldGroup} from './fold.js';
 
 // Gen 1 lets its owner pick the login's name; from Gen 2 on it is always admin.
@@ -89,9 +90,7 @@ class ShellyGroup extends FoldGroup {
     }
 
     _drop(id) {
-        this._save(this._units().filter(u => u.id !== id));
-        setSkipped(this._settings, [`shelly:${id}`], true);
-        Secrets.clear(Shelly.secretService(id)).catch(logError);
+        dropShelly(this._settings, id);
     }
 
     _toast(title) {
@@ -163,9 +162,6 @@ class ShellyGroup extends FoldGroup {
                     unit.channels.length > 1 ? ngettext('%d channel', '%d channels', unit.channels.length).format(unit.channels.length) : null,
                     unit.ip].filter(Boolean).join(' · '), -1),
             });
-            // Channels of a unit with several are renamed on the Devices page.
-            if (single)
-                row.add_suffix(renameButton(this._settings, single, name, this));
             if (unit.auth)
                 row.add_suffix(this._button('dialog-password-symbolic', _('Change the Password'), () => this._adopt(unit).catch(logError)));
             row.add_suffix(this._button('user-trash-symbolic', _('Remove'), () => this._drop(unit.id)));

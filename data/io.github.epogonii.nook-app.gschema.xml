@@ -1,0 +1,145 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<schemalist gettext-domain="io.github.epogonii.nook-app">
+  <schema id="io.github.epogonii.nook-app" path="/io/github/epogonii/nook-app/">
+    <key name="xiaomi-user-id" type="s">
+      <default>''</default>
+      <summary>Mi Home account the login in the keyring belongs to</summary>
+      <description>Written by the preferences window after a login or a logout, so the shell knows to read the keyring again. Empty when no one is logged in.</description>
+    </key>
+    <key name="gree-units" type="s">
+      <default>'[]'</default>
+      <summary>Gree air conditioners</summary>
+      <description>A JSON list of the units bound in the preferences: mac, ip, name, key, cipher and version. The key is what a unit hands out to anyone on the local network who asks, so it is kept here and not in the keyring.</description>
+    </key>
+    <key name="aircons" type="s">
+      <default>'[]'</default>
+      <summary>Midea and Daikin air conditioners</summary>
+      <description>A JSON list of the units added in the preferences: brand, id, ip and name, with port, version and serial number for Midea, and mac, api and firmware for Daikin. A newer Midea unit's token and key are in the keyring.</description>
+    </key>
+    <key name="lg-devices" type="s">
+      <default>'[]'</default>
+      <summary>LG ThinQ air conditioners</summary>
+      <description>A JSON list of the units read when the LG ThinQ account was added: id, name, model and what each can do. The access token is in the keyring.</description>
+    </key>
+    <key name="smartthings-devices" type="s">
+      <default>'[]'</default>
+      <summary>SmartThings air conditioners</summary>
+      <description>A JSON list of the units read when the SmartThings account was added: id, name, model and what each can do. The app keys and tokens are in the keyring.</description>
+    </key>
+    <key name="melcloud-devices" type="s">
+      <default>'[]'</default>
+      <summary>MELCloud air conditioners</summary>
+      <description>A JSON list of the units read when the MELCloud account was added: id, building, name, model and what each can do. The login is in the keyring.</description>
+    </key>
+    <key name="electrolux-devices" type="s">
+      <default>'[]'</default>
+      <summary>Electrolux air conditioners</summary>
+      <description>A JSON list of the units read when the Electrolux account was added: id, name, model and what each can do. The API key and tokens are in the keyring.</description>
+    </key>
+    <key name="find-skipped" type="as">
+      <default>[]</default>
+      <summary>Devices left out of Search Everything</summary>
+      <description>Ids like tapo:uuid or gree:mac of devices the user removed. Search Everything on the Devices page does not add them back; a device's own Search or its switch in Find Devices does.</description>
+    </key>
+    <key name="tapo-cameras" type="s">
+      <default>'[]'</default>
+      <summary>Tapo and other ONVIF cameras</summary>
+      <description>A JSON list of the cameras found on the local network: id (the camera's own uuid), ip, name, model and xaddr (its ONVIF device service; port 2020 is Tapo). The logins they are watched with are kept in the keyring, not here.</description>
+    </key>
+    <key name="cast-speakers" type="s">
+      <default>'[]'</default>
+      <summary>Google Cast speakers</summary>
+      <description>A JSON list of the speakers found in the preferences: id, name, model, ip and port. Nothing secret; a speaker answers anyone on the local network.</description>
+    </key>
+    <key name="tvs" type="s">
+      <default>'[]'</default>
+      <summary>TVs</summary>
+      <description>A JSON list of the TVs added in the preferences: id, brand, name, model, ip and mac. What a TV hands out when it is paired is kept in the keyring, not here.</description>
+    </key>
+    <key name="sonoff-switches" type="s">
+      <default>'[]'</default>
+      <summary>Sonoff switches</summary>
+      <description>A JSON list of the Sonoff switches in DIY mode found in the preferences: id, name, ip, port, and outlets for one with several channels. Nothing secret; in DIY mode a switch answers anyone on the local network.</description>
+    </key>
+    <key name="shelly-devices" type="s">
+      <default>'[]'</default>
+      <summary>Shelly devices</summary>
+      <description>JSON list of Shelly units on this network, each with its address, generation, model and channels. Their passwords are in the keyring.</description>
+    </key>
+    <key name="ewelink-devices" type="s">
+      <default>'[]'</default>
+      <summary>eWeLink devices</summary>
+      <description>A JSON list of the eWeLink devices added in the preferences: id, name, model, uiid, outlets and room. Nothing secret; the eWeLink login stays in the keyring.</description>
+    </key>
+    <key name="ewelink-region" type="s">
+      <default>''</default>
+      <summary>eWeLink region</summary>
+      <description>The region of the eWeLink account, or empty when logged out. Written by the preferences on login and logout to tell the shell; the login itself is in the keyring.</description>
+    </key>
+    <key name="hue-bridges" type="s">
+      <default>'[]'</default>
+      <summary>Hue bridges</summary>
+      <description>A JSON list of the Hue bridges added in the preferences: id, name, model, ip and the fingerprint of the certificate seen when the bridge was added. The key a bridge hands out when paired is kept in the keyring, not here.</description>
+    </key>
+    <key name="hue-devices" type="s">
+      <default>'[]'</default>
+      <summary>Hue devices</summary>
+      <description>A JSON list of the lights, plugs and sensors read from the Hue bridges: id, bridge, kind, name, room, model and what each can do.</description>
+    </key>
+    <key name="hass-server" type="s">
+      <default>''</default>
+      <summary>Home Assistant address</summary>
+      <description>The address of the Home Assistant server, or empty when not connected. Written by the preferences to tell the shell; the access token is in the keyring.</description>
+    </key>
+    <key name="hass-devices" type="s">
+      <default>'[]'</default>
+      <summary>Home Assistant devices</summary>
+      <description>A JSON list of the devices read from Home Assistant: the entity behind each, its type, name, room and the entities of the same device shown with it, with the attributes the card is built from.</description>
+    </key>
+    <key name="homekit-accessories" type="s">
+      <default>'[]'</default>
+      <summary>HomeKit accessories</summary>
+      <description>A JSON list of the HomeKit accessories paired in the preferences: id, name, model, ip, port, and the services and characteristics of each accessory behind it. The keys made at pairing are kept in the keyring, not here.</description>
+    </key>
+    <key name="smartlife-user" type="s">
+      <default>''</default>
+      <summary>Smart Life account</summary>
+      <description>The id of the Smart Life account, or empty when logged out. Written by the preferences on login and logout to tell the shell; the login itself is in the keyring.</description>
+    </key>
+    <key name="smartlife-devices" type="s">
+      <default>'[]'</default>
+      <summary>Smart Life devices</summary>
+      <description>A JSON list of the devices read from the Smart Life account: id, name, room, category, model, channel, and the data points Nook shows with their limits.</description>
+    </key>
+    <key name="names" type="a{ss}">
+      <default>{}</default>
+      <summary>Names given to devices</summary>
+      <description>Set in this window or in the Nook extension, which keep each other's copy. A did with no entry goes by the device's own name.</description>
+    </key>
+    <key name="icons" type="a{ss}">
+      <default>{}</default>
+      <summary>Icons chosen for devices</summary>
+      <description>A glyph name or the path of an image, per did, kept in step with the Nook extension's own copy.</description>
+    </key>
+    <key name="home-hidden" type="as">
+      <default>[]</default>
+      <summary>Devices hidden on Home</summary>
+      <description>Devices, by did, shown only in the Hidden group of this window's Home page.</description>
+    </key>
+    <key name="folded-groups" type="as">
+      <default>[]</default>
+      <summary>Folded groups</summary>
+      <description>Groups of this window shown folded.</description>
+    </key>
+    <key name="secrets-imported" type="b">
+      <default>false</default>
+      <summary>Logins taken over from the extension</summary>
+      <description>Set once the logins the Nook extension saved in the keyring before version 2 have been copied into this app's keyring.</description>
+    </key>
+    <key name="imported" type="b">
+      <default>false</default>
+      <summary>Device settings taken over from the extension</summary>
+      <description>Set once the devices the Nook extension kept in its own settings before version 2 have been copied here, so they are copied only once.</description>
+    </key>
+  </schema>
+</schemalist>

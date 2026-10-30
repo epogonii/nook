@@ -10,7 +10,7 @@
 import GLib from 'gi://GLib';
 import System from 'system';
 
-import * as Gree from '../lib/gree.js';
+import * as Gree from '../src/lib/gree.js';
 
 async function main() {
     const units = await Gree.discover(ARGV[0] ?? '255.255.255.255');

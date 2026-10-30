@@ -42,6 +42,10 @@ export class Listener {
         return this._states.get(sid) ?? null;
     }
 
+    states() {
+        return this._states;
+    }
+
     read(sid) {
         if (!this._socket || this._gateways.size === 0)
             return Promise.resolve(this.state(sid));

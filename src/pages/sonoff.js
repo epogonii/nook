@@ -5,10 +5,11 @@ import GLib from 'gi://GLib';
 import GObject from 'gi://GObject';
 import Gtk from 'gi://Gtk';
 
-import {gettext as _, ngettext} from 'resource:///org/gnome/Shell/Extensions/js/extensions/prefs.js';
+import {gettext as _, ngettext} from 'gettext';
 
 import * as Sonoff from '../lib/sonoff.js';
-import {deviceCount, renameButton, setGroupIcon, setSearching, setSkipped, skippedIn} from './common.js';
+import {dropSonoff} from '../remove.js';
+import {deviceCount, setGroupIcon, setSearching, setSkipped, skippedIn} from './common.js';
 import {FoldGroup} from './fold.js';
 
 export const SonoffGroup = GObject.registerClass(
@@ -47,8 +48,7 @@ class SonoffGroup extends FoldGroup {
     }
 
     _drop(id) {
-        this._save(this._switches().filter(s => s.id !== id));
-        setSkipped(this._settings, [`sonoff:${id}`], true);
+        dropSonoff(this._settings, id);
     }
 
     _entry(unit) {
@@ -89,9 +89,6 @@ class SonoffGroup extends FoldGroup {
                     more.length > 0 ? ngettext('%d channel', '%d channels', more.length + 1).format(more.length + 1) : null,
                     unit.ip].filter(Boolean).join(' · '), -1),
             });
-            // Channels of a multi-channel switch are renamed on the Devices page.
-            if (more.length === 0)
-                row.add_suffix(renameButton(this._settings, first.did, name, this));
             const remove = new Gtk.Button({
                 icon_name: 'user-trash-symbolic',
                 tooltip_text: _('Remove'),

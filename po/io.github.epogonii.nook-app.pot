@@ -1,0 +1,3573 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
+# This file is distributed under the same license as the nook-app package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+#
+#, fuzzy
+msgid ""
+msgstr ""
+"Project-Id-Version: nook-app\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2026-10-30 16:35+0200\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"Language: \n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=INTEGER; plural=EXPRESSION;\n"
+
+#: src/accounts.js:18
+msgid "Apps and Hubs"
+msgstr ""
+
+#: src/accounts.js:19
+msgid "Mi Home, Home Assistant, HomeKit and Smart Life"
+msgstr ""
+
+#: src/accounts.js:21 src/pages/aircons.js:24 src/window.js:84
+msgid "Air Conditioners"
+msgstr ""
+
+#: src/accounts.js:22
+msgid ""
+"Gree, Midea and Daikin on this network; LG, Samsung, Mitsubishi Electric and "
+"Electrolux through their apps"
+msgstr ""
+
+#: src/accounts.js:24
+msgid "Lights and Switches"
+msgstr ""
+
+#: src/accounts.js:25
+msgid "Philips Hue, Shelly, Sonoff and eWeLink"
+msgstr ""
+
+#: src/accounts.js:27
+msgid "TVs and Speakers"
+msgstr ""
+
+#: src/accounts.js:28
+msgid "TVs on this network and Google Cast speakers"
+msgstr ""
+
+#: src/accounts.js:30 src/home.js:36 src/pages/cameras.js:22 src/topbar.js:139
+#: src/window.js:86
+msgid "Cameras"
+msgstr ""
+
+#: src/accounts.js:31
+msgid "Tapo and other ONVIF cameras"
+msgstr ""
+
+#: src/accounts.js:48 src/pages/common.js:122 src/topbar.js:492
+#, javascript-format
+msgid "%d device"
+msgid_plural "%d devices"
+msgstr[0] ""
+msgstr[1] ""
+
+#: src/accounts.js:64 src/window.js:213
+msgid "Accounts"
+msgstr ""
+
+#: src/accounts.js:74
+msgid ""
+"Sign in to the apps your devices are in, or add devices this computer finds "
+"on the network."
+msgstr ""
+
+#: src/accounts.js:88 src/accounts.js:177 src/home.js:109 src/home.js:123
+msgid "Add Devices"
+msgstr ""
+
+#: src/card-camera.js:87
+msgid "Turn Left"
+msgstr ""
+
+#: src/card-camera.js:88
+msgid "Turn Right"
+msgstr ""
+
+#: src/card-camera.js:89
+msgid "Turn Up"
+msgstr ""
+
+#: src/card-camera.js:90
+msgid "Turn Down"
+msgstr ""
+
+#: src/card-camera.js:291
+msgid "Take a Snapshot"
+msgstr ""
+
+#: src/card-camera.js:302
+msgid "Controls"
+msgstr ""
+
+#: src/card-camera.js:357
+msgid ""
+"The camera refused the login: the password is wrong, or the camera locked it "
+"for a while after too many tries."
+msgstr ""
+
+#: src/card-camera.js:375 src/card-tv.js:74
+msgid "Open Accounts"
+msgstr ""
+
+#: src/card-camera.js:378
+msgid ""
+"Search for cameras again in Accounts, under Cameras, so Nook learns how to "
+"reach this one."
+msgstr ""
+
+#: src/card-camera.js:384
+msgid "Add the camera account from the Tapo app in Accounts, under Cameras."
+msgstr ""
+
+#: src/card-camera.js:385
+msgid "Add the login of this camera in Accounts, under Cameras."
+msgstr ""
+
+#: src/card-camera.js:390
+msgid ""
+"The saved camera account could not be read. Save it again in Accounts, under "
+"Cameras."
+msgstr ""
+
+#: src/card-camera.js:507 src/card-camera.js:587
+msgid "GStreamer is needed to show the picture."
+msgstr ""
+
+#: src/card-camera.js:509 src/card-camera.js:589
+msgid "The picture needs a GStreamer plugin that is not installed."
+msgstr ""
+
+#: src/card-camera.js:514
+msgid "The camera stopped sending its picture."
+msgstr ""
+
+#: src/card-camera.js:546
+#, javascript-format
+msgid "Could not turn the camera: %s"
+msgstr ""
+
+#: src/card-camera.js:556
+msgid "Turn to the Home Position"
+msgstr ""
+
+#: src/card-camera.js:596
+msgid "The camera sent no picture to save."
+msgstr ""
+
+#: src/card-camera.js:607 src/card-camera.js:610
+msgid "Snapshot saved"
+msgstr ""
+
+#: src/card-camera.js:610
+msgid "Show in Files"
+msgstr ""
+
+#: src/card-camera.js:637
+msgid ""
+"Privacy mode, the light, night vision and the siren need your TP-Link "
+"password, in Accounts under Cameras."
+msgstr ""
+
+#: src/card-camera.js:655
+msgid "The TP-Link password in Accounts is not the one this camera knows."
+msgstr ""
+
+#: src/card-camera.js:666
+msgid "Privacy Mode"
+msgstr ""
+
+#: src/card-camera.js:667
+msgid "Status Light"
+msgstr ""
+
+#: src/card-camera.js:668
+msgid "Motion Detection"
+msgstr ""
+
+#: src/card-camera.js:669
+msgid "Siren on Motion"
+msgstr ""
+
+#: src/card-camera.js:689 src/pages/cameras.js:40 src/pages/cameras.js:50
+msgid "TP-Link Password"
+msgstr ""
+
+#: src/card-camera.js:738 src/card-climate.js:40 src/hero.js:301 src/text.js:75
+#: src/text.js:197
+msgid "Auto"
+msgstr ""
+
+#: src/card-camera.js:738 src/card-climate.js:104 src/card-spec.js:55
+#: src/card-spec.js:305 src/card-spec.js:588 src/card-spec.js:616
+#: src/hero.js:337 src/hero.js:489 src/hero.js:535 src/hero.js:566
+#: src/hero.js:583 src/hero.js:666 src/hero.js:680 src/hero.js:695
+#: src/hero.js:717 src/text.js:47 src/text.js:60 src/text.js:294
+#: src/text.js:304 src/text.js:308
+msgid "On"
+msgstr ""
+
+#: src/card-camera.js:738 src/card-climate.js:67 src/card-climate.js:102
+#: src/card-climate.js:104 src/card-spec.js:55 src/card-spec.js:305
+#: src/card-spec.js:350 src/card-spec.js:360 src/card-spec.js:588
+#: src/card-spec.js:616 src/hero.js:337 src/hero.js:489 src/hero.js:535
+#: src/hero.js:566 src/hero.js:583 src/hero.js:666 src/hero.js:680
+#: src/hero.js:695 src/hero.js:717 src/history.js:219 src/text.js:47
+#: src/text.js:59 src/text.js:294 src/text.js:303 src/text.js:308
+msgid "Off"
+msgstr ""
+
+#: src/card-camera.js:739
+msgid "Night Vision"
+msgstr ""
+
+#: src/card-camera.js:759 src/card-camera.js:773 src/card-camera.js:789
+msgid "Sound the Siren"
+msgstr ""
+
+#: src/card-camera.js:769
+msgid "Click Again to Sound It"
+msgstr ""
+
+#: src/card-camera.js:789
+msgid "Stop the Siren"
+msgstr ""
+
+#: src/card-climate.js:20 src/text.js:172
+msgid "Eco"
+msgstr ""
+
+#: src/card-climate.js:21 src/text.js:76
+msgid "Sleep"
+msgstr ""
+
+#: src/card-climate.js:22 src/card-climate.js:46 src/text.js:99 src/text.js:102
+#: src/text.js:103
+msgid "Turbo"
+msgstr ""
+
+#: src/card-climate.js:23 src/card-climate.js:41 src/text.js:96 src/text.js:100
+msgid "Quiet"
+msgstr ""
+
+#: src/card-climate.js:24
+msgid "Display"
+msgstr ""
+
+#: src/card-climate.js:25 src/humanize.js:129
+msgid "Ionizer"
+msgstr ""
+
+#: src/card-climate.js:26
+msgid "X-Fan"
+msgstr ""
+
+#: src/card-climate.js:27
+msgid "8° heat"
+msgstr ""
+
+#: src/card-climate.js:28
+msgid "Fresh air"
+msgstr ""
+
+#: src/card-climate.js:42 src/text.js:78
+msgid "Low"
+msgstr ""
+
+#: src/card-climate.js:43 src/text.js:79 src/text.js:80 src/text.js:98
+#: src/text.js:174
+msgid "Medium"
+msgstr ""
+
+#: src/card-climate.js:44 src/text.js:81
+msgid "High"
+msgstr ""
+
+#: src/card-climate.js:45
+msgid "Max"
+msgstr ""
+
+#: src/card-climate.js:64 src/card-climate.js:99 src/card-spec.js:340
+#: src/humanize.js:86 src/humanize.js:87
+msgid "Swing"
+msgstr ""
+
+#: src/card-climate.js:77 src/humanize.js:82
+msgid "Mode"
+msgstr ""
+
+#: src/card-climate.js:78 src/humanize.js:14
+msgid "Fan"
+msgstr ""
+
+#: src/card-climate.js:79
+msgid "Up and down"
+msgstr ""
+
+#: src/card-climate.js:80
+msgid "Left and right"
+msgstr ""
+
+#: src/card-climate.js:127 src/humanize.js:96 src/humanize.js:108
+#: src/props.js:182
+msgid "Temperature"
+msgstr ""
+
+#: src/card-climate.js:128
+msgid "Cooler"
+msgstr ""
+
+#: src/card-climate.js:130
+msgid "Warmer"
+msgstr ""
+
+#: src/card-media.js:60
+msgid "Previous"
+msgstr ""
+
+#: src/card-media.js:62 src/card-media.js:131 src/card-tv.js:48
+#: src/humanize.js:172
+msgctxt "action"
+msgid "Play"
+msgstr ""
+
+#: src/card-media.js:65 src/humanize.js:174
+msgid "Next"
+msgstr ""
+
+#: src/card-media.js:71 src/card-media.js:157 src/card-tv.js:207
+#: src/card-tv.js:240 src/humanize.js:166
+msgid "Mute"
+msgstr ""
+
+#: src/card-media.js:74 src/card-tv.js:219 src/card-tv.js:235
+#: src/card-vacuum.js:380 src/humanize.js:106
+msgid "Volume"
+msgstr ""
+
+#: src/card-media.js:126 src/text.js:64 src/text.js:298
+msgid "Paused"
+msgstr ""
+
+#: src/card-media.js:133 src/card-spec.js:534 src/card-vacuum.js:243
+#: src/humanize.js:146 src/humanize.js:151 src/humanize.js:152
+msgid "Stop"
+msgstr ""
+
+#: src/card-media.js:135 src/card-spec.js:528 src/card-tv.js:50
+#: src/card-vacuum.js:119 src/humanize.js:147
+msgid "Pause"
+msgstr ""
+
+#: src/card-media.js:157 src/card-tv.js:240
+msgid "Unmute"
+msgstr ""
+
+#: src/card-parts.js:56 src/card-parts.js:181
+msgid "Less"
+msgstr ""
+
+#: src/card-parts.js:57 src/card-parts.js:185 src/device.js:181
+msgid "More"
+msgstr ""
+
+#: src/card-spec.js:86 src/card-spec.js:348 src/history.js:226 src/text.js:182
+#: src/text.js:230
+#, javascript-format
+msgid "%s min"
+msgstr ""
+
+#: src/card-spec.js:88 src/text.js:229
+#, javascript-format
+msgid "%s h %s min"
+msgstr ""
+
+#: src/card-spec.js:88 src/card-spec.js:349
+#, javascript-format
+msgid "%s h"
+msgstr ""
+
+#: src/card-spec.js:325 src/humanize.js:73
+msgid "Power"
+msgstr ""
+
+#: src/card-spec.js:326 src/humanize.js:83 src/humanize.js:84
+#: src/humanize.js:85 src/humanize.js:158
+msgid "Speed"
+msgstr ""
+
+#: src/card-spec.js:328
+msgid "Wind"
+msgstr ""
+
+#: src/card-spec.js:337
+msgid "Straight"
+msgstr ""
+
+#: src/card-spec.js:337
+msgid "Natural"
+msgstr ""
+
+#: src/card-spec.js:341
+msgid "Angle"
+msgstr ""
+
+#: src/card-spec.js:357 src/humanize.js:34 src/humanize.js:35
+#: src/humanize.js:36
+msgid "Timer"
+msgstr ""
+
+#: src/card-spec.js:365 src/card-spec.js:417 src/humanize.js:15
+msgid "Light"
+msgstr ""
+
+#: src/card-spec.js:366 src/humanize.js:29
+msgid "Sound"
+msgstr ""
+
+#: src/card-spec.js:367
+msgid "Child Lock"
+msgstr ""
+
+#: src/card-spec.js:382
+msgid "Turn the Head"
+msgstr ""
+
+#: src/card-spec.js:383 src/card-tv.js:45 src/text.js:88
+msgid "Left"
+msgstr ""
+
+#: src/card-spec.js:383 src/card-tv.js:46 src/text.js:89
+msgid "Right"
+msgstr ""
+
+#: src/card-spec.js:418 src/humanize.js:107
+msgid "Guard"
+msgstr ""
+
+#: src/card-spec.js:436
+msgid "Siren"
+msgstr ""
+
+#: src/card-spec.js:442
+msgid "Siren Volume"
+msgstr ""
+
+#: src/card-spec.js:447
+msgid "Light Around It"
+msgstr ""
+
+#: src/card-spec.js:491
+msgid "min left, paused"
+msgstr ""
+
+#: src/card-spec.js:491
+msgid "min left"
+msgstr ""
+
+#: src/card-spec.js:519
+msgid "Time to turn the food over."
+msgstr ""
+
+#: src/card-spec.js:530
+msgid "Go On"
+msgstr ""
+
+#: src/card-spec.js:532 src/humanize.js:145
+msgid "Start"
+msgstr ""
+
+#: src/card-spec.js:548 src/humanize.js:80
+msgid "Program"
+msgstr ""
+
+#: src/card-spec.js:569
+msgctxt "fryer"
+msgid "Heat"
+msgstr ""
+
+#: src/card-spec.js:571 src/humanize.js:71 src/humanize.js:109
+msgid "Time"
+msgstr ""
+
+#: src/card-spec.js:577
+msgid "Start In"
+msgstr ""
+
+#: src/card-spec.js:577
+msgid "Now"
+msgstr ""
+
+#: src/card-spec.js:579 src/humanize.js:111
+msgid "Preheat"
+msgstr ""
+
+#: src/card-spec.js:580
+msgid "Keep Warm"
+msgstr ""
+
+#: src/card-spec.js:581
+msgid "Turn Over"
+msgstr ""
+
+#: src/card-tv.js:23 src/device.js:24 src/hero.js:114
+msgid "TV"
+msgstr ""
+
+#: src/card-tv.js:30 src/card-tv.js:123
+msgid "Pair it under TVs, in Accounts, to control it from here."
+msgstr ""
+
+#: src/card-tv.js:32 src/pages/tvs.js:36
+msgid "The TV did not let Nook in."
+msgstr ""
+
+#: src/card-tv.js:34
+msgid ""
+"The TV did not wake up. Turn on network standby (Powered On by Apps) in its "
+"network settings."
+msgstr ""
+
+#: src/card-tv.js:36 src/card-tv.js:124
+msgid "The TV is not answering. Is it on the same network?"
+msgstr ""
+
+#: src/card-tv.js:43
+msgid "Back"
+msgstr ""
+
+#: src/card-tv.js:43
+msgid "Up"
+msgstr ""
+
+#: src/card-tv.js:44 src/home.js:86 src/home.js:204 src/home.js:305
+#: src/window.js:210
+msgid "Home"
+msgstr ""
+
+#: src/card-tv.js:45
+msgid "OK"
+msgstr ""
+
+#: src/card-tv.js:47 src/topbar.js:106
+msgid "Menu"
+msgstr ""
+
+#: src/card-tv.js:47
+msgid "Down"
+msgstr ""
+
+#: src/card-tv.js:49
+msgid "Channel Down"
+msgstr ""
+
+#: src/card-tv.js:50
+msgid "Channel Up"
+msgstr ""
+
+#: src/card-tv.js:88
+msgid "Quieter"
+msgstr ""
+
+#: src/card-tv.js:89
+msgid "Louder"
+msgstr ""
+
+#: src/card-tv.js:235
+#, javascript-format
+msgid "Volume %s"
+msgstr ""
+
+#: src/card-tv.js:257
+msgid "Input"
+msgstr ""
+
+#: src/card-tv.js:260 src/card-tv.js:272 src/topbar.js:357
+msgid "Apps"
+msgstr ""
+
+#: src/card-tv.js:282
+msgid "Remote"
+msgstr ""
+
+#: src/card-tv.js:284
+msgid "Arrows, OK"
+msgstr ""
+
+#: src/card-vacuum.js:63 src/humanize.js:44
+msgid "Map"
+msgstr ""
+
+#: src/card-vacuum.js:64
+msgid "Brushes and Filter"
+msgstr ""
+
+#: src/card-vacuum.js:66
+msgid "Settings"
+msgstr ""
+
+#: src/card-vacuum.js:119 src/card-vacuum.js:242 src/humanize.js:149
+#: src/humanize.js:150
+msgid "Clean"
+msgstr ""
+
+#: src/card-vacuum.js:149
+#, javascript-format
+msgid "%s h left"
+msgstr ""
+
+#: src/card-vacuum.js:244 src/humanize.js:153
+msgid "Dock"
+msgstr ""
+
+#: src/card-vacuum.js:245 src/humanize.js:45
+msgid "Find"
+msgstr ""
+
+#: src/card-vacuum.js:274 src/card-vacuum.js:283
+msgid "Suction"
+msgstr ""
+
+#: src/card-vacuum.js:321
+msgid "cleanings"
+msgstr ""
+
+#: src/card-vacuum.js:322
+msgid "hours"
+msgstr ""
+
+#: src/card-vacuum.js:323
+msgid "m² cleaned"
+msgstr ""
+
+#: src/card-vacuum.js:363
+msgid "Do Not Disturb"
+msgstr ""
+
+#: src/card-vacuum.js:417
+msgid "Play a Sound"
+msgstr ""
+
+#: src/card-vacuum.js:485
+msgid "No map yet: one is drawn as the robot cleans."
+msgstr ""
+
+#: src/card-vacuum.js:662
+msgid "Cleaning for"
+msgstr ""
+
+#: src/card-vacuum.js:664
+msgid "Cleaned"
+msgstr ""
+
+#: src/color.js:134 src/humanize.js:95 src/topbar.js:341
+msgid "Colour"
+msgstr ""
+
+#: src/color.js:300 src/device-menu.js:84 src/device.js:266 src/widgets.js:275
+msgid "Turn Off"
+msgstr ""
+
+#: src/color.js:300 src/device-menu.js:84 src/device.js:266 src/widgets.js:275
+msgid "Turn On"
+msgstr ""
+
+#: src/device-menu.js:32
+#, javascript-format
+msgid "Remove “%s”?"
+msgstr ""
+
+#: src/device-menu.js:34
+#, javascript-format
+msgid ""
+"Its whole unit goes: %s. To add it again, search for it on its account page."
+msgstr ""
+
+#: src/device-menu.js:36
+msgid "To add it again, search for it on its account page."
+msgstr ""
+
+#: src/device-menu.js:40 src/pages/ewelink.js:151 src/pages/homekit.js:32
+#: src/pages/hue.js:29 src/pages/hue.js:40 src/pages/shelly.js:33
+#: src/pages/smartlife.js:163 src/pages/tvs.js:56 src/pages/xiaomi.js:101
+#: src/widgets.js:393 src/widgets.js:484
+msgid "Cancel"
+msgstr ""
+
+#: src/device-menu.js:41 src/pages/aircons.js:91 src/pages/cameras.js:117
+#: src/pages/ewelink.js:94 src/pages/homekit.js:116 src/pages/hue.js:155
+#: src/pages/shelly.js:167 src/pages/sonoff.js:94 src/pages/speakers.js:70
+#: src/pages/tvs.js:151
+msgid "Remove"
+msgstr ""
+
+#: src/device-menu.js:49 src/pages/homekit.js:217
+msgid ""
+"Removed. The accessory could not be reached to forget Nook; reset it before "
+"pairing it again."
+msgstr ""
+
+#: src/device-menu.js:80 src/hero.js:727 src/text.js:37 src/text.js:72
+msgid "Open"
+msgstr ""
+
+#: src/device-menu.js:90
+msgid "Rename…"
+msgstr ""
+
+#: src/device-menu.js:95
+msgid "Change Icon…"
+msgstr ""
+
+#: src/device-menu.js:109 src/device.js:167
+msgid "Show in the Menu"
+msgstr ""
+
+#: src/device-menu.js:111 src/device.js:168
+msgid "Pin in the Menu"
+msgstr ""
+
+#: src/device-menu.js:113 src/device.js:169
+msgid "Show in the Top Bar"
+msgstr ""
+
+#: src/device-menu.js:115 src/device.js:154
+msgid "Top Bar Menu"
+msgstr ""
+
+#: src/device-menu.js:120
+msgid "Show on Home"
+msgstr ""
+
+#: src/device-menu.js:120
+msgid "Hide from Home"
+msgstr ""
+
+#: src/device-menu.js:123
+msgid "Remove…"
+msgstr ""
+
+#: src/device.js:140 src/pages/find.js:147
+msgid "In Nook"
+msgstr ""
+
+#: src/device.js:141
+msgid "Name"
+msgstr ""
+
+#: src/device.js:145 src/widgets.js:467
+msgid "Icon"
+msgstr ""
+
+#: src/device.js:168
+msgid "First in the menu, with a tab of its own"
+msgstr ""
+
+#: src/device.js:169
+msgid "Its reading or state next to the Nook icon"
+msgstr ""
+
+#: src/device.js:170
+msgid "Switch On at Login"
+msgstr ""
+
+#: src/device.js:171 src/topbar.js:468
+msgid "Notification Light"
+msgstr ""
+
+#: src/device.js:171
+msgid "Flashes when a chosen app sends a notification"
+msgstr ""
+
+#: src/device.js:175
+msgid "Details"
+msgstr ""
+
+#: src/device.js:252 src/text.js:289
+msgid "Offline"
+msgstr ""
+
+#: src/device.js:252 src/text.js:292 src/text.js:310 src/text.js:313
+msgid "Online"
+msgstr ""
+
+#: src/device.js:252
+msgid "Connecting…"
+msgstr ""
+
+#: src/device.js:288
+msgid "Room"
+msgstr ""
+
+#: src/device.js:289
+msgid "Service"
+msgstr ""
+
+#: src/device.js:290 src/humanize.js:125
+msgid "Model"
+msgstr ""
+
+#: src/device.js:291 src/humanize.js:18
+msgid "Gateway"
+msgstr ""
+
+#: src/device.js:292 src/support.js:75
+msgid "Network"
+msgstr ""
+
+#: src/device.js:293
+msgid "Signal"
+msgstr ""
+
+#: src/device.js:293
+msgctxt "unit"
+msgid "dBm"
+msgstr ""
+
+#: src/device.js:294 src/support.js:77
+msgid "Address"
+msgstr ""
+
+#: src/device.js:295
+msgid "Bluetooth address"
+msgstr ""
+
+#: src/device.js:295
+msgid "MAC address"
+msgstr ""
+
+#: src/device.js:296 src/humanize.js:122 src/humanize.js:123
+msgid "Firmware"
+msgstr ""
+
+#: src/device.js:297
+msgid "MCU firmware"
+msgstr ""
+
+#: src/device.js:298
+msgid "Hardware"
+msgstr ""
+
+#: src/device.js:299
+msgid "Up for"
+msgstr ""
+
+#: src/device.js:300
+msgid "Last online"
+msgstr ""
+
+#: src/device.js:301
+msgid "Device ID"
+msgstr ""
+
+#: src/devices.js:29 src/homes.js:214 src/pages/common.js:46
+msgid "Scene"
+msgstr ""
+
+#: src/hero.js:128
+msgid "The wheels are off the floor"
+msgstr ""
+
+#: src/hero.js:129
+msgid "A cliff sensor is dirty or blocked"
+msgstr ""
+
+#: src/hero.js:130
+msgid "The bumper is stuck"
+msgstr ""
+
+#: src/hero.js:131
+msgid "The robot is tilted"
+msgstr ""
+
+#: src/hero.js:132
+msgid "The bumper keeps getting stuck"
+msgstr ""
+
+#: src/hero.js:133
+msgid "The wheels keep coming off the floor"
+msgstr ""
+
+#: src/hero.js:134
+msgid "The floor sensor underneath is dirty"
+msgstr ""
+
+#: src/hero.js:135
+msgid "The dust bin is missing"
+msgstr ""
+
+#: src/hero.js:136
+msgid "The water tank is missing"
+msgstr ""
+
+#: src/hero.js:137
+msgid "The water tank is empty"
+msgstr ""
+
+#: src/hero.js:138
+msgid "The dust bin is full"
+msgstr ""
+
+#: src/hero.js:139
+msgid "The main brush is stuck"
+msgstr ""
+
+#: src/hero.js:140
+msgid "The side brush is stuck"
+msgstr ""
+
+#: src/hero.js:141
+msgid "The fan is blocked"
+msgstr ""
+
+#: src/hero.js:142
+msgid "The left wheel is stuck"
+msgstr ""
+
+#: src/hero.js:143
+msgid "The right wheel is stuck"
+msgstr ""
+
+#: src/hero.js:144
+msgid "The robot is stuck and cannot turn"
+msgstr ""
+
+#: src/hero.js:145
+msgid "The robot is stuck and cannot go on"
+msgstr ""
+
+#: src/hero.js:146
+msgid "The robot cannot find its dock"
+msgstr ""
+
+#: src/hero.js:147
+msgid "The battery is low"
+msgstr ""
+
+#: src/hero.js:148
+msgid "It is not charging"
+msgstr ""
+
+#: src/hero.js:149
+msgid "The battery is too low to start"
+msgstr ""
+
+#: src/hero.js:150
+msgid "Something is wrong inside the robot"
+msgstr ""
+
+#: src/hero.js:151
+msgid "The camera is covered"
+msgstr ""
+
+#: src/hero.js:152
+msgid "The camera does not work"
+msgstr ""
+
+#: src/hero.js:153
+msgid "Something is wrong with the battery"
+msgstr ""
+
+#: src/hero.js:154
+msgid "The front sensor is dirty"
+msgstr ""
+
+#: src/hero.js:155
+msgid "The gyroscope does not work"
+msgstr ""
+
+#: src/hero.js:182 src/text.js:61 src/text.js:298
+msgid "Idle"
+msgstr ""
+
+#: src/hero.js:182 src/hero.js:295
+msgid "Heating"
+msgstr ""
+
+#: src/hero.js:182
+msgid "Cooling down"
+msgstr ""
+
+#: src/hero.js:182 src/text.js:111
+msgid "Keeping warm"
+msgstr ""
+
+#: src/hero.js:187 src/history.js:18 src/humanize.js:160 src/text.js:41
+msgid "Leak"
+msgstr ""
+
+#: src/hero.js:187 src/history.js:18
+msgid "Dry again"
+msgstr ""
+
+#: src/hero.js:188 src/history.js:19
+msgid "Pressed"
+msgstr ""
+
+#: src/hero.js:188 src/history.js:19
+msgid "Pressed twice"
+msgstr ""
+
+#: src/hero.js:188 src/history.js:19
+msgid "Held"
+msgstr ""
+
+#: src/hero.js:189 src/history.js:20 src/humanize.js:103 src/text.js:39
+msgid "Motion"
+msgstr ""
+
+#: src/hero.js:190 src/history.js:21
+msgid "Opened"
+msgstr ""
+
+#: src/hero.js:190 src/hero.js:729 src/history.js:21 src/text.js:37
+#: src/text.js:73 src/text.js:74
+msgid "Closed"
+msgstr ""
+
+#: src/hero.js:220 src/hero.js:478 src/text.js:43
+msgid "No smoke"
+msgstr ""
+
+#: src/hero.js:220 src/hero.js:476 src/text.js:45
+msgid "No gas"
+msgstr ""
+
+#: src/hero.js:222 src/hero.js:478 src/text.js:43
+msgid "Smoke!"
+msgstr ""
+
+#: src/hero.js:222 src/hero.js:476 src/text.js:45
+msgid "Gas!"
+msgstr ""
+
+#: src/hero.js:223 src/humanize.js:92
+msgid "Fault"
+msgstr ""
+
+#: src/hero.js:226 src/hero.js:241
+msgid "Leak!"
+msgstr ""
+
+#: src/hero.js:228 src/hero.js:241
+msgid "No leak"
+msgstr ""
+
+#: src/hero.js:293
+msgid "Cooling"
+msgstr ""
+
+#: src/hero.js:297
+msgid "Drying"
+msgstr ""
+
+#: src/hero.js:299
+msgid "Fan only"
+msgstr ""
+
+#: src/hero.js:323 src/hero.js:538
+#, javascript-format
+msgid "Room %s°"
+msgstr ""
+
+#: src/hero.js:353 src/hero.js:548
+msgid "Nothing playing"
+msgstr ""
+
+#: src/hero.js:375 src/text.js:304
+msgid "Muted"
+msgstr ""
+
+#: src/hero.js:432
+msgid "Humidity %s %"
+msgstr ""
+
+#: src/hero.js:444
+#, javascript-format
+msgid "Last seen %s"
+msgstr ""
+
+#: src/hero.js:454
+#, javascript-format
+msgid "Since %s"
+msgstr ""
+
+#: src/hero.js:482
+#, javascript-format
+msgid "Smoke %s"
+msgstr ""
+
+#: src/hero.js:496
+#, javascript-format
+msgid "Speed %s"
+msgstr ""
+
+#: src/hero.js:537 src/hero.js:624 src/hero.js:697 src/hero.js:719
+#, javascript-format
+msgid "Set to %s"
+msgstr ""
+
+#: src/hero.js:548 src/text.js:162 src/text.js:297
+msgid "Playing"
+msgstr ""
+
+#: src/hero.js:550
+msgid "Volume %s %"
+msgstr ""
+
+#: src/hero.js:570 src/hero.js:637
+msgid "Brightness %s %"
+msgstr ""
+
+#: src/hero.js:585
+#, javascript-format
+msgid "Drawing %s"
+msgstr ""
+
+#: src/hero.js:606
+msgid "Battery %s %"
+msgstr ""
+
+#: src/hero.js:608
+msgid "Battery %s %, needs charging"
+msgstr ""
+
+#: src/hero.js:633
+msgid "Light on"
+msgstr ""
+
+#: src/hero.js:633
+msgid "Light off"
+msgstr ""
+
+#: src/hero.js:646
+#, javascript-format
+msgid "Signal %s dBm"
+msgstr ""
+
+#: src/hero.js:669
+#, javascript-format
+msgid "%s left"
+msgstr ""
+
+#: src/hero.js:682
+msgid "Filter %s %"
+msgstr ""
+
+#: src/hero.js:731
+msgid "Open %s %"
+msgstr ""
+
+#: src/hero.js:750
+#, javascript-format
+msgid "Freezer %s"
+msgstr ""
+
+#: src/hero.js:763
+msgid "Soil %s %"
+msgstr ""
+
+#: src/history.js:25
+msgid "A leak, and when it is dry again"
+msgstr ""
+
+#: src/history.js:26 src/history.js:27
+msgid "An alarm, and when it is over"
+msgstr ""
+
+#: src/history.js:28
+msgid "Every opening and closing"
+msgstr ""
+
+#: src/history.js:29
+msgid "Every motion it sees"
+msgstr ""
+
+#: src/history.js:30
+msgid "Every knock, tilt and fall"
+msgstr ""
+
+#: src/history.js:31
+msgid "Every press"
+msgstr ""
+
+#: src/history.js:69
+msgid "Last 24 Hours"
+msgstr ""
+
+#: src/history.js:73
+msgid "History"
+msgstr ""
+
+#: src/history.js:133
+msgid "Nothing kept"
+msgstr ""
+
+#: src/history.js:169
+msgid "Nothing in the last 30 days."
+msgstr ""
+
+#: src/history.js:189
+msgid "Notifications"
+msgstr ""
+
+#: src/history.js:225
+msgid "Left open longer than"
+msgstr ""
+
+#: src/history.js:229
+msgid "Warmer than"
+msgstr ""
+
+#: src/history.js:230
+msgid "Colder than"
+msgstr ""
+
+#: src/history.js:231
+msgid "More humid than"
+msgstr ""
+
+#: src/history.js:232
+msgid "Drier than"
+msgstr ""
+
+#: src/history.js:234
+msgid "A battery running low"
+msgstr ""
+
+#: src/history.js:236
+msgid ""
+"They come from the gateway once its LAN protocol is on, in the gateway’s "
+"settings in Mi Home."
+msgstr ""
+
+#: src/home.js:33 src/topbar.js:136 src/topbar.js:354
+msgid "Lights"
+msgstr ""
+
+#: src/home.js:34 src/topbar.js:137
+msgid "Climate"
+msgstr ""
+
+#: src/home.js:35 src/topbar.js:138
+msgid "Media"
+msgstr ""
+
+#: src/home.js:37 src/topbar.js:140
+msgid "Security"
+msgstr ""
+
+#: src/home.js:38 src/topbar.js:141
+msgid "Appliances"
+msgstr ""
+
+#: src/home.js:53 src/home.js:63
+#, javascript-format
+msgid "%d on"
+msgstr ""
+
+#: src/home.js:61
+msgid "Alarm!"
+msgstr ""
+
+#: src/home.js:113
+msgid "No Devices Yet"
+msgstr ""
+
+#: src/home.js:114
+msgid "Sign in to an account, or look for devices on this network."
+msgstr ""
+
+#: src/home.js:331
+msgid "Unavailable"
+msgstr ""
+
+#: src/home.js:334
+msgid "Hidden"
+msgstr ""
+
+#: src/humanize.js:13
+msgid "Air fryer"
+msgstr ""
+
+#: src/humanize.js:16
+msgid "Indicator light"
+msgstr ""
+
+#: src/humanize.js:17
+msgid "Alarm"
+msgstr ""
+
+#: src/humanize.js:19
+msgid "Motion sensor"
+msgstr ""
+
+#: src/humanize.js:20
+msgid "Door and window sensor"
+msgstr ""
+
+#: src/humanize.js:21
+msgid "Wireless switch"
+msgstr ""
+
+#: src/humanize.js:22 src/humanize.js:100
+msgid "Battery"
+msgstr ""
+
+#: src/humanize.js:23
+msgid "Smoke detector"
+msgstr ""
+
+#: src/humanize.js:24
+msgid "Leak sensor"
+msgstr ""
+
+#: src/humanize.js:25
+msgid "Temperature and humidity"
+msgstr ""
+
+#: src/humanize.js:26
+msgid "Environment"
+msgstr ""
+
+#: src/humanize.js:27
+msgid "Vacuum"
+msgstr ""
+
+#: src/humanize.js:28 src/text.js:62 src/text.js:63
+msgid "Cleaning"
+msgstr ""
+
+#: src/humanize.js:30
+msgid "Do not disturb"
+msgstr ""
+
+#: src/humanize.js:31
+msgid "Scale"
+msgstr ""
+
+#: src/humanize.js:32 src/humanize.js:33
+msgid "Child lock"
+msgstr ""
+
+#: src/humanize.js:37
+msgid "Motor"
+msgstr ""
+
+#: src/humanize.js:38
+msgid "Device information"
+msgstr ""
+
+#: src/humanize.js:39
+msgid "Filter"
+msgstr ""
+
+#: src/humanize.js:40
+msgid "Brush"
+msgstr ""
+
+#: src/humanize.js:41
+msgid "Main brush"
+msgstr ""
+
+#: src/humanize.js:42
+msgid "Side brush"
+msgstr ""
+
+#: src/humanize.js:43
+msgid "Consumables"
+msgstr ""
+
+#: src/humanize.js:46
+msgid "Air purifier"
+msgstr ""
+
+#: src/humanize.js:47
+msgid "Humidifier"
+msgstr ""
+
+#: src/humanize.js:48
+msgid "Heater"
+msgstr ""
+
+#: src/humanize.js:49
+msgid "Washing machine"
+msgstr ""
+
+#: src/humanize.js:50
+msgid "Dishwasher"
+msgstr ""
+
+#: src/humanize.js:51
+msgid "Dehumidifier"
+msgstr ""
+
+#: src/humanize.js:52
+msgid "Curtain"
+msgstr ""
+
+#: src/humanize.js:53
+msgid "Lock"
+msgstr ""
+
+#: src/humanize.js:54 src/humanize.js:55
+msgid "Fridge"
+msgstr ""
+
+#: src/humanize.js:56
+msgid "Freezer"
+msgstr ""
+
+#: src/humanize.js:57
+msgid "Coffee machine"
+msgstr ""
+
+#: src/humanize.js:58
+msgid "Thermostat"
+msgstr ""
+
+#: src/humanize.js:59
+msgid "Doorbell"
+msgstr ""
+
+#: src/humanize.js:60
+msgid "Plant sensor"
+msgstr ""
+
+#: src/humanize.js:61
+msgid "Cooker"
+msgstr ""
+
+#: src/humanize.js:62
+msgid "Water purifier"
+msgstr ""
+
+#: src/humanize.js:63
+msgid "Switch"
+msgstr ""
+
+#: src/humanize.js:64 src/humanize.js:65
+msgid "Socket"
+msgstr ""
+
+#: src/humanize.js:66
+msgid "Energy used"
+msgstr ""
+
+#: src/humanize.js:67
+msgid "Kettle"
+msgstr ""
+
+#: src/humanize.js:68
+msgid "Screen"
+msgstr ""
+
+#: src/humanize.js:69
+msgid "Remote control"
+msgstr ""
+
+#: src/humanize.js:70
+msgid "Warnings"
+msgstr ""
+
+#: src/humanize.js:72
+msgid "Users"
+msgstr ""
+
+#: src/humanize.js:74
+msgid "PM2.5"
+msgstr ""
+
+#: src/humanize.js:75
+msgid "Air quality"
+msgstr ""
+
+#: src/humanize.js:76
+msgid "Soil moisture"
+msgstr ""
+
+#: src/humanize.js:77
+msgid "Water purity"
+msgstr ""
+
+#: src/humanize.js:78 src/topbar.js:74
+msgid "Position"
+msgstr ""
+
+#: src/humanize.js:79
+msgid "Open to"
+msgstr ""
+
+#: src/humanize.js:81
+msgid "Spin speed"
+msgstr ""
+
+#: src/humanize.js:88
+msgid "Swing angle"
+msgstr ""
+
+#: src/humanize.js:89 src/humanize.js:90
+msgid "Status"
+msgstr ""
+
+#: src/humanize.js:91
+msgid "Work mode"
+msgstr ""
+
+#: src/humanize.js:93
+msgid "Brightness"
+msgstr ""
+
+#: src/humanize.js:94
+msgid "Colour temperature"
+msgstr ""
+
+#: src/humanize.js:97 src/props.js:183
+msgid "Humidity"
+msgstr ""
+
+#: src/humanize.js:98
+msgid "Target humidity"
+msgstr ""
+
+#: src/humanize.js:99
+msgid "Light level"
+msgstr ""
+
+#: src/humanize.js:101
+msgid "Voltage"
+msgstr ""
+
+#: src/humanize.js:102
+msgid "State"
+msgstr ""
+
+#: src/humanize.js:104
+msgid "No motion for"
+msgstr ""
+
+#: src/humanize.js:105 src/humanize.js:161
+msgid "Smoke"
+msgstr ""
+
+#: src/humanize.js:110
+msgid "Time left"
+msgstr ""
+
+#: src/humanize.js:112
+msgid "Keep warm"
+msgstr ""
+
+#: src/humanize.js:113
+msgid "Keep warm now"
+msgstr ""
+
+#: src/humanize.js:114
+msgid "Start in"
+msgstr ""
+
+#: src/humanize.js:115
+msgid "Weight"
+msgstr ""
+
+#: src/humanize.js:116
+msgid "Amount"
+msgstr ""
+
+#: src/humanize.js:117
+msgid "Texture"
+msgstr ""
+
+#: src/humanize.js:118
+msgid "Turn reminder"
+msgstr ""
+
+#: src/humanize.js:119 src/text.js:134
+msgid "Turn the food"
+msgstr ""
+
+#: src/humanize.js:120 src/text.js:67
+msgid "Charging"
+msgstr ""
+
+#: src/humanize.js:121
+msgid "Unit"
+msgstr ""
+
+#: src/humanize.js:124
+msgid "Maker"
+msgstr ""
+
+#: src/humanize.js:126
+msgid "Serial number"
+msgstr ""
+
+#: src/humanize.js:127
+msgid "Power draw"
+msgstr ""
+
+#: src/humanize.js:128
+msgid "Current"
+msgstr ""
+
+#: src/humanize.js:130
+msgid "Water level"
+msgstr ""
+
+#: src/humanize.js:131
+msgid "Water tank"
+msgstr ""
+
+#: src/humanize.js:132
+msgid "Heat level"
+msgstr ""
+
+#: src/humanize.js:133
+msgid "Filter life"
+msgstr ""
+
+#: src/humanize.js:134
+msgid "Filter time left"
+msgstr ""
+
+#: src/humanize.js:135
+msgid "Brush life"
+msgstr ""
+
+#: src/humanize.js:136
+msgid "Brush time left"
+msgstr ""
+
+#: src/humanize.js:137
+msgid "Enabled"
+msgstr ""
+
+#: src/humanize.js:138
+msgid "Starts at"
+msgstr ""
+
+#: src/humanize.js:139
+msgid "Ends at"
+msgstr ""
+
+#: src/humanize.js:140
+msgid "Duration"
+msgstr ""
+
+#: src/humanize.js:141
+msgid "Area"
+msgstr ""
+
+#: src/humanize.js:142
+msgid "Toggle"
+msgstr ""
+
+#: src/humanize.js:143
+msgid "Next mode"
+msgstr ""
+
+#: src/humanize.js:144
+msgid "Next speed"
+msgstr ""
+
+#: src/humanize.js:148
+msgid "Go on"
+msgstr ""
+
+#: src/humanize.js:154
+msgid "Play a sound"
+msgstr ""
+
+#: src/humanize.js:155
+msgid "Locate"
+msgstr ""
+
+#: src/humanize.js:156
+msgid "Brighter"
+msgstr ""
+
+#: src/humanize.js:157
+msgid "Dimmer"
+msgstr ""
+
+#: src/humanize.js:159
+msgid "Vertical swing"
+msgstr ""
+
+#: src/humanize.js:162
+msgid "Gas"
+msgstr ""
+
+#: src/humanize.js:163
+msgid "CO₂"
+msgstr ""
+
+#: src/humanize.js:164
+msgid "PM10"
+msgstr ""
+
+#: src/humanize.js:165 src/props.js:184
+msgid "Pressure"
+msgstr ""
+
+#: src/humanize.js:167
+msgid "Playback"
+msgstr ""
+
+#: src/humanize.js:168
+msgctxt "action"
+msgid "Open"
+msgstr ""
+
+#: src/humanize.js:169
+msgctxt "action"
+msgid "Close"
+msgstr ""
+
+#: src/humanize.js:170
+msgctxt "action"
+msgid "Stop"
+msgstr ""
+
+#: src/humanize.js:171
+msgctxt "action"
+msgid "Lock"
+msgstr ""
+
+#: src/humanize.js:173
+msgctxt "action"
+msgid "Run"
+msgstr ""
+
+#: src/main.js:19 src/support.js:115 src/window.js:54
+#: data/io.github.epogonii.nook-app.desktop:2
+msgid "Nook"
+msgstr ""
+
+#: src/pages/aircons.js:25
+msgid ""
+"Gree, Midea and Daikin units on this network, controlled directly. A newer "
+"Midea unit gets its key from Midea’s cloud once, when it is added."
+msgstr ""
+
+#: src/pages/aircons.js:33 src/pages/cameras.js:68 src/pages/homekit.js:55
+#: src/pages/hue.js:69 src/pages/shelly.js:65 src/pages/sonoff.js:28
+#: src/pages/speakers.js:28 src/pages/tvs.js:82
+msgid "Find on This Network"
+msgstr ""
+
+#: src/pages/aircons.js:34
+msgid "The unit has to be on and connected to the same Wi-Fi."
+msgstr ""
+
+#: src/pages/aircons.js:36 src/pages/cameras.js:71 src/pages/common.js:143
+#: src/pages/find.js:67 src/pages/homekit.js:58 src/pages/hue.js:72
+#: src/pages/shelly.js:68 src/pages/sonoff.js:31 src/pages/speakers.js:31
+#: src/pages/tvs.js:85
+msgid "Search"
+msgstr ""
+
+#: src/pages/aircons.js:40 src/pages/hue.js:76
+msgid "Add by Address"
+msgstr ""
+
+#: src/pages/aircons.js:136
+#, javascript-format
+msgid "%s would not pair: %s"
+msgstr ""
+
+#: src/pages/aircons.js:224
+msgid "No air conditioner answered."
+msgstr ""
+
+#: src/pages/aircons.js:226 src/pages/cameras.js:182 src/pages/hue.js:373
+#: src/pages/shelly.js:213 src/pages/sonoff.js:128 src/pages/speakers.js:125
+#: src/pages/tvs.js:285
+msgid "Nothing new found."
+msgstr ""
+
+#: src/pages/cameras.js:23
+msgid ""
+"Tapo and other ONVIF cameras on this network, watched and turned directly. A "
+"Tapo camera needs a camera account, which is not your TP-Link login; the "
+"same one on every camera is simplest. Any other camera takes its own login, "
+"under its row."
+msgstr ""
+
+#: src/pages/cameras.js:29
+msgid "Make a camera account"
+msgstr ""
+
+#: src/pages/cameras.js:30
+msgid ""
+"In the Tapo app: the camera, then Settings, Advanced Settings, Camera "
+"Account."
+msgstr ""
+
+#: src/pages/cameras.js:33
+msgid "Camera Account Login"
+msgstr ""
+
+#: src/pages/cameras.js:33
+msgid "Camera Account Password"
+msgstr ""
+
+#: src/pages/cameras.js:36
+msgid "Privacy mode, light, night vision and siren"
+msgstr ""
+
+#: src/pages/cameras.js:37
+msgid ""
+"These need your TP-Link account's password. The camera checks it itself; "
+"from here it never goes to TP-Link."
+msgstr ""
+
+#: src/pages/cameras.js:43 src/pages/common.js:230
+msgid "Forget"
+msgstr ""
+
+#: src/pages/cameras.js:50
+msgid "TP-Link Password, saved"
+msgstr ""
+
+#: src/pages/cameras.js:69
+msgid ""
+"Cameras at another place, like a summer house, cannot be reached from here."
+msgstr ""
+
+#: src/pages/cameras.js:113
+msgid "Camera Login"
+msgstr ""
+
+#: src/pages/cameras.js:113
+msgid "Camera Password"
+msgstr ""
+
+#: src/pages/cameras.js:181
+msgid ""
+"No camera answered. A camera answers only once its camera account exists."
+msgstr ""
+
+#: src/pages/cameras.js:182
+msgid "Cameras added."
+msgstr ""
+
+#: src/pages/cloud-aircons.js:43
+msgid "Address the Browser Ended On"
+msgstr ""
+
+#: src/pages/cloud-aircons.js:48 src/pages/ewelink.js:41
+#: src/pages/smartlife.js:69 src/pages/xiaomi.js:32
+msgid "Account"
+msgstr ""
+
+#: src/pages/cloud-aircons.js:51 src/pages/hass.js:44 src/pages/homekit.js:114
+#: src/pages/hue.js:139 src/pages/smartlife.js:72
+msgid "Read the List Again"
+msgstr ""
+
+#: src/pages/cloud-aircons.js:90 src/pages/hass.js:100
+msgid "Not connected"
+msgstr ""
+
+#: src/pages/cloud-aircons.js:91 src/pages/hass.js:101
+msgid "Disconnect"
+msgstr ""
+
+#: src/pages/cloud-aircons.js:91 src/pages/hass.js:101
+msgid "Connect"
+msgstr ""
+
+#: src/pages/cloud-aircons.js:112
+msgid "Fill in every field first."
+msgstr ""
+
+#: src/pages/cloud-aircons.js:122
+msgid "Sign in in the browser, then paste the address it ends on here."
+msgstr ""
+
+#: src/pages/cloud-aircons.js:136
+msgid "That address has no login code in it."
+msgstr ""
+
+#: src/pages/cloud-aircons.js:184
+#, javascript-format
+msgid "%d air conditioner from %s."
+msgid_plural "%d air conditioners from %s."
+msgstr[0] ""
+msgstr[1] ""
+
+#: src/pages/common.js:148
+msgid "Searching…"
+msgstr ""
+
+#: src/pages/common.js:180
+msgid "This is not an address Nook can use."
+msgstr ""
+
+#: src/pages/common.js:182
+msgid "Home Assistant was not found at this address."
+msgstr ""
+
+#: src/pages/common.js:184
+msgid "This is not a Hue bridge that Nook can use."
+msgstr ""
+
+#: src/pages/common.js:186
+msgid "The device is busy. Try again in a moment."
+msgstr ""
+
+#: src/pages/common.js:188
+msgid "The accessory cannot be reached."
+msgstr ""
+
+#: src/pages/common.js:190
+msgid "The device refused it."
+msgstr ""
+
+#: src/pages/common.js:192
+msgid "The device sent an answer Nook cannot read."
+msgstr ""
+
+#: src/pages/common.js:194
+msgid "The setup code is wrong."
+msgstr ""
+
+#: src/pages/common.js:196
+msgid ""
+"The accessory is in another home. Remove it from the Home app, or reset it, "
+"then pair again."
+msgstr ""
+
+#: src/pages/common.js:198
+msgid ""
+"The accessory refuses pairing for a while after wrong codes. Wait, or "
+"restart it."
+msgstr ""
+
+#: src/pages/common.js:200
+msgid "The accessory has as many owners as it can take."
+msgstr ""
+
+#: src/pages/common.js:202
+msgid "The device no longer knows Nook. Pair it again."
+msgstr ""
+
+#: src/pages/common.js:204
+msgid ""
+"The bridge answered with another certificate. Pair it again if it was "
+"replaced."
+msgstr ""
+
+#: src/pages/common.js:206
+msgid "Home Assistant refused the access token."
+msgstr ""
+
+#: src/pages/common.js:208
+msgid ""
+"The certificate of this Home Assistant is not trusted. Use its http:// "
+"address on this network, or give it a trusted certificate."
+msgstr ""
+
+#: src/pages/common.js:210
+msgid "The device did not answer in time."
+msgstr ""
+
+#: src/pages/common.js:212
+msgid "The connection closed. Try again."
+msgstr ""
+
+#: src/pages/common.js:214
+msgid "The Smart Life login has expired."
+msgstr ""
+
+#: src/pages/common.js:227
+msgid "Saved in the Keyring"
+msgstr ""
+
+#: src/pages/common.js:228 src/widgets.js:394
+msgid "Save"
+msgstr ""
+
+#: src/pages/common.js:240
+msgid "The keyring could not be used"
+msgstr ""
+
+#: src/pages/common.js:256
+msgid "Saved in the keyring"
+msgstr ""
+
+#: src/pages/common.js:256
+msgid "Not saved yet"
+msgstr ""
+
+#: src/pages/common.js:257
+msgid "Type a new password and save to change it."
+msgstr ""
+
+#: src/pages/common.js:287
+msgid "LG ThinQ"
+msgstr ""
+
+#: src/pages/common.js:288
+msgid ""
+"LG air conditioners in the LG ThinQ app, through LG’s ThinQ Connect service "
+"and a personal access token."
+msgstr ""
+
+#: src/pages/common.js:289
+msgid "Create a Personal Access Token"
+msgstr ""
+
+#: src/pages/common.js:290
+msgid ""
+"Sign in on LG’s site with your LG ThinQ account and create a token with the "
+"device permissions. Your country is its two-letter code, like DE or MD."
+msgstr ""
+
+#: src/pages/common.js:292
+msgid "Personal Access Token"
+msgstr ""
+
+#: src/pages/common.js:292
+msgid "Country Code"
+msgstr ""
+
+#: src/pages/common.js:297
+msgid "SmartThings"
+msgstr ""
+
+#: src/pages/common.js:298
+msgid ""
+"Samsung air conditioners in the SmartThings app, through an app of your own: "
+"SmartThings’ personal tokens last only a day."
+msgstr ""
+
+#: src/pages/common.js:299
+msgid "Make a SmartThings App"
+msgstr ""
+
+#: src/pages/common.js:300
+#, javascript-format
+msgid ""
+"With the SmartThings CLI, run smartthings apps:create, choose an OAuth-In "
+"App, give %s as the redirect URI and the scopes r:devices:* and x:devices:*, "
+"then copy its client ID and secret here."
+msgstr ""
+
+#: src/pages/common.js:303
+msgid "Client ID"
+msgstr ""
+
+#: src/pages/common.js:303
+msgid "Client Secret"
+msgstr ""
+
+#: src/pages/common.js:308
+msgid "MELCloud"
+msgstr ""
+
+#: src/pages/common.js:309
+msgid ""
+"Mitsubishi Electric air conditioners in the MELCloud app, with its email and "
+"password. MELCloud Home is another service and not supported yet."
+msgstr ""
+
+#: src/pages/common.js:311
+msgid "Email"
+msgstr ""
+
+#: src/pages/common.js:311
+msgid "Password"
+msgstr ""
+
+#: src/pages/common.js:316
+msgid "Electrolux"
+msgstr ""
+
+#: src/pages/common.js:317
+msgid ""
+"Electrolux and AEG air conditioners in their apps, through the Electrolux "
+"Group developer API."
+msgstr ""
+
+#: src/pages/common.js:318
+msgid "Get an API Key and Tokens"
+msgstr ""
+
+#: src/pages/common.js:319
+msgid ""
+"Sign in on the Electrolux developer site with your Electrolux or AEG "
+"account, create an API key, then generate an access token and a refresh "
+"token."
+msgstr ""
+
+#: src/pages/common.js:321
+msgid "API Key"
+msgstr ""
+
+#: src/pages/common.js:321 src/pages/hass.js:37
+msgid "Access Token"
+msgstr ""
+
+#: src/pages/common.js:321
+msgid "Refresh Token"
+msgstr ""
+
+#: src/pages/ewelink.js:23
+msgid "eWeLink"
+msgstr ""
+
+#: src/pages/ewelink.js:24
+msgid ""
+"Sonoff and other eWeLink devices, through a free app of your own on "
+"eWeLink's developer site."
+msgstr ""
+
+#: src/pages/ewelink.js:34
+msgid "Get an App ID and App Secret"
+msgstr ""
+
+#: src/pages/ewelink.js:35
+#, javascript-format
+msgid ""
+"Sign up on the developer site, wait for the approval, then create an app "
+"there with the redirect URL %s and copy its two keys here."
+msgstr ""
+
+#: src/pages/ewelink.js:38
+msgid "App ID"
+msgstr ""
+
+#: src/pages/ewelink.js:38
+msgid "App Secret"
+msgstr ""
+
+#: src/pages/ewelink.js:47
+msgid "Add by Device ID"
+msgstr ""
+
+#: src/pages/ewelink.js:89 src/pages/shelly.js:162 src/pages/sonoff.js:89
+#, javascript-format
+msgid "%d channel"
+msgid_plural "%d channels"
+msgstr[0] ""
+msgstr[1] ""
+
+#: src/pages/ewelink.js:122
+#, javascript-format
+msgid "Logged in, region %s"
+msgstr ""
+
+#: src/pages/ewelink.js:124 src/pages/smartlife.js:129 src/pages/xiaomi.js:77
+msgid "Not logged in"
+msgstr ""
+
+#: src/pages/ewelink.js:124
+msgid "Save the app keys first"
+msgstr ""
+
+#: src/pages/ewelink.js:125 src/pages/smartlife.js:131 src/pages/xiaomi.js:78
+msgid "Log Out"
+msgstr ""
+
+#: src/pages/ewelink.js:125 src/pages/smartlife.js:131 src/pages/xiaomi.js:78
+msgid "Log In"
+msgstr ""
+
+#: src/pages/ewelink.js:153
+msgid "Finish signing in in the browser."
+msgstr ""
+
+#: src/pages/ewelink.js:221
+#, javascript-format
+msgid "%d eWeLink device added."
+msgid_plural "%d eWeLink devices added."
+msgstr[0] ""
+msgstr[1] ""
+
+#: src/pages/ewelink.js:222
+msgid ""
+"eWeLink lists no new devices for this app. Search on the Devices page, or "
+"add one by its Device ID from the eWeLink app."
+msgstr ""
+
+#: src/pages/ewelink.js:233
+msgid ""
+"A Device ID is 10 letters and digits, like 1000a1b2c3, shown in the device "
+"settings of the eWeLink app."
+msgstr ""
+
+#: src/pages/ewelink.js:243 src/pages/ewelink.js:277
+msgid "This eWeLink account and app have no switch with that Device ID."
+msgstr ""
+
+#: src/pages/ewelink.js:247
+msgid "Device added."
+msgstr ""
+
+#: src/pages/ewelink.js:247 src/pages/find.js:23
+msgid "Already in Nook"
+msgstr ""
+
+#: src/pages/ewelink.js:275
+msgid "Log in to eWeLink first."
+msgstr ""
+
+#: src/pages/find.js:25
+msgid "Comes with the Mi Home account"
+msgstr ""
+
+#: src/pages/find.js:27
+msgid "With the eWeLink account, or in Sonoff DIY mode"
+msgstr ""
+
+#: src/pages/find.js:29
+msgid "Add it under Shelly"
+msgstr ""
+
+#: src/pages/find.js:31
+msgid "Pair it under Philips Hue"
+msgstr ""
+
+#: src/pages/find.js:33
+msgid "Connect it under Home Assistant"
+msgstr ""
+
+#: src/pages/find.js:35
+msgid "Pair it under HomeKit, once it is in no other home"
+msgstr ""
+
+#: src/pages/find.js:36
+msgid "Not supported yet"
+msgstr ""
+
+#: src/pages/find.js:43
+msgid "Find Devices"
+msgstr ""
+
+#: src/pages/find.js:44
+msgid ""
+"Air conditioners, cameras, speakers, TVs and Sonoff switches on this network "
+"are added, and eWeLink devices once that account is logged in. Whatever else "
+"answers is listed, with what it would take."
+msgstr ""
+
+#: src/pages/find.js:53
+msgid "Everything"
+msgstr ""
+
+#: src/pages/find.js:53
+msgid ""
+"Gree, Midea, Daikin, Cast, ONVIF, mDNS and UPnP. Nothing leaves this "
+"network, except eWeLink device IDs sent to the eWeLink account and a newer "
+"Midea unit’s ID sent to Midea’s cloud for its key."
+msgstr ""
+
+#: src/pages/find.js:57
+msgid "Look For"
+msgstr ""
+
+#: src/pages/find.js:110
+msgid "Nothing new to add."
+msgstr ""
+
+#: src/pages/find.js:112
+#, javascript-format
+msgid "%d new device added."
+msgid_plural "%d new devices added."
+msgstr[0] ""
+msgstr[1] ""
+
+#: src/pages/find.js:114
+msgid "Part of the search failed. Try again in a moment."
+msgstr ""
+
+#: src/pages/fold.js:89
+msgid "Expand"
+msgstr ""
+
+#: src/pages/fold.js:89
+msgid "Collapse"
+msgstr ""
+
+#: src/pages/hass.js:23
+msgid "Home Assistant"
+msgstr ""
+
+#: src/pages/hass.js:24
+msgid ""
+"Lights, switches, climate, covers and sensors of a Home Assistant server, "
+"through an access token of your own."
+msgstr ""
+
+#: src/pages/hass.js:33
+msgid "Create an Access Token"
+msgstr ""
+
+#: src/pages/hass.js:34
+msgid ""
+"In Home Assistant, open your profile, then Security, and create a long-lived "
+"access token at the bottom of the page."
+msgstr ""
+
+#: src/pages/hass.js:36
+msgid "Address, like http://homeassistant.local:8123"
+msgstr ""
+
+#: src/pages/hass.js:41
+msgid "Server"
+msgstr ""
+
+#: src/pages/hass.js:129
+msgid "Type the address of Home Assistant first."
+msgstr ""
+
+#: src/pages/hass.js:133
+msgid "Paste an access token first."
+msgstr ""
+
+#: src/pages/hass.js:159
+#, javascript-format
+msgid "%d device from Home Assistant."
+msgid_plural "%d devices from Home Assistant."
+msgstr[0] ""
+msgstr[1] ""
+
+#: src/pages/homekit.js:33 src/pages/homekit.js:126 src/pages/hue.js:147
+#: src/pages/tvs.js:57 src/pages/tvs.js:141
+msgid "Pair"
+msgstr ""
+
+#: src/pages/homekit.js:44 src/window.js:100
+msgid "HomeKit"
+msgstr ""
+
+#: src/pages/homekit.js:45
+msgid ""
+"HomeKit accessories on this network, paired with Nook by the setup code on "
+"the accessory or its box. An accessory has one owner: remove it from the "
+"Home app first, or reset it."
+msgstr ""
+
+#: src/pages/homekit.js:56
+msgid ""
+"An accessory answers while it is on; one in another home can only be paired "
+"once it is removed there."
+msgstr ""
+
+#: src/pages/homekit.js:123
+msgid "In another home"
+msgstr ""
+
+#: src/pages/homekit.js:144
+msgid ""
+"This accessory is in another home. Remove it from the Home app, or reset it, "
+"then search again."
+msgstr ""
+
+#: src/pages/homekit.js:147
+msgid "Pair with HomeKit"
+msgstr ""
+
+#: src/pages/homekit.js:148
+#, javascript-format
+msgid "Type in the eight-digit setup code on %s or its box."
+msgstr ""
+
+#: src/pages/homekit.js:153
+msgid "A setup code has eight digits, like 123-45-678."
+msgstr ""
+
+#: src/pages/homekit.js:190
+msgid "Pair the accessory again: its keys are not in the keyring."
+msgstr ""
+
+#: src/pages/homekit.js:201
+#, javascript-format
+msgid "%d HomeKit accessory."
+msgid_plural "%d HomeKit accessories."
+msgstr[0] ""
+msgstr[1] ""
+
+#: src/pages/homekit.js:258
+msgid "No HomeKit accessory answered."
+msgstr ""
+
+#: src/pages/homekit.js:260
+msgid ""
+"Nothing new to pair. An accessory in another home must be removed there "
+"first."
+msgstr ""
+
+#: src/pages/hue.js:23
+msgid "The Bridge Has a New Certificate"
+msgstr ""
+
+#: src/pages/hue.js:24
+#, javascript-format
+msgid ""
+"The bridge answered with another certificate than the one Nook saw before. "
+"That is expected after it was replaced or reset; otherwise something on this "
+"network may be posing as it.\n"
+"\n"
+"Before: %s\n"
+"Now: %s"
+msgstr ""
+
+#: src/pages/hue.js:30
+msgid "Trust the New One"
+msgstr ""
+
+#: src/pages/hue.js:57 src/window.js:98
+msgid "Philips Hue"
+msgstr ""
+
+#: src/pages/hue.js:58
+msgid ""
+"Hue lights, plugs and sensors through a Hue Bridge on this network, without "
+"the cloud."
+msgstr ""
+
+#: src/pages/hue.js:70
+msgid "A Hue Bridge answers on the network it is plugged into."
+msgstr ""
+
+#: src/pages/hue.js:134 src/text.js:301
+msgid "Not paired"
+msgstr ""
+
+#: src/pages/hue.js:147 src/pages/tvs.js:141
+msgid "Pair Again"
+msgstr ""
+
+#: src/pages/hue.js:200
+msgid ""
+"This bridge answered with another certificate than before. Remove it first "
+"to add it again."
+msgstr ""
+
+#: src/pages/hue.js:241
+msgid "Another bridge answers at this address now. Search again."
+msgstr ""
+
+#: src/pages/hue.js:244
+msgid "Press the Link Button"
+msgstr ""
+
+#: src/pages/hue.js:245
+msgid ""
+"Press the round button on the Hue Bridge. Nook keeps asking the bridge for a "
+"minute."
+msgstr ""
+
+#: src/pages/hue.js:255
+msgid "The link button was not pressed in time."
+msgstr ""
+
+#: src/pages/hue.js:288
+msgid "Pair the bridge first."
+msgstr ""
+
+#: src/pages/hue.js:309
+#, javascript-format
+msgid "%d Hue device."
+msgid_plural "%d Hue devices."
+msgstr[0] ""
+msgstr[1] ""
+
+#: src/pages/hue.js:371
+msgid "No Hue Bridge answered. Add it by its address if the network hides it."
+msgstr ""
+
+#: src/pages/hue.js:380
+msgid "Pair each new bridge with the button beside it."
+msgstr ""
+
+#: src/pages/shelly.js:27 src/pages/shelly.js:55 src/window.js:94
+msgid "Shelly"
+msgstr ""
+
+#: src/pages/shelly.js:28
+msgid "The login set in this Shelly’s web page."
+msgstr ""
+
+#: src/pages/shelly.js:28
+msgid "The password set in this Shelly’s app or web page."
+msgstr ""
+
+#: src/pages/shelly.js:34
+msgid "Add"
+msgstr ""
+
+#: src/pages/shelly.js:45
+msgid "The Shelly refused the password."
+msgstr ""
+
+#: src/pages/shelly.js:47
+msgid "The Shelly is not answering."
+msgstr ""
+
+#: src/pages/shelly.js:56
+msgid ""
+"Shelly relays, plugs, dimmers, lights and covers on this network, every "
+"generation, without the cloud. One with a password asks for it when added."
+msgstr ""
+
+#: src/pages/shelly.js:66
+msgid "Gen 1 and newer answer over mDNS on their own."
+msgstr ""
+
+#: src/pages/shelly.js:166
+msgid "Change the Password"
+msgstr ""
+
+#: src/pages/shelly.js:173
+msgid "Has a password"
+msgstr ""
+
+#: src/pages/shelly.js:175
+msgid "Add…"
+msgstr ""
+
+#: src/pages/shelly.js:211
+msgid "No Shelly answered."
+msgstr ""
+
+#: src/pages/smartlife.js:50
+msgid "Smart Life"
+msgstr ""
+
+#: src/pages/smartlife.js:51
+msgid ""
+"Devices in a Smart Life or Tuya Smart account, signed in the way Home "
+"Assistant does it: with the user code from the app and a QR code scanned "
+"with it."
+msgstr ""
+
+#: src/pages/smartlife.js:61
+msgid "User Code"
+msgstr ""
+
+#: src/pages/smartlife.js:63
+msgid "Where the User Code Is"
+msgstr ""
+
+#: src/pages/smartlife.js:64
+msgid ""
+"In the Smart Life app: Me, the gear at the top, Account and Security, User "
+"Code."
+msgstr ""
+
+#: src/pages/smartlife.js:87
+msgid ""
+"Open Smart Life on the phone, tap + on the Home tab, then Scan, point it at "
+"this code and confirm the login."
+msgstr ""
+
+#: src/pages/smartlife.js:159
+msgid "Type in the user code from the Smart Life app first."
+msgstr ""
+
+#: src/pages/smartlife.js:183
+msgid "The QR code was not scanned in time. Log in again for a new one."
+msgstr ""
+
+#: src/pages/smartlife.js:228
+#, javascript-format
+msgid "%d device from Smart Life."
+msgid_plural "%d devices from Smart Life."
+msgstr[0] ""
+msgstr[1] ""
+
+#: src/pages/sonoff.js:19
+msgid "Sonoff"
+msgstr ""
+
+#: src/pages/sonoff.js:20
+msgid ""
+"Sonoff relays and plugs in DIY mode on this network, without the cloud. One "
+"paired the usual way with the eWeLink app answers only eWeLink."
+msgstr ""
+
+#: src/pages/sonoff.js:29
+msgid "A switch answers here once it is in DIY mode."
+msgstr ""
+
+#: src/pages/sonoff.js:126
+msgid "No Sonoff in DIY mode answered."
+msgstr ""
+
+#: src/pages/speakers.js:19 src/window.js:88
+msgid "Speakers"
+msgstr ""
+
+#: src/pages/speakers.js:20
+msgid ""
+"Google Nest speakers and other Cast devices on this network: what plays, "
+"pause and volume, without the cloud."
+msgstr ""
+
+#: src/pages/speakers.js:29
+msgid "Speakers in the Google Home app show up here too."
+msgstr ""
+
+#: src/pages/speakers.js:123
+msgid "No speaker answered."
+msgstr ""
+
+#: src/pages/tvs.js:34
+msgid "The TV did not take the PIN. Pair again for a new one."
+msgstr ""
+
+#: src/pages/tvs.js:38
+msgid "Nobody answered on the TV in time."
+msgstr ""
+
+#: src/pages/tvs.js:40
+msgid "Pairing this TV needs the openssl command, which is not installed."
+msgstr ""
+
+#: src/pages/tvs.js:42
+msgid "The TV is not answering. It has to be on."
+msgstr ""
+
+#: src/pages/tvs.js:50
+msgid "Pair with the TV"
+msgstr ""
+
+#: src/pages/tvs.js:71 src/window.js:90
+msgid "TVs"
+msgstr ""
+
+#: src/pages/tvs.js:72
+msgid ""
+"Panasonic, Samsung, LG, Sony, Philips and Roku TVs, Android TV, Google TV "
+"and Apple TV on this network: power, volume, inputs, apps and a remote, "
+"without the cloud."
+msgstr ""
+
+#: src/pages/tvs.js:83
+msgid "A TV answers while it is on, or in standby if it keeps its network on."
+msgstr ""
+
+#: src/pages/tvs.js:136
+msgid "Paired"
+msgstr ""
+
+#: src/pages/tvs.js:175
+msgid "Pairing…"
+msgstr ""
+
+#: src/pages/tvs.js:181
+msgid "This TV takes commands without pairing."
+msgstr ""
+
+#: src/pages/tvs.js:184
+msgid "Type in the PIN the TV shows now."
+msgstr ""
+
+#: src/pages/tvs.js:191
+msgid "Type in the new PIN the TV shows now."
+msgstr ""
+
+#: src/pages/tvs.js:204
+msgid "Allow Nook on the TV when it asks."
+msgstr ""
+
+#: src/pages/tvs.js:208
+msgid ""
+"On the TV, under Network, Home Network, IP Control, set the authentication "
+"to a pre-shared key, then type the same key in here."
+msgstr ""
+
+#: src/pages/tvs.js:219
+#, javascript-format
+msgid "The pairing could not be saved in the keyring: %s"
+msgstr ""
+
+#: src/pages/tvs.js:222
+#, javascript-format
+msgid "Paired with the %s TV."
+msgstr ""
+
+#: src/pages/tvs.js:283
+msgid "No TV answered."
+msgstr ""
+
+#: src/pages/xiaomi.js:22
+msgid "Mi Home"
+msgstr ""
+
+#: src/pages/xiaomi.js:23
+msgid "Xiaomi devices and everything else added to the Mi Home app."
+msgstr ""
+
+#: src/pages/xiaomi.js:41
+msgid "A QR code to scan with Mi Home"
+msgstr ""
+
+#: src/pages/xiaomi.js:51
+msgid ""
+"Open Mi Home on your phone, tap the scan icon on the Profile tab and point "
+"it at this code."
+msgstr ""
+
+#: src/pages/xiaomi.js:76
+#, javascript-format
+msgid "Logged in as %s"
+msgstr ""
+
+#: src/support.js:65 src/window.js:200
+msgid "Support Nook"
+msgstr ""
+
+#: src/support.js:68
+msgid ""
+"Nook is free and stays free. If it earned a coffee, this is where it goes."
+msgstr ""
+
+#: src/support.js:70
+msgid "GitHub Sponsors"
+msgstr ""
+
+#: src/support.js:70
+msgid "Monthly or one time"
+msgstr ""
+
+#: src/support.js:71
+msgid "PayPal"
+msgstr ""
+
+#: src/support.js:74
+msgid "Cryptocurrency"
+msgstr ""
+
+#: src/support.js:80
+msgid "Copy the address"
+msgstr ""
+
+#: src/support.js:96
+#, javascript-format
+msgid "The %s address as a QR code"
+msgstr ""
+
+#: src/support.js:103
+#, javascript-format
+msgid "%s address copied"
+msgstr ""
+
+#: src/support.js:122
+msgid "Your smart home on the GNOME desktop"
+msgstr ""
+
+#: src/support.js:124
+msgid "Request a Feature"
+msgstr ""
+
+#: src/text.js:21
+msgctxt "unit"
+msgid "lx"
+msgstr ""
+
+#: src/text.js:25
+msgctxt "unit"
+msgid "W"
+msgstr ""
+
+#: src/text.js:26
+msgctxt "unit"
+msgid "V"
+msgstr ""
+
+#: src/text.js:27
+msgctxt "unit"
+msgid "A"
+msgstr ""
+
+#: src/text.js:28
+msgctxt "unit"
+msgid "kWh"
+msgstr ""
+
+#: src/text.js:29
+msgctxt "unit"
+msgid "Pa"
+msgstr ""
+
+#: src/text.js:39
+msgid "No motion"
+msgstr ""
+
+#: src/text.js:41
+msgid "Dry"
+msgstr ""
+
+#: src/text.js:65 src/text.js:66
+msgid "Error"
+msgstr ""
+
+#: src/text.js:68
+msgid "Not charging"
+msgstr ""
+
+#: src/text.js:69
+msgid "Returning to dock"
+msgstr ""
+
+#: src/text.js:70
+msgid "Charged"
+msgstr ""
+
+#: src/text.js:71
+msgid "Busy"
+msgstr ""
+
+#: src/text.js:77
+msgid "Favourite"
+msgstr ""
+
+#: src/text.js:82
+msgid "Normal"
+msgstr ""
+
+#: src/text.js:83
+msgid "Very low"
+msgstr ""
+
+#: src/text.js:84 src/text.js:199
+msgid "Cool"
+msgstr ""
+
+#: src/text.js:85 src/text.js:205
+msgid "Heat"
+msgstr ""
+
+#: src/text.js:86 src/text.js:201
+msgctxt "mode"
+msgid "Dry"
+msgstr ""
+
+#: src/text.js:87 src/text.js:203
+msgctxt "mode"
+msgid "Fan"
+msgstr ""
+
+#: src/text.js:90 src/text.js:91 src/topbar.js:50 src/topbar.js:128
+#: src/topbar.js:172 src/topbar.js:492
+msgid "None"
+msgstr ""
+
+#: src/text.js:92
+msgid "No faults"
+msgstr ""
+
+#: src/text.js:93
+msgid "Straight wind"
+msgstr ""
+
+#: src/text.js:94
+msgid "Natural wind"
+msgstr ""
+
+#: src/text.js:97 src/text.js:101
+msgid "Standard"
+msgstr ""
+
+#: src/text.js:104
+msgid "Waiting to start"
+msgstr ""
+
+#: src/text.js:105
+msgid "Cooking"
+msgstr ""
+
+#: src/text.js:106
+msgid "Preheating"
+msgstr ""
+
+#: src/text.js:107
+msgid "Done"
+msgstr ""
+
+#: src/text.js:108
+msgid "Preheated"
+msgstr ""
+
+#: src/text.js:109
+msgid "Preheat paused"
+msgstr ""
+
+#: src/text.js:110
+msgid "Paused to turn the food"
+msgstr ""
+
+#: src/text.js:112
+msgid "Keeping warm, paused"
+msgstr ""
+
+#: src/text.js:113
+msgid "Kept warm"
+msgstr ""
+
+#: src/text.js:114
+msgid "Crispy roast"
+msgstr ""
+
+#: src/text.js:115
+msgid "Tender roast"
+msgstr ""
+
+#: src/text.js:116
+msgid "Less fat"
+msgstr ""
+
+#: src/text.js:117
+msgid "Sensor disconnected"
+msgstr ""
+
+#: src/text.js:118
+msgid "Sensor short circuit"
+msgstr ""
+
+#: src/text.js:119
+msgid "Sensor failure"
+msgstr ""
+
+#: src/text.js:120
+msgid "French fries"
+msgstr ""
+
+#: src/text.js:121
+msgid "Chicken wings"
+msgstr ""
+
+#: src/text.js:122
+msgid "Steak"
+msgstr ""
+
+#: src/text.js:123
+msgid "Lamb chops"
+msgstr ""
+
+#: src/text.js:124
+msgid "Fish"
+msgstr ""
+
+#: src/text.js:125
+msgid "Shrimp"
+msgstr ""
+
+#: src/text.js:126
+msgid "Vegetables"
+msgstr ""
+
+#: src/text.js:127
+msgid "Cake"
+msgstr ""
+
+#: src/text.js:128
+msgid "Pizza"
+msgstr ""
+
+#: src/text.js:129
+msgid "Defrost"
+msgstr ""
+
+#: src/text.js:130
+msgid "Dried fruit"
+msgstr ""
+
+#: src/text.js:131
+msgid "Yoghurt"
+msgstr ""
+
+#: src/text.js:132
+msgid "Manual"
+msgstr ""
+
+#: src/text.js:133
+msgid "No need to turn"
+msgstr ""
+
+#: src/text.js:135
+msgid "One layer"
+msgstr ""
+
+#: src/text.js:136
+msgid "Two layers"
+msgstr ""
+
+#: src/text.js:137
+msgid "Half a basket"
+msgstr ""
+
+#: src/text.js:138
+msgid "Full basket"
+msgstr ""
+
+#: src/text.js:139
+msgid "Kilograms"
+msgstr ""
+
+#: src/text.js:140
+msgid "Pounds"
+msgstr ""
+
+#: src/text.js:141
+msgid "Battery fine"
+msgstr ""
+
+#: src/text.js:142
+msgid "Battery low"
+msgstr ""
+
+#: src/text.js:143
+msgid "Battery very low"
+msgstr ""
+
+#: src/text.js:144
+msgid "White"
+msgstr ""
+
+#: src/text.js:145
+msgid "Red"
+msgstr ""
+
+#: src/text.js:146
+msgid "Orange"
+msgstr ""
+
+#: src/text.js:147
+msgid "Yellow"
+msgstr ""
+
+#: src/text.js:148
+msgid "Green"
+msgstr ""
+
+#: src/text.js:149
+msgid "Cyan"
+msgstr ""
+
+#: src/text.js:150
+msgid "Blue"
+msgstr ""
+
+#: src/text.js:151
+msgid "Purple"
+msgstr ""
+
+#: src/text.js:152
+msgid "Pink"
+msgstr ""
+
+#: src/text.js:153
+msgid "Heat and cool"
+msgstr ""
+
+#: src/text.js:154
+msgid "Opening"
+msgstr ""
+
+#: src/text.js:155
+msgid "Closing"
+msgstr ""
+
+#: src/text.js:156
+msgid "Stopped"
+msgstr ""
+
+#: src/text.js:157
+msgid "Locked"
+msgstr ""
+
+#: src/text.js:158
+msgid "Unlocked"
+msgstr ""
+
+#: src/text.js:159
+msgid "Locking"
+msgstr ""
+
+#: src/text.js:160
+msgid "Unlocking"
+msgstr ""
+
+#: src/text.js:161
+msgid "Jammed"
+msgstr ""
+
+#: src/text.js:163
+msgid "Standby"
+msgstr ""
+
+#: src/text.js:164
+msgid "Buffering"
+msgstr ""
+
+#: src/text.js:165
+msgid "Humidify"
+msgstr ""
+
+#: src/text.js:166
+msgid "Dehumidify"
+msgstr ""
+
+#: src/text.js:167
+msgid "Excellent"
+msgstr ""
+
+#: src/text.js:168
+msgid "Good"
+msgstr ""
+
+#: src/text.js:169
+msgid "Fair"
+msgstr ""
+
+#: src/text.js:170
+msgid "Inferior"
+msgstr ""
+
+#: src/text.js:171
+msgid "Poor"
+msgstr ""
+
+#: src/text.js:173
+msgid "Smart"
+msgstr ""
+
+#: src/text.js:179
+#, javascript-format
+msgid "Level %s"
+msgstr ""
+
+#: src/text.js:216
+#, javascript-format
+msgid "today, %s"
+msgstr ""
+
+#: src/text.js:218
+#, javascript-format
+msgid "yesterday, %s"
+msgstr ""
+
+#: src/text.js:227
+#, javascript-format
+msgid "%s d %s h"
+msgstr ""
+
+#: src/topbar.js:50
+#, javascript-format
+msgid "%d light"
+msgid_plural "%d lights"
+msgstr[0] ""
+msgstr[1] ""
+
+#: src/topbar.js:56
+msgid "Placement"
+msgstr ""
+
+#: src/topbar.js:58
+msgid "Top bar button"
+msgstr ""
+
+#: src/topbar.js:59
+msgid "Quick Settings"
+msgstr ""
+
+#: src/topbar.js:61
+msgid "Location"
+msgstr ""
+
+#: src/topbar.js:62
+msgid "A button of its own, or a tile next to Wi-Fi and Bluetooth."
+msgstr ""
+
+#: src/topbar.js:65
+msgctxt "top bar area"
+msgid "Left"
+msgstr ""
+
+#: src/topbar.js:66
+msgctxt "top bar area"
+msgid "Centre"
+msgstr ""
+
+#: src/topbar.js:67
+msgctxt "top bar area"
+msgid "Right"
+msgstr ""
+
+#: src/topbar.js:69
+msgid "Top Bar Area"
+msgstr ""
+
+#: src/topbar.js:70
+msgid "Which part of the top bar the button is in."
+msgstr ""
+
+#: src/topbar.js:75
+msgid "Counted from the left of that area. Zero is first."
+msgstr ""
+
+#: src/topbar.js:81
+msgid "Nothing"
+msgstr ""
+
+#: src/topbar.js:82
+msgid "Find devices again"
+msgstr ""
+
+#: src/topbar.js:83
+msgid "Open these settings"
+msgstr ""
+
+#: src/topbar.js:85
+msgid "Middle Click"
+msgstr ""
+
+#: src/topbar.js:86
+msgid "On the button in the top bar."
+msgstr ""
+
+#: src/topbar.js:90
+msgid "Switch Menus on Hover"
+msgstr ""
+
+#: src/topbar.js:91
+msgid ""
+"Pointing at another top bar button closes Nook and opens that menu. Off: "
+"Nook stays open until a click outside it."
+msgstr ""
+
+#: src/topbar.js:108
+msgid "Rooms as tabs"
+msgstr ""
+
+#: src/topbar.js:109
+msgid "Small tiles"
+msgstr ""
+
+#: src/topbar.js:110
+msgid "Tiles by room"
+msgstr ""
+
+#: src/topbar.js:111
+msgid "Modules"
+msgstr ""
+
+#: src/topbar.js:113
+msgid "View"
+msgstr ""
+
+#: src/topbar.js:114
+msgid "How the menu lays out the devices."
+msgstr ""
+
+#: src/topbar.js:117
+msgid "Colour by Device Type"
+msgstr ""
+
+#: src/topbar.js:118
+msgid ""
+"Fans, lights and sensors each get a colour of their own instead of the "
+"accent colour."
+msgstr ""
+
+#: src/topbar.js:121
+msgid "Compact Scenes"
+msgstr ""
+
+#: src/topbar.js:122
+msgid ""
+"Scenes as one row of buttons under the header, instead of a section of their "
+"own."
+msgstr ""
+
+#: src/topbar.js:126
+msgid "Static"
+msgstr ""
+
+#: src/topbar.js:127
+msgid "Floating"
+msgstr ""
+
+#: src/topbar.js:130
+msgid "Tabs at the Bottom"
+msgstr ""
+
+#: src/topbar.js:131
+msgid "Home and the sections chosen below, while they have devices."
+msgstr ""
+
+#: src/topbar.js:135
+msgid "Scenes"
+msgstr ""
+
+#: src/topbar.js:143
+msgid "Tabs"
+msgstr ""
+
+#: src/topbar.js:145 src/topbar.js:171
+msgid "Automatic"
+msgstr ""
+
+#: src/topbar.js:146
+msgid "Up to six sections with the most devices."
+msgstr ""
+
+#: src/topbar.js:189
+msgid ""
+"The tabs shown over the tiles. A room left out keeps its devices under All."
+msgstr ""
+
+#: src/topbar.js:196
+msgid "Pinned"
+msgstr ""
+
+#: src/topbar.js:196
+msgid "Other"
+msgstr ""
+
+#: src/topbar.js:220
+msgid "Show All"
+msgstr ""
+
+#: src/topbar.js:220
+msgid "Hide All"
+msgstr ""
+
+#: src/topbar.js:248
+msgid ""
+"Drag a row to move its tile. Pinned devices come first and have a tab of "
+"their own."
+msgstr ""
+
+#: src/topbar.js:260 src/topbar.js:307
+msgid "No room"
+msgstr ""
+
+#: src/topbar.js:265
+msgid "Show in the top bar"
+msgstr ""
+
+#: src/topbar.js:267
+msgid "Pin"
+msgstr ""
+
+#: src/topbar.js:269
+msgid "Hide from the menu"
+msgstr ""
+
+#: src/topbar.js:324
+msgid "Read Every"
+msgstr ""
+
+#: src/topbar.js:325
+msgid ""
+"Minutes. Each time is one small request to each account or device with a "
+"reading there, and none is made while the screen is locked."
+msgstr ""
+
+#: src/topbar.js:332
+msgid "Their reading or state shows next to the Nook icon."
+msgstr ""
+
+#: src/topbar.js:339
+msgid ""
+"When one of the apps below sends a notification, the lights show the colour "
+"for a moment, then go back as they were. Lights without colour blink. Not "
+"with Do Not Disturb on or the screen locked."
+msgstr ""
+
+#: src/topbar.js:360
+msgid "No app has sent a notification yet"
+msgstr ""
+
+#: src/topbar.js:380 src/window.js:215
+msgid "Top Bar"
+msgstr ""
+
+#: src/topbar.js:387
+msgid "Get the Extension"
+msgstr ""
+
+#: src/topbar.js:391
+msgid "No Top Bar Menu"
+msgstr ""
+
+#: src/topbar.js:392
+msgid ""
+"The Nook extension puts these devices in the GNOME top bar. Once it runs, "
+"its settings are here."
+msgstr ""
+
+#: src/topbar.js:448
+msgid "Devices"
+msgstr ""
+
+#: src/topbar.js:460
+msgid "Order and Visibility"
+msgstr ""
+
+#: src/topbar.js:461
+msgid "Room Tabs"
+msgstr ""
+
+#: src/topbar.js:462
+msgid "Readings in the Top Bar"
+msgstr ""
+
+#: src/topbar.js:463
+msgid "Lights at Login"
+msgstr ""
+
+#: src/topbar.js:465
+msgid "Switched on each time you log in."
+msgstr ""
+
+#: src/topbar.js:482
+#, javascript-format
+msgid "%d pinned"
+msgid_plural "%d pinned"
+msgstr[0] ""
+msgstr[1] ""
+
+#: src/topbar.js:484
+#, javascript-format
+msgid "%d hidden"
+msgid_plural "%d hidden"
+msgstr[0] ""
+msgstr[1] ""
+
+#: src/topbar.js:488
+#, javascript-format
+msgid "%d of %d room"
+msgid_plural "%d of %d rooms"
+msgstr[0] ""
+msgstr[1] ""
+
+#: src/widgets.js:387
+msgid "Rename"
+msgstr ""
+
+#: src/widgets.js:388
+msgid ""
+"A name for Nook only; the device and its app keep their own. Leave it empty "
+"to use that one."
+msgstr ""
+
+#: src/widgets.js:422
+msgid "Images"
+msgstr ""
+
+#: src/widgets.js:426
+msgid "Choose an Image"
+msgstr ""
+
+#: src/widgets.js:437
+msgid "Could Not Use the Image"
+msgstr ""
+
+#: src/widgets.js:438
+msgid "Close"
+msgstr ""
+
+#: src/widgets.js:468
+msgid "Pick one for the tile, or use an image of your own."
+msgstr ""
+
+#: src/widgets.js:485
+msgid "Default"
+msgstr ""
+
+#: src/widgets.js:486
+msgid "Image…"
+msgstr ""
+
+#: src/widgets.js:499
+msgid "Show Sidebar"
+msgstr ""
+
+#: src/window.js:84
+msgid "Gree, Midea and Daikin units, by a broadcast on this network."
+msgstr ""
+
+#: src/window.js:86
+msgid ""
+"Tapo cameras, by ONVIF. A camera answers only once its camera account exists."
+msgstr ""
+
+#: src/window.js:88
+msgid "Google Cast speakers and displays, by mDNS."
+msgstr ""
+
+#: src/window.js:90
+msgid "By mDNS and UPnP."
+msgstr ""
+
+#: src/window.js:92
+msgid "Sonoff Switches"
+msgstr ""
+
+#: src/window.js:92
+msgid "Switches in DIY mode, by mDNS."
+msgstr ""
+
+#: src/window.js:94
+msgid "Shelly relays, plugs, lights and covers of every generation, by mDNS."
+msgstr ""
+
+#: src/window.js:96
+msgid "eWeLink Devices"
+msgstr ""
+
+#: src/window.js:96
+msgid ""
+"By mDNS, once the eWeLink account is logged in. Their device IDs are sent to "
+"that account."
+msgstr ""
+
+#: src/window.js:98
+msgid "Hue bridges, by mDNS."
+msgstr ""
+
+#: src/window.js:100
+msgid "HomeKit accessories, by mDNS."
+msgstr ""
+
+#: src/window.js:122
+msgid "Rooms"
+msgstr ""
+
+#: src/window.js:122
+msgid "Setup"
+msgstr ""
+
+#: src/window.js:133
+msgid "Main Menu"
+msgstr ""
+
+#: src/window.js:197
+msgid "Add Devices…"
+msgstr ""
+
+#: src/window.js:201
+msgid "About Nook"
+msgstr ""
+
+#: data/io.github.epogonii.nook-app.desktop:3
+msgid "Find, pair and sign in to the devices Nook shows in the top bar"
+msgstr ""
+
+#: data/io.github.epogonii.nook-app.desktop:9
+msgid "smart home;lights;camera;Home Assistant;Hue;HomeKit;Mi Home;"
+msgstr ""

@@ -5,10 +5,11 @@ import GLib from 'gi://GLib';
 import GObject from 'gi://GObject';
 import Gtk from 'gi://Gtk';
 
-import {gettext as _} from 'resource:///org/gnome/Shell/Extensions/js/extensions/prefs.js';
+import {gettext as _} from 'gettext';
 
 import {discover as findSpeakers, parseSpeakers} from '../lib/cast-home.js';
-import {deviceCount, renameButton, setGroupIcon, setSearching, setSkipped, skippedIn} from './common.js';
+import {dropSpeaker} from '../remove.js';
+import {deviceCount, setGroupIcon, setSearching, setSkipped, skippedIn} from './common.js';
 import {FoldGroup} from './fold.js';
 
 export const SpeakersGroup = GObject.registerClass(
@@ -64,7 +65,6 @@ class SpeakersGroup extends FoldGroup {
                 title: GLib.markup_escape_text(own ?? speaker.name, -1),
                 subtitle: GLib.markup_escape_text([own ? speaker.name : null, speaker.model, speaker.ip].filter(Boolean).join(' · '), -1),
             });
-            row.add_suffix(renameButton(this._settings, did, speaker.name, this));
             const remove = new Gtk.Button({
                 icon_name: 'user-trash-symbolic',
                 tooltip_text: _('Remove'),
@@ -85,8 +85,7 @@ class SpeakersGroup extends FoldGroup {
     }
 
     _drop(id) {
-        this._save(this._speakers().filter(s => s.id !== id));
-        setSkipped(this._settings, [`cast:${id}`], true);
+        dropSpeaker(this._settings, id);
     }
 
     _entry({id, name, model, ip, port}) {

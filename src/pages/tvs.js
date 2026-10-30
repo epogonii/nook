@@ -5,12 +5,13 @@ import GLib from 'gi://GLib';
 import GObject from 'gi://GObject';
 import Gtk from 'gi://Gtk';
 
-import {gettext as _} from 'resource:///org/gnome/Shell/Extensions/js/extensions/prefs.js';
+import {gettext as _} from 'gettext';
 
 import {survey} from '../lib/finder.js';
 import * as Secrets from '../lib/secrets.js';
 import {BRANDS, TvError, keepSecret, parseTvs, secretService} from '../lib/tv-home.js';
-import {deviceCount, renameButton, setGroupIcon, setSearching, setSkipped, skippedIn} from './common.js';
+import {dropTv} from '../remove.js';
+import {deviceCount, setGroupIcon, setSearching, setSkipped, skippedIn} from './common.js';
 import {FoldGroup} from './fold.js';
 
 function tvsIn(seen) {
@@ -144,7 +145,6 @@ class TvsGroup extends FoldGroup {
                 pair.connect('clicked', () => this._pair(tv, pair).catch(logError));
                 row.add_suffix(pair);
             }
-            row.add_suffix(renameButton(this._settings, did, tv.name ?? model, this));
             this._byDid.set(did, row);
             const remove = new Gtk.Button({
                 icon_name: 'user-trash-symbolic',
@@ -233,9 +233,7 @@ class TvsGroup extends FoldGroup {
     }
 
     _drop(id) {
-        this._save(this._tvs().filter(t => t.id !== id));
-        Secrets.clear(secretService(id)).catch(logError);
-        setSkipped(this._settings, [`tv:${id}`], true);
+        dropTv(this._settings, id);
     }
 
     _entry(t) {

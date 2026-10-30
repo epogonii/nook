@@ -5,7 +5,7 @@ import Gio from 'gi://Gio';
 import GLib from 'gi://GLib';
 import Gtk from 'gi://Gtk';
 
-import {gettext as _, ngettext} from 'resource:///org/gnome/Shell/Extensions/js/extensions/prefs.js';
+import {gettext as _, ngettext} from 'gettext';
 
 import * as Glyphs from '../lib/glyphs.js';
 import * as Electrolux from '../lib/electrolux.js';
@@ -126,48 +126,6 @@ export function deviceCount(count) {
 export function hueDevices(settings) {
     const bridges = new Set(Hue.parseBridges(settings.get_string('hue-bridges')).map(b => b.id));
     return Hue.parseDevices(settings.get_string('hue-devices')).filter(d => bridges.has(d.bridge));
-}
-
-function renameDevice(settings, did, name, parent) {
-    const names = settings.get_value('names').deepUnpack();
-    const entry = new Gtk.Entry({
-        text: names[did] ?? '',
-        placeholder_text: name,
-        activates_default: true,
-    });
-    const dialog = new Adw.AlertDialog({
-        heading: _('Rename'),
-        body: _('A name for Nook only; the device and its app keep their own. Leave it empty to use that one.'),
-        extra_child: entry,
-        default_response: 'save',
-        close_response: 'cancel',
-    });
-    dialog.add_response('cancel', _('Cancel'));
-    dialog.add_response('save', _('Save'));
-    dialog.set_response_appearance('save', Adw.ResponseAppearance.SUGGESTED);
-    dialog.connect('response', (_dialog, response) => {
-        if (response !== 'save')
-            return;
-        const next = {...settings.get_value('names').deepUnpack()};
-        const own = entry.text.trim();
-        if (own)
-            next[did] = own;
-        else
-            delete next[did];
-        settings.set_value('names', new GLib.Variant('a{ss}', next));
-    });
-    dialog.present(parent.get_root());
-}
-
-export function renameButton(settings, did, name, parent) {
-    const button = new Gtk.Button({
-        icon_name: 'document-edit-symbolic',
-        tooltip_text: _('Rename'),
-        valign: Gtk.Align.CENTER,
-        css_classes: ['flat'],
-    });
-    button.connect('clicked', () => renameDevice(settings, did, name, parent));
-    return button;
 }
 
 export function helpRow(title, subtitle, url) {

@@ -4,9 +4,16 @@ import Adw from 'gi://Adw';
 import GObject from 'gi://GObject';
 import Gtk from 'gi://Gtk';
 
-import {gettext as _} from 'resource:///org/gnome/Shell/Extensions/js/extensions/prefs.js';
+import {gettext as _} from 'gettext';
 
 import {groupTitle} from './common.js';
+
+let folding = true;
+
+// Off where each group has a page of its own.
+export function setFolding(on) {
+    folding = on;
+}
 
 // Rows of a folded group are taken out rather than hidden: groups show and hide rows of
 // their own, and unfolding would undo that.
@@ -34,6 +41,8 @@ class FoldGroup extends Adw.PreferencesGroup {
 
     // Kept in folded-groups under id; summary() is the description while folded.
     foldable(settings, id, summary = () => null) {
+        if (!folding)
+            return null;
         this._open = this.description;
         this._summary = summary;
         this._fold = new Gtk.Button({valign: Gtk.Align.CENTER, css_classes: ['flat', 'circular']});

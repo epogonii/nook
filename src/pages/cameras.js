@@ -5,11 +5,12 @@ import GLib from 'gi://GLib';
 import GObject from 'gi://GObject';
 import Gtk from 'gi://Gtk';
 
-import {gettext as _} from 'resource:///org/gnome/Shell/Extensions/js/extensions/prefs.js';
+import {gettext as _} from 'gettext';
 
 import * as Secrets from '../lib/secrets.js';
 import * as Tapo from '../lib/tapo.js';
-import {CredentialRows, deviceCount, helpRow, renameButton, setGroupIcon, setSearching, setSkipped, skippedIn} from './common.js';
+import {dropCamera} from '../remove.js';
+import {CredentialRows, deviceCount, helpRow, setGroupIcon, setSearching, setSkipped, skippedIn} from './common.js';
 import {FoldGroup} from './fold.js';
 
 const CAMERA_ACCOUNT_URL = 'https://www.tp-link.com/support/faq/2680/';
@@ -120,7 +121,7 @@ class CamerasGroup extends FoldGroup {
             remove.connect('clicked', () => this._drop(camera.id));
             this._byDid.set(`tapo:${camera.id}`, row);
             // An expander row puts each new suffix in front of the last.
-            const suffixes = [renameButton(this._settings, `tapo:${camera.id}`, camera.name, this), remove];
+            const suffixes = [remove];
             for (const suffix of tapo ? suffixes : suffixes.reverse())
                 row.add_suffix(suffix);
             this._rows.push(row);
@@ -137,9 +138,7 @@ class CamerasGroup extends FoldGroup {
     }
 
     _drop(id) {
-        this._save(this._cameras().filter(c => c.id !== id));
-        Secrets.clear(`onvif:${id}`).catch(logError);
-        setSkipped(this._settings, [`tapo:${id}`], true);
+        dropCamera(this._settings, id);
     }
 
     _entry(camera) {

@@ -1,0 +1,80 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- Copyright 2026 Evghenii Pogonii -->
+<component type="desktop-application">
+  <id>io.github.epogonii.nook-app</id>
+  <metadata_license>CC0-1.0</metadata_license>
+  <project_license>GPL-2.0-or-later</project_license>
+
+  <name>Nook</name>
+  <summary>Control your smart home</summary>
+  <developer id="io.github.epogonii">
+    <name>Evghenii Pogonii</name>
+  </developer>
+
+  <description>
+    <p>
+      Nook brings lights, plugs, sensors, cameras, air conditioners, TVs and
+      speakers together in one place. The Home page shows every device by
+      section and room: switch lights and plugs on and off, and see the
+      temperature, the doors and the leak sensors at a glance.
+    </p>
+    <p>
+      It signs in to Home Assistant, Philips Hue, HomeKit, Smart Life, Mi Home
+      and eWeLink, to the clouds of LG, Samsung, Mitsubishi Electric and
+      Electrolux, and finds and pairs devices on the local network: Gree, Midea
+      and Daikin air conditioners, Tapo and ONVIF cameras, Google Cast
+      speakers, TVs, Sonoff and Shelly switches.
+    </p>
+    <p>
+      With the Nook extension for GNOME Shell, installed from
+      extensions.gnome.org, the same devices are also in the top bar.
+    </p>
+  </description>
+
+  <screenshots>
+    <screenshot type="default">
+      <caption>Every device by section and room</caption>
+      <image>https://raw.githubusercontent.com/epogonii/nook-app/v1.0.0/screenshots/home.png</image>
+    </screenshot>
+    <screenshot environment="gnome:dark">
+      <caption>The Home page in the dark style</caption>
+      <image>https://raw.githubusercontent.com/epogonii/nook-app/v1.0.0/screenshots/home-dark.png</image>
+    </screenshot>
+    <screenshot>
+      <caption>Accounts and pairing for each kind of device</caption>
+      <image>https://raw.githubusercontent.com/epogonii/nook-app/v1.0.0/screenshots/accounts.png</image>
+    </screenshot>
+  </screenshots>
+
+  <branding>
+    <color type="primary" scheme_preference="light">#dedee2</color>
+    <color type="primary" scheme_preference="dark">#3d3d42</color>
+  </branding>
+
+  <launchable type="desktop-id">io.github.epogonii.nook-app.desktop</launchable>
+  <translation type="gettext">io.github.epogonii.nook-app</translation>
+
+  <url type="homepage">https://github.com/epogonii/nook-app</url>
+  <url type="bugtracker">https://github.com/epogonii/nook-app/issues</url>
+  <url type="vcs-browser">https://github.com/epogonii/nook-app</url>
+  <url type="donation">https://github.com/sponsors/epogonii</url>
+
+  <supports>
+    <control>pointing</control>
+    <control>keyboard</control>
+    <control>touch</control>
+  </supports>
+  <requires>
+    <display_length compare="ge">360</display_length>
+  </requires>
+
+  <content_rating type="oars-1.1"/>
+
+  <releases>
+    <release version="1.0.0" date="2026-10-30">
+      <description>
+        <p>The first release: the devices and accounts of the Nook extension, moved out of GNOME Shell into an app of their own.</p>
+      </description>
+    </release>
+  </releases>
+</component>

@@ -14,8 +14,8 @@ import GLib from 'gi://GLib';
 import Soup from 'gi://Soup?version=3.0';
 import System from 'system';
 
-import * as Secrets from '../lib/secrets.js';
-import {SERVERS, XiaomiCloud, XiaomiError} from '../lib/xiaomi.js';
+import * as Secrets from '../src/lib/secrets.js';
+import {SERVERS, XiaomiCloud, XiaomiError} from '../src/lib/xiaomi.js';
 
 const SPEC = 'https://miot-spec.org/miot-spec-v2';
 

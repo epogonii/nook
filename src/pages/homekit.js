@@ -5,11 +5,12 @@ import GLib from 'gi://GLib';
 import GObject from 'gi://GObject';
 import Gtk from 'gi://Gtk';
 
-import {gettext as _, ngettext} from 'resource:///org/gnome/Shell/Extensions/js/extensions/prefs.js';
+import {gettext as _, ngettext} from 'gettext';
 
 import * as HomeKit from '../lib/homekit.js';
 import * as Secrets from '../lib/secrets.js';
 import {SpecError} from '../lib/spec-home.js';
+import {dropHomeKit, homeKitCredentials} from '../remove.js';
 import {deviceCount, setGroupIcon, setSearching, specTrouble} from './common.js';
 import {FoldGroup} from './fold.js';
 
@@ -132,12 +133,8 @@ class HomeKitGroup extends FoldGroup {
             this.add(row);
     }
 
-    async _credentials(host) {
-        try {
-            return JSON.parse(await Secrets.lookup(HomeKit.secretService(host.id)) ?? 'null');
-        } catch {
-            return null;
-        }
+    _credentials(host) {
+        return homeKitCredentials(host);
     }
 
     async _pair(found) {
@@ -213,26 +210,10 @@ class HomeKitGroup extends FoldGroup {
         }
     }
 
-    // Tells the accessory to forget Nook, so another home can pair it; removed here either way.
     async _drop(host, button = null) {
         if (button)
             button.sensitive = false;
-        const credentials = await this._credentials(host);
-        let freed = !credentials;
-        if (credentials) {
-            const client = new HomeKit.HapHost(host, credentials);
-            try {
-                await client.unpair();
-                freed = true;
-            } catch (e) {
-                console.debug(`nook: HomeKit unpair: ${e.message}`);
-            } finally {
-                client.close();
-            }
-        }
-        await Secrets.clear(HomeKit.secretService(host.id)).catch(logError);
-        this._save(this._hosts().filter(h => h.id !== host.id));
-        if (!freed)
+        if (!await dropHomeKit(this._settings, host))
             this._toast(_('Removed. The accessory could not be reached to forget Nook; reset it before pairing it again.'));
     }
 

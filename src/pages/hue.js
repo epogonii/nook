@@ -6,7 +6,7 @@ import GLib from 'gi://GLib';
 import GObject from 'gi://GObject';
 import Gtk from 'gi://Gtk';
 
-import {gettext as _, ngettext} from 'resource:///org/gnome/Shell/Extensions/js/extensions/prefs.js';
+import {gettext as _, ngettext} from 'gettext';
 
 import * as Hue from '../lib/hue.js';
 import * as Secrets from '../lib/secrets.js';

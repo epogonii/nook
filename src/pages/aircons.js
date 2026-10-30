@@ -5,7 +5,7 @@ import GLib from 'gi://GLib';
 import GObject from 'gi://GObject';
 import Gtk from 'gi://Gtk';
 
-import {gettext as _} from 'resource:///org/gnome/Shell/Extensions/js/extensions/prefs.js';
+import {gettext as _} from 'gettext';
 
 import {BRANDS as AIRCONS, didOf as airconDid, parseAircons, parseUnits} from '../lib/aircon-home.js';
 import {ClimateError} from '../lib/climate.js';
@@ -13,7 +13,8 @@ import * as Daikin from '../lib/daikin.js';
 import * as Gree from '../lib/gree.js';
 import * as Midea from '../lib/midea.js';
 import * as Secrets from '../lib/secrets.js';
-import {deviceCount, renameButton, setGroupIcon, setSearching, setSkipped, skippedIn} from './common.js';
+import {dropAircon} from '../remove.js';
+import {deviceCount, setGroupIcon, setSearching, setSkipped, skippedIn} from './common.js';
 import {FoldGroup} from './fold.js';
 
 export const AirconGroup = GObject.registerClass(
@@ -85,7 +86,6 @@ class AirconGroup extends FoldGroup {
                 subtitle: GLib.markup_escape_text([own ? name : null, AIRCONS[unit.brand].title, unit.ip,
                     unit.brand === 'midea' ? null : unit.mac].filter(Boolean).join(' · '), -1),
             });
-            row.add_suffix(renameButton(this._settings, did, name, this));
             const remove = new Gtk.Button({
                 icon_name: 'user-trash-symbolic',
                 tooltip_text: _('Remove'),
@@ -105,12 +105,8 @@ class AirconGroup extends FoldGroup {
         this._window.add_toast(new Adw.Toast({title, timeout: 6}));
     }
 
-    async _drop(unit) {
-        const did = airconDid(unit);
-        this._save(this._units().filter(u => airconDid(u) !== did));
-        setSkipped(this._settings, [did], true);
-        if (unit.brand === 'midea')
-            await Secrets.clear(Midea.secretService(unit.id)).catch(e => console.debug(`nook: keyring: ${e.message}`));
+    _drop(unit) {
+        return dropAircon(this._settings, unit);
     }
 
     // What a found unit becomes in the settings, or null with a toast saying why not.

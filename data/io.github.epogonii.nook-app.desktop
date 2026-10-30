@@ -1,0 +1,12 @@
+[Desktop Entry]
+Name=Nook
+Comment=Find, pair and sign in to the devices Nook shows in the top bar
+Exec=nook-app
+Icon=io.github.epogonii.nook-app
+Terminal=false
+Type=Application
+Categories=Utility;
+Keywords=smart home;lights;camera;Home Assistant;Hue;HomeKit;Mi Home;
+StartupNotify=true
+SingleMainWindow=true
+DBusActivatable=true

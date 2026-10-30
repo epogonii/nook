@@ -10,8 +10,8 @@ import Gio from 'gi://Gio';
 import GLib from 'gi://GLib';
 import System from 'system';
 
-import * as Secrets from '../lib/secrets.js';
-import * as Tapo from '../lib/tapo.js';
+import * as Secrets from '../src/lib/secrets.js';
+import * as Tapo from '../src/lib/tapo.js';
 
 const SECONDS = 6;
 const feed = GLib.build_filenamev([GLib.path_get_dirname(GLib.path_get_dirname(

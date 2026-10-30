@@ -6,7 +6,7 @@ import Gio from 'gi://Gio';
 import GObject from 'gi://GObject';
 import Gtk from 'gi://Gtk';
 
-import {gettext as _} from 'resource:///org/gnome/Shell/Extensions/js/extensions/prefs.js';
+import {gettext as _} from 'gettext';
 
 import * as Secrets from '../lib/secrets.js';
 import {XiaomiCloud, XiaomiError} from '../lib/xiaomi.js';

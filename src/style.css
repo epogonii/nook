@@ -1,0 +1,606 @@
+.nook-home {
+  padding: 6px 24px 24px;
+}
+
+.nook-section {
+  margin: 18px 2px 8px;
+}
+
+.nook-section.first {
+  margin-top: 6px;
+}
+
+.nook-fold-toggle {
+  min-height: 28px;
+  padding: 2px 6px;
+  margin-left: -6px;
+}
+
+.nook-chevron {
+  -gtk-icon-size: 12px;
+  opacity: 0.55;
+  transition: -gtk-icon-transform 200ms ease-out;
+}
+
+.nook-section.folded .nook-chevron {
+  -gtk-icon-transform: rotate(-90deg);
+}
+
+.nook-section.folded .nook-chevron:dir(rtl) {
+  -gtk-icon-transform: rotate(90deg);
+}
+
+.nook-tile {
+  padding: 8px 12px 8px 8px;
+  min-height: 52px;
+  border-radius: 12px;
+}
+
+.nook-tile-name {
+  font-weight: 600;
+}
+
+.nook-glyph {
+  min-width: 36px;
+  min-height: 36px;
+  padding: 0;
+  border-radius: 999px;
+  background-color: alpha(currentColor, 0.08);
+}
+
+button.nook-glyph:hover {
+  background-color: alpha(currentColor, 0.14);
+}
+
+.nook-glyph.large {
+  min-width: 72px;
+  min-height: 72px;
+}
+
+.nook-glyph.small {
+  min-width: 32px;
+  min-height: 32px;
+}
+
+.nook-camera {
+  padding: 0;
+  border-radius: 12px;
+}
+
+.nook-camera-caption {
+  padding: 28px 12px 8px;
+  color: white;
+  background-image: linear-gradient(to top, alpha(black, 0.6), alpha(black, 0));
+}
+
+.nook-camera .nook-tile-state {
+  color: alpha(white, 0.8);
+}
+
+.offline .nook-tile-name,
+.offline .nook-tile-state {
+  color: alpha(currentColor, 0.55);
+}
+
+.offline .nook-glyph {
+  background-color: alpha(currentColor, 0.05);
+}
+
+/* A device page's card, coloured by tintClass(). White on the shaded colour in both styles. */
+.nook-hero {
+  padding: 14px 16px 20px;
+  border-radius: 20px;
+  color: white;
+  background-color: #3a3a40;
+}
+
+.nook-hero-status {
+  font-size: 0.9em;
+  color: alpha(white, 0.75);
+}
+
+.nook-dot {
+  min-width: 7px;
+  min-height: 7px;
+  border-radius: 999px;
+  background-color: alpha(white, 0.35);
+}
+
+.nook-dot.on {
+  background-color: #57e389;
+}
+
+.nook-hero .nook-power {
+  color: white;
+  background-color: alpha(white, 0.1);
+}
+
+.nook-hero .nook-power:hover {
+  background-color: alpha(white, 0.17);
+}
+
+.nook-hero .nook-power.on {
+  color: #1c1c21;
+  background-color: white;
+}
+
+.nook-hero-scene {
+  margin: 6px 0 8px;
+}
+
+.nook-hero-big {
+  font-size: 3em;
+  font-weight: 300;
+  font-feature-settings: "tnum";
+}
+
+.nook-hero-word {
+  font-size: 1.5em;
+  font-weight: 700;
+}
+
+.nook-hero-small {
+  margin-top: 2px;
+  font-size: 0.9em;
+  color: alpha(white, 0.78);
+}
+
+.nook-count {
+  font-feature-settings: "tnum";
+}
+
+.nook-qr {
+  background-color: white;
+  border-radius: 12px;
+  padding: 12px;
+}
+
+.nook-charts {
+  padding: 12px 14px 10px;
+}
+
+.nook-chart {
+  font-size: 0.8em;
+  color: alpha(currentColor, 0.55);
+}
+
+.nook-stepper-value {
+  font-weight: bold;
+}
+
+.nook-round {
+  min-width: 34px;
+  min-height: 34px;
+  padding: 0;
+}
+
+/* The kind's controls in a page's card, white on its shade as the extension's. */
+.nook-stage {
+  margin-top: 16px;
+}
+
+.nook-hero .nook-round {
+  color: white;
+  background-color: alpha(white, 0.12);
+}
+
+.nook-hero .nook-round:hover {
+  background-color: alpha(white, 0.2);
+}
+
+.nook-hero .nook-round:disabled {
+  color: alpha(white, 0.35);
+}
+
+.nook-ac-tile {
+  padding: 8px 9px;
+  border-radius: 14px;
+  font-weight: normal;
+  color: white;
+  background-color: alpha(white, 0.07);
+}
+
+.nook-ac-tile:hover {
+  background-color: alpha(white, 0.15);
+}
+
+.nook-ac-tile.open {
+  box-shadow: inset 0 0 0 2px alpha(white, 0.55);
+}
+
+.nook-ac-tile.on {
+  color: #1c1c21;
+  background-color: alpha(white, 0.92);
+}
+
+.nook-ac-bubble {
+  min-width: 28px;
+  min-height: 28px;
+  border-radius: 999px;
+  background-color: alpha(white, 0.12);
+}
+
+.nook-ac-tile.on .nook-ac-bubble {
+  background-color: alpha(black, 0.08);
+}
+
+.nook-ac-mark {
+  color: alpha(white, 0.6);
+}
+
+.nook-ac-led {
+  min-width: 6px;
+  min-height: 6px;
+  border-radius: 999px;
+  background-color: alpha(white, 0.3);
+}
+
+.nook-ac-tile.on .nook-ac-led {
+  background-color: #2ec27e;
+}
+
+.nook-ac-tile-title {
+  padding-top: 4px;
+  font-size: 0.8em;
+  color: alpha(white, 0.7);
+}
+
+.nook-ac-tile.on .nook-ac-tile-title {
+  color: alpha(#1c1c21, 0.65);
+}
+
+.nook-ac-tile-value {
+  font-size: 0.92em;
+  font-weight: bold;
+}
+
+.nook-segments {
+  padding: 3px;
+  border-radius: 14px;
+  background-color: alpha(black, 0.22);
+}
+
+.nook-segment {
+  padding: 6px 2px 5px;
+  border-radius: 11px;
+  color: white;
+  background: none;
+}
+
+.nook-segment:hover {
+  background-color: alpha(white, 0.1);
+}
+
+.nook-segment.on {
+  color: #1c1c21;
+  background-color: alpha(white, 0.92);
+}
+
+.nook-segment-box {
+  font-size: 0.8em;
+  font-weight: bold;
+}
+
+.nook-slider-title {
+  color: alpha(white, 0.78);
+}
+
+.nook-slider-value {
+  font-weight: bold;
+}
+
+.nook-hero scale trough {
+  background-color: alpha(white, 0.18);
+}
+
+.nook-hero scale highlight {
+  background-color: white;
+}
+
+.nook-hero scale slider {
+  background-color: white;
+  box-shadow: 0 1px 4px alpha(black, 0.3);
+}
+
+.nook-hero progressbar trough {
+  background-color: alpha(white, 0.18);
+}
+
+.nook-hero progressbar progress {
+  background-color: white;
+}
+
+.nook-stats > flowboxchild {
+  padding: 0;
+}
+
+.nook-stat-chip {
+  padding: 4px 10px 4px 8px;
+  border-radius: 999px;
+  background-color: alpha(white, 0.11);
+}
+
+.nook-stat-title {
+  font-size: 0.85em;
+  color: alpha(white, 0.72);
+}
+
+.nook-stat-value {
+  font-size: 0.85em;
+  font-weight: bold;
+}
+
+.nook-hero .nook-action {
+  min-width: 44px;
+  min-height: 44px;
+}
+
+.nook-action-word {
+  font-size: 0.8em;
+  color: alpha(white, 0.78);
+}
+
+.nook-strip {
+  padding: 8px 10px;
+  border-radius: 14px;
+  font-weight: normal;
+  color: white;
+  background-color: alpha(white, 0.07);
+}
+
+.nook-strip:hover {
+  background-color: alpha(white, 0.12);
+}
+
+.nook-strip.on {
+  background-color: alpha(#2ec27e, 0.16);
+  box-shadow: inset 0 0 0 1px alpha(#2ec27e, 0.35);
+}
+
+.nook-strip.on:hover {
+  background-color: alpha(#2ec27e, 0.24);
+}
+
+.nook-strip .nook-ac-bubble {
+  min-width: 32px;
+  min-height: 32px;
+}
+
+.nook-strip.on .nook-ac-bubble {
+  color: #10241a;
+  background-color: #2ec27e;
+}
+
+.nook-strip-title {
+  font-weight: bold;
+}
+
+.nook-strip-state {
+  font-size: 0.8em;
+  color: alpha(white, 0.7);
+}
+
+.nook-strip.on switch:checked {
+  background-color: #2ec27e;
+}
+
+.nook-fryer-minutes {
+  font-size: 2.4em;
+  font-weight: 300;
+}
+
+.nook-fryer-unit {
+  color: alpha(white, 0.7);
+}
+
+.nook-fryer-note {
+  font-weight: bold;
+  color: #f8e45c;
+}
+
+.nook-wheel-power {
+  min-width: 64px;
+  min-height: 64px;
+  padding: 0;
+  color: white;
+  background-color: #2c2c32;
+  box-shadow: 0 3px 10px alpha(black, 0.35);
+}
+
+.nook-wheel-power:hover {
+  background-color: #3a3a42;
+}
+
+.nook-wheel-power.on {
+  color: #1c1c21;
+  background-color: white;
+}
+
+.nook-swatches {
+  padding: 2px 0;
+}
+
+.nook-swatch {
+  min-width: 26px;
+  min-height: 26px;
+  padding: 0;
+  border: 2px solid transparent;
+  border-radius: 999px;
+  background: none;
+  box-shadow: none;
+}
+
+.nook-swatch:hover {
+  border-color: alpha(currentColor, 0.45);
+}
+
+.nook-swatch.checked {
+  border-color: currentColor;
+}
+
+.nook-ac-tile-title.wide {
+  padding-top: 0;
+}
+
+/* A speaker's player: one more line of the card's text above, against the stage's margin. */
+.nook-media-line {
+  margin-top: -10px;
+  font-size: 0.9em;
+  color: alpha(white, 0.78);
+}
+
+.nook-media progressbar > trough,
+.nook-media progressbar > trough > progress {
+  min-height: 4px;
+}
+
+.nook-media-times {
+  font-size: 0.8em;
+  color: alpha(white, 0.75);
+}
+
+.nook-media .nook-round {
+  min-width: 40px;
+  min-height: 40px;
+}
+
+.nook-media button.nook-media-play {
+  min-width: 56px;
+  min-height: 56px;
+  -gtk-icon-size: 22px;
+  color: alpha(black, 0.8);
+  background-color: white;
+}
+
+.nook-media button.nook-media-play:hover {
+  background-color: alpha(white, 0.86);
+}
+
+.nook-media button.nook-media-play:active {
+  background-color: alpha(white, 0.74);
+}
+
+.nook-media button.nook-media-play:disabled {
+  color: alpha(black, 0.8);
+  background-color: alpha(white, 0.8);
+}
+
+.nook-ac-tile:active {
+  background-color: alpha(white, 0.22);
+}
+
+.nook-ac-tile.on:hover {
+  background-color: white;
+}
+
+.nook-ac-tile.on .nook-ac-mark {
+  color: alpha(#1c1c21, 0.6);
+}
+
+.nook-hero .nook-round:active {
+  background-color: alpha(white, 0.24);
+}
+
+/* An air conditioner's target and settings (card-climate.js). */
+.nook-climate .nook-slider-title {
+  font-weight: bold;
+}
+
+.nook-climate .nook-round {
+  min-width: 36px;
+  min-height: 36px;
+}
+
+.nook-climate .nook-stepper-value {
+  font-size: 1.15em;
+}
+
+/* A TV's page: the pairing note, the mute key while muted, the remote (card-tv.js). */
+.nook-tv-note {
+  color: alpha(white, 0.78);
+}
+
+.nook-hero .nook-tv-pair {
+  padding: 5px 14px;
+  border-radius: 999px;
+  color: white;
+  background-color: alpha(white, 0.12);
+}
+
+.nook-hero .nook-tv-pair:hover {
+  background-color: alpha(white, 0.2);
+}
+
+.nook-hero .nook-round.on {
+  color: #1c1c21;
+  background-color: white;
+}
+
+.nook-hero .nook-round.on:hover {
+  background-color: alpha(white, 0.88);
+}
+
+.nook-tv-remote {
+  padding: 6px 0;
+}
+
+.nook-hero .nook-tv-remote .nook-round {
+  min-width: 40px;
+  min-height: 40px;
+}
+
+/* A robot's page (card-vacuum.js). The map is drawn light on dark: its frame stays dark. */
+.nook-hero .nook-action.on {
+  color: #1c1c21;
+  background-color: white;
+}
+
+.nook-vacuum-title {
+  font-size: 0.85em;
+  font-weight: bold;
+  color: alpha(white, 0.7);
+}
+
+.nook-vacuum-map {
+  padding: 8px;
+  border-radius: 12px;
+  color: white;
+  background-color: #2a2b30;
+}
+
+.nook-vacuum-map-note {
+  color: alpha(white, 0.7);
+}
+
+.nook-vacuum-number {
+  font-size: 1.4em;
+  font-weight: 300;
+  font-feature-settings: "tnum";
+}
+
+levelbar > trough > block.nook-worn {
+  background-color: var(--error-bg-color);
+}
+
+levelbar > trough > block.nook-wearing {
+  background-color: var(--warning-bg-color);
+}
+
+/* A camera's live picture in its page's card (card-camera.js). */
+.nook-live {
+  margin: 10px 0;
+  border-radius: 14px;
+  background-color: black;
+}
+
+.nook-live-idle {
+  color: alpha(white, 0.4);
+}
+
+.nook-live-status {
+  margin: 12px;
+  padding: 10px 14px;
+  border-radius: 12px;
+  color: alpha(white, 0.9);
+  background-color: alpha(black, 0.6);
+}

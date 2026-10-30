@@ -3,7 +3,7 @@
 
 // Helper for tools/check-aes.py: encrypts its cases with lib/aes.js, prints the results.
 
-import * as Aes from '../lib/aes.js';
+import * as Aes from '../src/lib/aes.js';
 
 const hex = bytes => Array.from(bytes, b => b.toString(16).padStart(2, '0')).join('');
 const unhex = text => Uint8Array.from(text.match(/../g) ?? [], h => Number.parseInt(h, 16));

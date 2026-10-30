@@ -6,12 +6,12 @@ import GLib from 'gi://GLib';
 import GObject from 'gi://GObject';
 import Gtk from 'gi://Gtk';
 
-import {gettext as _, ngettext} from 'resource:///org/gnome/Shell/Extensions/js/extensions/prefs.js';
+import {gettext as _, ngettext} from 'gettext';
 
 import * as Ewelink from '../lib/ewelink.js';
 import * as EwelinkHome from '../lib/ewelink-home.js';
 import * as Secrets from '../lib/secrets.js';
-import {CredentialRows, deviceCount, helpRow, renameButton, setGroupIcon, setSkipped, skippedIn} from './common.js';
+import {CredentialRows, deviceCount, helpRow, setGroupIcon, setSkipped, skippedIn} from './common.js';
 import {FoldGroup} from './fold.js';
 
 const EWELINK_DEV_URL = 'https://dev.ewelink.cc/';
@@ -89,9 +89,6 @@ class EwelinkGroup extends FoldGroup {
                     more.length > 0 ? ngettext('%d channel', '%d channels', more.length + 1).format(more.length + 1) : null,
                     unit.id].filter(Boolean).join(' · '), -1),
             });
-            // Channels of a multi-channel switch are renamed on the Devices page.
-            if (more.length === 0)
-                row.add_suffix(renameButton(this._settings, first.did, name, this));
             const remove = new Gtk.Button({
                 icon_name: 'user-trash-symbolic',
                 tooltip_text: _('Remove'),
