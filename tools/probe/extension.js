@@ -76,22 +76,27 @@ export default class Probe extends Extension {
             settings_schema: source.lookup('org.gnome.shell.extensions.nook', false),
         });
 
+        // Devices are the app's settings; nested-session.sh compiled its schema.
+        const appSource = Gio.SettingsSchemaSource.new_from_directory(GLib.getenv('NOOK_APP_SCHEMAS'),
+            Gio.SettingsSchemaSource.get_default(), false);
+        const app = new Gio.Settings({settings_schema: appSource.lookup('io.github.epogonii.nook-app', false)});
         try {
-            const cast = await import(nook.dir.get_child('lib').get_child('cast-home.js').get_uri());
-            settings.set_string('cast-speakers', JSON.stringify(await cast.discover(3000)));
+            const sources = Gio.File.new_for_path(GLib.getenv('NOOK_APP'));
+            const cast = await import(sources.resolve_relative_path('src/lib/cast-home.js').get_uri());
+            app.set_string('cast-speakers', JSON.stringify(await cast.discover(3000)));
         } catch (e) {
             console.log(`nook probe: no speakers: ${e.message}`);
         }
 
-        settings.set_string('gree-units', JSON.stringify([{
+        app.set_string('gree-units', JSON.stringify([{
             mac: 'f4911e000001', ip: '127.0.0.1', name: 'Fake AC',
             key: '0123456789abcdef', cipher: 'ecb',
         }]));
         // ip 'test' makes lib/tapo.js treat it as a test camera (feed.js --test).
-        settings.set_string('tapo-cameras', JSON.stringify([{
+        app.set_string('tapo-cameras', JSON.stringify([{
             id: 'test', ip: 'test', name: 'Test camera', model: 'C200',
         }]));
-        settings.set_string('tvs', JSON.stringify([{
+        app.set_string('tvs', JSON.stringify([{
             id: 'probe', brand: 'panasonic', name: '49FX740_Series', model: 'Panasonic VIErA',
             ip: '192.168.100.46', mac: null,
         }]));

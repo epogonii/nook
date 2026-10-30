@@ -9,7 +9,7 @@ import {gettext as _, pgettext} from 'resource:///org/gnome/shell/extensions/ext
 import * as PopupMenu from 'resource:///org/gnome/shell/ui/popupMenu.js';
 
 import * as Scenes from '../lib/scenes.js';
-import {WHITE} from '../lib/spec-home.js';
+import {WHITE} from '../lib/color.js';
 import {ColorWheel, paintOf, rgbOf, swatchRow} from './color.js';
 import {sensorKind, whenText} from './events.js';
 import {ALARM, freeze, heroOf, wordLabel} from './hero.js';

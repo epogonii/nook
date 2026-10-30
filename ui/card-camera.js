@@ -9,13 +9,34 @@ import St from 'gi://St';
 import {gettext as _} from 'resource:///org/gnome/shell/extensions/extension.js';
 import * as Main from 'resource:///org/gnome/shell/ui/main.js';
 
-import * as Secrets from '../lib/secrets.js';
-import {OnvifError} from '../lib/onvif.js';
-import {parseCameras} from '../lib/tapo.js';
-import {CameraApi, TapoError, WRONG_PASSWORD} from '../lib/tapo-local.js';
 import {CameraView, NO_GSTREAMER, NO_PLUGIN, Panner, REFUSED, panButtons} from './camera.js';
+import {CameraError, OnvifError, TapoError, WRONG_PASSWORD} from './errors.js';
 import {VERTICAL, readSetting} from './text.js';
 import {optimistic, skeletonLines} from './widgets.js';
+
+function saveSnapshot(folder, file, bytes) {
+    return new Promise((resolve, reject) => {
+        folder.make_directory_async(GLib.PRIORITY_DEFAULT, null, (_folder, made) => {
+            try {
+                folder.make_directory_finish(made);
+            } catch (e) {
+                if (!e.matches(Gio.IOErrorEnum, Gio.IOErrorEnum.EXISTS)) {
+                    reject(e);
+                    return;
+                }
+            }
+            file.replace_contents_bytes_async(new GLib.Bytes(bytes), null, false, Gio.FileCreateFlags.NONE, null,
+                (_file, replaced) => {
+                    try {
+                        file.replace_contents_finish(replaced);
+                        resolve();
+                    } catch (e) {
+                        reject(e);
+                    }
+                });
+        });
+    });
+}
 
 export class CameraCard {
     async _openCameraCard(device) {
@@ -24,42 +45,46 @@ export class CameraCard {
         this._title.text = readSetting(this._settings, 'names')[device.did] || device.name;
         this._clear();
 
-        let account = null;
-        let controls;
         const toSettings = [_('Settings…'), () => {
             this._closeMenu();
             this._openPreferences(`accounts-tapo ${device.did}`);
         }];
-        if (device.test) {
-            controls = device.source.controls(device);
-        } else if (!device.tapo && !device.xaddr) {
+        let account;
+        try {
+            account = await device.source.account(device);
+        } catch (e) {
+            console.debug(`nook: keyring: ${e.message}`);
+            account = 'none';
+        }
+        if (this._card !== device)
+            return;
+        if (account === 'unknown') {
             this._message(_('Search for cameras again in Settings, under Cameras, so Nook learns how to reach this one.'), toSettings);
             return;
-        } else {
-            let saved = null;
-            try {
-                saved = await Secrets.lookup(device.source.secret(device));
-            } catch (e) {
-                console.debug(`nook: keyring: ${e.message}`);
-            }
-            if (this._card !== device)
-                return;
-            if (!saved) {
-                this._message(device.tapo
-                    ? _('Add the camera account from the Tapo app in Settings, under Cameras.')
-                    : _('Add the login of this camera in Settings, under Cameras.'), toSettings);
-                return;
-            }
-            let user, password;
-            try {
-                ({user, password} = JSON.parse(saved));
-            } catch {
-                this._message(_('The saved camera account could not be read. Save it again in Settings, under Cameras.'));
-                return;
-            }
-            account = {user, password};
-            controls = device.source.controls(device, user, password);
         }
+        if (account === 'none') {
+            this._message(device.tapo
+                ? _('Add the camera account from the Tapo app in Settings, under Cameras.')
+                : _('Add the login of this camera in Settings, under Cameras.'), toSettings);
+            return;
+        }
+        if (account === 'unreadable') {
+            this._message(_('The saved camera account could not be read. Save it again in Settings, under Cameras.'));
+            return;
+        }
+        let controls;
+        try {
+            controls = await device.source.controls(device);
+        } catch (e) {
+            if (this._card === device)
+                this._message(e.message);
+            return;
+        }
+        if (this._card !== device) {
+            this._app.release(controls);
+            return;
+        }
+        this._cameraControls = controls;
 
         const view = new CameraView(() => device.source.refused(device));
         this._body.add_child(view);
@@ -68,9 +93,9 @@ export class CameraCard {
         if (!device.test && device.source.isRefused(device))
             view.showRefused();
         else if (device.test)
-            view.start(this._path, null);
+            view.start(this._app, device);
         else
-            this._watchCamera(device, view, account, controls).catch(logError);
+            this._watchCamera(device, view, controls).catch(logError);
 
         const row = new St.BoxLayout({style_class: 'nook-card-row'});
         const about = [device.model.replace(/^tapo /, 'Tapo '), device.test ? '' : device.ip].filter(Boolean).join(' · ');
@@ -83,17 +108,16 @@ export class CameraCard {
         info.clutter_text.ellipsize = Pango.EllipsizeMode.END;
         row.add_child(info);
         const snapshot = this._addRoundButton(row, 'camera-photo-symbolic', _('Take a Snapshot'), () => {
-            this._takeSnapshot(device, account, view, snapshot).catch(logError);
+            this._takeSnapshot(device, view, snapshot).catch(logError);
         });
         this._body.add_child(row);
         this._addPanButtons(device, view, controls, row, info).catch(logError);
         this._addCameraControls(device, view).catch(logError);
     }
 
-    async _watchCamera(device, view, account, controls) {
+    async _watchCamera(device, view, controls) {
         try {
-            const {live, still} = await device.source.streams(device, controls, this._cancellable);
-            Object.assign(account, {url: live, still});
+            await device.source.streams(device, controls, this._cancellable);
         } catch (e) {
             if (e.matches?.(Gio.IOErrorEnum, Gio.IOErrorEnum.CANCELLED) || this._camera !== view)
                 return;
@@ -108,59 +132,43 @@ export class CameraCard {
             return;
         }
         if (this._camera === view)
-            view.start(this._path, account);
+            view.start(this._app, device);
     }
 
-    async _takeSnapshot(device, account, view, button) {
+    async _takeSnapshot(device, view, button) {
         if (!device.test && device.source.isRefused(device)) {
             view.showRefused();
             return;
         }
-        // The camera has not said where its stream is yet.
-        if (account && !account.still)
-            return;
         button.reactive = false;
         button.opacity = 110;
         const name = readSetting(this._settings, 'names')[device.did] || device.name;
         try {
+            const jpeg = await this._app.still(device.did);
             const pictures = GLib.get_user_special_dir(GLib.UserDirectory.DIRECTORY_PICTURES) ?? GLib.get_home_dir();
             const folder = Gio.File.new_for_path(GLib.build_filenamev([pictures, 'Nook']));
             const stamp = GLib.DateTime.new_now_local().format('%Y-%m-%d %H-%M-%S');
             const file = folder.get_child(`${name.replaceAll('/', '-')} ${stamp}.jpg`);
-            const argv = ['gjs', '-m', `${this._path}/feed.js`, '--still', file.get_path()];
-            if (!account)
-                argv.push('--test');
-            const process = Gio.Subprocess.new(argv, Gio.SubprocessFlags.STDIN_PIPE |
-                Gio.SubprocessFlags.STDOUT_SILENCE | Gio.SubprocessFlags.STDERR_SILENCE);
-            const input = account ? `${JSON.stringify({...account, url: account.still})}\n` : null;
-            await new Promise((resolve, reject) => {
-                process.communicate_utf8_async(input, null, (_process, result) => {
-                    try {
-                        resolve(process.communicate_utf8_finish(result));
-                    } catch (e) {
-                        reject(e);
-                    }
-                });
-            });
-            const status = process.get_exit_status();
+            await saveSnapshot(folder, file, jpeg);
+            if (!this._gone)
+                this._alerts.snapshotSaved(name, file);
+        } catch (e) {
             if (this._gone)
                 return;
-            if (status === 0)
-                this._alerts.snapshotSaved(name, file);
-            else if (status === NO_GSTREAMER)
+            if (!(e instanceof CameraError) && !(e instanceof GLib.Error))
+                throw e;
+            if (e.code === NO_GSTREAMER) {
                 Main.notifyError(name, _('GStreamer is needed to show the picture.'));
-            else if (status === NO_PLUGIN)
+            } else if (e.code === NO_PLUGIN) {
                 Main.notifyError(name, _('The picture needs a GStreamer plugin that is not installed.'));
-            else if (status === REFUSED) {
+            } else if (e.code === REFUSED) {
                 device.source.refused(device);
                 if (this._camera === view)
                     view.showRefused();
-            } else
-                Main.notifyError(name, _('The camera sent no picture to save.'));
-        } catch (e) {
-            if (!(e instanceof GLib.Error))
-                throw e;
-            Main.notifyError(name, e.message);
+            } else if (e.code !== 'no-stream') {
+                // 'no-stream': the camera hasn't said where its stream is yet.
+                Main.notifyError(name, e instanceof CameraError ? _('The camera sent no picture to save.') : e.message);
+            }
         } finally {
             if (this._camera === view) {
                 button.reactive = true;
@@ -175,14 +183,6 @@ export class CameraCard {
             this._addDeviceInfo(device);
             return;
         }
-        let saved = null;
-        try {
-            saved = await Secrets.lookup('tapo-admin');
-        } catch (e) {
-            console.debug(`nook: keyring: ${e.message}`);
-        }
-        if (this._camera !== view)
-            return;
         this._body.add_child(new St.Label({style_class: 'nook-room', text: _('Camera')}));
         const section = new St.BoxLayout({...VERTICAL, style_class: 'nook-card-section'});
         this._body.add_child(section);
@@ -193,11 +193,19 @@ export class CameraCard {
             label.clutter_text.line_wrap = true;
             section.add_child(label);
         };
-        let password = null;
+        section.add_child(skeletonLines());
+        let api;
         try {
-            password = saved ? JSON.parse(saved).password : null;
-        } catch {}
-        if (!password) {
+            api = await this._app.open('camera-api', {did: device.did});
+        } catch (e) {
+            if (this._camera !== view)
+                return;
+            if (!(e instanceof TapoError) && !(e instanceof GLib.Error))
+                throw e;
+            if (e.code !== 'no-password') {
+                say(e.message);
+                return;
+            }
             say(_('Privacy mode, the light, night vision and the siren need your TP-Link password, in Settings under Cameras.'));
             const settings = new St.Button({style_class: 'nook-chip', label: _('Settings…'), can_focus: true, x_align: Clutter.ActorAlign.START});
             settings.connect('clicked', () => {
@@ -207,10 +215,11 @@ export class CameraCard {
             section.add_child(settings);
             return;
         }
-
-        section.destroy_all_children();
-        section.add_child(skeletonLines());
-        const api = this._cameraApi = new CameraApi(device.ip, password);
+        if (this._camera !== view) {
+            this._app.release(api);
+            return;
+        }
+        this._cameraApi = api;
         let state;
         try {
             state = await api.read();
@@ -346,19 +355,5 @@ export class CameraCard {
         // After adding buttons: Clutter passes text direction to children only when set.
         pad.set_text_direction(Clutter.TextDirection.LTR);
         row.insert_child_above(pad, info);
-    }
-
-    // A camera found at a new address keeps it, without reloading the menu.
-    _keepCameras(tapo, moved) {
-        if (tapo !== this._tapo)
-            return;
-        const cameras = parseCameras(readSetting(this._settings, 'tapo-cameras'))
-            .map(camera => ({...camera, ...moved.find(m => m.id === camera.id)}));
-        this._keepingCameras = true;
-        try {
-            this._settings.set_string('tapo-cameras', JSON.stringify(cameras));
-        } finally {
-            this._keepingCameras = false;
-        }
     }
 }

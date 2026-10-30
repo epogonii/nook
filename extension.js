@@ -3,23 +3,46 @@
 import Gio from 'gi://Gio';
 import GLib from 'gi://GLib';
 import GObject from 'gi://GObject';
+import Shell from 'gi://Shell';
 
 import {Extension, gettext as _} from 'resource:///org/gnome/shell/extensions/extension.js';
 import * as Main from 'resource:///org/gnome/shell/ui/main.js';
 import * as QuickSettings from 'resource:///org/gnome/shell/ui/quickSettings.js';
 
-import {clearPacing} from './lib/mihome.js';
-import * as Tapo from './lib/tapo.js';
 import * as Timers from './lib/timers.js';
 import {Alerts} from './ui/alerts.js';
 import {clearFanWords} from './ui/climate.js';
 import {clearNameWords} from './ui/humanize.js';
 import {NookButton} from './ui/menu.js';
+import {App, DEVICE_KEYS} from './ui/remote.js';
 import {beacons} from './ui/rows.js';
 import {clearWords, readSetting} from './ui/text.js';
 
 // ms without network-changed before connections are renewed.
 const NETWORK_SETTLE = 3000;
+// ms before reattaching to an app that stopped in use.
+const APP_RESTART = 3000;
+
+// Apps that have sent a notification, as [id, name]: GNOME keeps settings for each of them,
+// and their ids are what a notification source's policy calls them.
+function notifyingApps() {
+    const schemas = Gio.SettingsSchemaSource.get_default();
+    if (!schemas?.lookup('org.gnome.desktop.notifications', true) ||
+        !schemas.lookup('org.gnome.desktop.notifications.application', true))
+        return [];
+    const system = Shell.AppSystem.get_default();
+    const apps = [];
+    for (const child of new Gio.Settings({schema_id: 'org.gnome.desktop.notifications'}).get_strv('application-children')) {
+        const desktop = new Gio.Settings({
+            schema_id: 'org.gnome.desktop.notifications.application',
+            path: `/org/gnome/desktop/notifications/application/${child}/`,
+        }).get_string('application-id');
+        const app = system.lookup_app(desktop);
+        if (app)
+            apps.push([desktop.replace(/\.desktop$/, ''), app.get_name()]);
+    }
+    return apps.sort((a, b) => a[1].localeCompare(b[1]));
+}
 
 const NookToggle = GObject.registerClass(
 class NookToggle extends QuickSettings.QuickMenuToggle {
@@ -55,16 +78,23 @@ class NookIndicator extends QuickSettings.SystemIndicator {
 export default class NookExtension extends Extension {
     enable() {
         this._settings = this.getSettings();
-        this._alerts = new Alerts(this._settings, this.path);
+        this._app = new App();
+        this._app.onReloaded = () => this._button?.reload().catch(logError);
+        this._restarting = 0;
+        this._app.onLost = () => this._restartSoon();
+        this._alerts = new Alerts(this._settings, this.path, this._app);
         this._alerts.start();
+        // The settings live here and are set in the app's window, which gets all of them
+        // whenever it starts, and each change after that.
+        this._app.onUi = values => this._takeUi(values);
+        this._app.onUiWanted = () => this._sendUi();
+        this._app.onAppeared = () => this._sendUi();
+        this._settings.connectObject('changed', (_settings, key) => {
+            if (!DEVICE_KEYS.includes(key))
+                this._app.setUi({[key]: this._settings.get_value(key)});
+        }, this);
+        this._sendUi();
 
-        // prefs.js writes this on login/logout; the keyring has no usable change signal.
-        this._settings.connectObject(
-            'changed::xiaomi-user-id', () => this._button?.reload().catch(logError),
-            'changed::ewelink-region', () => this._button?.reload().catch(logError),
-            'changed::hass-server', () => this._button?.reload().catch(logError),
-            'changed::smartlife-user', () => this._button?.reload().catch(logError),
-            this);
         this._placing = 0;
         const placeInPanel = () => {
             if (readSetting(this._settings, 'location') === 'panel')
@@ -103,6 +133,30 @@ export default class NookExtension extends Extension {
             this._lightUp();
     }
 
+    _sendUi() {
+        const values = {};
+        for (const key of this._settings.settings_schema.list_keys()) {
+            if (!DEVICE_KEYS.includes(key))
+                values[key] = this._settings.get_value(key);
+        }
+        values['$apps'] = new GLib.Variant('a(ss)', notifyingApps());
+        this._app.setUi(values);
+    }
+
+    // Only keys of this schema, of their own type and range.
+    _takeUi(values) {
+        const schema = this._settings.settings_schema;
+        for (const [key, value] of Object.entries(values)) {
+            if (DEVICE_KEYS.includes(key) || !schema.has_key(key))
+                continue;
+            const spec = schema.get_key(key);
+            if (!value.get_type().equal(spec.get_value_type()) || !spec.range_check(value))
+                continue;
+            if (!this._settings.get_value(key).equal(value))
+                this._settings.set_value(key, value);
+        }
+    }
+
     _lightUp() {
         this._litUp = true;
         this._button?.lightUp(readSetting(this._settings, 'login-lights'));
@@ -139,11 +193,12 @@ export default class NookExtension extends Extension {
         }
         if (this._button)
             return;
-        const openPreferences = (target = '') => {
-            this._settings.set_string('prefs-target', target);
-            Main.extensionManager.openExtensionPrefs(this.uuid, '', {});
+        // Everything is set up in the app's window; the prefs only say where to get it.
+        const openPreferences = (target = 'top-bar') => {
+            if (!this._app.openWindow(target))
+                Main.extensionManager.openExtensionPrefs(this.uuid, '', {});
         };
-        this._button = new NookButton(this._settings, openPreferences, this.path, this._alerts);
+        this._button = new NookButton(this._settings, openPreferences, this.path, this._alerts, this._app);
         if (readSetting(this._settings, 'location') === 'quick-settings') {
             this._indicator = new NookIndicator(this._button, this.path);
             Main.panel.statusArea.quickSettings.addExternalIndicator(this._indicator);
@@ -179,6 +234,19 @@ export default class NookExtension extends Extension {
         });
     }
 
+    // The bus starts the app again on the next call.
+    _restartSoon() {
+        if (this._restarting)
+            return;
+        this._restarting = GLib.timeout_add(GLib.PRIORITY_DEFAULT, APP_RESTART, () => {
+            this._restarting = 0;
+            this._alerts.stop();
+            this._alerts.start();
+            this._button?.reload().catch(logError);
+            return GLib.SOURCE_REMOVE;
+        });
+    }
+
     // Stays enabled in unlock-dialog only for gateway leak/smoke alerts while locked;
     // the menu, and with it every cloud call, is dropped on lock and rebuilt on unlock.
     disable() {
@@ -188,6 +256,9 @@ export default class NookExtension extends Extension {
         if (this._networking)
             GLib.source_remove(this._networking);
         this._networking = 0;
+        if (this._restarting)
+            GLib.source_remove(this._restarting);
+        this._restarting = 0;
         Gio.NetworkMonitor.get_default().disconnectObject(this);
         Main.layoutManager.disconnectObject(this);
         Main.messageTray.disconnectObject(this);
@@ -199,14 +270,14 @@ export default class NookExtension extends Extension {
         this._dropButton();
         this._alerts?.stop();
         this._alerts = null;
-        // After the button: the sources it keeps for a light mid-flash are aborted here.
+        // After the button: lets go of homes kept for a light mid-flash.
         Timers.removeAll();
+        this._app?.destroy();
+        this._app = null;
         this._settings = null;
         beacons.clear();
         clearWords();
         clearFanWords();
         clearNameWords();
-        clearPacing();
-        Tapo.clearRefusals();
     }
 }

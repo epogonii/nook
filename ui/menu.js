@@ -13,7 +13,7 @@ import * as PanelMenu from 'resource:///org/gnome/shell/ui/panelMenu.js';
 import * as PopupMenu from 'resource:///org/gnome/shell/ui/popupMenu.js';
 
 import {arrange} from '../lib/arrange.js';
-import {XiaomiError} from '../lib/xiaomi.js';
+import {BUS_NAME} from './bridge.js';
 import {CameraCard} from './card-camera.js';
 import {ClimateCard} from './card-climate.js';
 import {ControlsCard} from './card-controls.js';
@@ -24,12 +24,13 @@ import {TvCard} from './card-tv.js';
 import {VacuumCard} from './card-vacuum.js';
 import {Card} from './card.js';
 import {TileDrop} from './drop.js';
+import {XiaomiError} from './errors.js';
 import {WrapLayout} from './layouts.js';
 import {MenuRead} from './menu-read.js';
 import {MenuLights} from './menu-lights.js';
 import {MenuView} from './menu-view.js';
 import {isBluetooth} from './rows.js';
-import {CHIP_SPACING, CLOUD_AIRCONS, VERTICAL, readSetting} from './text.js';
+import {CHIP_SPACING, VERTICAL, readSetting} from './text.js';
 import {skeletonTile} from './tiles.js';
 import {Glyph, SceneButton, skeletonLines} from './widgets.js';
 
@@ -46,11 +47,12 @@ const CARD_TICK = 1;
 
 export const NookButton = GObject.registerClass(
 class NookButton extends PanelMenu.Button {
-    _init(settings, openPreferences, path, alerts) {
+    _init(settings, openPreferences, path, alerts, app) {
         super._init(0.5, _('Nook'));
         this._settings = settings;
         this._path = path;
         this._alerts = alerts;
+        this._app = app;
         this._beacons = null;
         this._hearing = 0;
         this._unheard = new Set();
@@ -72,8 +74,6 @@ class NookButton extends PanelMenu.Button {
         this._smartlife = null;
         this._miScenes = null;
         this._clouds = [];
-        this._keepingSpeaker = false;
-        this._keepingCameras = false;
         this._loginNote = null;
         this._tiles = [];
         // Offline devices when the tiles were last drawn; null while something else shows.
@@ -295,26 +295,6 @@ class NookButton extends PanelMenu.Button {
             'changed::groups', () => this._render(),
             'changed::names', () => this._render(),
             'changed::icons', () => this._render(),
-            'changed::gree-units', () => this.reload().catch(logError),
-            'changed::aircons', () => this.reload().catch(logError),
-            'changed::tapo-cameras', () => {
-                if (!this._keepingCameras)
-                    this.reload().catch(logError);
-            },
-            'changed::cast-speakers', () => {
-                if (!this._keepingSpeaker)
-                    this.reload().catch(logError);
-            },
-            'changed::tvs', () => this.reload().catch(logError),
-            'changed::sonoff-switches', () => this.reload().catch(logError),
-            'changed::shelly-devices', () => this.reload().catch(logError),
-            'changed::ewelink-devices', () => this.reload().catch(logError),
-            'changed::hue-bridges', () => this.reload().catch(logError),
-            'changed::hue-devices', () => this.reload().catch(logError),
-            'changed::hass-devices', () => this.reload().catch(logError),
-            'changed::homekit-accessories', () => this.reload().catch(logError),
-            'changed::smartlife-devices', () => this.reload().catch(logError),
-            ...CLOUD_AIRCONS.flatMap(brand => [`changed::${brand.id}-devices`, () => this.reload().catch(logError)]),
             'changed::extra-tiles', () => {
                 this._syncExtras();
                 this._render();
@@ -536,8 +516,10 @@ class NookButton extends PanelMenu.Button {
         this._stopLightUp();
         this._stopBeacons();
         this._stopCardTimer();
-        this._cameraApi?.abort();
+        this._app.release(this._cameraApi);
         this._cameraApi = null;
+        this._app.release(this._cameraControls);
+        this._cameraControls = null;
         if (this._sirenTimer)
             GLib.source_remove(this._sirenTimer);
         this._sirenTimer = 0;
@@ -561,7 +543,7 @@ class NookButton extends PanelMenu.Button {
         this._settings.disconnectObject(this);
         this._cancellable?.cancel();
         this._cancellable = null;
-        this._dropSources();
+        this._letGo();
         if (this._pushSync)
             GLib.source_remove(this._pushSync);
         this._pushSync = 0;
@@ -570,8 +552,10 @@ class NookButton extends PanelMenu.Button {
     _clear() {
         this._camera?.stop();
         this._camera = null;
-        this._cameraApi?.abort();
+        this._app.release(this._cameraApi);
         this._cameraApi = null;
+        this._app.release(this._cameraControls);
+        this._cameraControls = null;
         if (this._sirenTimer)
             GLib.source_remove(this._sirenTimer);
         this._sirenTimer = 0;
@@ -634,6 +618,20 @@ class NookButton extends PanelMenu.Button {
                 row.add_child(skeletonTile(shape));
             this._body.add_child(row);
         }
+    }
+
+    _showNoApp() {
+        this._message(_('Nook needs the Nook app, which talks to the devices outside GNOME Shell.'),
+            [_('Install the Nook App…'), () => {
+                this._closeMenu();
+                const context = global.create_app_launch_context(0, -1);
+                // appstream:// needs a software store; Flathub's page otherwise.
+                try {
+                    Gio.AppInfo.launch_default_for_uri(`appstream://${BUS_NAME}`, context);
+                } catch {
+                    Gio.AppInfo.launch_default_for_uri(`https://flathub.org/apps/${BUS_NAME}`, context);
+                }
+            }]);
     }
 
     // Mi Home is one source of many: only a login that was there and is lost gets a note.

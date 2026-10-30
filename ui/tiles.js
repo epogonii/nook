@@ -11,17 +11,14 @@ import {gettext as _, ngettext} from 'resource:///org/gnome/shell/extensions/ext
 import * as DND from 'resource:///org/gnome/shell/ui/dnd.js';
 import * as Main from 'resource:///org/gnome/shell/ui/main.js';
 
-import {TvError, TvHome} from '../lib/tv-home.js';
 import * as Glyphs from '../lib/glyphs.js';
 import * as Scenes from '../lib/scenes.js';
-import {ClimateError, MODES} from '../lib/aircon-home.js';
-import {SonoffError, SonoffHome} from '../lib/sonoff.js';
-import {EwelinkError} from '../lib/ewelink.js';
-import {SpecError} from '../lib/spec-home.js';
-import {XiaomiError} from '../lib/xiaomi.js';
+import {MODES} from '../lib/climate.js';
 import {climateLook} from './climate.js';
+import {ClimateError, EwelinkError, SonoffError, SpecError, TvError, XiaomiError} from './errors.js';
 import {castAllows, castToggle, heroOf, mediaColor, showCastPlay} from './hero.js';
 import {humanize} from './humanize.js';
+import {homeKind} from './remote.js';
 import {isBluetooth, playingNow, stateText} from './rows.js';
 import {PRIMARY_SECONDARY, VERTICAL, booleanText, deviceType, sonoffTrouble, specTrouble, statusWorking, tvTrouble, volumeIcon} from './text.js';
 import {Glyph, VolumeSlider, skeletonBar, skeletonLine} from './widgets.js';
@@ -156,8 +153,8 @@ export function troubleText(device, e) {
         !(e instanceof SonoffError) && !(e instanceof EwelinkError) && !(e instanceof SpecError) &&
         !(e instanceof GLib.Error))
         throw e;
-    return device.source instanceof TvHome ? tvTrouble(e)
-        : device.source instanceof SonoffHome ? sonoffTrouble(e)
+    return homeKind(device.source) === 'tv' ? tvTrouble(e)
+        : homeKind(device.source) === 'sonoff' ? sonoffTrouble(e)
             : e instanceof SpecError ? specTrouble(e) : e.message;
 }
 

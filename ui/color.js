@@ -7,7 +7,7 @@ import St from 'gi://St';
 
 import {gettext as _} from 'resource:///org/gnome/shell/extensions/extension.js';
 
-import {PRESETS, WHITE, hsvToRgb, nearestRgb, rgbToHsv} from '../lib/spec-home.js';
+import {PRESETS, WHITE, hsvToRgb, nearestRgb, rgbToHsv} from '../lib/color.js';
 import {NUMBER_FORMATS} from './humanize.js';
 import {choiceText} from './text.js';
 import {Glyph} from './widgets.js';

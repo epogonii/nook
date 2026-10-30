@@ -3,7 +3,7 @@
 import {gettext as _} from 'resource:///org/gnome/shell/extensions/extension.js';
 
 import * as Scenes from '../lib/scenes.js';
-import {MODES} from '../lib/aircon-home.js';
+import {MODES} from '../lib/climate.js';
 import {choiceText, modeText} from './text.js';
 
 // The colour scale; a unit's own range is in its caps.

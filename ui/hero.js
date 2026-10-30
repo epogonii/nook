@@ -8,7 +8,7 @@ import {gettext as _} from 'resource:///org/gnome/shell/extensions/extension.js'
 
 import * as Glyphs from '../lib/glyphs.js';
 import * as Scenes from '../lib/scenes.js';
-import {WHITE} from '../lib/spec-home.js';
+import {WHITE} from '../lib/color.js';
 import {climateLook, climateMode} from './climate.js';
 import {colorName, rgbOf} from './color.js';
 import {whenText} from './events.js';

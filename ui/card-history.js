@@ -7,8 +7,8 @@ import St from 'gi://St';
 import {gettext as _} from 'resource:///org/gnome/shell/extensions/extension.js';
 import * as PopupMenu from 'resource:///org/gnome/shell/ui/popupMenu.js';
 
-import {XiaomiError} from '../lib/xiaomi.js';
 import {Chart} from './chart.js';
+import {XiaomiError} from './errors.js';
 import {alertsOn, sensorRules, whenText} from './events.js';
 import {HISTORY_SPAN, historyKeys} from './props.js';
 import {VERTICAL, numberFormat, readSetting} from './text.js';

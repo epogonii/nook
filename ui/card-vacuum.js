@@ -8,8 +8,8 @@ import St from 'gi://St';
 import {gettext as _} from 'resource:///org/gnome/shell/extensions/extension.js';
 
 import {MapError, decodeMap, parsePath} from '../lib/vacuum-map.js';
-import {XiaomiError} from '../lib/xiaomi.js';
 import * as Timers from '../lib/timers.js';
+import {XiaomiError} from './errors.js';
 import {ALARM, choiceOf, vacuumMode, wordLabel} from './hero.js';
 import {humanize} from './humanize.js';
 import {fillStats, spanText, statFlow} from './rows.js';

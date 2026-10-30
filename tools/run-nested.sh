@@ -16,7 +16,7 @@
 # NOOK_SCHEME=prefer-dark selects the dark style. The window needs mutter-devkit.
 set -euo pipefail
 
-SHOTS='card-camera snapshot card-climate card-climate-warm bar tabs-type tabs-accent tabs-room grid-type rooms-type control-type card-fan card-vacuum card-vacuum-2 card-vacuum-3 card-speaker card-tv prefs prefs-Devices prefs-Accounts prefs-Find notify locked'
+SHOTS='card-camera snapshot card-climate card-climate-warm bar tabs-type tabs-accent tabs-room grid-type rooms-type control-type card-fan card-vacuum card-vacuum-2 card-vacuum-3 card-speaker card-tv prefs notify locked'
 
 # Everything runs inside main() so bash parses the whole file first: this script is
 # often edited while a window it started is still open.
@@ -92,7 +92,7 @@ main() {
 
     NOOK_USER_ID=$user_id NOOK_STATE=$keep_state dbus-run-session -- "$src/tools/nested-session.sh" \
         "$nested" "$real_bus" "$src" "$mode" "$shots" "$enabled" "${shell_args[@]}" 2>&1 |
-        grep --line-buffered -E "^'|did not answer|nook|keyring-copy|prefs-shot|JS ERROR|JS WARNING|TypeError|ReferenceError|SyntaxError|Gjs-CRITICAL|Gjs-WARNING|Gtk-CRITICAL|St-CRITICAL|Clutter-CRITICAL" || true
+        grep --line-buffered -E "^'|did not answer|nook|keyring-copy|JS ERROR|JS WARNING|TypeError|ReferenceError|SyntaxError|Gjs-CRITICAL|Gjs-WARNING|Gtk-CRITICAL|St-CRITICAL|Clutter-CRITICAL" || true
 }
 
 keep() {

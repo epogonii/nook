@@ -22,6 +22,14 @@ main() {
 
     printf %s "$DBUS_SESSION_BUS_ADDRESS" > "$nested/bus"
 
+    # The devices are the Nook app's: with NOOK_APP set to its sources, run it on this bus.
+    if [ -n "${NOOK_APP:-}" ]; then
+        mkdir -p "$nested/app-schemas"
+        glib-compile-schemas --targetdir="$nested/app-schemas" "$NOOK_APP/data"
+        GSETTINGS_SCHEMA_DIR="$nested/app-schemas" gjs -m "$NOOK_APP/src/main.js" --gapplication-service &
+        export NOOK_APP_SCHEMAS=$nested/app-schemas
+    fi
+
     if [ -n "${NOOK_STATE:-}" ] && [ -s "$NOOK_STATE/nook.dconf" ]; then
         dconf load /org/gnome/shell/extensions/nook/ < "$NOOK_STATE/nook.dconf" || true
     fi
@@ -45,12 +53,6 @@ main() {
         for _ in $(seq 1 150); do
             [ -e "$shots/done" ] && break
             sleep 1
-        done
-        local page
-        for page in Devices Accounts Find; do
-            WAYLAND_DISPLAY="nook-nested-$$" \
-                GI_TYPELIB_PATH=/usr/lib64/gnome-shell/girepository-1.0:/usr/lib64/gnome-shell \
-                gjs -m "$src/tools/prefs-shot.js" "$shots/prefs-$page.png" "$page" || true
         done
         ;;
     *)

@@ -12,7 +12,7 @@ import {gettext as _} from 'resource:///org/gnome/shell/extensions/extension.js'
 import {SHELL_MAJOR} from './text.js';
 import {skeletonBlock} from './widgets.js';
 
-// Must match NO_GSTREAMER, REFUSED and NO_PLUGIN in feed.js.
+// feed.js exit codes.
 export const NO_GSTREAMER = 2;
 export const REFUSED = 3;
 export const NO_PLUGIN = 4;
@@ -169,7 +169,8 @@ class CameraView extends St.Widget {
         });
         this._status.clutter_text.line_wrap = true;
         this.add_child(this._status);
-        this._process = null;
+        this._app = null;
+        this._feed = null;
         this._cancellable = null;
         this._onRefused = onRefused;
         this.connect('destroy', () => this.stop());
@@ -282,65 +283,42 @@ class CameraView extends St.Widget {
         this._show(text);
     }
 
-    start(path, account) {
+    start(app, device) {
         this.stop();
-        const argv = ['gjs', '-m', `${path}/feed.js`];
-        if (!account)
-            argv.push('--test');
-        let process;
-        try {
-            process = Gio.Subprocess.new(argv, Gio.SubprocessFlags.STDIN_PIPE |
-                Gio.SubprocessFlags.STDOUT_PIPE | Gio.SubprocessFlags.STDERR_SILENCE);
-        } catch (e) {
-            this._show(e.message);
-            return;
-        }
-        this._process = process;
         const cancellable = this._cancellable = new Gio.Cancellable();
-
-        // Credentials go over stdin, never argv. If the helper already exited, the write
-        // fails and wait_async below reports the exit.
-        const stdin = process.get_stdin_pipe();
-        const close = () => stdin.close_async(GLib.PRIORITY_DEFAULT, null, null);
-        if (account) {
-            const input = new GLib.Bytes(new TextEncoder().encode(`${JSON.stringify(account)}\n`));
-            stdin.write_bytes_async(input, GLib.PRIORITY_DEFAULT, null, (_stdin, result) => {
-                try {
-                    stdin.write_bytes_finish(result);
-                } catch (e) {
-                    console.debug(`nook: camera: ${e.message}`);
-                }
-                close();
-            });
-        } else {
-            close();
-        }
-
-        process.wait_async(cancellable, (_process, result) => {
-            try {
-                process.wait_finish(result);
-            } catch {
+        this._app = app;
+        app.openFeed(device.did, status => {
+            if (this._cancellable === cancellable)
+                this._ended(status);
+        }).then(({stream, feed}) => {
+            if (this._cancellable !== cancellable) {
+                app.closeFeed(feed);
+                stream.close(null);
                 return;
             }
-            if (this._process !== process)
-                return;
-            const status = process.get_exit_status();
-            if (status === NO_GSTREAMER)
-                this._show(_('GStreamer is needed to show the picture.'));
-            else if (status === NO_PLUGIN)
-                this._show(_('The picture needs a GStreamer plugin that is not installed.'));
-            else if (status === REFUSED) {
-                this.showRefused();
-                this._onRefused?.();
-            } else
-                this._show(_('The camera stopped sending its picture.'));
+            this._feed = feed;
+            const frames = new Gio.DataInputStream({base_stream: stream, buffer_size: 1 << 20});
+            this._readFrames(frames, cancellable).catch(e => {
+                if (!e.matches?.(Gio.IOErrorEnum, Gio.IOErrorEnum.CANCELLED))
+                    logError(e);
+            });
+        }).catch(e => {
+            if (this._cancellable === cancellable)
+                this._show(e.message);
         });
+    }
 
-        const stream = new Gio.DataInputStream({base_stream: process.get_stdout_pipe(), buffer_size: 1 << 20});
-        this._readFrames(stream, cancellable).catch(e => {
-            if (!e.matches?.(Gio.IOErrorEnum, Gio.IOErrorEnum.CANCELLED))
-                logError(e);
-        });
+    _ended(status) {
+        if (status === NO_GSTREAMER) {
+            this._show(_('GStreamer is needed to show the picture.'));
+        } else if (status === NO_PLUGIN) {
+            this._show(_('The picture needs a GStreamer plugin that is not installed.'));
+        } else if (status === REFUSED) {
+            this.showRefused();
+            this._onRefused?.();
+        } else {
+            this._show(_('The camera stopped sending its picture.'));
+        }
     }
 
     _show(text) {
@@ -369,7 +347,8 @@ class CameraView extends St.Widget {
     stop() {
         this._cancellable?.cancel();
         this._cancellable = null;
-        this._process?.force_exit();
-        this._process = null;
+        if (this._feed)
+            this._app.closeFeed(this._feed);
+        this._feed = null;
     }
 });

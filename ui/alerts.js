@@ -7,8 +7,6 @@ import {gettext as _} from 'resource:///org/gnome/shell/extensions/extension.js'
 import * as Main from 'resource:///org/gnome/shell/ui/main.js';
 import * as MessageTray from 'resource:///org/gnome/shell/ui/messageTray.js';
 
-import * as Gateway from '../lib/gateway.js';
-import {cachedDevices} from '../lib/mihome.js';
 import {showInFiles} from './camera.js';
 import {alertsOn, sensorKind, sensorRules} from './events.js';
 import {batteryShare} from './rows.js';
@@ -58,10 +56,13 @@ function reportText(kind, data) {
 
 // Gateway sensor events as notifications. The only part of Nook kept on the lock screen.
 export class Alerts {
-    constructor(settings, path) {
+    constructor(settings, path, app) {
         this._settings = settings;
+        this._app = app;
         this._icon = Gio.FileIcon.new(Gio.File.new_for_path(`${path}/icons/nook-symbolic.svg`));
-        this._listener = new Gateway.Listener(report => this._report(report).catch(logError));
+        this._listener = null;
+        this._stopped = true;
+        this._known = new Map();
         this._source = null;
         this._last = new Map();
         this._crossed = new Set();
@@ -71,27 +72,38 @@ export class Alerts {
     }
 
     state(sid) {
-        return this._listener.state(sid);
+        return this._listener?.state(sid) ?? null;
     }
 
     read(sid) {
-        return this._listener.read(sid);
+        return this._listener?.read(sid) ?? Promise.resolve(null);
     }
 
     start() {
-        try {
-            this._listener.start();
-        } catch (e) {
-            console.debug(`nook: gateway: ${e.message}`);
+        this._stopped = false;
+        this._start().catch(e => console.debug(`nook: gateway: ${e.message}`));
+    }
+
+    async _start() {
+        if (!this._listener) {
+            const listener = await this._app.open('gateway');
+            if (this._stopped || this._listener) {
+                this._app.release(listener);
+                return;
+            }
+            listener.onReport = report => this._report(report).catch(logError);
+            this._listener = listener;
         }
+        await this._listener.start();
     }
 
     get heard() {
-        return this._listener.heard;
+        return this._listener?.heard ?? false;
     }
 
-    async _report({sid, model, data, cmd}) {
+    async _report({sid, model, data, cmd, name, room}) {
         const did = `lumi.${sid}`;
+        this._known.set(did, {name, room});
         // Sub-device heartbeats repeat the state about hourly; only their voltage is news.
         if (cmd === 'heartbeat') {
             for (const [body, alarm] of this._checkRules(did, model, null, {voltage: data.voltage}))
@@ -108,15 +120,12 @@ export class Alerts {
             await this._tell(did, model, body, alarm);
     }
 
-    // Names come from the cached device list: no cloud requests from here, which also
-    // runs on the lock screen.
     async _tell(did, model, body, alarm) {
-        const devices = await cachedDevices(this._settings.get_string('xiaomi-user-id'));
-        if (!this._listener.running)
+        if (!this._listener?.running)
             return;
-        const device = devices.find(d => d.did === did);
-        const name = readSetting(this._settings, 'names')[did] || device?.name || model;
-        this._notify(did, name, device?.room ? `${body} · ${device.room}` : body, alarm);
+        const known = this._known.get(did);
+        const name = readSetting(this._settings, 'names')[did] || known?.name || model;
+        this._notify(did, name, known?.room ? `${body} · ${known.room}` : body, alarm);
     }
 
     // Each threshold notifies once per crossing and re-arms when the reading is back past
@@ -235,9 +244,14 @@ export class Alerts {
     }
 
     stop() {
+        this._stopped = true;
         for (const did of [...this._openTimers.keys()])
             this._stopTimer(did);
-        this._listener.stop();
+        if (this._listener) {
+            this._listener.stop().catch(e => console.debug(`nook: gateway: ${e.message}`));
+            this._app.release(this._listener);
+        }
+        this._listener = null;
         this._source?.destroy();
         this._source = null;
     }

@@ -9,11 +9,9 @@ import St from 'gi://St';
 import {gettext as _} from 'resource:///org/gnome/shell/extensions/extension.js';
 import * as Main from 'resource:///org/gnome/shell/ui/main.js';
 
-import {ClimateError, MODES} from '../lib/aircon-home.js';
-import {snapTemperature, specClimate} from '../lib/climate.js';
-import {SpecError} from '../lib/spec-home.js';
-import {XiaomiError} from '../lib/xiaomi.js';
+import {MODES, snapTemperature, specClimate} from '../lib/climate.js';
 import {CLIMATE_AIRFLOWS, CLIMATE_FANS, CLIMATE_MODES, CLIMATE_SIDES, CLIMATE_TOGGLES, MODE_GLYPHS, airflowChoice, climateLook, climateSpeed, climateStatus, climateToggle, climateView, fanText, swingsOnly} from './climate.js';
+import {ClimateError, SpecError, XiaomiError} from './errors.js';
 import {VERTICAL, modeText, numberFormat, readSetting, specTrouble} from './text.js';
 import {Glyph, Scene, TemperatureSlider} from './widgets.js';
 

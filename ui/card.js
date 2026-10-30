@@ -10,11 +10,9 @@ import {gettext as _} from 'resource:///org/gnome/shell/extensions/extension.js'
 import * as Main from 'resource:///org/gnome/shell/ui/main.js';
 import * as PopupMenu from 'resource:///org/gnome/shell/ui/popupMenu.js';
 
-import {SonoffError, SonoffHome} from '../lib/sonoff.js';
-import {EwelinkError} from '../lib/ewelink.js';
-import {SpecError} from '../lib/spec-home.js';
-import {XiaomiError} from '../lib/xiaomi.js';
+import {EwelinkError, SonoffError, SpecError, XiaomiError} from './errors.js';
 import {EVENT_KEYS} from './events.js';
+import {homeKind} from './remote.js';
 import {isBluetooth, setLive} from './rows.js';
 import {PRIMARY_SECONDARY, VERTICAL, deviceType, readSetting, sonoffTrouble, specTrouble} from './text.js';
 import {Glyph, optimistic} from './widgets.js';
@@ -257,7 +255,7 @@ export class Card {
                 throw e;
             if (this._gone)
                 return;
-            Main.notifyError(device.name, device.source instanceof SonoffHome ? sonoffTrouble(e)
+            Main.notifyError(device.name, homeKind(device.source) === 'sonoff' ? sonoffTrouble(e)
                 : e instanceof SpecError ? specTrouble(e) : e.message);
         }
         if (this._card === device)

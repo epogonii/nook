@@ -9,7 +9,7 @@ import St from 'gi://St';
 import {gettext as _} from 'resource:///org/gnome/shell/extensions/extension.js';
 import * as Main from 'resource:///org/gnome/shell/ui/main.js';
 
-import {CastError, parseSpeakers} from '../lib/cast-home.js';
+import {CastError} from './errors.js';
 import {castAllows, castToggle, mediaColor, showCastPlay, speakerKind} from './hero.js';
 import {playingNow} from './rows.js';
 import {VERTICAL, readSetting, volumeIcon} from './text.js';
@@ -237,16 +237,5 @@ export class MediaCard {
             this._syncMediaCard();
         else if (!this._card)
             this._tiles.forEach(tile => tile.sync());
-    }
-
-    _keepSpeaker(speaker) {
-        const speakers = parseSpeakers(readSetting(this._settings, 'cast-speakers'))
-            .map(s => (s.id === speaker.id ? {...s, ip: speaker.ip, port: speaker.port} : s));
-        this._keepingSpeaker = true;
-        try {
-            this._settings.set_string('cast-speakers', JSON.stringify(speakers));
-        } finally {
-            this._keepingSpeaker = false;
-        }
     }
 }

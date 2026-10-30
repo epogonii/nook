@@ -8,9 +8,16 @@
 import Gio from 'gi://Gio';
 import GioUnix from 'gi://GioUnix';
 import GLib from 'gi://GLib';
+import Secret from 'gi://Secret';
 import System from 'system';
 
-import * as Secrets from '../lib/secrets.js';
+Gio._promisify(Secret, 'password_lookup');
+Gio._promisify(Secret, 'password_store');
+
+// The Nook app's schema.
+const SCHEMA = new Secret.Schema('io.github.epogonii.nook', Secret.SchemaFlags.NONE, {
+    service: Secret.SchemaAttributeType.STRING,
+});
 
 const SERVICES = [
     ['xiaomi', 'Nook: Xiaomi account'],
@@ -25,7 +32,7 @@ async function main() {
         for (const [service] of SERVICES) {
             if (wanted.length > 0 && !wanted.includes(service))
                 continue;
-            const saved = await Secrets.lookup(service);
+            const saved = await Secret.password_lookup(SCHEMA, {service}, null);
             if (saved)
                 found[service] = saved;
         }
@@ -36,7 +43,7 @@ async function main() {
         const found = JSON.parse(line || '{}');
         for (const [service, label] of SERVICES) {
             if (found[service])
-                await Secrets.store(service, label, found[service]);
+                await Secret.password_store(SCHEMA, {service}, Secret.COLLECTION_DEFAULT, label, found[service], null);
         }
     } else {
         throw new Error('usage: keyring-copy.js get|put');

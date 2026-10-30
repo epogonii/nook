@@ -9,9 +9,9 @@ import St from 'gi://St';
 import {gettext as _} from 'resource:///org/gnome/shell/extensions/extension.js';
 import * as Main from 'resource:///org/gnome/shell/ui/main.js';
 
-import {TvError} from '../lib/tv-home.js';
 import * as Glyphs from '../lib/glyphs.js';
 import * as Scenes from '../lib/scenes.js';
+import {TvError} from './errors.js';
 import {VERTICAL, readSetting, tvShowing, tvTrouble, volumeIcon} from './text.js';
 import {Scene} from './widgets.js';
 

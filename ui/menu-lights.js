@@ -4,7 +4,7 @@
 
 import GLib from 'gi://GLib';
 
-import {WHITE} from '../lib/spec-home.js';
+import {WHITE} from '../lib/color.js';
 import * as Timers from '../lib/timers.js';
 import {paintOf} from './color.js';
 import {troubleText} from './tiles.js';
@@ -13,8 +13,6 @@ import {troubleText} from './tiles.js';
 const LIGHT_UP_TRIES = 12;
 const LIGHT_UP_EVERY = 10;
 const FLASH_MS = 2000;
-// Longest a dropped source is kept for a flash to put its light back.
-const RESTORE_MS = 10000;
 
 const switchable = device => device.primary.kind === 'switch' && typeof device.source?.setSwitch === 'function';
 
@@ -151,29 +149,5 @@ export class MenuLights {
             flashes.set(device.did, {source: device.source, done});
             done.catch(logError);
         }
-    }
-
-    // Aborted at once, the source of a light mid-flash (screen locked, settings changed)
-    // would leave it in the notification's colour. disable() aborts it at once anyway.
-    _abortAfterFlash(source) {
-        const flashes = [...this._flashes?.values() ?? []].filter(f => f.source === source);
-        if (flashes.length === 0) {
-            source.abort();
-            return;
-        }
-        let aborted = false;
-        const abort = () => {
-            if (!aborted)
-                source.abort();
-            aborted = true;
-        };
-        const deadline = Timers.timeout(RESTORE_MS, () => {
-            abort();
-            return GLib.SOURCE_REMOVE;
-        }, {cleanup: abort});
-        Promise.allSettled(flashes.map(f => f.done)).then(() => {
-            Timers.remove(deadline);
-            abort();
-        }).catch(logError);
     }
 }

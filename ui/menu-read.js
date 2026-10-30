@@ -8,35 +8,16 @@ import St from 'gi://St';
 import {gettext as _} from 'resource:///org/gnome/shell/extensions/extension.js';
 import * as Main from 'resource:///org/gnome/shell/ui/main.js';
 
-import {BeaconScan} from '../lib/ble.js';
-import {CastError, CastHome, parseSpeakers} from '../lib/cast-home.js';
-import {TvError, TvHome, parseTvs} from '../lib/tv-home.js';
+import {CLOUD_AIRCONS} from '../lib/brands.js';
 import * as Glyphs from '../lib/glyphs.js';
-import {AirconHome, ClimateError, parseAircons, parseUnits} from '../lib/aircon-home.js';
-import {CloudAirconHome, parseEntries} from '../lib/cloud-aircon.js';
-import * as Secrets from '../lib/secrets.js';
-import {ShellyHome, parseDevices as parseShelly} from '../lib/shelly.js';
-import {SonoffError, SonoffHome, parseSwitches} from '../lib/sonoff.js';
-import {EwelinkError} from '../lib/ewelink.js';
-import {EwelinkHome, parseDevices as parseEwelinkDevices} from '../lib/ewelink-home.js';
-import {HassHome, parseDevices as parseHassDevices} from '../lib/hass-home.js';
-import {HomeKitHome, parseHosts as parseHomeKitHosts} from '../lib/homekit-home.js';
-import {HueHome} from '../lib/hue-home.js';
-import {parseBridges as parseHueBridges, parseDevices as parseHueDevices} from '../lib/hue.js';
-import {SmartLifeHome, parseDevices as parseSmartLifeDevices} from '../lib/smartlife-home.js';
-import {SpecError} from '../lib/spec-home.js';
-import {MiHome} from '../lib/mihome.js';
-import {MiScenes} from '../lib/mi-scenes.js';
-import * as Tapo from '../lib/tapo.js';
-import {TapoError} from '../lib/tapo-local.js';
-import {XiaomiCloud, XiaomiError} from '../lib/xiaomi.js';
+import {CastError, ClimateError, EwelinkError, SonoffError, SpecError, TapoError, TvError, XiaomiError} from './errors.js';
 import {EVENT_KEYS} from './events.js';
+import {API_VERSION, Beacons, homeKind} from './remote.js';
 import {BEACON_FRESH, beaconOf, beacons, isBluetooth, playingNow, setLive, stateText} from './rows.js';
-import {CLOUD_AIRCONS, deviceType, formatValue, numberFormat, readSetting, tvShowing} from './text.js';
+import {deviceType, formatValue, numberFormat, readSetting, tvShowing} from './text.js';
 import {Glyph, skeletonBar} from './widgets.js';
 
-const SECRET_LABEL = 'Nook: Xiaomi account';
-// The button's device sources besides this._clouds; each has abort().
+// The button's device sources besides this._clouds.
 const SOURCES = ['_home', '_aircon', '_tapo', '_cast', '_tv', '_sonoff', '_shelly', '_ewelink', '_hue', '_hass',
     '_homekit', '_smartlife', '_miScenes'];
 
@@ -111,7 +92,7 @@ export class MenuRead {
         this._stopReadings();
         this._readings.destroy_all_children();
         this._cancellable?.cancel();
-        this._dropSources();
+        this._forgetSources();
         if (this._pushSync)
             GLib.source_remove(this._pushSync);
         this._pushSync = 0;
@@ -120,122 +101,36 @@ export class MenuRead {
         this._title.text = _('Nook');
         this._showLoading();
 
-        const aircons = [...parseUnits(readSetting(this._settings, 'gree-units')),
-            ...parseAircons(readSetting(this._settings, 'aircons'))];
-        if (aircons.length > 0)
-            this._aircon = new AirconHome(aircons);
-        const cameras = Tapo.parseCameras(readSetting(this._settings, 'tapo-cameras'));
-        if (cameras.length > 0) {
-            const tapo = this._tapo = new Tapo.TapoHome(cameras);
-            tapo.onMoved = moved => this._keepCameras(tapo, moved);
+        const app = this._app;
+        let attached;
+        try {
+            if (!await app.installed()) {
+                if (!cancellable.is_cancelled())
+                    this._showNoApp();
+                return;
+            }
+            await app.migrate(this._settings);
+            attached = await app.attach();
+        } catch (e) {
+            if (!cancellable.is_cancelled())
+                this._message(_('The Nook app did not answer: %s').replace('%s', e.message));
+            return;
         }
-        const speakers = parseSpeakers(readSetting(this._settings, 'cast-speakers'));
-        if (speakers.length > 0) {
-            const cast = this._cast = new CastHome(speakers);
-            cast.onChange = device => this._castChanged(cast, device);
-            cast.onMoved = speaker => this._keepSpeaker(speaker);
+        if (cancellable.is_cancelled())
+            return;
+        if (attached.version !== API_VERSION) {
+            this._message(attached.version > API_VERSION
+                ? _('This version of the Nook app needs a newer Nook extension.')
+                : _('Update the Nook app: this version of the extension needs a newer one.'));
+            return;
         }
-        const tvs = parseTvs(readSetting(this._settings, 'tvs'));
-        if (tvs.length > 0) {
-            const tv = this._tv = new TvHome(tvs);
-            tv.onChange = device => this._tvChanged(tv, device);
-        }
-        const switches = parseSwitches(readSetting(this._settings, 'sonoff-switches'));
-        if (switches.length > 0)
-            this._sonoff = new SonoffHome(switches);
-        const shellies = parseShelly(readSetting(this._settings, 'shelly-devices'));
-        if (shellies.length > 0) {
-            const shelly = this._shelly = new ShellyHome(shellies);
-            shelly.onExpired = () => {
-                if (this._shelly !== shelly)
-                    return;
-                this._loginNote = {text: _('A Shelly needs its password again.'), target: 'accounts-shelly'};
-                this._render();
-            };
-            shelly.onBack = () => {
-                if (this._shelly !== shelly || this._loginNote?.target !== 'accounts-shelly')
-                    return;
-                this._loginNote = null;
-                this._render();
-            };
-        }
-        const ewelinkDevices = parseEwelinkDevices(readSetting(this._settings, 'ewelink-devices'));
-        if (ewelinkDevices.length > 0 && readSetting(this._settings, 'ewelink-region')) {
-            const ewelink = this._ewelink = new EwelinkHome(ewelinkDevices);
-            ewelink.onExpired = () => {
-                if (this._ewelink !== ewelink)
-                    return;
-                this._loginNote = {text: _('The eWeLink login has expired.'), target: 'accounts-ewelink'};
-                this._render();
-            };
-        }
-        const hueDevices = parseHueDevices(readSetting(this._settings, 'hue-devices'));
-        if (hueDevices.length > 0) {
-            const hue = this._hue = new HueHome(parseHueBridges(readSetting(this._settings, 'hue-bridges')), hueDevices);
-            hue.onExpired = () => {
-                if (this._hue !== hue)
-                    return;
-                this._loginNote = {text: _('A Hue bridge needs to be paired again.'), target: 'accounts-hue'};
-                this._render();
-            };
-            hue.onChange = () => this._pushed(hue);
-        }
-        const hassDevices = parseHassDevices(readSetting(this._settings, 'hass-devices'));
-        if (hassDevices.length > 0 && readSetting(this._settings, 'hass-server')) {
-            const hass = this._hass = new HassHome(hassDevices);
-            hass.onExpired = () => {
-                if (this._hass !== hass)
-                    return;
-                this._loginNote = {text: _('Home Assistant refused the access token.'), target: 'accounts-hass'};
-                this._render();
-            };
-            hass.onChange = () => this._pushed(hass);
-        }
-        const accessories = parseHomeKitHosts(readSetting(this._settings, 'homekit-accessories'));
-        if (accessories.length > 0) {
-            const homekit = this._homekit = new HomeKitHome(accessories);
-            homekit.onExpired = () => {
-                if (this._homekit !== homekit)
-                    return;
-                this._loginNote = {text: _('A HomeKit accessory needs to be paired again.'), target: 'accounts-homekit'};
-                this._render();
-            };
-        }
-        const smartDevices = parseSmartLifeDevices(readSetting(this._settings, 'smartlife-devices'));
-        if (smartDevices.length > 0 && readSetting(this._settings, 'smartlife-user')) {
-            const smartlife = this._smartlife = new SmartLifeHome(smartDevices);
-            smartlife.onExpired = () => {
-                if (this._smartlife !== smartlife)
-                    return;
-                this._loginNote = {text: _('The Smart Life login has expired.'), target: 'accounts-smartlife'};
-                this._render();
-            };
-        }
-        for (const brand of CLOUD_AIRCONS) {
-            const entries = parseEntries(readSetting(this._settings, `${brand.id}-devices`));
-            if (entries.length === 0)
-                continue;
-            const cloud = new CloudAirconHome(brand, entries);
-            cloud.onExpired = () => {
-                if (!this._clouds.includes(cloud))
-                    return;
-                this._loginNote = {text: _('The %s login has expired.').replace('%s', brand.label), target: `accounts-${brand.id}`};
-                this._render();
-            };
-            // A login renewed in the settings works again without a reload.
-            cloud.onBack = () => {
-                if (!this._clouds.includes(cloud) || this._loginNote?.target !== `accounts-${brand.id}`)
-                    return;
-                this._loginNote = null;
-                this._render();
-            };
-            this._clouds.push(cloud);
-        }
+        for (const source of attached.homes)
+            this._adopt(source);
         this._startReadings();
 
-        let saved;
+        let xiaomi;
         try {
-            saved = await Secrets.lookup('xiaomi', cancellable);
+            xiaomi = await app.xiaomi();
         } catch (e) {
             if (!cancellable.is_cancelled())
                 this._message(_('The keyring could not be read: %s').replace('%s', e.message));
@@ -243,25 +138,18 @@ export class MenuRead {
         }
         if (cancellable.is_cancelled())
             return;
-        if (!saved) {
+        switch (xiaomi.state) {
+        case 'keyring':
+            this._message(_('The keyring could not be read: %s').replace('%s', xiaomi.message));
+            return;
+        case 'none':
             this._showLogin();
             return;
-        }
-
-        let credentials;
-        try {
-            credentials = JSON.parse(saved);
-        } catch {
+        case 'unreadable':
             this._showLogin(_('The saved Mi Home login could not be read.'));
             return;
         }
-        const cloud = new XiaomiCloud(credentials);
-        const home = this._home = new MiHome(cloud);
-        // A token refresh finishing after logout must not re-store the login.
-        cloud.onRefresh = fresh => {
-            if (this._home === home)
-                Secrets.store('xiaomi', SECRET_LABEL, JSON.stringify(fresh)).catch(logError);
-        };
+        const home = this._home = xiaomi.homes.find(h => homeKind(h) === 'xiaomi');
         try {
             await home.load();
             // Cache predates stored homes: rediscover, refreshOnline() needs them.
@@ -275,7 +163,7 @@ export class MenuRead {
         if (cancellable.is_cancelled())
             return;
 
-        const scenes = this._miScenes = new MiScenes(cloud, home, _('Scene'));
+        const scenes = this._miScenes = xiaomi.homes.find(h => homeKind(h) === 'scenes');
         scenes.onDevices = () => {
             if (this._miScenes === scenes)
                 this._render();
@@ -287,6 +175,83 @@ export class MenuRead {
         this._startReadings();
         if (this._menu.isOpen)
             await this._read();
+    }
+
+    _adopt(source) {
+        const note = (text, target) => {
+            if (!this._sources().includes(source))
+                return;
+            this._loginNote = {text, target};
+            this._render();
+        };
+        const back = target => {
+            if (!this._sources().includes(source) || this._loginNote?.target !== target)
+                return;
+            this._loginNote = null;
+            this._render();
+        };
+        switch (homeKind(source)) {
+        case 'aircon':
+            this._aircon = source;
+            break;
+        case 'tapo':
+            this._tapo = source;
+            break;
+        case 'cast':
+            this._cast = source;
+            source.onChange = device => this._castChanged(source, device);
+            break;
+        case 'tv':
+            this._tv = source;
+            source.onChange = device => this._tvChanged(source, device);
+            break;
+        case 'sonoff':
+            this._sonoff = source;
+            break;
+        case 'shelly':
+            this._shelly = source;
+            source.onExpired = () => note(_('A Shelly needs its password again.'), 'accounts-shelly');
+            source.onBack = () => back('accounts-shelly');
+            break;
+        case 'ewelink':
+            this._ewelink = source;
+            source.onExpired = () => note(_('The eWeLink login has expired.'), 'accounts-ewelink');
+            break;
+        case 'hue':
+            this._hue = source;
+            source.onExpired = () => note(_('A Hue bridge needs to be paired again.'), 'accounts-hue');
+            source.onChange = () => this._pushed(source);
+            break;
+        case 'hass':
+            this._hass = source;
+            source.onExpired = () => note(_('Home Assistant refused the access token.'), 'accounts-hass');
+            source.onChange = () => this._pushed(source);
+            break;
+        case 'homekit':
+            this._homekit = source;
+            source.onExpired = () => note(_('A HomeKit accessory needs to be paired again.'), 'accounts-homekit');
+            break;
+        case 'smartlife':
+            this._smartlife = source;
+            source.onExpired = () => note(_('The Smart Life login has expired.'), 'accounts-smartlife');
+            break;
+        case 'cloud': {
+            const brand = CLOUD_AIRCONS.find(b => b.label === source.label);
+            const target = `accounts-${brand?.id ?? ''}`;
+            source.onExpired = () => note(_('The %s login has expired.').replace('%s', source.label), target);
+            // A login renewed in the app works again without a reload.
+            source.onBack = () => back(target);
+            this._clouds.push(source);
+            break;
+        }
+        }
+    }
+
+    // No abort: the homes are the app's, and the next attach returns them.
+    _forgetSources() {
+        for (const name of SOURCES)
+            this[name] = null;
+        this._clouds = [];
     }
 
     _stopReadings() {
@@ -471,15 +436,10 @@ export class MenuRead {
         this._lightUpStep();
     }
 
-    _dropSources() {
-        for (const name of SOURCES) {
-            if (this[name])
-                this._abortAfterFlash(this[name]);
-            this[name] = null;
-        }
-        for (const cloud of this._clouds)
-            this._abortAfterFlash(cloud);
-        this._clouds = [];
+    // Not under a flashing light: it would stay in the notification's colour.
+    _letGo() {
+        this._forgetSources();
+        this._app.detachAfter([...this._flashes?.values() ?? []].map(f => f.done));
     }
 
     // The top bar stays in view under an open card.
@@ -498,7 +458,7 @@ export class MenuRead {
         if (this._beacons || !this._home?.devices.some(isBluetooth))
             return;
         const byAddress = address => this._home?.devices.find(d => isBluetooth(d) && d.mac?.toUpperCase() === address);
-        const scan = this._beacons = new BeaconScan((address, beacon) => {
+        const scan = this._beacons = new Beacons(this._app, (address, beacon) => {
             const device = byAddress(address);
             if (!device)
                 return;
@@ -525,7 +485,7 @@ export class MenuRead {
                 return;
             home.beaconKey(device).then(key => {
                 if (key && this._beacons === scan)
-                    scan.keys.set(address, key);
+                    scan.setKey(address, key);
             }).catch(e => console.debug(`nook: beacon key: ${e.message}`));
         };
         this._hearing = GLib.timeout_add_seconds(GLib.PRIORITY_LOW, HEAR_SECONDS, () => {
@@ -620,10 +580,10 @@ export class MenuRead {
     }
 
     async _readLastEvents(home) {
-        const keysOf = device => (device.primary.props.length === 0
-            ? (EVENT_KEYS()[deviceType(device)] ?? []).map(([key]) => key) : []);
+        const keys = Object.fromEntries(home.devices.map(device => [device.did, device.primary.props.length === 0
+            ? (EVENT_KEYS()[deviceType(device)] ?? []).map(([key]) => key) : []]));
         try {
-            if (!await home.readLastEvents(home.devices, keysOf))
+            if (!await home.readLastEvents(home.devices, keys))
                 return;
         } catch (e) {
             if (!(e instanceof XiaomiError) && !(e instanceof GLib.Error))

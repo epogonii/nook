@@ -7,15 +7,8 @@ import St from 'gi://St';
 import {gettext as _, pgettext} from 'resource:///org/gnome/shell/extensions/extension.js';
 import * as Config from 'resource:///org/gnome/shell/misc/config.js';
 
-import {MODES} from '../lib/aircon-home.js';
-import {BRAND as ELECTROLUX} from '../lib/electrolux.js';
-import {BRAND as LG} from '../lib/lg.js';
-import {BRAND as MELCLOUD} from '../lib/melcloud.js';
-import {BRAND as SMARTTHINGS} from '../lib/smartthings.js';
-import {SonoffError} from '../lib/sonoff.js';
-
-// Air conditioners behind a maker's account; each keeps its list in <id>-devices.
-export const CLOUD_AIRCONS = [LG, SMARTTHINGS, MELCLOUD, ELECTROLUX];
+import {MODES} from '../lib/climate.js';
+import {SonoffError} from './errors.js';
 
 export const SHELL_MAJOR = Number.parseInt(Config.PACKAGE_VERSION.split('.')[0], 10);
 

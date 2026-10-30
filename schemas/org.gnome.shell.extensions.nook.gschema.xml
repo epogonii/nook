@@ -288,11 +288,6 @@
       <summary>What a middle click on the button does</summary>
       <description>"refresh" looks for the devices again, the way the button in the menu does; "settings" opens the preferences.</description>
     </key>
-    <key name="prefs-target" type="s">
-      <default>''</default>
-      <summary>Where the preferences window opens</summary>
-      <description>Written by the shell just before it opens the preferences: the id of a group on the Accounts page, such as "accounts-tapo", optionally followed by a space and a device. The window scrolls there and clears the key.</description>
-    </key>
     <key name="hover-switch" type="b">
       <default>false</default>
       <summary>Pointing at another top bar button opens its menu</summary>
