@@ -1,7 +1,7 @@
 {
   "uuid": "nook@epogonii.github.io",
   "name": "Nook",
-  "description": "Your smart home from the top bar: lights, plugs, sensors, cameras, air conditioners, TVs and speakers, from Home Assistant, Hue, HomeKit, Smart Life, Mi Home, eWeLink and the local network.\n\nNeeds the Nook app (io.github.epogonii.nook-app, on Flathub), which talks to the devices; the extension draws the menu. While the screen is locked, Nook only turns Xiaomi gateway leak and smoke alerts into notifications. The copy button for donation addresses uses the clipboard; nothing is read from it.",
+  "description": "Your smart home from the top bar: lights, plugs, sensors, cameras, air conditioners, TVs and speakers, from Home Assistant, Hue, HomeKit, Smart Life, Mi Home, eWeLink and the local network.\n\nNeeds the Nook app (io.github.epogonii.nook, on Flathub), which talks to the devices; the extension draws the menu. While the screen is locked, Nook only turns Xiaomi gateway leak and smoke alerts into notifications. The copy button for donation addresses uses the clipboard; nothing is read from it.",
   "shell-version": [
     "46",
     "47",

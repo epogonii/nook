@@ -79,7 +79,7 @@ function savedLogins() {
         });
     })))).then(found => found.filter(Boolean));
 }
-const APP_PATH = '/io/github/epogonii/nook_app';
+const APP_PATH = '/io/github/epogonii/nook';
 
 export function homeKind(source) {
     return source?.[TARGET]?.kind ?? null;

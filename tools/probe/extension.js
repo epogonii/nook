@@ -79,7 +79,7 @@ export default class Probe extends Extension {
         // Devices are the app's settings; nested-session.sh compiled its schema.
         const appSource = Gio.SettingsSchemaSource.new_from_directory(GLib.getenv('NOOK_APP_SCHEMAS'),
             Gio.SettingsSchemaSource.get_default(), false);
-        const app = new Gio.Settings({settings_schema: appSource.lookup('io.github.epogonii.nook-app', false)});
+        const app = new Gio.Settings({settings_schema: appSource.lookup('io.github.epogonii.nook', false)});
         try {
             const sources = Gio.File.new_for_path(GLib.getenv('NOOK_APP'));
             const cast = await import(sources.resolve_relative_path('src/lib/cast-home.js').get_uri());

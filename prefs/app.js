@@ -7,7 +7,7 @@ import Gtk from 'gi://Gtk';
 
 import {BUS_NAME} from '../ui/bridge.js';
 
-const APP_PATH = '/io/github/epogonii/nook_app';
+const APP_PATH = '/io/github/epogonii/nook';
 
 // By hand, not Gio._promisify(): this process runs every extension's preferences.
 function call(bus, ...args) {
