@@ -65,7 +65,7 @@ Home Assistant knows comes in through Home Assistant.
   do. Tiles keep the order set in Settings or go by name.
 
 <p align="center">
-  <img src="docs/layouts.png" alt="The same home as rooms in tabs, as small tiles and as modules">
+  <img src="docs/layouts.png" alt="The same home with all rooms, as small tiles and as modules, with tabs at the bottom">
 </p>
 
 ## Install
