@@ -262,6 +262,11 @@
       <summary>Where Nook is opened from</summary>
       <description>"panel" gives Nook a button of its own in the top bar; "quick-settings" makes it a tile in Quick Settings, with the logo and the readings among the system icons.</description>
     </key>
+    <key name="top-bar-icon" type="b">
+      <default>true</default>
+      <summary>Nook shows in the top bar</summary>
+      <description>When off, nothing of Nook is in the top bar: it is a tile in Quick Settings, whatever "location" says, with no logo or readings among the system icons.</description>
+    </key>
     <key name="panel-box" type="s">
       <choices>
         <choice value="left"/>

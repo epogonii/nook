@@ -3331,7 +3331,13 @@ msgstr "Кнопка в верхней панели"
 msgid "Quick Settings"
 msgstr "Быстрые настройки"
 
-#: src/topbar.js:61
+#: src/topbar.js:59
+msgid "Off: nothing of Nook is in the top bar, only its tile in Quick Settings."
+msgstr ""
+"Выкл.: в верхней панели Nook нет совсем, только плитка в быстрых "
+"настройках."
+
+#: src/topbar.js:66
 msgid "Location"
 msgstr "Где находится"
 

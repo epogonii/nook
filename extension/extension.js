@@ -58,10 +58,12 @@ class NookToggle extends QuickSettings.QuickMenuToggle {
 
 const NookIndicator = GObject.registerClass(
 class NookIndicator extends QuickSettings.SystemIndicator {
-    _init(button, path) {
+    _init(button, path, icon) {
         super._init();
-        this.add_child(button.takeMark());
-        this.visible = true;
+        // Without it the tile stays, and nothing shows among the system icons.
+        if (icon)
+            this.add_child(button.takeMark());
+        this.visible = icon;
         const toggle = new NookToggle(path);
         const quickSettings = Main.panel.statusArea.quickSettings;
         button.hostIn(toggle.menu, quickSettings.menu);
@@ -102,6 +104,7 @@ export default class NookExtension extends Extension {
         };
         this._settings.connectObject(
             'changed::location', () => this._placeSoon(),
+            'changed::top-bar-icon', () => this._placeSoon(),
             'changed::panel-box', placeInPanel,
             'changed::panel-index', placeInPanel,
             this);
@@ -199,8 +202,9 @@ export default class NookExtension extends Extension {
                 Main.extensionManager.openExtensionPrefs(this.uuid, '', {});
         };
         this._button = new NookButton(this._settings, openPreferences, this.path, this._alerts, this._app);
-        if (readSetting(this._settings, 'location') === 'quick-settings') {
-            this._indicator = new NookIndicator(this._button, this.path);
+        const icon = readSetting(this._settings, 'top-bar-icon');
+        if (!icon || readSetting(this._settings, 'location') === 'quick-settings') {
+            this._indicator = new NookIndicator(this._button, this.path, icon);
             Main.panel.statusArea.quickSettings.addExternalIndicator(this._indicator);
         } else {
             Main.panel.addToStatusArea(this.uuid, this._button,

@@ -68,6 +68,7 @@ const DEFAULTS = {
     'alerts': {},
     'sensor-rules': '{}',
     'location': 'panel',
+    'top-bar-icon': true,
     'panel-box': 'right',
     'panel-index': 0,
     'middle-click': 'none',

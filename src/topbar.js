@@ -54,13 +54,19 @@ const nameOf = (settings, device) => settings.get_value('names').deepUnpack()[de
 
 function placementGroup(menu) {
     const group = new Adw.PreferencesGroup({title: _('Placement')});
-    group.add(choiceRow(menu, 'location', [
+    const shown = switchRow(menu, 'top-bar-icon', {
+        title: _('Show in the Top Bar'),
+        subtitle: _('Off: nothing of Nook is in the top bar, only its tile in Quick Settings.'),
+    });
+    group.add(shown);
+    const location = choiceRow(menu, 'location', [
         ['panel', _('Top bar button')],
         ['quick-settings', _('Quick Settings')],
     ], {
         title: _('Location'),
         subtitle: _('A button of its own, or a tile next to Wi-Fi and Bluetooth.'),
-    }));
+    });
+    group.add(location);
     const box = choiceRow(menu, 'panel-box', [
         ['left', pgettext('top bar area', 'Left')],
         ['center', pgettext('top bar area', 'Centre')],
@@ -92,13 +98,17 @@ function placementGroup(menu) {
     });
     group.add(hover);
     const follow = () => {
-        const own = menu.get_string('location') === 'panel';
+        // An extension from before the switch doesn't send it.
+        shown.visible = menu.get_value('top-bar-icon') !== null;
+        const icon = !shown.visible || menu.get_boolean('top-bar-icon');
+        location.sensitive = icon;
+        const own = icon && menu.get_string('location') === 'panel';
         for (const row of [box, index, middle, hover])
             row.sensitive = own;
     };
     follow();
-    const handler = menu.connect('changed::location', follow);
-    group.connect('destroy', () => menu.disconnect(handler));
+    const handlers = ['changed::location', 'changed::top-bar-icon'].map(signal => menu.connect(signal, follow));
+    group.connect('destroy', () => handlers.forEach(id => menu.disconnect(id)));
     return group;
 }
 
