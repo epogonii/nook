@@ -98,8 +98,6 @@ Home Assistant knows comes in through Home Assistant.
 
 ## Install
 
-### The app
-
 On Fedora 43 and later, install it from [Copr](https://copr.fedorainfracloud.org/coprs/swink/nook/):
 
 ```sh
@@ -117,22 +115,6 @@ cd nook
 meson setup build
 sudo meson install -C build
 ```
-
-### The extension
-
-The extension runs on GNOME 46 to 51. It is in review on extensions.gnome.org:
-
-<a href="https://extensions.gnome.org/extension/11453/nook/"><img src="docs/get-it-on-ego.png" width="228" alt="Get it on GNOME Extensions"></a>
-
-Until it is published there, install it from a checkout of this repository:
-
-```sh
-extension/tools/install-local.sh
-```
-
-Log out and back in, then turn Nook on in **Extensions**. Its settings open the app, where
-everything is set: accounts on the **Accounts** page, new devices through **Add Devices**, and
-the menu on the **Top Bar** page. GNOME starts the app when the extension needs it.
 
 I don't have every device listed above at home. Support for the ones I couldn't try is built
 from their public documentation and APIs, and from open source projects that already talk to
