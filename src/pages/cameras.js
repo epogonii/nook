@@ -30,7 +30,7 @@ class CamerasGroup extends FoldGroup {
             _('In the Tapo app: the camera, then Settings, Advanced Settings, Camera Account.'),
             CAMERA_ACCOUNT_URL));
         this._credentials = new CredentialRows(this, 'tapo', 'Nook: Tapo camera account',
-            [_('Camera Account Login'), _('Camera Account Password')]);
+            [_('Camera Account Login'), _('Camera Account Password')], () => Tapo.clearRefusals());
 
         this.add(new Adw.ActionRow({
             title: _('Privacy mode, light, night vision and siren'),

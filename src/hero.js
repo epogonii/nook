@@ -8,7 +8,8 @@ import * as Scenes from './lib/scenes.js';
 import {MODES} from './lib/climate.js';
 import {WHITE} from './lib/spec-home.js';
 import {colorName, rgbOf} from './color.js';
-import {booleanText, choiceText, deviceType, formatValue, numberFormat, stateText, statusWorking, whenText} from './text.js';
+import {booleanText, choiceText, deviceType, formatValue, heardOf, kettleStatus, numberFormat, stateText, statusWorking,
+    whenText} from './text.js';
 
 // The picture on top of a device page: the extension's card heroes (ui/hero.js,
 // ui/card-climate.js, ui/card-media.js, ui/card-tv.js), drawn by lib/scenes.js.
@@ -176,10 +177,6 @@ export function vacuumMode(description) {
     if (/error|fault/i.test(text))
         return 'error';
     return 'idle';
-}
-
-function kettleStatus(status) {
-    return [_('Idle'), _('Heating'), _('Cooling down'), _('Keeping warm')][status] ?? null;
 }
 
 // Cloud event-history keys by device type.
@@ -381,11 +378,66 @@ function tvHero(device) {
 export function heroOf(device, services = [], values = new Map()) {
     const hero = kindHero(device, services, values);
     // Its last state isn't news once it stopped answering; the card says Offline.
-    if (device.online === false) {
+    if (device.online === false && !heardOf(device)) {
         hero.big = null;
         hero.small = null;
     }
     return hero;
+}
+
+// A Home tile's second line: what the device is doing now, where stateText would only say On.
+export function tileText(device) {
+    if ((device.online !== true && !heardOf(device)) || ['media', 'camera'].includes(device.primary.kind))
+        return stateText(device);
+    const hero = heroOf(device);
+    const props = device.primary.props ?? [];
+    const find = name => {
+        const index = props.findIndex(p => p.name === name);
+        const value = device.values?.[index];
+        return index >= 0 && value !== null && value !== undefined ? {prop: props[index], value} : null;
+    };
+    if (device.primary.kind === 'climate') {
+        const {Pow, Mod, SetTem} = device.state ?? {};
+        if (Pow !== 1)
+            return stateText(device);
+        return [Mod !== null && Mod !== undefined ? climateStatus(Mod) : null,
+            typeof SetTem === 'number' ? degrees(SetTem) : null].filter(Boolean).join(' · ') || stateText(device);
+    }
+    switch (hero.scene) {
+    case 'aircon':
+        if (hero.state.on && typeof hero.state.target === 'number')
+            return `${hero.big} · ${degrees(hero.state.target)}`;
+        break;
+    case 'light': {
+        const brightness = find('brightness');
+        return hero.state.on && brightness ? formatValue(brightness.prop, brightness.value) : stateText(device);
+    }
+    case 'plug': {
+        const power = find('electric-power');
+        return hero.state.on && power?.value > 0 ? formatValue(power.prop, power.value) : stateText(device);
+    }
+    case 'fan':
+        if (hero.state.on && hero.small)
+            return hero.small;
+        break;
+    case 'thermo': {
+        const {humidity} = hero.state;
+        if (hero.big && typeof humidity === 'number')
+            return `${hero.big} · ${numberFormat.format(humidity)}%`;
+        break;
+    }
+    case 'kettle':
+        if (hero.big)
+            return [hero.big, hero.small].filter(Boolean).join(' · ');
+        break;
+    case 'motion': {
+        const time = device.times?.[props.findIndex(p => p.name === 'motion-state')];
+        if (!hero.state.active && time)
+            return _('Last seen %s').replace('%s', shortWhen(time));
+        break;
+    }
+    }
+    return hero.big ?? stateText(device);
 }
 
 function kindHero(device, services, values) {
@@ -416,6 +468,7 @@ function kindHero(device, services, values) {
         return null;
     };
     const live = device.live ?? {};
+    const beacon = heardOf(device) ?? {};
     // Gateway values are hundredths, as strings; anything non-numeric is no reading.
     const hundredths = value => (Number.isFinite(Number(value)) && value !== '' && value !== null ? Number(value) / 100 : null);
 
@@ -425,6 +478,8 @@ function kindHero(device, services, values) {
         let humidity = find('relative-humidity')?.value ?? null;
         temperature = hundredths(live.temperature) ?? temperature;
         humidity = hundredths(live.humidity) ?? humidity;
+        temperature = beacon.temperature ?? temperature;
+        humidity = beacon.humidity ?? humidity;
         hero.state = {temperature, humidity};
         if (typeof temperature === 'number')
             hero.big = degrees(temperature);
@@ -502,10 +557,10 @@ function kindHero(device, services, values) {
     case 'kettle': {
         const water = find('temperature')?.value;
         const doing = choiceOf(find('status')?.prop, find('status')?.value) ?? '';
-        let status;
-        if (doing)
+        let status = beacon.status;
+        if (status === undefined && doing)
             status = /heat|boil/i.test(doing) ? 1 : /cool/i.test(doing) ? 2 : /warm|keep/i.test(doing) ? 3 : 0;
-        const temperature = typeof water === 'number' ? water : null;
+        const temperature = beacon.temperature ?? (typeof water === 'number' ? water : null);
         hero.state = {temperature, status: status ?? 0};
         if (temperature !== null)
             hero.big = degrees(temperature);
@@ -793,7 +848,18 @@ function kindHero(device, services, values) {
 
 // The card's colour: an alarm's red, a reading's own tint, grey while offline.
 export function heroColor(device, hero) {
-    if (device.online === false)
+    if (device.online === false && !heardOf(device))
         return OFFLINE;
     return hero.alarm ? ALARM : Scenes.tint(hero.scene, hero.state) ?? hero.color;
+}
+
+// Off, closed, dry, quiet, docked, or with nothing to say but Online: nothing on a tile worth
+// a look. A reading is never at rest.
+export function atRest(hero) {
+    if (hero.alarm)
+        return false;
+    return ['on', 'active', 'open', 'playing', 'light', 'working', 'cooking', 'ringing', 'wet', 'alarm']
+        .some(key => hero.state[key] === false) ||
+        ['idle', 'charging'].includes(hero.state.mode) || hero.scene === 'glyph' ||
+        hero.color === RESTING || hero.color === SILENT;
 }

@@ -104,6 +104,94 @@ function tileLook(key, value, caps) {
     return [null, value ? _('On') : _('Off')];
 }
 
+// What a card set and the unit has not confirmed yet, shown over its state. Writes go out
+// one at a time: a source without a queue of its own could apply quick changes out of order.
+// changed: what shows moved; done: the unit took a change.
+export class ClimateWrites {
+    constructor(device, {changed, toast, done}) {
+        this._device = device;
+        this._changed = changed;
+        this._toast = toast;
+        this._done = done;
+        this.wanted = new Map();
+        this.touched = 0;
+        this._queue = Promise.resolve();
+        this._settle = 0;
+        this._gone = false;
+    }
+
+    // Set and not confirmed, or presses still gathering.
+    get pending() {
+        return this._settle !== 0 || this.wanted.size > 0;
+    }
+
+    shown(state) {
+        return {...state, ...Object.fromEntries(this.wanted)};
+    }
+
+    nudge(direction) {
+        const {state, caps} = this._device;
+        if (!state || !caps?.range)
+            return;
+        const [min, max, step] = caps.range;
+        const from = this.wanted.get('SetTem') ?? state.SetTem;
+        const next = snapTemperature(caps, (typeof from === 'number' ? from : (min + max) / 2) + direction * step);
+        this.touched = Date.now();
+        this.wanted.set('SetTem', next);
+        this._changed();
+        if (this._settle)
+            GLib.source_remove(this._settle);
+        this._settle = GLib.timeout_add(GLib.PRIORITY_DEFAULT, NUDGE_SETTLE, () => {
+            this._settle = 0;
+            this.write({SetTem: next});
+            return GLib.SOURCE_REMOVE;
+        });
+    }
+
+    write(changes) {
+        this.touched = Date.now();
+        for (const [key, value] of Object.entries(changes))
+            this.wanted.set(key, value);
+        this._changed();
+        this._queue = this._queue.then(() => this._send(changes)).catch(logError);
+    }
+
+    // A target still settling goes out now; nothing is told after.
+    forget() {
+        if (this._gone)
+            return;
+        this._gone = true;
+        if (this._settle) {
+            GLib.source_remove(this._settle);
+            this._settle = 0;
+            this.write({SetTem: this.wanted.get('SetTem')});
+        }
+    }
+
+    async _send(changes) {
+        const device = this._device;
+        let done = false;
+        try {
+            await device.source.set(device, changes);
+            done = true;
+        } catch (e) {
+            if (!(e instanceof ClimateError) && !(e instanceof GLib.Error))
+                throw e;
+            if (!this._gone && !e.matches?.(Gio.IOErrorEnum, Gio.IOErrorEnum.CANCELLED))
+                this._toast(e.message);
+        } finally {
+            for (const [key, value] of Object.entries(changes)) {
+                if (this.wanted.get(key) === value)
+                    this.wanted.delete(key);
+            }
+            if (!done)
+                this._changed();
+        }
+        if (done && !this._gone)
+            this._done();
+    }
+}
+
 // The menu's air conditioner card in a device page: the target and the unit's settings
 // as tiles, for Gree, Midea, Daikin (lib/aircon-home.js). The hero shows the rest.
 export class ClimateCard {
@@ -111,13 +199,15 @@ export class ClimateCard {
         this._device = device;
         this._home = home;
         this._page = page;
-        this._toast = toast;
         this._written = written;
-        // What the card set and the unit has not confirmed yet, shown over its state.
-        this._wanted = new Map();
-        this._queue = Promise.resolve();
-        this._settle = 0;
-        this._touched = 0;
+        this._writes = new ClimateWrites(device, {
+            changed: () => this._changed(),
+            toast,
+            done: () => {
+                this._written();
+                this._home.onEvent?.();
+            },
+        });
         this._reading = false;
         this._gone = false;
         this.groups = [];
@@ -125,9 +215,9 @@ export class ClimateCard {
         this.stage = new Gtk.Box({orientation: Gtk.Orientation.VERTICAL, spacing: 14, visible: false, css_classes: ['nook-stage', 'nook-climate']});
         this._line = new Gtk.Box({spacing: 6, css_classes: ['nook-stepper-line']});
         this._line.append(new Gtk.Label({label: _('Temperature'), xalign: 0, hexpand: true, wrap: true, css_classes: ['nook-slider-title']}));
-        this._minus = roundButton('list-remove-symbolic', _('Cooler'), () => this._nudge(-1));
+        this._minus = roundButton('list-remove-symbolic', _('Cooler'), () => this._writes.nudge(-1));
         this._target = new Gtk.Label({width_chars: 7, css_classes: ['numeric', 'nook-stepper-value']});
-        this._plus = roundButton('list-add-symbolic', _('Warmer'), () => this._nudge(1));
+        this._plus = roundButton('list-add-symbolic', _('Warmer'), () => this._writes.nudge(1));
         const stepper = new Gtk.Box({spacing: 6, valign: Gtk.Align.CENTER, css_classes: ['nook-stepper']});
         stepper.append(this._minus);
         stepper.append(this._target);
@@ -151,11 +241,7 @@ export class ClimateCard {
             return;
         GLib.source_remove(this._timer);
         this._gone = true;
-        if (this._settle) {
-            GLib.source_remove(this._settle);
-            this._settle = 0;
-            this._write({SetTem: this._wanted.get('SetTem')});
-        }
+        this._writes.forget();
     }
 
     sync() {
@@ -166,7 +252,7 @@ export class ClimateCard {
         this.stage.sensitive = this._device.online !== false;
         if (!state || !caps)
             return;
-        const shown = {...state, ...Object.fromEntries(this._wanted)};
+        const shown = this._writes.shown(state);
         this._line.visible = Boolean(caps.range);
         if (caps.range) {
             const [min, max] = caps.range;
@@ -180,18 +266,18 @@ export class ClimateCard {
             const [look, text] = tileLook(key, shown[key], caps);
             const tile = {title, glyph: look ?? glyph, text};
             if (choices && !(SWINGS[key] && swingsOnly(choices)))
-                return {...tile, value: swingOf(key, shown[key]), choices, pick: v => this._write({[key]: v})};
+                return {...tile, value: swingOf(key, shown[key]), choices, pick: v => this._writes.write({[key]: v})};
             // Quiet stays 1: greeclimate sends 2, which firmware 3.75 ignores.
-            return {...tile, on: Boolean(shown[key]), pick: on => this._write({[key]: on ? 1 : 0})};
+            return {...tile, on: Boolean(shown[key]), pick: on => this._writes.write({[key]: on ? 1 : 0})};
         }));
     }
 
     // The device as it will be once what the card set lands, or null when nothing waits:
     // the page can draw the hero from it.
     preview() {
-        if (this._wanted.size === 0 || !this._device.state)
+        if (this._writes.wanted.size === 0 || !this._device.state)
             return null;
-        return Object.assign(Object.create(this._device), {state: {...this._device.state, ...Object.fromEntries(this._wanted)}});
+        return Object.assign(Object.create(this._device), {state: this._writes.shown(this._device.state)});
     }
 
     _changed() {
@@ -203,66 +289,11 @@ export class ClimateCard {
             this.sync();
     }
 
-    _nudge(direction) {
-        const {state, caps} = this._device;
-        if (!state || !caps?.range)
-            return;
-        const [min, max, step] = caps.range;
-        const from = this._wanted.get('SetTem') ?? state.SetTem;
-        const next = snapTemperature(caps, (typeof from === 'number' ? from : (min + max) / 2) + direction * step);
-        this._touched = Date.now();
-        this._wanted.set('SetTem', next);
-        this._changed();
-        if (this._settle)
-            GLib.source_remove(this._settle);
-        this._settle = GLib.timeout_add(GLib.PRIORITY_DEFAULT, NUDGE_SETTLE, () => {
-            this._settle = 0;
-            this._write({SetTem: next});
-            return GLib.SOURCE_REMOVE;
-        });
-    }
-
-    // One write at a time: a source without a queue of its own could apply quick changes
-    // out of order.
-    _write(changes) {
-        this._touched = Date.now();
-        for (const [key, value] of Object.entries(changes))
-            this._wanted.set(key, value);
-        this._changed();
-        this._queue = this._queue.then(() => this._send(changes)).catch(logError);
-    }
-
-    async _send(changes) {
-        const device = this._device;
-        let done = false;
-        try {
-            await device.source.set(device, changes);
-            done = true;
-        } catch (e) {
-            if (!(e instanceof ClimateError) && !(e instanceof GLib.Error))
-                throw e;
-            if (!this._gone && !e.matches?.(Gio.IOErrorEnum, Gio.IOErrorEnum.CANCELLED))
-                this._toast(e.message);
-        } finally {
-            for (const [key, value] of Object.entries(changes)) {
-                if (this._wanted.get(key) === value)
-                    this._wanted.delete(key);
-            }
-            if (!done)
-                this._changed();
-        }
-        if (done && !this._gone) {
-            this._written();
-            this._home.onEvent?.();
-        }
-    }
-
     // The home reads every unit only once a minute; this one is read while its page shows.
     async _read(now = false) {
         const device = this._device;
         if (this._gone || this._reading || typeof device.source?.readDevice !== 'function' ||
-            (!now && !this._page?.get_mapped()) || this._settle || this._wanted.size > 0 ||
-            Date.now() - this._touched < TOUCHED)
+            (!now && !this._page?.get_mapped()) || this._writes.pending || Date.now() - this._writes.touched < TOUCHED)
             return;
         this._reading = true;
         try {

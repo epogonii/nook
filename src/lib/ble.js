@@ -19,9 +19,9 @@ const HAS_CAPABILITY = 0x20;
 const HAS_OBJECT = 0x40;
 const HAS_IO = 0x20;
 
-function call(path, iface, method, args) {
+function call(bus, path, iface, method, args) {
     return new Promise((resolve, reject) => {
-        Gio.DBus.system.call(BLUEZ, path, iface, method, args, null, Gio.DBusCallFlags.NONE, -1, null,
+        bus.call(BLUEZ, path, iface, method, args, null, Gio.DBusCallFlags.NONE, -1, null,
             (connection, result) => {
                 try {
                     resolve(connection.call_finish(result));
@@ -97,6 +97,7 @@ export class BeaconScan {
         this._adapter = null;
         this._subscriptions = [];
         this._wanted = false;
+        this._bus = null;
     }
 
     // No-op without a powered adapter. _wanted is rechecked after each await, so a
@@ -105,14 +106,16 @@ export class BeaconScan {
         this._wanted = true;
         if (this._adapter)
             return;
-        const [objects] = (await call('/', 'org.freedesktop.DBus.ObjectManager', 'GetManagedObjects', null)).deepUnpack();
+        // Held while scanning: GLib keeps the shared connection only while something holds
+        // it, and BlueZ ends the discovery of a client whose connection closed.
+        const bus = this._bus ??= Gio.DBus.system;
+        const [objects] = (await call(bus, '/', 'org.freedesktop.DBus.ObjectManager', 'GetManagedObjects', null)).deepUnpack();
         const adapter = Object.entries(objects).find(([, ifaces]) => ifaces[ADAPTER]?.Powered?.deepUnpack())?.[0];
         this.off = !adapter;
         if (!adapter || !this._wanted || this._adapter)
             return;
         this._adapter = adapter;
 
-        const bus = Gio.DBus.system;
         this._subscriptions.push(bus.signal_subscribe(BLUEZ, 'org.freedesktop.DBus.Properties', 'PropertiesChanged',
             null, DEVICE, Gio.DBusSignalFlags.NONE, (_bus, _sender, path, _iface, _signal, params) => {
                 const [, changed] = params.deepUnpack();
@@ -131,12 +134,12 @@ export class BeaconScan {
 
         // No UUIDs filter: BlueZ matches advertised service UUIDs, and MiBeacon's
         // appears only in service data.
-        await call(adapter, ADAPTER, 'SetDiscoveryFilter', new GLib.Variant('(a{sv})', [{
+        await call(bus, adapter, ADAPTER, 'SetDiscoveryFilter', new GLib.Variant('(a{sv})', [{
             Transport: new GLib.Variant('s', 'le'),
             DuplicateData: new GLib.Variant('b', true),
         }]));
         if (this._wanted)
-            await call(adapter, ADAPTER, 'StartDiscovery', null);
+            await call(bus, adapter, ADAPTER, 'StartDiscovery', null);
     }
 
     _look(path, props) {
@@ -159,11 +162,12 @@ export class BeaconScan {
     stop() {
         this._wanted = false;
         for (const id of this._subscriptions)
-            Gio.DBus.system.signal_unsubscribe(id);
+            this._bus.signal_unsubscribe(id);
         this._subscriptions = [];
         if (this._adapter) {
-            call(this._adapter, ADAPTER, 'StopDiscovery', null).catch(() => {});
+            call(this._bus, this._adapter, ADAPTER, 'StopDiscovery', null).catch(() => {});
             this._adapter = null;
         }
+        this._bus = null;
     }
 }

@@ -10,13 +10,13 @@ import {gettext as _, pgettext} from 'gettext';
 import {CameraCard} from './card-camera.js';
 import {ClimateCard} from './card-climate.js';
 import {MediaCard} from './card-media.js';
-import {SpecCard, ownSwitch} from './card-spec.js';
+import {SpecCard} from './card-spec.js';
 import {TvCard} from './card-tv.js';
 import {deviceMenu, setLook, toggled} from './device-menu.js';
 import {heroColor, heroOf} from './hero.js';
 import {HistorySection, alertsGroup} from './history.js';
 import {IN_HERO} from './props.js';
-import {isOn, macText, spanText, whenText} from './text.js';
+import {heardOf, isBluetooth, isOn, macText, ownSwitch, spanText, whenText} from './text.js';
 import {SceneArea, dropPicture, glyphArea, iconDialog, lookOf, renameDialog, tintClass} from './widgets.js';
 
 // The services a did belongs to, by its prefix; a bare did is Mi Home's.
@@ -249,8 +249,15 @@ class DevicePage extends Adw.NavigationPage {
         }
         // A camera's card shows its picture, live or the last still.
         this._scene.visible = !picture && device.primary.kind !== 'camera';
-        this._status.label = offline ? _('Offline') : device.online ? _('Online') : _('Connecting…');
-        if (device.online)
+        // Mi Home has it offline unless a gateway relays it; the window hears it nearby.
+        const heard = heardOf(device);
+        if (isBluetooth(device) && device.online !== true) {
+            this._status.label = heard ? _('Heard %s').replace('%s', whenText(heard.time))
+                : this._home.hearing ? _('Listening for it nearby…') : _('Bluetooth is off, so it cannot be heard.');
+        } else {
+            this._status.label = offline ? _('Offline') : device.online ? _('Online') : _('Connecting…');
+        }
+        if (device.online || heard)
             this._dot.add_css_class('on');
         else
             this._dot.remove_css_class('on');

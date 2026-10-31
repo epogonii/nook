@@ -10,7 +10,7 @@ import {choiceOf} from './hero.js';
 import {NUMBER_FORMATS, humanize} from './humanize.js';
 import {WHITE} from './lib/spec-home.js';
 import {MAIN_RANGES, PLUMBING, PROP_GLYPHS, RISKY_ACTION, SERVICE_GLYPHS, actionIcon, choiceGlyph, specTitle, worthShowing} from './props.js';
-import {choiceText, deviceType, formatValue, numberFormat, specKey} from './text.js';
+import {choiceText, deviceType, formatValue, numberFormat, ownSwitch, specKey} from './text.js';
 import {glyphArea} from './widgets.js';
 
 // ms a value just written stays over what a read brings: the device may not report it yet.
@@ -23,12 +23,6 @@ const isBluetooth = device => String(device.did).startsWith('blt.');
 
 // Mi Home's own devices have a bare did; their robots, fryers and gateways have cards of their own.
 const isMi = device => !device.did.includes(':');
-
-// The device's own switch, for the power button; a socket's ring light is not it.
-export function ownSwitch(device) {
-    const [prop] = device.primary.props;
-    return device.primary.kind === 'switch' && !(prop?.service === 'light' && deviceType(device) !== 'light');
-}
 
 // The colour wheel's light has a switch of its own when it isn't the device's (a socket's ring).
 function lightSwitch(device, {service, on}) {

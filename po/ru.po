@@ -3728,3 +3728,60 @@ msgstr ""
 #: data/io.github.epogonii.nook.desktop:9
 msgid "smart home;lights;camera;Home Assistant;Hue;HomeKit;Mi Home;"
 msgstr "умный дом;свет;камера;Home Assistant;Hue;HomeKit;Mi Home;"
+
+#: src/device.js:255
+#, javascript-format
+msgid "Heard %s"
+msgstr "Слышно %s"
+
+#: src/device.js:256
+msgid "Listening for it nearby…"
+msgstr "Ждём сигнала поблизости…"
+
+#: src/device.js:256
+msgid "Bluetooth is off, so it cannot be heard."
+msgstr "Bluetooth выключен, сигнал не слышно."
+
+#: src/home-cards.js:262
+msgid "Inside"
+msgstr "В комнате"
+
+#: src/home-cards.js:267
+msgid "Target"
+msgstr "Задано"
+
+#: src/home.js:192
+msgid "Welcome to Nook"
+msgstr "Добро пожаловать в Nook"
+
+#: src/home.js:232
+msgid "Small"
+msgstr "Маленький"
+
+#: src/home.js:232
+msgid "Large"
+msgstr "Большой"
+
+#: src/home.js:235
+msgid "Device Pictures"
+msgstr "Картинки устройств"
+
+#: src/home.js:236
+msgid "Animations"
+msgstr "Анимации"
+
+#: src/home.js:238
+msgid "Tile Size"
+msgstr "Размер плиток"
+
+#: src/home.js:240
+msgid "View Options"
+msgstr "Вид"
+
+#: src/home.js:249
+msgid "All"
+msgstr "Все"
+
+#: src/text.js:329
+msgid "Bluetooth"
+msgstr "Bluetooth"

@@ -48,9 +48,36 @@ class AppMiHome extends MiHome {
     }
 }
 
-class AppBeaconScan extends BeaconScan {
+// BlueZ keeps one discovery per bus connection, so the extension's scans and the window's
+// share one: a second StartDiscovery would fail, and one StopDiscovery would end them all.
+const listening = new Set();
+let shared = null;
+
+class AppBeaconScan {
+    constructor(onBeacon) {
+        this._onBeacon = onBeacon;
+        this.onLocked = null;
+        this.off = false;
+    }
+
+    async start() {
+        if (!shared) {
+            shared = new BeaconScan((address, beacon) => listening.forEach(scan => scan._onBeacon(address, beacon)));
+            shared.onLocked = address => listening.forEach(scan => scan.onLocked?.(address));
+        }
+        listening.add(this);
+        await shared.start();
+        this.off = shared.off;
+    }
+
     setKey(address, key) {
-        this.keys.set(address, key);
+        shared?.keys.set(address, key);
+    }
+
+    stop() {
+        listening.delete(this);
+        if (listening.size === 0)
+            shared?.stop();
     }
 
     abort() {

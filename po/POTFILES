@@ -13,6 +13,7 @@ src/device.js
 src/devices.js
 src/hero.js
 src/history.js
+src/home-cards.js
 src/home.js
 src/homes.js
 src/humanize.js

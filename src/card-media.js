@@ -12,14 +12,14 @@ import {CastError} from './lib/cast-home.js';
 const VOLUME = {name: 'volume', range: [0, 100, 1], unit: 'percentage'};
 
 // An app with no media session and no playing group takes no pause, only a receiver STOP.
-const onlyStops = device => Boolean(device.state?.app) && !device.state.media;
-const playingNow = device => ['PLAYING', 'BUFFERING'].includes(device.state?.media?.state) || onlyStops(device);
+export const onlyStops = device => Boolean(device.state?.app) && !device.state.media;
+export const playingNow = device => ['PLAYING', 'BUFFERING'].includes(device.state?.media?.state) || onlyStops(device);
 
 // Cast supportedMediaCommands bits: 64 next, 128 previous. A media status
 // without the field allows everything.
-const castAllows = (media, bit) => Boolean(media) && (typeof media.commands !== 'number' || (media.commands & bit) !== 0);
+export const castAllows = (media, bit) => Boolean(media) && (typeof media.commands !== 'number' || (media.commands & bit) !== 0);
 
-function clock(seconds) {
+export function clock(seconds) {
     const whole = Math.max(0, Math.floor(seconds));
     const minutes = Math.floor(whole / 60);
     const rest = String(whole % 60).padStart(2, '0');

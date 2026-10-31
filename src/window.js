@@ -28,20 +28,18 @@ import {SpeakersGroup} from './pages/speakers.js';
 import {TvsGroup} from './pages/tvs.js';
 import {XiaomiGroup} from './pages/xiaomi.js';
 import {TopBarPage} from './topbar.js';
+import {CameraPin} from './widgets.js';
 
 // A row of the sidebar: one place in the window.
 const PlaceRow = GObject.registerClass(
 class PlaceRow extends Gtk.ListBoxRow {
-    _init(place, title, icon = null, count = null) {
+    _init(place, title, icon) {
         super._init();
         this.place = place;
         const box = new Gtk.Box({spacing: 12});
-        // Rooms line up with the text of the rows that have an icon.
-        box.append(icon ? new Gtk.Image({icon_name: icon}) : new Gtk.Box({width_request: 16}));
+        box.append(new Gtk.Image({icon_name: icon}));
         this.label = new Gtk.Label({label: title, xalign: 0, hexpand: true, ellipsize: Pango.EllipsizeMode.END});
         box.append(this.label);
-        if (count !== null)
-            box.append(new Gtk.Label({label: String(count), css_classes: ['dim-label', 'caption', 'nook-count']}));
         this.child = box;
     }
 });
@@ -107,19 +105,17 @@ class Window extends Adw.ApplicationWindow {
         this._accounts = new AccountsPage(settings, this._groups, this._nav);
         this._topBar = new TopBarPage(this._menu, settings, this._home, this._nav);
         this._home.connect('add-devices', () => this.addDevices());
+        this._home.connect('show-accounts', () => this.showPlace('accounts'));
         this._accounts.connect('add-devices', () => this.addDevices());
         this._home.connect('open-device', (_home, device) => this._openDevice(device));
-        this._home.connect('rooms-changed', () => this._fillSidebar());
         this._nav.connect('popped', (_nav, page) => page.forget?.());
         this._nav.connect('replaced', () => this._home.devicePage?.forget());
 
         this._list = new Gtk.ListBox({css_classes: ['navigation-sidebar']});
         this._list.connect('row-activated', (_list, row) => this.showPlace(row.place));
-        this._list.set_header_func((row, before) => {
-            const first = row.place.startsWith('room:') && !before?.place.startsWith('room:');
-            const setup = row.place === 'accounts';
-            row.set_header(first || setup ? new Gtk.Label({
-                label: first ? _('Rooms') : _('Setup'),
+        this._list.set_header_func(row => {
+            row.set_header(row.place === 'accounts' ? new Gtk.Label({
+                label: _('Setup'),
                 xalign: 0,
                 css_classes: ['heading', 'dim-label'],
                 margin_start: 12,
@@ -133,18 +129,34 @@ class Window extends Adw.ApplicationWindow {
             tooltip_text: _('Main Menu'),
             menu_model: this._mainMenu(),
         });
-        const sidebarHeader = new Adw.HeaderBar();
+        const brand = new Gtk.Box({spacing: 6, css_classes: ['nook-brand']});
+        brand.append(new Gtk.Image({icon_name: 'io.github.epogonii.nook-symbolic'}));
+        brand.append(new Gtk.Label({label: _('Nook'), css_classes: ['title']}));
+        const sidebarHeader = new Adw.HeaderBar({title_widget: brand});
         sidebarHeader.pack_end(menuButton);
         const sidebarView = new Adw.ToolbarView({
             content: new Gtk.ScrolledWindow({hscrollbar_policy: Gtk.PolicyType.NEVER, child: this._list}),
         });
         sidebarView.add_top_bar(sidebarHeader);
+        const pin = new CameraPin();
+        pin.connect('open', () => {
+            if (this._nav.visible_page === this._home.devicePage && this._home.devicePage.device === pin.device)
+                return;
+            this.showPlace('home');
+            this._openDevice(pin.device);
+        });
+        this._home.connect('pin-changed', () => {
+            const device = this._home.pinned;
+            pin.set(device, device && this._home.nameOf(device), device && this._home.stillOf(device));
+        });
+        sidebarView.add_bottom_bar(pin);
 
         this._split = new Adw.OverlaySplitView({
             sidebar: sidebarView,
             content: this._nav,
             min_sidebar_width: 200,
             max_sidebar_width: 260,
+            css_classes: ['nook-dark-side'],
         });
         const sidebar = Gio.SimpleAction.new_stateful('show-sidebar', null, GLib.Variant.new_boolean(true));
         sidebar.connect('change-state', (action, value) => {
@@ -207,16 +219,13 @@ class Window extends Adw.ApplicationWindow {
     }
 
     _fillSidebar() {
-        const places = [['home', _('Home'), 'go-home-symbolic', null]];
-        for (const [key, name, count] of this._home.rooms)
-            places.push([`room:${key}`, name, null, count]);
-        places.push(['accounts', _('Accounts'), 'goa-panel-symbolic', null]);
+        const places = [['home', _('Home'), 'go-home-symbolic'], ['accounts', _('Accounts'), 'goa-panel-symbolic']];
         if (this._menu.present)
-            places.push(['top-bar', _('Top Bar'), 'focus-top-bar-symbolic', null]);
+            places.push(['top-bar', _('Top Bar'), 'focus-top-bar-symbolic']);
         for (let row = this._list.get_first_child(); row; row = this._list.get_first_child())
             this._list.remove(row);
-        for (const [place, title, icon, count] of places)
-            this._list.append(new PlaceRow(place, title, icon, count));
+        for (const [place, title, icon] of places)
+            this._list.append(new PlaceRow(place, title, icon));
         if (!places.some(([place]) => place === this._place))
             this._place = 'home';
         this._select();
@@ -229,13 +238,12 @@ class Window extends Adw.ApplicationWindow {
         }
     }
 
-    // place: "home", "room:<key>", "accounts", "top-bar".
+    // place: "home", "accounts", "top-bar". Home keeps the room its tabs show.
     showPlace(place) {
         this._place = place;
         this._select();
         let page;
-        if (place === 'home' || place.startsWith('room:')) {
-            this._home.setRoom(place === 'home' ? null : place.slice(5));
+        if (place === 'home') {
             page = this._home;
         } else if (place === 'accounts') {
             page = this._accounts;

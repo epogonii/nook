@@ -2,8 +2,70 @@
   padding: 6px 24px 24px;
 }
 
+/* The sidebar stays dark in both styles. */
+.nook-dark-side .sidebar-pane {
+  --sidebar-bg-color: #18181b;
+  --sidebar-backdrop-color: #1e1e21;
+  --sidebar-fg-color: white;
+  --sidebar-shade-color: rgb(0 0 6 / 25%);
+  --sidebar-border-color: rgb(0 0 6 / 36%);
+}
+
+@media (prefers-color-scheme: dark) {
+  .nook-dark-side .sidebar-pane {
+    --sidebar-bg-color: #131315;
+    --sidebar-backdrop-color: #19191b;
+  }
+}
+
+/* Home's rooms in its header: the one shown in full, the rest dimmed. */
+button.flat.nook-room-tab {
+  min-height: 0;
+  padding: 5px 9px;
+  font-size: 15px;
+  font-weight: 600;
+  color: alpha(currentColor, 0.5);
+}
+
+button.flat.nook-room-tab:hover {
+  color: alpha(currentColor, 0.75);
+}
+
+button.flat.nook-room-tab:checked {
+  color: inherit;
+  font-weight: 700;
+  background: none;
+}
+
+button.flat.nook-room-tab:checked:hover {
+  background-color: alpha(currentColor, 0.07);
+}
+
+/* Rooms past an edge of the strip fade out under it. */
+.nook-room-strip > undershoot.left,
+.nook-room-strip > undershoot.right {
+  box-shadow: none;
+  background-repeat: no-repeat;
+  background-size: 28px 100%;
+}
+
+.nook-room-strip > undershoot.left {
+  background-image: linear-gradient(to right, var(--window-bg-color), alpha(var(--window-bg-color), 0));
+}
+
+.nook-room-strip > undershoot.right {
+  background-position: right;
+  background-image: linear-gradient(to left, var(--window-bg-color), alpha(var(--window-bg-color), 0));
+}
+
+/* The tile shows its own hover; the cell around it is no wider. */
+.nook-home flowboxchild {
+  padding: 0;
+  background: none;
+}
+
 .nook-section {
-  margin: 18px 2px 8px;
+  margin: 40px 2px 12px;
 }
 
 .nook-section.first {
@@ -30,14 +92,71 @@
   -gtk-icon-transform: rotate(90deg);
 }
 
-.nook-tile {
-  padding: 8px 12px 8px 8px;
-  min-height: 52px;
-  border-radius: 12px;
+.nook-tile-body {
+  padding: 0;
+  border-radius: 24px;
 }
 
 .nook-tile-name {
+  font-weight: 700;
+}
+
+.nook-tile .nook-tile-name {
+  font-size: 1.07em;
+}
+
+.nook-tile .nook-tile-state {
+  font-size: 0.93em;
+}
+
+.nook-tile.small .nook-tile-name {
+  font-size: 0.9em;
+}
+
+.nook-tile.small .nook-tile-state {
+  font-size: 0.85em;
+}
+
+.nook-tile .nook-tile-state.busy {
   font-weight: 600;
+}
+
+.nook-tile .nook-tile-state.alarm {
+  color: var(--error-color);
+  font-weight: 700;
+}
+
+/* Grey at rest; the device's colour (widgets.js tintClass) while it does something. */
+.nook-status-dot {
+  min-width: 8px;
+  min-height: 8px;
+  border-radius: 999px;
+  background-color: alpha(currentColor, 0.3);
+}
+
+.nook-tile-more {
+  min-width: 32px;
+  min-height: 32px;
+  padding: 0;
+  opacity: 0.45;
+  transition: opacity 150ms ease-out;
+}
+
+.nook-tile:hover .nook-tile-more,
+.nook-tile:focus-within .nook-tile-more {
+  opacity: 1;
+}
+
+.nook-tile-picture {
+  transition: filter 300ms ease-out;
+}
+
+.nook-tile.off .nook-tile-picture {
+  filter: opacity(0.75);
+}
+
+.nook-tile.offline .nook-tile-picture {
+  filter: grayscale(1) opacity(0.45);
 }
 
 .nook-glyph {
@@ -64,7 +183,7 @@ button.nook-glyph:hover {
 
 .nook-camera {
   padding: 0;
-  border-radius: 12px;
+  border-radius: 24px;
 }
 
 .nook-camera-caption {
@@ -75,6 +194,163 @@ button.nook-glyph:hover {
 
 .nook-camera .nook-tile-state {
   color: alpha(white, 0.8);
+}
+
+/* The camera at the foot of the sidebar. */
+button.flat.nook-camera-pin {
+  margin: 0 6px 6px;
+  padding: 6px 6px 8px;
+  border-radius: 16px;
+}
+
+.nook-camera-pin-still {
+  margin-bottom: 8px;
+  border-radius: 10px;
+  background-color: alpha(currentColor, 0.08);
+}
+
+/* Onto Home, one after another: on opening, on a room change, as a device turns up (home.js). */
+@keyframes nook-rise {
+  from {
+    opacity: 0;
+    transform: translateY(16px) scale(0.98);
+  }
+
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+
+.nook-rise {
+  animation: nook-rise 450ms cubic-bezier(0.22, 1, 0.36, 1) both;
+}
+
+.nook-rise-1 {
+  animation-delay: 40ms;
+}
+
+.nook-rise-2 {
+  animation-delay: 80ms;
+}
+
+.nook-rise-3 {
+  animation-delay: 120ms;
+}
+
+.nook-rise-4 {
+  animation-delay: 160ms;
+}
+
+.nook-rise-5 {
+  animation-delay: 200ms;
+}
+
+.nook-rise-6 {
+  animation-delay: 240ms;
+}
+
+.nook-rise-7 {
+  animation-delay: 280ms;
+}
+
+.nook-rise-8 {
+  animation-delay: 320ms;
+}
+
+.nook-rise-9 {
+  animation-delay: 360ms;
+}
+
+/* Home with no devices yet (home.js). */
+.nook-welcome {
+  margin: 36px 12px;
+}
+
+.nook-held {
+  opacity: 0;
+}
+
+.nook-welcome > .nook-showcase {
+  margin-bottom: 28px;
+}
+
+.nook-welcome > .title-1 {
+  margin-bottom: 10px;
+}
+
+.nook-welcome-buttons {
+  margin-top: 30px;
+}
+
+.nook-welcome-buttons > button {
+  min-width: 120px;
+}
+
+/* What is going on, over Home's sections (home-cards.js). */
+.nook-wide-row {
+  margin: 6px 0 28px;
+}
+
+.nook-home flowboxchild > .nook-wide {
+  padding: 18px;
+  border-radius: 24px;
+}
+
+.nook-player-cover {
+  border-radius: 12px;
+  background-color: alpha(currentColor, 0.05);
+}
+
+.nook-player-cover.empty {
+  padding: 12px;
+}
+
+.nook-player-title {
+  font-size: 1.2em;
+  font-weight: 700;
+}
+
+.nook-player progressbar > trough,
+.nook-player progressbar > trough > progress {
+  min-height: 4px;
+}
+
+.nook-player-times {
+  color: alpha(currentColor, 0.6);
+}
+
+.nook-player button.nook-player-play {
+  min-width: 42px;
+  min-height: 42px;
+  color: var(--window-bg-color);
+  background-color: var(--window-fg-color);
+}
+
+.nook-player button.nook-player-play:hover {
+  background-color: alpha(var(--window-fg-color), 0.85);
+}
+
+.nook-player button.nook-player-play:active {
+  background-color: alpha(var(--window-fg-color), 0.72);
+}
+
+.nook-aircon-figure {
+  font-size: 2.3em;
+  font-weight: 300;
+}
+
+.nook-aircon-modes > button {
+  min-height: 0;
+  padding: 4px 11px;
+  border-radius: 999px;
+  font-size: 0.9em;
+  font-weight: 600;
+}
+
+.nook-aircon-modes > button:checked {
+  color: var(--window-bg-color);
+  background-color: var(--window-fg-color);
 }
 
 .offline .nook-tile-name,

@@ -12,6 +12,42 @@ export const numberFormat = new Intl.NumberFormat(undefined, {maximumFractionDig
 // ONVIF cameras have no urn, and their model ('IPC-model') names no kind.
 export const deviceType = device => device.urn?.split(':')[3] ?? (device.primary?.kind === 'camera' ? 'camera' : null);
 
+// The device's own switch, for the power button; a socket's ring light is not it.
+export function ownSwitch(device) {
+    const [prop] = device.primary.props;
+    return device.primary.kind === 'switch' && !(prop?.service === 'light' && deviceType(device) !== 'light');
+}
+
+// Mi Home has a Bluetooth device online only while a gateway relays it; nearby, the window
+// hears its adverts instead. The last one per did, kept across device list reloads: a kettle
+// advertises only every ~30 s.
+export const beacons = new Map();
+
+// Seconds. Older readings stay off tiles, where they'd look current.
+const BEACON_FRESH = 10 * 60;
+
+export const isBluetooth = device => String(device.did).startsWith('blt.');
+
+export function heardOf(device) {
+    const beacon = beacons.get(device.did);
+    return beacon && Date.now() / 1000 - beacon.time < BEACON_FRESH ? beacon : null;
+}
+
+export function kettleStatus(status) {
+    return [_('Idle'), _('Heating'), _('Cooling down'), _('Keeping warm')][status] ?? null;
+}
+
+function beaconText(beacon) {
+    const parts = [];
+    if (beacon.temperature !== undefined)
+        parts.push(`${numberFormat.format(beacon.temperature)} °C`);
+    if (beacon.humidity !== undefined)
+        parts.push(`${numberFormat.format(beacon.humidity)} %`);
+    if (beacon.status > 0 && kettleStatus(beacon.status))
+        parts.push(kettleStatus(beacon.status));
+    return parts.join(' · ') || null;
+}
+
 let units = null;
 
 function unitText(unit) {
@@ -283,10 +319,14 @@ export function isOn(device) {
 
 export function stateText(device) {
     const {primary, values, online} = device;
+    const heard = heardOf(device);
+    const said = heard && beaconText(heard);
+    if (said)
+        return said;
     if (online === null || online === undefined)
         return '…';
     if (!online)
-        return _('Offline');
+        return isBluetooth(device) ? _('Bluetooth') : _('Offline');
     switch (primary.kind) {
     case 'camera':
         return _('Online');

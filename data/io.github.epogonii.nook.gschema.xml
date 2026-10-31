@@ -131,6 +131,26 @@
       <summary>Folded groups</summary>
       <description>Groups of this window shown folded.</description>
     </key>
+    <key name="tile-size" type="s">
+      <choices>
+        <choice value="small"/>
+        <choice value="medium"/>
+        <choice value="large"/>
+      </choices>
+      <default>'medium'</default>
+      <summary>Size of the Home tiles</summary>
+      <description>How large the device tiles on this window's Home page are.</description>
+    </key>
+    <key name="pictures" type="b">
+      <default>true</default>
+      <summary>Device pictures</summary>
+      <description>Whether the tiles on this window's Home page show pictures of the devices. Off, they show each device's symbol in a coloured well.</description>
+    </key>
+    <key name="animations" type="b">
+      <default>true</default>
+      <summary>Animations</summary>
+      <description>Whether device pictures move while their devices work and fade as their light changes. Off, they stay still, as they do with the system's Reduce Animation.</description>
+    </key>
     <key name="secrets-imported" type="b">
       <default>false</default>
       <summary>Logins taken over from the extension</summary>
