@@ -3565,7 +3565,7 @@ msgid "About Nook"
 msgstr ""
 
 #: data/io.github.epogonii.nook.desktop:3
-msgid "Find, pair and sign in to the devices Nook shows in the top bar"
+msgid "Control your smart home"
 msgstr ""
 
 #: data/io.github.epogonii.nook.desktop:9

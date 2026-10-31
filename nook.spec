@@ -30,8 +30,6 @@ Recommends:     bluez
 Nook brings lights, plugs, sensors, cameras, air conditioners, TVs and
 speakers together in one place. Its window shows every device by section and
 room, signs in to the accounts and finds and pairs devices on the network.
-With the Nook extension for GNOME Shell, the same devices are also in the
-top bar.
 
 %prep
 %autosetup

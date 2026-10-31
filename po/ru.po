@@ -3746,10 +3746,8 @@ msgid "About Nook"
 msgstr "О Nook"
 
 #: data/io.github.epogonii.nook.desktop:3
-msgid "Find, pair and sign in to the devices Nook shows in the top bar"
-msgstr ""
-"Поиск, сопряжение и вход в аккаунты устройств, которые Nook показывает в "
-"верхней панели"
+msgid "Control your smart home"
+msgstr "Управление умным домом"
 
 #: data/io.github.epogonii.nook.desktop:9
 msgid "smart home;lights;camera;Home Assistant;Hue;HomeKit;Mi Home;"

@@ -1,6 +1,6 @@
 [Desktop Entry]
 Name=Nook
-Comment=Find, pair and sign in to the devices Nook shows in the top bar
+Comment=Control your smart home
 Exec=nook
 Icon=io.github.epogonii.nook
 Terminal=false
