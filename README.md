@@ -6,13 +6,11 @@
 
 <p align="center">
   Your smart home on the GNOME desktop.<br>
-  Lights, climate, sensors, cameras, speakers and TVs, in a window of their own and in the top bar.
+  Lights, climate, sensors, cameras, speakers and TVs in one window.
 </p>
 
 <p align="center">
-  <img alt="App version" src="https://img.shields.io/badge/dynamic/xml?url=https%3A%2F%2Fraw.githubusercontent.com%2Fepogonii%2Fnook%2Fmain%2Fdata%2Fio.github.epogonii.nook.metainfo.xml&query=%2F%2Frelease%5B1%5D%2F%40version&label=app&color=4a86cf">
-  <img alt="Extension version" src="https://img.shields.io/badge/dynamic/json?url=https%3A%2F%2Fraw.githubusercontent.com%2Fepogonii%2Fnook%2Fmain%2Fextension%2Fmetadata.json&query=%24%5B%27version-name%27%5D&label=extension&color=4a86cf">
-  <img alt="GNOME Shell 46 to 51" src="https://img.shields.io/badge/GNOME%20Shell-46%20to%2051-5c5cf5?logo=gnome&logoColor=white">
+  <img alt="Version" src="https://img.shields.io/badge/dynamic/xml?url=https%3A%2F%2Fraw.githubusercontent.com%2Fepogonii%2Fnook%2Fmain%2Fdata%2Fio.github.epogonii.nook.metainfo.xml&query=%2F%2Frelease%5B1%5D%2F%40version&label=version&color=4a86cf">
   <a href="LICENSE"><img alt="License GPL-2.0-or-later" src="https://img.shields.io/badge/license-GPL--2.0--or--later-8f33c7"></a>
   <a href="https://github.com/epogonii/nook/commits/main"><img alt="Last commit" src="https://img.shields.io/github/last-commit/epogonii/nook?color=2e9e6b"></a>
   <a href="https://github.com/sponsors/epogonii"><img alt="Sponsor" src="https://img.shields.io/badge/sponsor-GitHub-ea4aaa?logo=githubsponsors&logoColor=white"></a>
@@ -26,11 +24,6 @@
 Nook brings the devices of your home together, whatever app or hub they live in. It talks to
 most of them directly on your network, and to the rest through the account you already have.
 Nothing to host, no extra hub.
-
-It comes in two parts. The **Nook app** is where the devices live: its window shows the whole
-home, signs in to your accounts and finds and pairs what is on your network. The **Nook
-extension** puts the same devices in a menu in the GNOME top bar; it draws the menu and asks
-the app for everything else.
 
 ## Works with
 
@@ -55,45 +48,13 @@ Home Assistant knows comes in through Home Assistant.
 - **Now**: the sidebar sums up the home. The temperature indoors, the lights that are on, the
   doors and windows, motion, leaks, what is playing, and a camera.
 - **Device pages** hold the controls and the details: brightness and colour, modes and target
-  temperature, readings and their history, the name and the icon, and what the top bar shows of
-  the device.
+  temperature, readings and their history, the name and the icon.
 - **Accounts** signs in to the apps and hubs above and to the clouds of air conditioners;
   **Add Devices** looks for everything on your network at once.
 - **Backgrounds**: twelve come with the app, or pick a picture of your own.
 
 <p align="center">
   <img src="screenshots/device.png" width="49%" alt="A lamp's page: its brightness, mode and colour temperature, its name and icon"> <img src="screenshots/accounts.png" width="49%" alt="Accounts: apps and hubs, air conditioners, lights and switches, TVs and speakers, cameras">
-</p>
-
-## The top bar
-
-<p align="center">
-  <img src="docs/demo.gif" width="400" alt="Switching a light and a plug from their tiles, changing a lamp's colour and brightness, turning an air conditioner from cooling to heating, boiling a kettle, following a robot vacuum on its map and a day of temperature and humidity">
-</p>
-
-- **Tiles** switch with one click. A **card** holds the rest: brightness and colour, modes and
-  target temperature, positions, readings and device info.
-- **Rooms** come from your apps; the room picker above the tiles shows one at a time.
-- **Tabs at the bottom**: Home and up to six sections such as lights, climate or cameras, picked
-  from the devices you have or by hand, as a bar or a floating pill.
-- **Top bar readings**: pin a thermometer or a door sensor and its value sits next to the icon.
-- **TVs** show the app or channel that is on; the card holds the volume, the inputs, the apps
-  and a remote.
-- **Speakers** show what is playing and the time left, with play, pause and next. A speaker
-  playing in a group shows the group's playback.
-- **Cameras** play live in their card, turn if they can, and save a snapshot to `Pictures/Nook`.
-- **Scenes** from Home Assistant and Mi Home run from a tile of their own.
-- **Alerts**: a leak or smoke sensor behind a Xiaomi gateway becomes a notification the moment
-  it fires, also on the lock screen.
-- **Four layouts**: one room at a time, small tiles, tiles by room, or modules grouped by what
-  things do. The **Top Bar** page of the app sets them up.
-
-<p align="center">
-  <img src="docs/cards.png" alt="Cards for a lamp, an air conditioner, a radiator and a motion sensor">
-</p>
-
-<p align="center">
-  <img src="docs/layouts.png" alt="The same home with all rooms, as small tiles and as modules, with tabs at the bottom">
 </p>
 
 ## Install
@@ -125,12 +86,8 @@ them, so something may not work on a real unit. If yours doesn't, please
 
 - Devices on your network are reached directly; nothing goes through a server of ours. A newer
   Midea air conditioner gets its key from Midea's cloud once, when it is added.
-- Logins and pairing keys stay in the keyring, never in settings. Those the extension saved
-  before the app existed are handed over to the app once, the first time it starts.
-- Cloud accounts are asked while the window or the menu is open, and every few minutes for
-  readings shown in the top bar. Those readings wait while the screen is locked.
-- While the screen is locked there is no menu; only a Xiaomi gateway's leak and smoke alerts
-  still become notifications.
+- Logins and pairing keys stay in the keyring, never in settings.
+- Cloud accounts are asked only while the window is on screen.
 
 As a Flatpak, the app is allowed:
 
