@@ -100,7 +100,14 @@ Home Assistant knows comes in through Home Assistant.
 
 ### The app
 
-Nook isn't on Flathub yet. Until it is, build it from this repository with Meson. It needs GJS,
+On Fedora 43 and later, install it from [Copr](https://copr.fedorainfracloud.org/coprs/swink/nook/):
+
+```sh
+sudo dnf copr enable swink/nook
+sudo dnf install nook
+```
+
+Nook isn't on Flathub yet. Elsewhere, build it from this repository with Meson. It needs GJS,
 GTK 4, libadwaita and libsecret. Camera video needs GStreamer with RTSP and an H.264 decoder
 (`gst-plugins-good` and `gst-libav` or `openh264`); pairing an Android TV needs `openssl`.
 
@@ -117,7 +124,7 @@ The extension runs on GNOME 46 to 51. It is in review on extensions.gnome.org:
 
 <a href="https://extensions.gnome.org/extension/11453/nook/"><img src="docs/get-it-on-ego.png" width="228" alt="Get it on GNOME Extensions"></a>
 
-Until it is published there, install it from the same checkout:
+Until it is published there, install it from a checkout of this repository:
 
 ```sh
 extension/tools/install-local.sh
