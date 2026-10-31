@@ -1,5 +1,5 @@
 <p align="center">
-  <img src="icons/nook-logo-anim-dark.svg#gh-light-mode-only" width="96" alt=""><img src="icons/nook-logo-anim.svg#gh-dark-mode-only" width="96" alt="">
+  <img src="docs/nook-logo-anim-dark.svg#gh-light-mode-only" width="96" alt=""><img src="docs/nook-logo-anim.svg#gh-dark-mode-only" width="96" alt="">
 </p>
 
 <h1 align="center">Nook</h1>
@@ -12,7 +12,7 @@
 <p align="center">
   <a href="https://extensions.gnome.org/extension/11453/nook/"><img alt="Get it on extensions.gnome.org" src="https://img.shields.io/badge/extensions.gnome.org-get%20it-4a86cf?logo=gnome&logoColor=white"></a>
   <img alt="GNOME Shell 46 to 51" src="https://img.shields.io/badge/GNOME%20Shell-46%20to%2051-5c5cf5?logo=gnome&logoColor=white">
-  <img alt="Version" src="https://img.shields.io/badge/dynamic/json?url=https%3A%2F%2Fraw.githubusercontent.com%2Fepogonii%2Fnook%2Fmain%2Fmetadata.json&query=%24%5B%27version-name%27%5D&label=version&color=4a86cf">
+  <img alt="Version" src="https://img.shields.io/badge/dynamic/json?url=https%3A%2F%2Fraw.githubusercontent.com%2Fepogonii%2Fnook%2Fmain%2Fextension%2Fmetadata.json&query=%24%5B%27version-name%27%5D&label=version&color=4a86cf">
   <a href="LICENSE"><img alt="License GPL-2.0-or-later" src="https://img.shields.io/badge/license-GPL--2.0--or--later-8f33c7"></a>
   <a href="https://github.com/epogonii/nook/commits/main"><img alt="Last commit" src="https://img.shields.io/github/last-commit/epogonii/nook?color=2e9e6b"></a>
   <a href="https://github.com/sponsors/epogonii"><img alt="Sponsor" src="https://img.shields.io/badge/sponsor-GitHub-ea4aaa?logo=githubsponsors&logoColor=white"></a>
@@ -79,7 +79,7 @@ Review takes its time, so the version there can sit behind this branch. To run t
 ```sh
 git clone https://github.com/epogonii/nook.git
 cd nook
-tools/install-local.sh
+extension/tools/install-local.sh
 ```
 
 Log out and back in, turn Nook on in **Extensions**, then open its settings. Add accounts and

@@ -1,11 +1,12 @@
-# Tag a version and the zip that gets uploaded to extensions.gnome.org is
-# attached to the release, built from the same sources as the tag.
+# Tag a version of the extension and the zip that gets uploaded to
+# extensions.gnome.org is attached to the release, built from the same sources
+# as the tag. Its tags are extension-v*: plain v* tags are the app's.
 name: Release
 
 on:
   push:
     tags:
-      - 'v*'
+      - 'extension-v*'
 
 permissions:
   contents: write
@@ -15,6 +16,9 @@ jobs:
     runs-on: ubuntu-latest
     env:
       ASSET: nook@epogonii.github.io.shell-extension.zip
+    defaults:
+      run:
+        working-directory: extension
     steps:
       - uses: actions/checkout@v5
 
@@ -25,7 +29,7 @@ jobs:
 
       - name: The tag and metadata.json must agree
         run: |
-          want="${GITHUB_REF_NAME#v}"
+          want="${GITHUB_REF_NAME#extension-v}"
           have=$(python3 -c 'import json; print(json.load(open("metadata.json"))["version-name"])')
           if [ "$want" != "$have" ]; then
             echo "tag says $want, metadata.json says $have"
@@ -45,7 +49,7 @@ jobs:
         env:
           GH_TOKEN: ${{ github.token }}
         run: |
-          version="${GITHUB_REF_NAME#v}"
+          version="${GITHUB_REF_NAME#extension-v}"
           touch notes.md
           if [ -f CHANGELOG.md ]; then
             awk -v v="## $version" '$0 == v {take = 1; next} /^## / {take = 0} take' \
@@ -53,14 +57,14 @@ jobs:
           fi
           if gh release view "$GITHUB_REF_NAME" >/dev/null 2>&1; then
             if [ -s notes.md ]; then
-              gh release edit "$GITHUB_REF_NAME" --title "$version" \
+              gh release edit "$GITHUB_REF_NAME" --title "Extension $version" \
                 --notes-file notes.md --draft=false
             else
               gh release edit "$GITHUB_REF_NAME" --draft=false
             fi
             gh release upload "$GITHUB_REF_NAME" "$ASSET" --clobber
           elif [ -s notes.md ]; then
-            gh release create "$GITHUB_REF_NAME" --title "$version" --notes-file notes.md "$ASSET"
+            gh release create "$GITHUB_REF_NAME" --title "Extension $version" --notes-file notes.md "$ASSET"
           else
-            gh release create "$GITHUB_REF_NAME" --title "$version" --generate-notes "$ASSET"
+            gh release create "$GITHUB_REF_NAME" --title "Extension $version" --generate-notes "$ASSET"
           fi

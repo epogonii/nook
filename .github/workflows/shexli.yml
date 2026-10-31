@@ -7,7 +7,13 @@ on:
   push:
     branches:
       - main
+    paths:
+      - 'extension/**'
+      - '.github/workflows/shexli.yml'
   pull_request:
+    paths:
+      - 'extension/**'
+      - '.github/workflows/shexli.yml'
 
 permissions:
   contents: read
@@ -24,6 +30,7 @@ jobs:
           sudo apt-get install -y --no-install-recommends libglib2.0-bin gettext
 
       - name: Build the zip
+        working-directory: extension
         run: tools/pack.sh
 
       - uses: actions/setup-python@v5
@@ -39,6 +46,6 @@ jobs:
 
       - uses: 3v1n0/shexli-ci@c31b5dc22ae7acd684e5ec9ee6728f39ac2e1eac
         with:
-          path: nook.zip
-          baseline: shexli-baseline.json
+          path: extension/nook.zip
+          baseline: extension/shexli-baseline.json
           shexli-source: git+https://gitlab.gnome.org/3v1n0/extensions-web.git@4c063f8ae9e220df6b3d1f4cdeb168420ab558c4#subdirectory=shexli
