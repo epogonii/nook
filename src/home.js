@@ -214,6 +214,7 @@ export const HomePage = GObject.registerClass({
         this._tiles = [];
         this._summaries = [];
         this._timer = 0;
+        this._started = false;
         this._settle = 0;
         this._beacons = null;
         this._listening = null;
@@ -390,10 +391,26 @@ export const HomePage = GObject.registerClass({
         this._header.show_title = rooms.length === 0;
     }
 
-    // While the window shows: reads now and every READ_EVERY s, pushes in between.
+    // While the window shows: reads now and every READ_EVERY s, pushes in between. Minimized
+    // or on another workspace it takes only the pushes: no reads, stills or Bluetooth scan.
     start() {
         this._service.attachWindow(this);
+        this._started = true;
         this._collect();
+        this._run();
+    }
+
+    // The window suspended, or back from it.
+    setHidden(hidden) {
+        if (!this._started || hidden === !this._timer)
+            return;
+        if (hidden)
+            this._pause();
+        else
+            this._run();
+    }
+
+    _run() {
         this._read().catch(logError);
         this._timer = GLib.timeout_add_seconds(GLib.PRIORITY_LOW, READ_EVERY, () => {
             this._read().catch(logError);
@@ -407,18 +424,23 @@ export const HomePage = GObject.registerClass({
         });
     }
 
-    stop() {
+    _pause() {
         if (this._timer)
             GLib.source_remove(this._timer);
         this._timer = 0;
-        if (this._settle)
-            GLib.source_remove(this._settle);
-        this._settle = 0;
         if (this._stillTimer)
             GLib.source_remove(this._stillTimer);
         this._stillTimer = 0;
         this._beacons?.stop();
         this._beacons = null;
+    }
+
+    stop() {
+        this._started = false;
+        this._pause();
+        if (this._settle)
+            GLib.source_remove(this._settle);
+        this._settle = 0;
         this._service.detachWindow();
         this._sources = [];
     }
@@ -447,9 +469,11 @@ export const HomePage = GObject.registerClass({
 
     // Only the homes whose settings changed are new; the page stays as it was around them.
     onReloaded() {
-        if (!this._timer)
+        if (!this._started)
             return;
         this._collect();
+        if (!this._timer)
+            return;
         this._read().catch(logError);
         this._xiaomi().catch(logError);
         this._takeStills().catch(logError);

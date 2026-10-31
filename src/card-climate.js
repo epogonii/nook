@@ -8,6 +8,7 @@ import {gettext as _} from 'gettext';
 import {TileGrid, roundButton} from './card-parts.js';
 import {ClimateError, MODES, snapTemperature} from './lib/climate.js';
 import {choiceText, modeText, numberFormat} from './text.js';
+import {inSight} from './widgets.js';
 
 // ms the − and + presses gather before they go out as one write.
 const NUDGE_SETTLE = 600;
@@ -293,7 +294,7 @@ export class ClimateCard {
     async _read(now = false) {
         const device = this._device;
         if (this._gone || this._reading || typeof device.source?.readDevice !== 'function' ||
-            (!now && !this._page?.get_mapped()) || this._writes.pending || Date.now() - this._writes.touched < TOUCHED)
+            (!now && !(this._page && inSight(this._page))) || this._writes.pending || Date.now() - this._writes.touched < TOUCHED)
             return;
         this._reading = true;
         try {

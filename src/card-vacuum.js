@@ -13,7 +13,7 @@ import * as Timers from './lib/timers.js';
 import {MapError, decodeMap, parsePath} from './lib/vacuum-map.js';
 import {XiaomiError} from './lib/xiaomi.js';
 import {choiceText, formatValue, numberFormat, spanText} from './text.js';
-import {SceneArea} from './widgets.js';
+import {SceneArea, inSight} from './widgets.js';
 
 // Map refetch: after MAP_FRESH ms; every MAP_FRESH_WORKING s while cleaning.
 const MAP_FRESH = 5 * 60 * 1000;
@@ -515,7 +515,7 @@ export class VacuumCard {
         if (!working || this._gone)
             return;
         this._mapTimer = GLib.timeout_add_seconds(GLib.PRIORITY_DEFAULT, view.live ? MAP_LIVE : MAP_FRESH_WORKING, () => {
-            if (this._scene.get_mapped())
+            if (inSight(this._scene))
                 (view.live ? this._followRobot() : this._loadMap()).catch(logError);
             return GLib.SOURCE_CONTINUE;
         });

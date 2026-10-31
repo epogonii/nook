@@ -212,6 +212,7 @@ class Window extends Adw.ApplicationWindow {
             this._menu.disconnect(this._presentHandler);
             return false;
         });
+        this.connect('notify::suspended', () => this._home.setHidden(this.suspended));
         this._home.start();
     }
 

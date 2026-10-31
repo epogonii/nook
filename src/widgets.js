@@ -124,6 +124,37 @@ export function holdStill(value) {
 
 export const animating = () => !still && Gtk.Settings.get_default().gtk_enable_animations;
 
+// Minimized or on another workspace the window is suspended: still mapped, but nobody sees it,
+// and its timers and often its frame clock keep running.
+export const inSight = widget => widget.get_mapped() && !(widget.get_root() instanceof Gtk.Window && widget.get_root().suspended);
+
+// changed() on map, unmap and when the window is suspended or comes back. Returns what stops it.
+export function followSight(widget, changed) {
+    let root = null;
+    let suspension = 0;
+    const handlers = [
+        widget.connect('map', () => {
+            root = widget.get_root();
+            suspension = root instanceof Gtk.Window ? root.connect('notify::suspended', () => changed()) : 0;
+            changed();
+        }),
+        widget.connect('unmap', () => {
+            if (suspension)
+                root.disconnect(suspension);
+            root = null;
+            suspension = 0;
+            changed();
+        }),
+    ];
+    return () => {
+        handlers.forEach(id => widget.disconnect(id));
+        if (suspension)
+            root.disconnect(suspension);
+        root = null;
+        suspension = 0;
+    };
+}
+
 // Tiles show the device's picture, or the drawing its page has.
 let withPictures = true;
 export function showPictures(value) {
@@ -163,8 +194,7 @@ class SceneArea extends Gtk.DrawingArea {
                 cr.$dispose();
             }
         });
-        this.connect('map', () => this._run());
-        this.connect('unmap', () => this._run());
+        followSight(this, () => this._run());
     }
 
     show(name, state) {
@@ -180,7 +210,7 @@ class SceneArea extends Gtk.DrawingArea {
     }
 
     _run() {
-        const moving = this.get_mapped() && Scenes.moves(this._name, this._state) && animating();
+        const moving = inSight(this) && Scenes.moves(this._name, this._state) && animating();
         if (moving && !this._tick) {
             this._tick = this.add_tick_callback((_area, clock) => {
                 const now = clock.get_frame_time();
@@ -394,6 +424,38 @@ function glowAt(snapshot, [cx, cy], [rx, ry], stops) {
         stops.map(([offset, red, green, blue, alpha]) => new Gsk.ColorStop({offset, color: new Gdk.RGBA({red, green, blue, alpha})})));
 }
 
+// Pictures with something moving around them, redrawn together every MOTION_FRAME: a tick
+// callback each would keep the frame clock running at the display's rate.
+const moving = new Set();
+let motionTimer = 0;
+
+function move(picture, on) {
+    if (on === moving.has(picture))
+        return;
+    if (on)
+        moving.add(picture);
+    else
+        moving.delete(picture);
+    if (moving.size > 0 && !motionTimer) {
+        motionTimer = GLib.timeout_add(GLib.PRIORITY_DEFAULT, MOTION_FRAME / 1000, () => {
+            for (const each of [...moving]) {
+                // Out of sight also by a layout that scrolled nothing, which no signal reports.
+                if (inSight(each) && each._motion && animating() && each._inView())
+                    each.queue_draw();
+                else
+                    moving.delete(each);
+            }
+            if (moving.size > 0)
+                return GLib.SOURCE_CONTINUE;
+            motionTimer = 0;
+            return GLib.SOURCE_REMOVE;
+        });
+    } else if (moving.size === 0 && motionTimer) {
+        GLib.source_remove(motionTimer);
+        motionTimer = 0;
+    }
+}
+
 // Drawn past its own edges: the tile's rounded corners cut it. Its light and display fade
 // between states; what the device does moves around it, never the picture itself, which
 // would blur.
@@ -417,18 +479,17 @@ class DevicePicture extends Gtk.Widget {
         this._scrolled = [];
         // Below 1 in small tiles, whose text takes more of them: the picture shrinks toward the corner.
         this.shrink = 1;
-        this.connect('map', () => {
-            this._watch(true);
-            this._run();
-        });
-        this.connect('unmap', () => {
-            this._watch(false);
+        this._watching = false;
+        followSight(this, () => {
+            if (this.get_mapped() !== this._watching)
+                this._watch(this.get_mapped());
             this._run();
         });
     }
 
     // Scrolled out of sight it stops moving, and moves again once back.
     _watch(on) {
+        this._watching = on;
         this._scrolled.forEach(id => this._adjustment.disconnect(id));
         this._scrolled = [];
         const scroller = on ? this.get_ancestor(Gtk.ScrolledWindow) : null;
@@ -514,36 +575,31 @@ class DevicePicture extends Gtk.Widget {
         return alpha >= 0.5 ? screen : null;
     }
 
-    // Ticks while it fades or moves, and only while in sight.
+    // Ticks while it fades; moves on the shared timer, only while in sight.
     _run() {
         if (!this.get_mapped() && this._was) {
             this._was = null;
             this._fade = 1;
         }
-        const wanted = this.get_mapped() && (this._fade < 1 || (Boolean(this._motion) && animating() && this._inView()));
-        if (wanted && !this._tick) {
+        const fading = this.get_mapped() && this._fade < 1;
+        if (fading && !this._tick) {
             this._tick = this.add_tick_callback((_widget, clock) => this._frame(clock.get_frame_time()));
-        } else if (!wanted && this._tick) {
+        } else if (!fading && this._tick) {
             this.remove_tick_callback(this._tick);
             this._tick = 0;
         }
+        move(this, inSight(this) && Boolean(this._motion) && animating() && this._inView());
     }
 
     _frame(now) {
-        if (this._fade < 1) {
-            this._fadeStart ||= now;
-            const share = Math.min(1, (now - this._fadeStart) / (FADE * 1000));
-            // Eased out: quick at first, then settling.
-            this._fade = 1 - (1 - share) ** 3;
-            if (share >= 1)
-                this._was = null;
-            this.queue_draw();
-        } else if (Math.floor(now / MOTION_FRAME) !== Math.floor(this._last / MOTION_FRAME)) {
-            this._last = now;
-            this.queue_draw();
-        }
-        // Out of sight also by a layout that scrolled nothing, which no signal reports.
-        if (this._fade < 1 || (this._motion && animating() && this._inView()))
+        this._fadeStart ||= now;
+        const share = Math.min(1, (now - this._fadeStart) / (FADE * 1000));
+        // Eased out: quick at first, then settling.
+        this._fade = 1 - (1 - share) ** 3;
+        if (share >= 1)
+            this._was = null;
+        this.queue_draw();
+        if (this._fade < 1)
             return GLib.SOURCE_CONTINUE;
         this._tick = 0;
         return GLib.SOURCE_REMOVE;
@@ -584,7 +640,7 @@ class DevicePicture extends Gtk.Widget {
     // Behind the picture: air and steam come out from under it. Still where animations are off.
     _move(snapshot, rect) {
         const box = [rect.get_x(), rect.get_y(), rect.get_width(), rect.get_height()];
-        const time = this._tick ? GLib.get_monotonic_time() / 1e6 : 0;
+        const time = moving.has(this) ? GLib.get_monotonic_time() / 1e6 : 0;
         const pulse = Motion.pulse(this._motion, box, time);
         if (pulse) {
             const [cx, cy, radius, stops] = pulse;

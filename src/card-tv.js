@@ -9,6 +9,7 @@ import {gettext as _, pgettext} from 'gettext';
 import {TileGrid, roundButton, sliderRow, volumeIcon} from './card-parts.js';
 import {tvShowing} from './hero.js';
 import {TvError} from './lib/net.js';
+import {followSight, inSight} from './widgets.js';
 
 // ms between reads while the page shows, and since the last press before one, as the
 // extension's open card.
@@ -102,11 +103,12 @@ export class TvCard {
         this.stage.append(this._note);
         this.stage.append(this._controls);
 
-        // Reads only while the page is on screen: a closed window leaves it unmapped.
+        // Reads only while the page is on screen: a closed window leaves it unmapped, a
+        // minimized one suspended.
         const page = ctx.page;
-        this._handlers = [page.connect('map', () => this._watch(true)), page.connect('unmap', () => this._watch(false))];
+        this._unfollow = followSight(page, () => this._watch(inSight(page)));
         this.sync();
-        if (page.get_mapped())
+        if (inSight(page))
             this._watch(true);
     }
 
@@ -138,9 +140,7 @@ export class TvCard {
     forget() {
         this._gone = true;
         this._watch(false);
-        for (const id of this._handlers)
-            this._ctx.page.disconnect(id);
-        this._handlers = [];
+        this._unfollow();
     }
 
     _watch(on) {

@@ -15,7 +15,7 @@ import {CameraError} from './cameras.js';
 import {loadingRow, noteRow, roundButton} from './card-parts.js';
 import {OnvifError} from './lib/onvif.js';
 import {TapoError, WRONG_PASSWORD} from './lib/tapo-local.js';
-import {aspectBox, glyphArea, navigationRow} from './widgets.js';
+import {aspectBox, followSight, glyphArea, inSight, navigationRow} from './widgets.js';
 
 Gio._promisify(Gio.InputStream.prototype, 'read_bytes_async');
 Gio._promisify(Gio.Subprocess.prototype, 'wait_async');
@@ -281,9 +281,8 @@ export class CameraCard {
         overlay.add_overlay(this._spinner);
         overlay.add_overlay(this._status);
         this._picture = aspectBox(overlay, 16 / 9, 2000, {overflow: Gtk.Overflow.HIDDEN, css_classes: ['nook-live']});
-        this._picture.connect('map', () => this._update());
-        // Closing the window doesn't forget() the page.
-        this._picture.connect('unmap', () => this._stopFeed());
+        // Closing the window doesn't forget() the page; minimizing it stops the feed too.
+        followSight(this._picture, () => (inSight(this._picture) ? this._update() : this._stopFeed()));
 
         this._info = new Gtk.Label({xalign: 0, hexpand: true, ellipsize: Pango.EllipsizeMode.END, css_classes: ['nook-hero-status']});
         this._pad = new Gtk.Box({spacing: 6, visible: false, sensitive: false});
@@ -425,7 +424,7 @@ export class CameraCard {
             this._apiAsked = true;
             this._addSettings().catch(logError);
         }
-        if (!this._feed && !this._problem && this._picture.get_mapped())
+        if (!this._feed && !this._problem && inSight(this._picture))
             this._startFeed().catch(logError);
     }
 
