@@ -27,10 +27,11 @@ Recommends:     avahi
 Recommends:     bluez
 
 %description
-Nook shows lights, plugs, sensors, cameras, air conditioners, TVs and
-speakers in the GNOME top bar. This app is the part that talks to them: the
-Nook extension draws the menu and asks the app for everything else. Its
-window signs in to the accounts and finds and pairs devices on the network.
+Nook brings lights, plugs, sensors, cameras, air conditioners, TVs and
+speakers together in one place. Its window shows every device by section and
+room, signs in to the accounts and finds and pairs devices on the network.
+With the Nook extension for GNOME Shell, the same devices are also in the
+top bar.
 
 %prep
 %autosetup
@@ -61,5 +62,5 @@ appstreamcli validate --no-net %{buildroot}%{_metainfodir}/%{app_id}.metainfo.xm
 %{_metainfodir}/%{app_id}.metainfo.xml
 
 %changelog
-* Fri Oct 30 2026 Evghenii Pogonii <epogonii@gmail.com> - 1.0.0-1
+* Sat Oct 31 2026 Evghenii Pogonii <epogonii@gmail.com> - 1.0.0-1
 - First release

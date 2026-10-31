@@ -75,7 +75,7 @@
   <content_rating type="oars-1.1"/>
 
   <releases>
-    <release version="1.0.0" date="2026-10-30">
+    <release version="1.0.0" date="2026-10-31">
       <description>
         <p>The first release: the devices and accounts of the Nook extension, moved out of GNOME Shell into an app of their own.</p>
       </description>
