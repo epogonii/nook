@@ -1,4 +1,5 @@
 src/accounts.js
+src/backdrop.js
 src/card-camera.js
 src/card-climate.js
 src/card-media.js
@@ -11,6 +12,7 @@ src/color.js
 src/device-menu.js
 src/device.js
 src/devices.js
+src/glance.js
 src/hero.js
 src/history.js
 src/home-cards.js

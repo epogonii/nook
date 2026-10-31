@@ -121,6 +121,11 @@
       <summary>Icons chosen for devices</summary>
       <description>A glyph name or the path of an image, per did, kept in step with the Nook extension's own copy.</description>
     </key>
+    <key name="shown-as" type="a{ss}">
+      <default>{}</default>
+      <summary>What devices are pictured as</summary>
+      <description>Per did, what its tile and page picture instead of the device itself: "door" or "window" for a contact sensor.</description>
+    </key>
     <key name="home-hidden" type="as">
       <default>[]</default>
       <summary>Devices hidden on Home</summary>
@@ -150,6 +155,20 @@
       <default>true</default>
       <summary>Animations</summary>
       <description>Whether device pictures move while their devices work and fade as their light changes. Off, they stay still, as they do with the system's Reduce Animation.</description>
+    </key>
+    <key name="glance" type="s">
+      <choices>
+        <choice value="sidebar"/>
+        <choice value="top"/>
+      </choices>
+      <default>'sidebar'</default>
+      <summary>Where the home at a glance shows</summary>
+      <description>"sidebar": under the places in the sidebar, and above Home's tiles while the sidebar is hidden or the window too narrow for it. "top": above Home's tiles.</description>
+    </key>
+    <key name="background" type="s">
+      <default>''</default>
+      <summary>Home's background</summary>
+      <description>The name of a picture that comes with the app (morning, blinds, linen, mist, sage, ripple, dunes, dusk, night, rain, lamp or velvet), the path of a picture of the user's own, kept in the app's data folder, or empty for none.</description>
     </key>
     <key name="secrets-imported" type="b">
       <default>false</default>

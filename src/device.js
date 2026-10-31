@@ -17,7 +17,7 @@ import {heroColor, heroOf} from './hero.js';
 import {HistorySection, alertsGroup} from './history.js';
 import {IN_HERO} from './props.js';
 import {heardOf, isBluetooth, isOn, macText, ownSwitch, spanText, whenText} from './text.js';
-import {SceneArea, dropPicture, glyphArea, iconDialog, lookOf, renameDialog, tintClass} from './widgets.js';
+import {SceneArea, dropPicture, glyphArea, iconDialog, lookOf, renameDialog, sceneOf, tintClass} from './widgets.js';
 
 // The services a did belongs to, by its prefix; a bare did is Mi Home's.
 const SOURCES = {
@@ -190,7 +190,7 @@ class DevicePage extends Adw.NavigationPage {
         view.add_top_bar(header);
         this.child = view;
 
-        for (const key of ['names', 'icons'])
+        for (const key of ['names', 'icons', 'shown-as'])
             this._handlers.push([settings, settings.connect(`changed::${key}`, () => this.sync())]);
         for (const key of ['hidden', 'pinned', 'panel-sensors', 'login-lights', 'notify-lights'])
             this._handlers.push([menu, menu.connect(`changed::${key}`, () => this._syncMenu())]);
@@ -238,7 +238,7 @@ class DevicePage extends Adw.NavigationPage {
             this._card.add_css_class(tint);
             this._tint = tint;
         }
-        this._scene.show(hero.scene, hero.state);
+        this._scene.show(sceneOf(device, hero), hero.state);
         const spec = typeof device.source?.services !== 'function' ? {services: [], values: new Map()}
             : this._read ? {services: this._services, values: this._values} : null;
         this._kind?.sync(spec, IN_HERO[hero.scene] ?? []);

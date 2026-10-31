@@ -551,6 +551,90 @@ function door(cr, width, height, time, state) {
     cr.fill();
 }
 
+// A window with the sensor where its sash meets the frame: opened, the sash swings into the
+// room on its hinges, as the door's leaf does.
+function casement(cr, width, height, time, state) {
+    const {open = false} = state;
+    const sashWidth = 52;
+    const sashHeight = 58;
+    const left = width / 2 - sashWidth / 2;
+    const top = 14;
+    const right = left + sashWidth;
+    const bottom = top + sashHeight;
+    cr.setSourceRGB(0.86, 0.87, 0.9);
+    cr.rectangle(left - 4, top - 4, sashWidth + 8, sashHeight + 8);
+    cr.fill();
+    plastic(cr, bottom + 3, bottom + 8, 0.04);
+    roundRect(cr, left - 9, bottom + 3, sashWidth + 18, 5, 1.5);
+    cr.fill();
+    const sky = new Cairo.LinearGradient(0, top, 0, bottom);
+    sky.addColorStopRGB(0, 0.34, 0.56, 0.86);
+    sky.addColorStopRGB(1, 0.66, 0.8, 0.94);
+    cr.setSource(sky);
+    cr.rectangle(left, top, sashWidth, sashHeight);
+    cr.fill();
+
+    // The sash as four corners, clockwise from its top left: white bars round the glass.
+    const sash = corners => {
+        const inset = (across, down) => [0, 1].map(i => {
+            const upper = corners[0][i] + (corners[1][i] - corners[0][i]) * across;
+            const lower = corners[3][i] + (corners[2][i] - corners[3][i]) * across;
+            return upper + (lower - upper) * down;
+        });
+        const path = points => {
+            cr.moveTo(...points[0]);
+            for (const point of points.slice(1))
+                cr.lineTo(...point);
+            cr.closePath();
+        };
+        const pane = [inset(0.12, 0.08), inset(0.88, 0.08), inset(0.88, 0.92), inset(0.12, 0.92)];
+        cr.setSourceRGB(0.97, 0.97, 0.98);
+        path(corners);
+        cr.fill();
+        cr.setSource(sky);
+        path(pane);
+        cr.fill();
+        cr.setSourceRGBA(1, 1, 1, 0.22);
+        path([inset(0.3, 0.08), inset(0.52, 0.08), inset(0.32, 0.92), inset(0.12, 0.92)]);
+        cr.fill();
+        cr.setSourceRGB(0.97, 0.97, 0.98);
+        cr.setLineWidth(2.5);
+        cr.moveTo(...inset(0.12, 0.38));
+        cr.lineTo(...inset(0.88, 0.38));
+        cr.stroke();
+    };
+    let magnet;
+    if (open) {
+        const reach = sashWidth * 0.55;
+        sash([[left - reach, top - 5], [left, top], [left, bottom], [left - reach, bottom + 5]]);
+        magnet = [left - reach + 2, top - 3];
+        const light = new Cairo.LinearGradient(left, 0, right, 0);
+        light.addColorStopRGBA(0, 1, 0.97, 0.88, 0.4);
+        light.addColorStopRGBA(1, 1, 0.97, 0.88, 0);
+        cr.setSource(light);
+        cr.moveTo(left, bottom + 8);
+        cr.lineTo(right, bottom + 8);
+        cr.lineTo(right + 16, bottom + 16);
+        cr.lineTo(left - 4, bottom + 16);
+        cr.closePath();
+        cr.fill();
+    } else {
+        sash([[left, top], [right, top], [right, bottom], [left, bottom]]);
+        cr.setSourceRGB(0.75, 0.76, 0.8);
+        roundRect(cr, right - 6, top + sashHeight * 0.52, 2.5, 10, 1.2);
+        cr.fill();
+        magnet = [right - 11, top + 2];
+    }
+    plastic(cr, top - 6, top + 10, 0.04);
+    roundRect(cr, magnet[0], magnet[1], 9, 5, 1.5);
+    cr.fill();
+    roundRect(cr, right + 1, top - 3, 7, 12, 1.5);
+    cr.fill();
+    cr.setSourceRGB(...(open ? [0.97, 0.66, 0.25] : [0.36, 0.86, 0.55]));
+    cr.arc(right + 4.5, top + 1, 1.2, 0, TAU);
+    cr.fill();
+}
+
 function leak(cr, width, height, time, state) {
     const {wet = false} = state;
     const centerX = width / 2;
@@ -2304,11 +2388,13 @@ function waterPurifier(cr, width, height, time, state) {
 
 // body: where the device is, as [x from the middle, y, width, height], or a function of
 // the state and stage width giving that. Glows, steam, airflow and the like are not in it.
+// left: where its leftmost state reaches, when that is further than where it is now.
 const SCENES = {
     aircon: {height: 108, draw: aircon, body: airconBody, moves: state => state.on},
     thermo: {height: 96, draw: thermo, body: ({humidity = null}) => (humidity === null ? [-13, 10, 27, 73] : [-33, 10, 78, 73])},
     motion: {height: 96, draw: motion, body: [-45, 25, 38, 60], moves: state => state.active},
-    door: {height: 96, draw: door, body: ({open = false}) => (open ? [-49, 2, 77, 92] : [-28, 4, 56, 84])},
+    door: {height: 96, draw: door, body: ({open = false}) => (open ? [-49, 2, 77, 92] : [-28, 4, 56, 84]), left: -49},
+    window: {height: 96, draw: casement, body: ({open = false}) => (open ? [-55, 9, 90, 71] : [-35, 10, 70, 70]), left: -55},
     leak: {height: 96, draw: leak, body: ({wet = false}) => (wet ? [-46, 65, 92, 23] : [-24, 14, 48, 69]), moves: state => state.wet},
     smoke: {height: 96, draw: smoke, body: [-33, 24, 66, 31], moves: state => state.alarm},
     fan: {height: 96, draw: fan, body: [-34, 4, 68, 90], moves: state => state.on},
@@ -2375,6 +2461,16 @@ export function moves(name, state) {
 
 export function framesPerSecond(name) {
     return SCENES[name]?.fps ?? 60;
+}
+
+// Where the device's leftmost state starts, in surface pixels: a picture set by it stays put
+// as the device opens.
+export function left(name, surfaceWidth, surfaceHeight, state) {
+    const scene = SCENES[name];
+    const now = body(name, surfaceWidth, surfaceHeight, state);
+    if (!now || scene.left === undefined)
+        return now?.[0] ?? null;
+    return surfaceWidth / 2 + scene.left * surfaceHeight / scene.height;
 }
 
 // The device itself as [x, y, width, height] in surface pixels.

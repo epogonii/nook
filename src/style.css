@@ -9,6 +9,10 @@
   --sidebar-fg-color: white;
   --sidebar-shade-color: rgb(0 0 6 / 25%);
   --sidebar-border-color: rgb(0 0 6 / 36%);
+  /* Text in the warning and error colours, light enough for the dark. */
+  --standalone-color-oklab: max(l, 0.85) a b;
+  --warning-color: oklab(from var(--warning-bg-color) var(--standalone-color-oklab));
+  --error-color: oklab(from var(--error-bg-color) var(--standalone-color-oklab));
 }
 
 @media (prefers-color-scheme: dark) {
@@ -41,21 +45,79 @@ button.flat.nook-room-tab:checked:hover {
   background-color: alpha(currentColor, 0.07);
 }
 
-/* Rooms past an edge of the strip fade out under it. */
+/* Rooms past an edge of the strip fade out under it; so do chips past an edge of theirs. */
 .nook-room-strip > undershoot.left,
-.nook-room-strip > undershoot.right {
+.nook-room-strip > undershoot.right,
+.nook-glance-strip > undershoot.left,
+.nook-glance-strip > undershoot.right {
   box-shadow: none;
   background-repeat: no-repeat;
   background-size: 28px 100%;
 }
 
-.nook-room-strip > undershoot.left {
+.nook-room-strip > undershoot.left,
+.nook-glance-strip > undershoot.left {
   background-image: linear-gradient(to right, var(--window-bg-color), alpha(var(--window-bg-color), 0));
 }
 
-.nook-room-strip > undershoot.right {
+.nook-room-strip > undershoot.right,
+.nook-glance-strip > undershoot.right {
   background-position: right;
   background-image: linear-gradient(to left, var(--window-bg-color), alpha(var(--window-bg-color), 0));
+}
+
+/* Home's background (backdrop.js): the choices in its dialog. */
+.nook-backdrops {
+  padding: 6px 18px 24px;
+}
+
+button.nook-backdrop-swatch {
+  padding: 6px;
+  border-radius: 14px;
+}
+
+.nook-backdrop-frame {
+  border-radius: 10px;
+  background-color: var(--window-bg-color);
+  box-shadow: inset 0 0 0 1px alpha(currentColor, 0.15);
+}
+
+.nook-backdrop-frame.choose {
+  background: none;
+  box-shadow: none;
+  /* Inside the frame, which then keeps the others' size. */
+  outline: 2px dashed alpha(currentColor, 0.25);
+  outline-offset: -2px;
+}
+
+button.nook-backdrop-swatch.chosen .nook-backdrop-frame {
+  outline: 3px solid var(--accent-color);
+  outline-offset: 2px;
+}
+
+/* The home at a glance (glance.js): chips above the tiles, rows in the sidebar. */
+.nook-glance-strip {
+  margin: 0 -2px 14px;
+}
+
+button.nook-glance-chip {
+  padding: 8px 18px 8px 8px;
+  border-radius: 22px;
+}
+
+.nook-glance-chip .nook-glyph,
+.nook-glance .nook-glyph {
+  min-width: 30px;
+  min-height: 30px;
+}
+
+.nook-glance-value {
+  font-weight: 700;
+}
+
+.nook-glance-temperature {
+  font-size: 40px;
+  font-weight: 300;
 }
 
 /* The tile shows its own hover; the cell around it is no wider. */
@@ -132,6 +194,16 @@ button.flat.nook-room-tab:checked:hover {
   min-height: 8px;
   border-radius: 999px;
   background-color: alpha(currentColor, 0.3);
+}
+
+.nook-status-dot.online {
+  background-color: #2ec27e;
+}
+
+@media (prefers-color-scheme: dark) {
+  .nook-status-dot.online {
+    background-color: #57e389;
+  }
 }
 
 .nook-tile-more {

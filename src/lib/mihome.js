@@ -259,7 +259,11 @@ export class MiHome {
         return cacheFile(`xiaomi-${this._cloud.credentials.userId}.json`);
     }
 
+    // Once: the extension asks again after each reload, and a home kept through it has its
+    // devices read and shown already.
     async load() {
+        if (this.devices.length > 0)
+            return;
         const cached = await readJson(this._cacheFile);
         if (cached?.version === CACHE_VERSION) {
             this.devices = cached.devices;

@@ -5,6 +5,7 @@ import Gio from 'gi://Gio';
 import GLib from 'gi://GLib';
 import {gettext as _} from 'gettext';
 
+import {heroOf} from './hero.js';
 import {removable, removeDevice, unitOf} from './remove.js';
 import {isOn} from './text.js';
 import {dropPicture, iconDialog, renameDialog, setNamed, switchable} from './widgets.js';
@@ -102,6 +103,22 @@ export function deviceMenu(device, home, {open = null, parent = home, onRemoved 
         });
     });
     model.append_section(null, look);
+
+    // A contact sensor shows as itself, or as the door or the window it is on.
+    if (heroOf(device).scene === 'door') {
+        const current = settings.get_value('shown-as').deepUnpack()[did] ?? 'sensor';
+        const choice = Gio.SimpleAction.new_stateful('shown-as', new GLib.VariantType('s'), GLib.Variant.new_string(current));
+        choice.connect('change-state', (_action, value) => {
+            choice.set_state(value);
+            const as = value.unpack();
+            setNamed(settings, 'shown-as', did, as === 'sensor' ? '' : as);
+        });
+        actions.add_action(choice);
+        const shown = new Gio.Menu();
+        for (const [as, label] of [['sensor', _('Sensor')], ['door', _('Door')], ['window', _('Window')]])
+            shown.append(label, `device.shown-as::${as}`);
+        model.append_section(_('Show As'), shown);
+    }
 
     // The extension's lists: only while it runs to read them.
     if (menu.present) {

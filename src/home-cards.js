@@ -63,7 +63,7 @@ function speakerPicture() {
     return speaker;
 }
 
-const COVER_SIZE = 120;
+const COVER_SIZE = 112;
 
 // Sized by its frame, whatever the picture's own size.
 const Cover = GObject.registerClass(
@@ -73,7 +73,9 @@ class Cover extends Gtk.Picture {
     }
 });
 
-const line = classes => new Gtk.Label({xalign: 0, ellipsize: Pango.EllipsizeMode.END, css_classes: classes});
+// Asking for little width: the row lays cards out by what they ask, and a long title would
+// leave one card a row.
+const line = classes => new Gtk.Label({xalign: 0, ellipsize: Pango.EllipsizeMode.END, max_width_chars: 12, css_classes: classes});
 
 function toast(widget, text) {
     widget.get_root()?.add_toast?.(new Adw.Toast({title: text}));
@@ -83,7 +85,7 @@ function toast(widget, text) {
 export const PlayerCard = GObject.registerClass(
 class PlayerCard extends Gtk.Box {
     _init(device, home) {
-        super._init({spacing: 18, css_classes: ['card', 'nook-wide', 'nook-player']});
+        super._init({spacing: 16, css_classes: ['card', 'nook-wide', 'nook-player']});
         this.device = device;
         this._home = home;
         this._tick = 0;

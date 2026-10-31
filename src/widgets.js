@@ -124,27 +124,40 @@ export function holdStill(value) {
 
 export const animating = () => !still && Gtk.Settings.get_default().gtk_enable_animations;
 
-// Tiles show the device, or its glyph in a well.
+// Tiles show the device's picture, or the drawing its page has.
 let withPictures = true;
 export function showPictures(value) {
     withPictures = value;
 }
 
-// A tile with only the well over its text needs less height than a picture.
-const GLYPH_RATIO = 1.3;
+// What a contact sensor is pictured as, by did: "door" or "window", else the sensor itself.
+let shownAs = {};
+export function setShownAs(value) {
+    shownAs = value;
+}
 
-// A device card's picture from lib/scenes.js, moving while shown when its scene does.
+export const shownAsOf = (device, hero) => (hero.scene === 'door' ? shownAs[device.did] ?? null : null);
+
+// The drawing of it on its page and its tile: a sensor on a window draws the window.
+export const sceneOf = (device, hero) => (shownAsOf(device, hero) === 'window' ? 'window' : hero.scene);
+
+// A device card's picture from lib/scenes.js, moving while shown when its scene does. start:
+// how far from the left edge the device stands, rather than in the middle.
 export const SceneArea = GObject.registerClass(
 class SceneArea extends Gtk.DrawingArea {
-    _init(height) {
+    _init(height, start = null) {
         super._init({content_height: height, hexpand: true});
         this._name = 'glyph';
         this._state = {};
+        this._start = start;
         this._tick = 0;
         this._last = 0;
         this.set_draw_func((_area, cr, width, tall) => {
             try {
                 const font = this.get_pango_context().get_font_description();
+                const left = this._start === null ? null : Scenes.left(this._name, width, tall, this._state);
+                if (left !== null)
+                    cr.translate(this._start - left, 0);
                 Scenes.draw(cr, this._name, width, tall, GLib.get_monotonic_time() / 1e6, {...this._state, font});
             } finally {
                 cr.$dispose();
@@ -801,8 +814,10 @@ function motionOf(picture, hero, on) {
     case 'air-conditioner':
         return on ? {kind: 'air', color: hero.state.air ?? hero.state.color} : null;
     case 'kettle':
-        // Heating, or keeping warm.
-        return [1, 3].includes(hero.state.status) ? {kind: 'steam', strength: hero.state.status === 1 ? 1 : 0.6} : null;
+        // Heating, keeping warm, or still hot as its page shows it.
+        if (hero.state.status === 1)
+            return {kind: 'steam', strength: 1};
+        return hero.state.status === 3 || hero.state.temperature >= 60 ? {kind: 'steam', strength: 0.6} : null;
     case 'speaker':
         return hero.state.playing ? {kind: 'sound', color: hero.color} : null;
     case 'fan':
@@ -811,13 +826,13 @@ function motionOf(picture, hero, on) {
     return null;
 }
 
-// A device in the Home grid: its picture, or its glyph when it has none; the switch turns it
-// on and off, the rest opens its page.
+// A device in the Home grid: its picture, or its glyph when it has none, or with pictures off
+// its page's drawing; the switch turns it on and off, the rest opens its page.
 export const Tile = GObject.registerClass({
     Signals: {'open': {}, 'toggle': {}, 'menu': {param_types: [GObject.TYPE_DOUBLE, GObject.TYPE_DOUBLE]}},
 }, class Tile extends Adw.Bin {
     _init(device, name, look) {
-        super._init({layout_manager: new AspectLayout(withPictures ? 1 : GLYPH_RATIO, 220), css_classes: ['nook-tile']});
+        super._init({layout_manager: new AspectLayout(1, 220), css_classes: ['nook-tile']});
         onContextMenu(this, (x, y) => this.emit('menu', x, y));
         this.device = device;
         this._look = look;
@@ -826,6 +841,8 @@ export const Tile = GObject.registerClass({
         this._picture = new DevicePicture();
         this._well = new GlyphWell({size: 32, large: true});
         Object.assign(this._well, {halign: Gtk.Align.START, valign: Gtk.Align.START, margin_start: 18, margin_top: 18});
+        this._scene = new SceneArea(110, 26);
+        Object.assign(this._scene, {valign: Gtk.Align.START, margin_top: 16, can_target: false, css_classes: ['nook-tile-picture']});
         this._name = new Gtk.Label({
             label: name,
             xalign: 0,
@@ -846,6 +863,7 @@ export const Tile = GObject.registerClass({
         this._text.append(this._name);
         this._text.append(status);
         const inside = new Gtk.Overlay({child: this._picture});
+        inside.add_overlay(this._scene);
         inside.add_overlay(this._well);
         inside.add_overlay(this._text);
         this._button = new Gtk.Button({child: inside, tooltip_text: name, overflow: Gtk.Overflow.HIDDEN, css_classes: ['card', 'nook-tile-body']});
@@ -884,6 +902,7 @@ export const Tile = GObject.registerClass({
         this.layout_manager.natural = width;
         this._small = width < 200;
         this._picture.shrink = this._small ? 0.9 : 1;
+        this._scene.content_height = Math.round(width * 0.52);
         if (this._small)
             this.add_css_class('small');
         else
@@ -927,8 +946,16 @@ export const Tile = GObject.registerClass({
         const hero = heroOf(this.device);
         this._showStatus(hero, offline || off || atRest(hero) ||
             (isBluetooth(this.device) && this.device.online !== true && !heardOf(this.device)));
-        // A picture of the user's own takes the well, as do all with pictures off.
-        const picture = this._look[2] || !withPictures ? null : pictureName(this.device, this._look);
+        // Nothing more to say than that it answers: green, as on its page.
+        if (!this._tint && !offline && this._state.label === _('Online'))
+            this._dot.add_css_class('online');
+        else
+            this._dot.remove_css_class('online');
+        // A picture of the user's own takes the well; with pictures off the rest are drawn.
+        const as = shownAsOf(this.device, hero);
+        let picture = this._look[2] || !withPictures ? null : pictureName(this.device, this._look);
+        if (picture && as)
+            picture = hero.state.open ? `${as}-open` : as;
         const screen = picture && DISPLAYS[picture] ? screenOf(this.device) : null;
         const pictured = this._picture.set(picture, {
             screen: screen ?? (picture === 'temperature-humidity-sensor' ? NO_READING : null),
@@ -936,9 +963,13 @@ export const Tile = GObject.registerClass({
             dark: kind === 'tv' && !on,
             motion: picture && !offline ? motionOf(picture, hero, on) : null,
         });
+        const drawn = !withPictures && !this._look[2];
         this._picture.visible = pictured;
-        this._well.visible = !pictured;
-        if (!pictured)
+        this._scene.visible = drawn;
+        if (drawn)
+            this._scene.show(sceneOf(this.device, hero), hero.state);
+        this._well.visible = !pictured && !drawn;
+        if (!pictured && !drawn)
             this._well.set(this._look, on, offline);
     }
 

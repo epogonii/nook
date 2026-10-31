@@ -6,15 +6,18 @@ import Gio from 'gi://Gio';
 import GLib from 'gi://GLib';
 import GObject from 'gi://GObject';
 import Gtk from 'gi://Gtk?version=4.0';
-import {gettext as _} from 'gettext';
+import {gettext as _, ngettext} from 'gettext';
 
+import {backdropDialog, forgetBackdrop, showBackdrop} from './backdrop.js';
 import {deviceMenu} from './device-menu.js';
-import {tileText} from './hero.js';
+import {GlanceList, GlanceStrip} from './glance.js';
+import {heroOf, shortWhen, tileText} from './hero.js';
 import {AirconCard, PlayerCard} from './home-cards.js';
 import {openBeacons} from './homes.js';
-import {beacons, isBluetooth, isOn} from './text.js';
+import {beacons, heardOf, isBluetooth, isOn} from './text.js';
 import {
-    CameraTile, Showcase, Tile, animating, holdStill, lookOf, popupMenu, powered, showPictures, sidebarButton, switchable,
+    CameraTile, Showcase, Tile, animating, holdStill, lookOf, popupMenu, powered, setShownAs, showPictures, shownAsOf,
+    sidebarButton, switchable,
 } from './widgets.js';
 
 // s between reads while the window is shown, as the menu does while it is open.
@@ -28,6 +31,8 @@ const SETTLE_MS = 300;
 const TILE_WIDTHS = {small: [180, 200], medium: [220, 240], large: [300, 300]};
 // The last of the delays before a card rises in, nook-rise-N in style.css.
 const RISE_LAST = 9;
+// ms a click on the home at a glance takes to scroll to its section.
+const SCROLL_MS = 300;
 
 // The extension's Modules view sections, by the glyphs they take.
 const SECTIONS = [
@@ -65,17 +70,30 @@ const WELCOME = [
 const alarming = device => device.online !== false && device.primary.props.some((p, i) =>
     ['submersion-state', 'smoke-status', 'gas-status'].includes(p.name) && device.values?.[i] === true);
 
+// The air where the sensors that answer are: their readings averaged, null where none has one.
+function airOf(devices) {
+    const states = devices.filter(upToDate).map(device => heroOf(device))
+        .filter(({scene}) => scene === 'thermo').map(({state}) => state);
+    const mean = key => {
+        const values = states.map(state => state[key]).filter(value => typeof value === 'number');
+        return values.length > 0 ? values.reduce((sum, value) => sum + value, 0) / values.length : null;
+    };
+    return {temperature: mean('temperature'), humidity: mean('humidity')};
+}
+
 function sectionSummary(id, devices) {
     const on = devices.filter(isOn).length;
     switch (id) {
     case 'climate': {
+        const {temperature, humidity} = airOf(devices);
+        const parts = [];
+        if (temperature !== null)
+            parts.push(`${numberFormat.format(temperature)}°`);
+        if (humidity !== null)
+            parts.push(`${Math.round(humidity)}%`);
         if (on > 0)
-            return _('%d on').replace('%d', String(on));
-        const reading = devices.map(device => {
-            const i = device.primary.props.findIndex(p => p.unit === 'celsius');
-            return i >= 0 && device.online !== false ? device.values?.[i] : null;
-        }).find(value => typeof value === 'number');
-        return reading === undefined ? '' : `${numberFormat.format(reading)}°`;
+            parts.push(_('%d on').replace('%d', String(on)));
+        return parts.join(' · ');
     }
     case 'security':
         return devices.some(alarming) ? _('Alarm!') : '';
@@ -84,9 +102,88 @@ function sectionSummary(id, devices) {
     }
 }
 
+// The whole home at a glance, as glance.js shows it. here: the devices that answer and aren't
+// hidden; gone: how many don't answer.
+function glanceOf(here, gone, nameOf) {
+    const items = [];
+    const heroes = here.filter(upToDate).map(device => [device, heroOf(device)]);
+    const of = scene => heroes.filter(([, hero]) => hero.scene === scene);
+    // Sensors that warn: one doing so by its name and what its tile says, several counted.
+    const told = (key, glyph, title, all, warns, calm, many, level) => {
+        if (all.length === 0)
+            return;
+        const now = all.filter(warns);
+        items.push({
+            key,
+            glyph,
+            title: now.length === 1 ? nameOf(now[0][0]) : title,
+            value: now.length === 1 ? now[0][1].big ?? many(1) : now.length > 1 ? many(now.length) : calm,
+            level: now.length > 0 ? level : null,
+            fold: 'home:security',
+        });
+    };
+    const {temperature, humidity} = airOf(here);
+    if (temperature !== null || humidity !== null) {
+        const degrees = temperature !== null ? `${numberFormat.format(temperature)}°` : null;
+        const percent = humidity !== null ? `${Math.round(humidity)}%` : null;
+        items.push({
+            key: degrees ? 'air' : 'humidity',
+            glyph: 'thermometer',
+            title: _('Indoors'),
+            value: [degrees, percent].filter(Boolean).join(' · '),
+            temperature: degrees,
+            humidity: percent,
+            fold: 'home:climate',
+        });
+    }
+    const lights = here.filter(device => sectionOf(device) === 'lights');
+    if (lights.length > 0) {
+        const on = lights.filter(isOn).length;
+        items.push({key: 'lights', glyph: 'bulb', title: _('Lights'),
+            value: on > 0 ? _('%d on').replace('%d', String(on)) : _('All off'), fold: 'home:lights'});
+    }
+    // Until a contact sensor is read, it is neither.
+    const doors = of('door').filter(([, hero]) => typeof hero.state.open === 'boolean');
+    const windows = doors.filter(([device, hero]) => shownAsOf(device, hero) === 'window').length;
+    told('doors', 'door', windows === 0 ? _('Doors') : windows === doors.length ? _('Windows') : _('Doors and Windows'),
+        doors, ([, hero]) => hero.state.open, _('All closed'), n => ngettext('%d open', '%d open', n).replace('%d', String(n)),
+        'warning');
+    const motion = of('motion');
+    if (motion.length > 0) {
+        const active = motion.filter(([, hero]) => hero.state.active);
+        const last = Math.max(0, ...motion.map(([device]) =>
+            device.times?.[(device.primary.props ?? []).findIndex(p => p.name === 'motion-state')] ?? 0));
+        let value = _('None');
+        if (active.length > 0)
+            value = [...new Set(active.map(([device]) => device.room || nameOf(device)))].join(', ');
+        else if (last > 0)
+            value = shortWhen(last);
+        items.push({key: 'motion', glyph: 'motion', title: _('Motion'), value, fold: 'home:security'});
+    }
+    told('water', 'drop', _('Water'), of('leak'), ([, hero]) => hero.state.wet, _('No leaks'),
+        n => ngettext('%d leak', '%d leaks', n).replace('%d', String(n)), 'error');
+    told('smoke', 'smoke', _('Smoke'), of('smoke'), ([, hero]) => hero.state.alarm, _('No smoke'),
+        n => ngettext('%d alarm', '%d alarms', n).replace('%d', String(n)), 'error');
+    // A speaker playing in a group is told of by the group.
+    const playing = heroes.filter(([, hero]) => (hero.scene === 'speaker' ? hero.state.playing : hero.scene === 'tv' && hero.state.on));
+    const players = playing.filter(([device]) => !playing.some(([other]) => other !== device && other.name === device.state?.group));
+    if (players.length > 0) {
+        items.push({key: 'playing', glyph: 'speaker', title: _('Playing'),
+            value: players.map(([, hero]) => hero.big).filter(Boolean).join(', '), fold: 'home:media'});
+    }
+    if (gone > 0) {
+        items.push({key: 'gone', glyph: 'wifi', title: _('Unavailable'),
+            value: ngettext('%d device', '%d devices', gone).replace('%d', String(gone)), level: 'dim', fold: 'unavailable'});
+    }
+    return items;
+}
+
 // Not answering. Mi Home has a Bluetooth device offline unless a gateway relays it; its tile
 // says whether the window heard it instead.
 const unavailable = device => device.online === false && !isBluetooth(device);
+
+// Answering, or heard: else its last readings are no news, as on its tile.
+const upToDate = device => device.online !== false || Boolean(heardOf(device));
 
 // Which devices show and where: a change rebuilds the grid, anything else updates tiles.
 const layoutKey = devices => devices.map(device => `${device.did}${unavailable(device) ? '-' : '+'}`).sort().join(' ');
@@ -119,6 +216,7 @@ export const HomePage = GObject.registerClass({
         this._timer = 0;
         this._settle = 0;
         this._beacons = null;
+        this._listening = null;
         this._sources = [];
         this._stills = new Map();
         this._stillTimer = 0;
@@ -136,6 +234,13 @@ export const HomePage = GObject.registerClass({
         this._risen = 0;
         // Unavailable and Hidden start folded each time; sections stay as left.
         this._unfolded = new Set();
+        // By key, each fold's header and how to open it.
+        this._folds = new Map();
+        // The home at a glance: in the sidebar, which the window shows, or above the tiles.
+        this.glance = new GlanceList();
+        this._strip = null;
+        this._sidebarShown = true;
+        this._scrolling = null;
         this.devicePage = null;
 
         this._body = new Gtk.Box({orientation: Gtk.Orientation.VERTICAL, css_classes: ['nook-home']});
@@ -171,8 +276,10 @@ export const HomePage = GObject.registerClass({
         const view = new Adw.ToolbarView({content: this._stack});
         view.add_top_bar(header);
         this.child = view;
+        showBackdrop(view, settings.get_string('background'));
         holdStill(!settings.get_boolean('animations'));
         showPictures(settings.get_boolean('pictures'));
+        setShownAs(settings.get_value('shown-as').deepUnpack());
         this._looks = ['changed::names', 'changed::icons', 'changed::home-hidden', 'changed::tile-size']
             .map(signal => settings.connect(signal, () => this._render()));
         this._looks.push(settings.connect('changed::animations', () => {
@@ -181,7 +288,11 @@ export const HomePage = GObject.registerClass({
         }), settings.connect('changed::pictures', () => {
             showPictures(settings.get_boolean('pictures'));
             this._render();
-        }));
+        }), settings.connect('changed::shown-as', () => {
+            setShownAs(settings.get_value('shown-as').deepUnpack());
+            this._render();
+        }), settings.connect('changed::glance', () => this._showGlance()),
+        settings.connect('changed::background', () => showBackdrop(view, settings.get_string('background'))));
     }
 
     // Made anew each time the page empties, to rise in again. The text waits for the pictures.
@@ -227,6 +338,10 @@ export const HomePage = GObject.registerClass({
         actions.add_action(size);
         actions.add_action(settings.create_action('pictures'));
         actions.add_action(settings.create_action('animations'));
+        actions.add_action(settings.create_action('glance'));
+        const background = new Gio.SimpleAction({name: 'background'});
+        background.connect('activate', () => backdropDialog(this, settings));
+        actions.add_action(background);
         this.insert_action_group('home', actions);
         const menu = new Gio.Menu();
         for (const [value, label] of [['small', _('Small')], ['medium', _('Medium')], ['large', _('Large')]])
@@ -234,9 +349,16 @@ export const HomePage = GObject.registerClass({
         const look = new Gio.Menu();
         look.append(_('Device Pictures'), 'home.pictures');
         look.append(_('Animations'), 'home.animations');
+        const glance = new Gio.Menu();
+        glance.append(_('In the Sidebar'), 'home.glance::sidebar');
+        glance.append(_('Above the Tiles'), 'home.glance::top');
         const view = new Gio.Menu();
         view.append_section(_('Tile Size'), menu);
         view.append_section(null, look);
+        view.append_section(_('Now'), glance);
+        const more = new Gio.Menu();
+        more.append(_('Background…'), 'home.background');
+        view.append_section(null, more);
         return new Gtk.MenuButton({icon_name: 'view-grid-symbolic', tooltip_text: _('View Options'), menu_model: view});
     }
 
@@ -303,6 +425,7 @@ export const HomePage = GObject.registerClass({
 
     forget() {
         this.stop();
+        forgetBackdrop();
         this._wide.forEach(card => card.forget());
         this._wide = [];
         this._looks.forEach(id => this._settings.disconnect(id));
@@ -322,11 +445,14 @@ export const HomePage = GObject.registerClass({
         });
     }
 
+    // Only the homes whose settings changed are new; the page stays as it was around them.
     onReloaded() {
         if (!this._timer)
             return;
-        this.stop();
-        this.start();
+        this._collect();
+        this._read().catch(logError);
+        this._xiaomi().catch(logError);
+        this._takeStills().catch(logError);
     }
 
     // [key, name, count] by name; keys are lower-cased, as the extension merges rooms.
@@ -378,6 +504,11 @@ export const HomePage = GObject.registerClass({
     async _xiaomi() {
         const {list} = await this._service.xiaomi();
         const home = list.find(({kind}) => kind === 'xiaomi')?.home;
+        if (!home && this._timer) {
+            this._beacons?.stop();
+            this._beacons = null;
+            this._listening = null;
+        }
         if (!home || !this._timer)
             return;
         if (home.devices.length === 0) {
@@ -394,7 +525,12 @@ export const HomePage = GObject.registerClass({
 
     // While the window shows, as the extension's menu while open: Bluetooth devices' adverts.
     _listen(home) {
-        if (this._beacons || !home.devices.some(isBluetooth))
+        if (this._beacons && this._listening === home)
+            return;
+        this._beacons?.stop();
+        this._beacons = null;
+        this._listening = home;
+        if (!home.devices.some(isBluetooth))
             return;
         const byAddress = address => home.devices.find(d => isBluetooth(d) && d.mac?.toUpperCase() === address);
         const scan = this._beacons = openBeacons((address, beacon) => {
@@ -510,6 +646,7 @@ export const HomePage = GObject.registerClass({
             root.set_focus(null);
         for (let child = this._body.get_first_child(); child; child = this._body.get_first_child())
             this._body.remove(child);
+        this._folds.clear();
         this._wide.forEach(card => card.forget());
         this._wide = [];
         this._wideKey = null;
@@ -527,6 +664,10 @@ export const HomePage = GObject.registerClass({
         const byName = (a, b) => (names[a.did] || a.name).localeCompare(names[b.did] || b.name);
         const hidden = new Set(this._settings.get_strv('home-hidden'));
         const here = this._here(shown);
+        this._strip = new GlanceStrip();
+        this._strip.connect('activate', (_strip, key) => this.goTo(key));
+        this._body.append(this._strip);
+        this._rise(this._strip, 'glance');
         this._wideRow = new Gtk.FlowBox({
             homogeneous: true,
             max_children_per_line: 2,
@@ -558,7 +699,76 @@ export const HomePage = GObject.registerClass({
         const put = shown.filter(device => hidden.has(device.did)).sort(byName);
         if (put.length > 0)
             this._fold(_('Hidden'), this._grid(put, false, names, icons), count(put), 'hidden', false);
+        this._showGlance();
         this.emit('pin-changed');
+    }
+
+    // The whole home, as in every room: what answers and isn't hidden, and how many don't answer.
+    _showGlance() {
+        const names = this._settings.get_value('names').deepUnpack();
+        const hidden = new Set(this._settings.get_strv('home-hidden'));
+        const devices = this.devices.filter(device => !hidden.has(device.did));
+        const items = glanceOf(devices.filter(device => !unavailable(device)), devices.filter(unavailable).length,
+            device => names[device.did] || device.name);
+        const where = this._settings.get_string('glance');
+        this.glance.set(items);
+        this.glance.visible = items.length > 0 && where === 'sidebar';
+        if (this._strip) {
+            this._strip.set(items);
+            this._strip.visible = items.length > 0 && (where === 'top' || !this._sidebarShown);
+        }
+    }
+
+    // Whether the sidebar is beside the page: else what it says at a glance goes above the tiles.
+    setSidebarShown(shown) {
+        this._sidebarShown = shown;
+        this._showGlance();
+    }
+
+    // To a fold of the whole home, open: from a room, back to all of them first.
+    goTo(key) {
+        if (this._room)
+            this.setRoom(null);
+        if (!this._folds.has(key))
+            return;
+        this._folds.get(key).open();
+        const scroller = this._stack.get_child_by_name('grid');
+        const adjustment = scroller.vadjustment;
+        // A frame after it is laid out and open: a room left for All has it made just now, and the
+        // page isn't long enough to bring a fold at its end up until that is open.
+        let frames = 0;
+        let ready = false;
+        scroller.add_tick_callback(() => {
+            // Looked up each frame: an update may have rebuilt the page meanwhile.
+            const fold = this._folds.get(key);
+            if (!fold)
+                return GLib.SOURCE_REMOVE;
+            const [placed, bounds] = fold.header.compute_bounds(this._body);
+            const now = placed && fold.header.get_height() > 0 && fold.revealer.child_revealed;
+            if (!(ready && now) && frames++ < 60) {
+                ready = now;
+                return GLib.SOURCE_CONTINUE;
+            }
+            if (!placed)
+                return GLib.SOURCE_REMOVE;
+            const to = Math.max(0, Math.min(bounds.get_y() - 12, adjustment.upper - adjustment.page_size));
+            this._scrolling?.skip();
+            this._scrolling = null;
+            if (!animating()) {
+                adjustment.value = to;
+                return GLib.SOURCE_REMOVE;
+            }
+            this._scrolling = new Adw.TimedAnimation({
+                widget: scroller,
+                value_from: adjustment.value,
+                value_to: to,
+                duration: SCROLL_MS,
+                easing: Adw.Easing.EASE_OUT_CUBIC,
+                target: Adw.PropertyAnimationTarget.new(adjustment, 'value'),
+            });
+            this._scrolling.play();
+            return GLib.SOURCE_REMOVE;
+        });
     }
 
     _shown(devices) {
@@ -647,7 +857,7 @@ export const HomePage = GObject.registerClass({
             toggle.update_state([Gtk.AccessibleState.EXPANDED], [open]);
         };
         show(!folded);
-        toggle.connect('clicked', () => {
+        const flip = () => {
             const open = !revealer.reveal_child;
             show(open);
             if (kept) {
@@ -658,7 +868,9 @@ export const HomePage = GObject.registerClass({
             } else {
                 this._unfolded.delete(key);
             }
-        });
+        };
+        toggle.connect('clicked', flip);
+        this._folds.set(key, {header, revealer, open: () => revealer.reveal_child || flip()});
         this._body.append(header);
         this._body.append(revealer);
     }
@@ -714,6 +926,7 @@ export const HomePage = GObject.registerClass({
         }
         for (const [label, id, own] of this._summaries)
             label.label = sectionSummary(id, own);
+        this._showGlance();
         this.devicePage?.sync();
     }
 

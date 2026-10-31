@@ -774,6 +774,22 @@ msgstr "Скрыть с главной"
 msgid "Remove…"
 msgstr "Удалить…"
 
+#: src/device-menu.js:118
+msgid "Sensor"
+msgstr "Датчик"
+
+#: src/device-menu.js:118
+msgid "Door"
+msgstr "Дверь"
+
+#: src/device-menu.js:118
+msgid "Window"
+msgstr "Окно"
+
+#: src/device-menu.js:120
+msgid "Show As"
+msgstr "Показывать как"
+
 #: src/device.js:140 src/pages/find.js:147
 msgid "In Nook"
 msgstr "В Nook"
@@ -3785,3 +3801,131 @@ msgstr "Все"
 #: src/text.js:329
 msgid "Bluetooth"
 msgstr "Bluetooth"
+
+#: src/home.js
+msgid "Indoors"
+msgstr "В доме"
+
+#: src/home.js
+msgid "All off"
+msgstr "Всё выключено"
+
+#: src/home.js
+msgid "Doors"
+msgstr "Двери"
+
+#: src/home.js
+msgid "Windows"
+msgstr "Окна"
+
+#: src/home.js
+msgid "Doors and Windows"
+msgstr "Двери и окна"
+
+#: src/home.js
+msgid "All closed"
+msgstr "Всё закрыто"
+
+#: src/home.js
+#, javascript-format
+msgid "%d open"
+msgid_plural "%d open"
+msgstr[0] "Открыто: %d"
+msgstr[1] "Открыто: %d"
+msgstr[2] "Открыто: %d"
+
+#: src/home.js
+msgid "Water"
+msgstr "Вода"
+
+#: src/home.js
+msgid "No leaks"
+msgstr "Протечек нет"
+
+#: src/home.js
+#, javascript-format
+msgid "%d leak"
+msgid_plural "%d leaks"
+msgstr[0] "Протечек: %d"
+msgstr[1] "Протечек: %d"
+msgstr[2] "Протечек: %d"
+
+#: src/home.js
+#, javascript-format
+msgid "%d alarm"
+msgid_plural "%d alarms"
+msgstr[0] "Тревог: %d"
+msgstr[1] "Тревог: %d"
+msgstr[2] "Тревог: %d"
+
+#: src/home.js
+msgid "In the Sidebar"
+msgstr "В боковой панели"
+
+#: src/home.js
+msgid "Above the Tiles"
+msgstr "Над плитками"
+
+#: src/home.js
+msgid "Background…"
+msgstr "Фон…"
+
+#: src/backdrop.js
+msgid "Background"
+msgstr "Фон"
+
+#: src/backdrop.js
+msgid "Morning"
+msgstr "Утро"
+
+#: src/backdrop.js
+msgid "Linen"
+msgstr "Лён"
+
+#: src/backdrop.js
+msgid "Sage"
+msgstr "Шалфей"
+
+#: src/backdrop.js
+msgid "Dunes"
+msgstr "Дюны"
+
+#: src/backdrop.js
+msgid "Night"
+msgstr "Ночь"
+
+#: src/backdrop.js
+msgid "Lamp"
+msgstr "Лампа"
+
+#: src/backdrop.js
+msgid "Your Picture"
+msgstr "Своя картинка"
+
+#: src/backdrop.js
+msgid "Choose…"
+msgstr "Выбрать…"
+
+#: src/backdrop.js
+msgid "Blinds"
+msgstr "Жалюзи"
+
+#: src/backdrop.js
+msgid "Mist"
+msgstr "Туман"
+
+#: src/backdrop.js
+msgid "Ripple"
+msgstr "Рябь"
+
+#: src/backdrop.js
+msgid "Dusk"
+msgstr "Сумерки"
+
+#: src/backdrop.js
+msgid "Rain"
+msgstr "Дождь"
+
+#: src/backdrop.js
+msgid "Velvet"
+msgstr "Бархат"

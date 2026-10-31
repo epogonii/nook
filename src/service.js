@@ -60,6 +60,7 @@ export class Service {
         this._window = null;
         this._next = 0;
         this._rebuild = 0;
+        this._stale = new Set();
         this._exported = null;
         this.menu = new MenuSettings();
         this.menu.send = values => this._emit('UiChanged', '(a{sv})', [values]);
@@ -67,7 +68,7 @@ export class Service {
         this._uiWatch = 0;
         this._changed = settings.connect('changed', (_settings, key) => {
             if (DEVICE_KEYS.includes(key) && !this._homes.keeping)
-                this._rebuildSoon();
+                this._rebuildSoon(key);
         });
     }
 
@@ -316,15 +317,30 @@ export class Service {
         this._built = false;
     }
 
-    _rebuildSoon() {
+    // key: the setting that changed, for only the homes built from it; null for all of them.
+    _rebuildSoon(key = null) {
         // Nothing built yet: an Import before the first Attach.
         if (!this._built)
             return;
+        this._stale.add(key);
         if (this._rebuild)
             GLib.source_remove(this._rebuild);
         this._rebuild = GLib.timeout_add(GLib.PRIORITY_DEFAULT, REBUILD_DELAY, () => {
             this._rebuild = 0;
-            this._closeHomes();
+            const changed = this._stale;
+            this._stale = new Set();
+            if (!this._built)
+                return GLib.SOURCE_REMOVE;
+            if (changed.has(null)) {
+                this._closeHomes();
+            } else {
+                const before = this._homes.list.map(({id}) => id);
+                const now = new Set(this._homes.build(changed).map(({id}) => id));
+                for (const id of before.filter(id => !now.has(id)))
+                    this._objects.delete(id);
+                for (const {id, kind, home} of this._homes.list.filter(({id}) => !this._objects.has(id)))
+                    this._register(id, kind, home);
+            }
             this._emit('Reloaded', '()', []);
             this._window?.onReloaded();
             return GLib.SOURCE_REMOVE;

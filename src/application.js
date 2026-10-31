@@ -46,6 +46,13 @@ class Application extends Adw.Application {
         provider.load_from_file(Gio.File.new_for_uri(GLib.Uri.resolve_relative(import.meta.url, 'style.css', GLib.UriFlags.NONE)));
         Gtk.StyleContext.add_provider_for_display(Gdk.Display.get_default(), provider,
             Gtk.STYLE_PROVIDER_PRIORITY_APPLICATION);
+        // Told outright: a provider added after the style last changed takes @media as in the light style.
+        const manager = Adw.StyleManager.get_default();
+        const scheme = () => {
+            provider.prefers_color_scheme = manager.dark ? Gtk.InterfaceColorScheme.DARK : Gtk.InterfaceColorScheme.LIGHT;
+        };
+        manager.connect('notify::dark', scheme);
+        scheme();
         const show = new Gio.SimpleAction({name: 'show-page', parameter_type: new GLib.VariantType('s')});
         show.connect('activate', (_action, target) => this._window().showPage(target.unpack()));
         this.add_action(show);

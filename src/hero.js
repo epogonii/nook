@@ -198,7 +198,7 @@ function sensorKind(model) {
     return null;
 }
 
-function shortWhen(seconds) {
+export function shortWhen(seconds) {
     const then = GLib.DateTime.new_from_unix_local(seconds);
     const now = GLib.DateTime.new_now_local();
     if (then.format('%Y-%m-%d') === now.format('%Y-%m-%d'))

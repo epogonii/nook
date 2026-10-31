@@ -31,7 +31,7 @@ const SECRET_LABEL = 'Nook: Xiaomi account';
 
 export const CLOUD_AIRCONS = [LG, SMARTTHINGS, MELCLOUD, ELECTROLUX];
 
-// A change to any of these rebuilds every home.
+// A change to any of these rebuilds the homes built from it.
 export const DEVICE_KEYS = ['xiaomi-user-id', 'gree-units', 'aircons', 'tapo-cameras', 'cast-speakers', 'tvs',
     'sonoff-switches', 'shelly-devices', 'ewelink-devices', 'ewelink-region', 'hue-bridges', 'hue-devices',
     'hass-server', 'hass-devices', 'homekit-accessories', 'smartlife-user', 'smartlife-devices',
@@ -136,74 +136,92 @@ export class Homes {
     constructor(settings) {
         this._settings = settings;
         this._generation = 0;
+        this._xiaomiGeneration = 0;
         this.list = [];
         // A home saving a moved camera or speaker must not rebuild the homes.
         this.keeping = false;
         this._xiaomiState = null;
     }
 
-    // Mi Home waits on the keyring: see xiaomi().
-    build() {
+    // [name, keys it is built from, make]; the kind is the name up to a colon. Mi Home, built
+    // from xiaomi-user-id, waits on the keyring: see xiaomi().
+    _makers() {
         const settings = this._settings;
+        const some = (list, make) => (list.length > 0 ? make(list) : null);
+        return [
+            ['aircon', ['gree-units', 'aircons'], () => some(
+                [...parseUnits(read(settings, 'gree-units')), ...parseAircons(read(settings, 'aircons'))],
+                aircons => new AirconHome(aircons))],
+            ['tapo', ['tapo-cameras'], () => some(Tapo.parseCameras(read(settings, 'tapo-cameras')), cameras => {
+                const tapo = new Cameras(cameras);
+                tapo.onMoved = moved => this._keepCameras(moved);
+                return tapo;
+            })],
+            ['cast', ['cast-speakers'], () => some(parseSpeakers(read(settings, 'cast-speakers')), speakers => {
+                const cast = new CastHome(speakers);
+                cast.onMoved = speaker => this._keepSpeaker(speaker);
+                return cast;
+            })],
+            ['tv', ['tvs'], () => some(parseTvs(read(settings, 'tvs')), tvs => new TvHome(tvs))],
+            ['sonoff', ['sonoff-switches'], () => some(parseSwitches(read(settings, 'sonoff-switches')),
+                switches => new SonoffHome(switches))],
+            ['shelly', ['shelly-devices'], () => some(parseShelly(read(settings, 'shelly-devices')),
+                shellies => new ShellyHome(shellies))],
+            ['ewelink', ['ewelink-devices', 'ewelink-region'], () => (read(settings, 'ewelink-region')
+                ? some(parseEwelinkDevices(read(settings, 'ewelink-devices')), devices => new EwelinkHome(devices)) : null)],
+            ['hue', ['hue-devices', 'hue-bridges'], () => some(parseHueDevices(read(settings, 'hue-devices')),
+                devices => new HueHome(parseHueBridges(read(settings, 'hue-bridges')), devices))],
+            ['hass', ['hass-devices', 'hass-server'], () => (read(settings, 'hass-server')
+                ? some(parseHassDevices(read(settings, 'hass-devices')), devices => new HassHome(devices)) : null)],
+            ['homekit', ['homekit-accessories'], () => some(parseHomeKitHosts(read(settings, 'homekit-accessories')),
+                hosts => new HomeKitHome(hosts))],
+            ['smartlife', ['smartlife-devices', 'smartlife-user'], () => (read(settings, 'smartlife-user')
+                ? some(parseSmartLifeDevices(read(settings, 'smartlife-devices')), devices => new SmartLifeHome(devices))
+                : null)],
+            ...CLOUD_AIRCONS.map(brand => [`cloud:${brand.id}`, [`${brand.id}-devices`], () => some(
+                parseEntries(read(settings, `${brand.id}-devices`)), entries => new CloudAirconHome(brand, entries))]),
+        ];
+    }
+
+    // Every home, or only those built from the changed keys: the rest keep their ids, devices
+    // and connections.
+    build(changed = null) {
         const generation = ++this._generation;
+        const before = new Map(this.list.map(entry => [entry.id.slice(0, entry.id.lastIndexOf('.')), entry]));
         const list = [];
-        const add = (kind, home) => list.push({id: `${kind}.${generation}`, kind, home});
-
-        const aircons = [...parseUnits(read(settings, 'gree-units')), ...parseAircons(read(settings, 'aircons'))];
-        if (aircons.length > 0)
-            add('aircon', new AirconHome(aircons));
-        const cameras = Tapo.parseCameras(read(settings, 'tapo-cameras'));
-        if (cameras.length > 0) {
-            const tapo = new Cameras(cameras);
-            tapo.onMoved = moved => this._keepCameras(moved);
-            add('tapo', tapo);
+        const gone = [];
+        for (const [name, keys, make] of this._makers()) {
+            const old = before.get(name);
+            if (old && changed && !keys.some(key => changed.has(key))) {
+                list.push(old);
+                continue;
+            }
+            const home = make();
+            if (old)
+                gone.push(old);
+            if (old && home)
+                keepOffline(old.home, home);
+            if (home)
+                list.push({id: `${name}.${generation}`, kind: name.split(':')[0], home});
         }
-        const speakers = parseSpeakers(read(settings, 'cast-speakers'));
-        if (speakers.length > 0) {
-            const cast = new CastHome(speakers);
-            cast.onMoved = speaker => this._keepSpeaker(speaker);
-            add('cast', cast);
+        const xiaomi = ['xiaomi', 'scenes'].map(name => before.get(name)).filter(Boolean);
+        if (changed && !changed.has('xiaomi-user-id')) {
+            list.push(...xiaomi);
+        } else {
+            gone.push(...xiaomi);
+            this._xiaomiGeneration++;
+            this._xiaomiState = null;
         }
-        const tvs = parseTvs(read(settings, 'tvs'));
-        if (tvs.length > 0)
-            add('tv', new TvHome(tvs));
-        const switches = parseSwitches(read(settings, 'sonoff-switches'));
-        if (switches.length > 0)
-            add('sonoff', new SonoffHome(switches));
-        const shellies = parseShelly(read(settings, 'shelly-devices'));
-        if (shellies.length > 0)
-            add('shelly', new ShellyHome(shellies));
-        const ewelink = parseEwelinkDevices(read(settings, 'ewelink-devices'));
-        if (ewelink.length > 0 && read(settings, 'ewelink-region'))
-            add('ewelink', new EwelinkHome(ewelink));
-        const hue = parseHueDevices(read(settings, 'hue-devices'));
-        if (hue.length > 0)
-            add('hue', new HueHome(parseHueBridges(read(settings, 'hue-bridges')), hue));
-        const hass = parseHassDevices(read(settings, 'hass-devices'));
-        if (hass.length > 0 && read(settings, 'hass-server'))
-            add('hass', new HassHome(hass));
-        const accessories = parseHomeKitHosts(read(settings, 'homekit-accessories'));
-        if (accessories.length > 0)
-            add('homekit', new HomeKitHome(accessories));
-        const smartlife = parseSmartLifeDevices(read(settings, 'smartlife-devices'));
-        if (smartlife.length > 0 && read(settings, 'smartlife-user'))
-            add('smartlife', new SmartLifeHome(smartlife));
-        for (const brand of CLOUD_AIRCONS) {
-            const entries = parseEntries(read(settings, `${brand.id}-devices`));
-            if (entries.length > 0)
-                list.push({id: `cloud:${brand.id}.${generation}`, kind: 'cloud', home: new CloudAirconHome(brand, entries)});
-        }
-
+        close(gone);
         this.list = list;
-        this._xiaomiState = null;
         return list;
     }
 
     xiaomi() {
-        const generation = this._generation;
+        const generation = this._xiaomiGeneration;
         this._xiaomiState ??= this._xiaomi(generation).then(state => {
-            const list = generation === this._generation ? state.list : [];
-            if (generation !== this._generation)
+            const list = generation === this._xiaomiGeneration ? state.list : [];
+            if (generation !== this._xiaomiGeneration)
                 close(state.list);
             this.list.push(...list);
             return {...state, list};
@@ -245,6 +263,7 @@ export class Homes {
 
     close() {
         this._generation++;
+        this._xiaomiGeneration++;
         close(this.list);
         this.list = [];
         this._xiaomiState = null;
@@ -269,6 +288,15 @@ export class Homes {
         } finally {
             this.keeping = false;
         }
+    }
+}
+
+// What a rebuilt home lists again stays unreachable until read, so its tile keeps its place.
+function keepOffline(from, to) {
+    const offline = new Set((from.devices ?? []).filter(device => device.online === false).map(device => device.did));
+    for (const device of to.devices ?? []) {
+        if (typeof device.online !== 'boolean' && offline.has(device.did))
+            device.online = false;
     }
 }
 

@@ -134,8 +134,16 @@ class Window extends Adw.ApplicationWindow {
         brand.append(new Gtk.Label({label: _('Nook'), css_classes: ['title']}));
         const sidebarHeader = new Adw.HeaderBar({title_widget: brand});
         sidebarHeader.pack_end(menuButton);
+        // Under the places, the home at a glance.
+        const side = new Gtk.Box({orientation: Gtk.Orientation.VERTICAL});
+        side.append(this._list);
+        side.append(this._home.glance);
+        this._home.glance.connect('activate', (_list, key) => {
+            this.showPlace('home');
+            this._home.goTo(key);
+        });
         const sidebarView = new Adw.ToolbarView({
-            content: new Gtk.ScrolledWindow({hscrollbar_policy: Gtk.PolicyType.NEVER, child: this._list}),
+            content: new Gtk.ScrolledWindow({hscrollbar_policy: Gtk.PolicyType.NEVER, child: side}),
         });
         sidebarView.add_top_bar(sidebarHeader);
         const pin = new CameraPin();
@@ -176,6 +184,10 @@ class Window extends Adw.ApplicationWindow {
         const narrow = new Adw.Breakpoint({condition: Adw.BreakpointCondition.parse('max-width: 640sp')});
         narrow.add_setter(this._split, 'collapsed', true);
         this.add_breakpoint(narrow);
+        const beside = () => this._home.setSidebarShown(this._split.show_sidebar && !this._split.collapsed);
+        this._split.connect('notify::show-sidebar', beside);
+        this._split.connect('notify::collapsed', beside);
+        beside();
 
         this._nav.add(this._home);
         this._fillSidebar();
