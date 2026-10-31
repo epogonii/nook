@@ -1,0 +1,14 @@
+# Built by tools/install-local.sh from the schema xml.
+schemas/gschemas.compiled
+
+# Throwaway home of tools/run-nested.sh.
+tools/nested-home.*/
+
+# What tools/pack.sh produces. Releases carry it; the repository does not.
+nook.zip
+
+# Python bytecode of the test helpers.
+tools/__pycache__/
+
+# Built by tools/install-local.sh from po/*.po.
+po/*.mo

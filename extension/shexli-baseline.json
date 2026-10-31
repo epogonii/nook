@@ -1,0 +1,31 @@
+{
+  "spec_version": "2026-04-02",
+  "known": [
+    {
+      "rule_id": "EGO-L-008",
+      "paths": [
+        "electrolux.js",
+        "lg.js",
+        "melcloud.js",
+        "midea.js",
+        "smartthings.js"
+      ],
+      "snippets": [
+        "this._session = new Soup.Session({timeout: 10})",
+        "this._session = new Soup.Session({timeout: 15})",
+        "this._session = new Soup.Session({timeout: 15})",
+        "this._session = new Soup.Session({timeout: 15})",
+        "this._session = new Soup.Session({timeout: 15})"
+      ]
+    },
+    {
+      "rule_id": "EGO-P-007",
+      "paths": [
+        "feed.js"
+      ],
+      "snippets": [
+        ""
+      ]
+    }
+  ]
+}

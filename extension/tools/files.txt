@@ -1,0 +1,55 @@
+# What the extension is made of, as opposed to what the repository holds.
+# Both the local install and the packed zip are built from this list, so
+# there is one place to add a file to. Blank lines and lines starting with #
+# are ignored. The compiled schema is built into place by the installer.
+
+metadata.json
+extension.js
+ui/alerts.js
+ui/bridge.js
+ui/camera.js
+ui/card-camera.js
+ui/card-climate.js
+ui/card-controls.js
+ui/card-history.js
+ui/card-media.js
+ui/card-spec.js
+ui/card-tv.js
+ui/card-vacuum.js
+ui/card.js
+ui/chart.js
+ui/climate.js
+ui/color.js
+ui/drop.js
+ui/errors.js
+ui/events.js
+ui/hero.js
+ui/humanize.js
+ui/layouts.js
+ui/menu-lights.js
+ui/menu-read.js
+ui/menu-view.js
+ui/menu.js
+ui/props.js
+ui/remote.js
+ui/rows.js
+ui/text.js
+ui/tiles.js
+ui/widgets.js
+prefs.js
+prefs/app.js
+LICENSE
+stylesheet.css
+icons/nook-logo-dark.svg
+icons/nook-logo.svg
+icons/nook-symbolic.svg
+icons/nook-top-bar-symbolic.svg
+lib/arrange.js
+lib/brands.js
+lib/color.js
+lib/vacuum-map.js
+lib/glyphs.js
+lib/climate.js
+lib/scenes.js
+lib/timers.js
+schemas/org.gnome.shell.extensions.nook.gschema.xml
