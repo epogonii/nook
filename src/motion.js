@@ -17,6 +17,9 @@ const LID = [0.34, 0.04];
 const SPEAKER = [0.5, 0.49];
 const FAN_HEAD = [0.5, 0.18, 0.18];
 
+// The robot vacuum's top button, where its light is: centre, then half its width and height.
+const BUTTON = [0.414, 0.435, 0.17, 0.18];
+
 const COOL = [0.36, 0.62, 0.95];
 const ALARM = [0.88, 0.11, 0.14];
 // Steam and air: grey on a light tile, where white would not show.
@@ -109,6 +112,9 @@ function breeze(cr, [x, y, width, height], time, {pace = 1, dark}) {
 
 const MOTIONS = {air, steam, sound, breeze};
 
+// Whether it draws behind the picture.
+export const behind = kind => kind in MOTIONS;
+
 // Where it draws, as [x, y, width, height]: what the tile has to repaint.
 export function area(kind, [x, y, width, height]) {
     switch (kind) {
@@ -134,6 +140,18 @@ export function pulse(motion, [x, y, width, height], time) {
     const beat = 0.5 + 0.5 * Math.sin(time * TAU / 1.2);
     return [x + width / 2, y + height / 2, Math.max(width, height) * 0.85,
         [[0, ...ALARM, 0.2 + 0.35 * beat], [0.5, ...ALARM, 0.1 + 0.2 * beat], [1, ...ALARM, 0]]];
+}
+
+// A light on the picture, not behind it: the button of a charging robot vacuum breathes.
+// [x, y, radius across, radius down, stops as in pulse()], or null.
+export function light(motion, [x, y, width, height], time) {
+    if (motion.kind !== 'charge')
+        return null;
+    const breath = 0.5 - 0.5 * Math.cos(time * TAU / 2.4);
+    const [red, green, blue] = motion.color;
+    const [across, down, wide, tall] = BUTTON;
+    return [x + across * width, y + down * height, wide * width, tall * height,
+        [[0, red, green, blue, 0.2 + 0.4 * breath], [0.6, red, green, blue, 0.12 + 0.33 * breath], [1, red, green, blue, 0]]];
 }
 
 // motion: {kind, ...} as widgets.js gives it; time in seconds.

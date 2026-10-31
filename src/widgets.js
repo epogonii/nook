@@ -627,6 +627,10 @@ class DevicePicture extends Gtk.Widget {
         if (this._motion)
             this._move(snapshot, rect);
         snapshot.append_scaled_texture(texture, Gsk.ScalingFilter.LINEAR, rect);
+        const light = this._motion && Motion.light(this._motion, [rect.get_x(), rect.get_y(), rect.get_width(), rect.get_height()],
+            moving.has(this) ? GLib.get_monotonic_time() / 1e6 : 0);
+        if (light)
+            glowAt(snapshot, light.slice(0, 2), light.slice(2, 4), light[4]);
         const display = DISPLAYS[this._name];
         if (!display)
             return;
@@ -647,6 +651,8 @@ class DevicePicture extends Gtk.Widget {
             glowAt(snapshot, [cx, cy], [radius, radius], stops);
             return;
         }
+        if (!Motion.behind(this._motion.kind))
+            return;
         const [x, y, width, height] = Motion.area(this._motion.kind, box);
         const cr = snapshot.append_cairo(new Graphene.Rect().init(x, y, width, height));
         Motion.draw(cr, box, time, {...this._motion, dark: Adw.StyleManager.get_default().dark});
@@ -878,6 +884,8 @@ function motionOf(picture, hero, on) {
         return hero.state.playing ? {kind: 'sound', color: hero.color} : null;
     case 'fan':
         return on ? {kind: 'breeze', pace: hero.state.level ?? 1} : null;
+    case 'vacuum':
+        return hero.state.mode === 'charging' ? {kind: 'charge', color: hero.color} : null;
     }
     return null;
 }

@@ -853,13 +853,13 @@ export function heroColor(device, hero) {
     return hero.alarm ? ALARM : Scenes.tint(hero.scene, hero.state) ?? hero.color;
 }
 
-// Off, closed, dry, quiet, docked, or with nothing to say but Online: nothing on a tile worth
+// Off, closed, dry, quiet, docked and charged, or with nothing to say but Online: nothing on a tile worth
 // a look. A reading is never at rest.
 export function atRest(hero) {
     if (hero.alarm)
         return false;
     return ['on', 'active', 'open', 'playing', 'light', 'working', 'cooking', 'ringing', 'wet', 'alarm']
         .some(key => hero.state[key] === false) ||
-        ['idle', 'charging'].includes(hero.state.mode) || hero.scene === 'glyph' ||
+        hero.state.mode === 'idle' || hero.scene === 'glyph' ||
         hero.color === RESTING || hero.color === SILENT;
 }
