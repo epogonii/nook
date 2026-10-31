@@ -247,32 +247,43 @@ export default class PanasonicTv {
     }
 
     // QMI says VC for any app. The app list marks the running one but needs the key;
-    // unpaired, DIAL can still name YouTube and Netflix.
+    // unpaired, DIAL can still name YouTube and Netflix. Not finding the app still means QMI answered.
     async _showing() {
         const input = await this._inquire('QMI');
         if (input !== 'VC')
             return {source: sourceId(input), app: null, title: null};
-        const app = this.paired ? (await this.apps()).find(a => a.running) : await this._dialRunning();
+        const app = await (this.paired ? this.apps().then(apps => apps.find(a => a.running)) : this._dialRunning())
+            .catch(e => {
+                if (!(e instanceof TvError) && !(e instanceof GLib.Error))
+                    throw e;
+                return null;
+            });
         return {source: null, app: app?.id ?? null, title: app?.title ?? null};
     }
 
-    // UPnP volume doubles as the power probe: it answers only while the TV is on.
+    // In standby every request answers HTTP 400, so the UPnP volume and the PAC input each
+    // say the TV is on. Either will do, so one unanswered request can't turn it off here.
     async status() {
         const showing = this._showing().catch(e => {
             if (!(e instanceof TvError) && !(e instanceof GLib.Error))
                 throw e;
-            return {source: null, app: null};
+            return null;
         });
-        let sound;
+        let sound = null;
         try {
             sound = await readVolume(this._session, `${this._base}/dmr/control_0`, 'm');
             await this._needsKey();
         } catch (e) {
-            if (e instanceof TvError || e instanceof GLib.Error)
-                return {on: false, volume: null, muted: null, source: null, app: null};
-            throw e;
+            if (!(e instanceof TvError) && !(e instanceof GLib.Error))
+                throw e;
         }
-        return {on: true, ...sound, ...await showing};
+        const shown = await showing;
+        if (!sound && !shown) {
+            // The encrypted session doesn't outlive standby.
+            this._link = null;
+            return {on: false, volume: null, muted: null, source: null, app: null};
+        }
+        return {on: true, volume: null, muted: null, ...sound, source: null, app: null, ...shown};
     }
 
     async _awake() {
@@ -302,7 +313,8 @@ export default class PanasonicTv {
     }
 
     // The power key toggles: press it only after two reads agree the TV is the other
-    // way, so one lost reply can't turn off a TV asked to turn on.
+    // way, so one lost reply can't turn off a TV asked to turn on. Turning it off, the press
+    // may be retried on a fresh session: in standby the TV takes no key.
     async power(on) {
         for (let ask = 0; ask < 2; ask++) {
             const {on: now} = await this.status();
@@ -319,7 +331,7 @@ export default class PanasonicTv {
             }
             throw new TvError('The TV did not wake up', 'asleep');
         }
-        await this._command('X_SendKey', `<X_KeyEvent>${KEYS.power}</X_KeyEvent>`, false);
+        await this._command('X_SendKey', `<X_KeyEvent>${KEYS.power}</X_KeyEvent>`, !on);
     }
 
     // QIL: "TV[TV],H1[HDMI1],V1[VIDEO]". Only inputs with a key: those are what source() can pick.
