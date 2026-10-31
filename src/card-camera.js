@@ -26,6 +26,10 @@ Gio._promisify(Gio.File.prototype, 'replace_contents_bytes_async', 'replace_cont
 const NO_GSTREAMER = 2;
 const REFUSED = 3;
 const NO_PLUGIN = 4;
+const NO_SOUND = 5;
+
+// Cameras with the sound on, by did, for as long as the app runs.
+const hearing = new Set();
 
 // Pan per click: PAN_STEP ms at PAN_SPEED. The C200 ignores the time limit sent with a
 // move; the stop that follows ends it.
@@ -289,9 +293,12 @@ export class CameraCard {
         this._pad.set_direction(Gtk.TextDirection.LTR);
         this._shoot = roundButton('camera-photo-symbolic', _('Take a Snapshot'), () => this._takeSnapshot().catch(logError));
         this._shoot.sensitive = false;
+        this._sound = roundButton('audio-volume-muted-symbolic', _('Unmute'), () => this._toggleSound());
+        this._showSound();
         this._bar = new Gtk.Box({spacing: 6});
         this._bar.append(this._info);
         this._bar.append(this._pad);
+        this._bar.append(this._sound);
         this._bar.append(this._shoot);
 
         this.stage = new Gtk.Box({orientation: Gtk.Orientation.VERTICAL});
@@ -443,7 +450,7 @@ export class CameraCard {
             // Other ONVIF cameras say where their stream is first.
             if (!device.test)
                 await device.source.streams(device, this._controls, feed.cancellable);
-            process = await device.source.startFeed(device);
+            process = await device.source.startFeed(device, hearing.has(device.did));
         } catch (e) {
             if (this._feed !== feed)
                 return;
@@ -509,8 +516,31 @@ export class CameraCard {
         } else if (status === REFUSED) {
             this._device.source.refused(this._device);
             this._refused();
+        } else if (status === NO_SOUND) {
+            hearing.delete(this._device.did);
+            this._showSound();
+            this._ctx.toast(_('The camera’s sound could not be played.'));
+            this._update();
         } else {
             this._say(_('The camera stopped sending its picture.'));
+        }
+    }
+
+    _showSound() {
+        const on = hearing.has(this._device.did);
+        this._sound.icon_name = on ? 'audio-volume-high-symbolic' : 'audio-volume-muted-symbolic';
+        this._sound.tooltip_text = on ? _('Mute') : _('Unmute');
+    }
+
+    // The sound plays from feed.js's own pipeline: the feed starts again with it or without.
+    _toggleSound() {
+        const did = this._device.did;
+        if (!hearing.delete(did))
+            hearing.add(did);
+        this._showSound();
+        if (this._feed) {
+            this._stopFeed();
+            this._update();
         }
     }
 

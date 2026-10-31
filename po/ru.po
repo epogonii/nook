@@ -159,6 +159,10 @@ msgstr "Для картинки нужен плагин GStreamer, которо�
 msgid "The camera stopped sending its picture."
 msgstr "Камера перестала присылать картинку."
 
+#: src/card-camera.js:522
+msgid "The camera’s sound could not be played."
+msgstr "Не удалось воспроизвести звук камеры."
+
 #: src/card-camera.js:546
 #, javascript-format
 msgid "Could not turn the camera: %s"

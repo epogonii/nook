@@ -77,11 +77,13 @@ export class Cameras extends TapoHome {
         return `${JSON.stringify({...saved, url: streams[which]})}\n`;
     }
 
-    async startFeed(device) {
+    async startFeed(device, sound = false) {
         const input = await this._input(device, 'live');
         const argv = ['gjs', '-m', FEED];
         if (input === null)
             argv.push('--test');
+        if (sound)
+            argv.push('--sound');
         const process = Gio.Subprocess.new(argv, Gio.SubprocessFlags.STDIN_PIPE |
             Gio.SubprocessFlags.STDOUT_PIPE | Gio.SubprocessFlags.STDERR_SILENCE);
         // Credentials over stdin: argv is visible to other processes.

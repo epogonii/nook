@@ -151,6 +151,7 @@ As a Flatpak, the app is allowed:
 | `--system-talk-name=org.bluez` | adverts of Xiaomi Bluetooth thermometers |
 | `--system-talk-name=org.freedesktop.Avahi` | mDNS discovery of speakers, TVs, Hue, Home Assistant, HomeKit and Shelly |
 | `--filesystem=xdg-pictures/Nook:create` | camera snapshots, saved to `Pictures/Nook` |
+| `--socket=pulseaudio` | a camera's sound, once turned on in the camera's page |
 | `--socket=wayland`, `--socket=fallback-x11`, `--share=ipc`, `--device=dri` | the window |
 
 ## Support Nook

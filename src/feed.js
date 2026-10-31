@@ -9,6 +9,7 @@
 //   gjs -m feed.js               camera from the JSON on stdin
 //   gjs -m feed.js --test        test pattern, no camera
 //   gjs -m feed.js --still FILE  one JPEG at the stream's native size, then exit
+//   --sound                      with either of the first two: plays the camera's sound
 
 import GdkPixbuf from 'gi://GdkPixbuf';
 import Gio from 'gi://Gio';
@@ -16,10 +17,12 @@ import GioUnix from 'gi://GioUnix';
 import GLib from 'gi://GLib';
 import System from 'system';
 
-// Must match NO_GSTREAMER, REFUSED and NO_PLUGIN in ui/camera.js.
+// Must match card-camera.js, and but for NO_SOUND the extension's ui/camera.js.
 const NO_GSTREAMER = 2;
 const REFUSED = 3;
 const NO_PLUGIN = 4;
+// The sound failed, and with it the stream: started again without it, the picture works.
+const NO_SOUND = 5;
 
 const WIDTH = 640;
 const RATE = 4;
@@ -30,6 +33,7 @@ const STILL_GIVE_UP_MS = 20000;
 
 const stillAt = ARGV.indexOf('--still');
 const still = stillAt >= 0 ? ARGV[stillAt + 1] : null;
+const sound = ARGV.includes('--sound') && !still;
 
 let Gst;
 try {
@@ -39,17 +43,37 @@ try {
     System.exit(NO_GSTREAMER);
 }
 
+// Somewhere to play it: in the sandbox only with the pulseaudio socket. Finding nowhere,
+// autoaudiosink goes on into a fakesink.
+function canPlay() {
+    const sink = Gst.ElementFactory.make('autoaudiosink', null);
+    if (!sink)
+        return false;
+    let real = false;
+    if (sink.set_state(Gst.State.READY) !== Gst.StateChangeReturn.FAILURE) {
+        const [found, kid] = sink.iterate_elements().next();
+        real = found === Gst.IteratorResult.OK && kid.get_factory()?.get_name() !== 'fakesink';
+    }
+    sink.set_state(Gst.State.NULL);
+    return real;
+}
+
+if (sound && !canPlay())
+    System.exit(NO_SOUND);
+
+const SPEAKER = 'decodebin name=sound ! audioconvert ! audioresample ! autoaudiosink name=speaker sync=false';
+
 let source = 'videotestsrc is-live=true pattern=smpte ! video/x-raw,width=640,height=360';
 let account = null;
-let drain = '';
+let drain = sound ? ` audiotestsrc is-live=true wave=silence ! ${SPEAKER.replace('decodebin name=sound', 'identity name=sound')}` : '';
 if (!ARGV.includes('--test')) {
     const input = new Gio.DataInputStream({base_stream: new GioUnix.InputStream({fd: 0})});
     const [line] = input.read_line_utf8(null);
     account = JSON.parse(line ?? '{}');
     source = 'rtspsrc name=camera protocols=tcp latency=300 ! application/x-rtp,media=video ! decodebin';
-    // Sink the audio stream: left unlinked it stops the pipeline, and declining it at
-    // RTSP setup makes the camera drop the video as well.
-    drain = ' camera. ! application/x-rtp,media=audio ! fakesink sync=false async=false';
+    // Sink the audio stream when not played: left unlinked it stops the pipeline, and
+    // declining it at RTSP setup makes the camera drop the video as well.
+    drain = ` camera. ! application/x-rtp,media=audio ! ${sound ? SPEAKER : 'fakesink sync=false async=false'}`;
 }
 
 let pipeline;
@@ -155,10 +179,21 @@ if (still) {
 // Auth failure gets its own exit code: retrying a refused login keeps the camera locked.
 const bus = pipeline.get_bus();
 bus.add_signal_watch();
+// Under the sound's own elements, decoder and speaker.
+function fromSound(object) {
+    for (let at = object; at; at = at.get_parent()) {
+        if (at.name === 'sound' || at.name === 'speaker')
+            return true;
+    }
+    return false;
+}
+
 bus.connect('message', (_bus, message) => {
     if (message.type === Gst.MessageType.ERROR) {
         const [error] = message.parse_error();
-        if (error.matches(Gst.ResourceError, Gst.ResourceError.NOT_AUTHORIZED))
+        if (sound && fromSound(message.src))
+            status = NO_SOUND;
+        else if (error.matches(Gst.ResourceError, Gst.ResourceError.NOT_AUTHORIZED))
             status = REFUSED;
         // decodebin with no decoder for the camera's codec, e.g. H.264 without openh264 or libav.
         else if (error.matches(Gst.CoreError, Gst.CoreError.MISSING_PLUGIN) ||
