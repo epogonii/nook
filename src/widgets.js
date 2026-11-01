@@ -281,6 +281,10 @@ const DISPLAYS = {
     'temperature-humidity-sensor': [0.0628, 0.135, 0.8021, 0.1569, 0.7902, 0.9099, 0.077, 0.834],
     'television': [0.006, 0.037, 0.997, 0.004, 0.988, 0.766, 0.018, 0.912],
 };
+// By file in pictures/: its water window, [left, top, right, bottom] as fractions of the picture.
+const GAUGES = {
+    'kettle': [0.215, 0.2, 0.305, 0.68],
+};
 // A tile's picture is whole, as large as fits INSET from its corner, left of WIDE and above GROUND,
 // which it stands on: in pixels, and in fractions of the tile's width and height.
 const INSET = 20;
@@ -468,6 +472,7 @@ class DevicePicture extends Gtk.Widget {
         this._glow = null;
         this._dark = false;
         this._motion = null;
+        this._water = null;
         // While a change fades in: what showed before it, and how far along it is, 0 to 1.
         this._was = null;
         this._fade = 1;
@@ -522,8 +527,8 @@ class DevicePicture extends Gtk.Widget {
 
     // false: there is no picture of it. screen: what its display shows, as screenOf(); glow:
     // the light it gives off, as glowOf(); dark: its display is off; motion: what moves
-    // around it, as motionOf().
-    set(name, {screen = null, glow = null, dark = false, motion = null} = {}) {
+    // around it, as motionOf(); water: the colour of the water in its window.
+    set(name, {screen = null, glow = null, dark = false, motion = null, water = null} = {}) {
         if (name !== this._name || JSON.stringify([screen, glow, dark]) !== JSON.stringify([this._screen, this._glow, this._dark])) {
             // Another picture shows at once; the same one changing fades, while it shows.
             const fading = name === this._name && this.get_mapped() && animating() && this._inView();
@@ -538,6 +543,10 @@ class DevicePicture extends Gtk.Widget {
         }
         if (JSON.stringify(motion) !== JSON.stringify(this._motion)) {
             this._motion = motion;
+            this.queue_draw();
+        }
+        if (JSON.stringify(water) !== JSON.stringify(this._water)) {
+            this._water = water;
             this.queue_draw();
         }
         this._run();
@@ -631,6 +640,8 @@ class DevicePicture extends Gtk.Widget {
             moving.has(this) ? GLib.get_monotonic_time() / 1e6 : 0);
         if (light)
             glowAt(snapshot, light.slice(0, 2), light.slice(2, 4), light[4]);
+        if (this._water && GAUGES[this._name])
+            gauge(snapshot, rect, GAUGES[this._name], this._water);
         const display = DISPLAYS[this._name];
         if (!display)
             return;
@@ -675,6 +686,50 @@ class DevicePicture extends Gtk.Widget {
         cr.$dispose();
     }
 });
+
+// Tinted glass, three quarters full, as on the kettle's page.
+function gauge(snapshot, rect, [left, top, right, bottom], color) {
+    const x = rect.get_x() + left * rect.get_width();
+    const y = rect.get_y() + top * rect.get_height();
+    const width = (right - left) * rect.get_width();
+    const height = (bottom - top) * rect.get_height();
+    const radius = width * 0.45;
+    const cr = snapshot.append_cairo(rect);
+    const window = () => {
+        cr.newPath();
+        cr.arc(x + width - radius, y + radius, radius, -Math.PI / 2, 0);
+        cr.arc(x + width - radius, y + height - radius, radius, 0, Math.PI / 2);
+        cr.arc(x + radius, y + height - radius, radius, Math.PI / 2, Math.PI);
+        cr.arc(x + radius, y + radius, radius, Math.PI, 1.5 * Math.PI);
+        cr.closePath();
+    };
+    window();
+    cr.save();
+    cr.clip();
+    cr.setSourceRGBA(0.62, 0.66, 0.72, 0.35);
+    cr.paint();
+    const surface = y + height * 0.25;
+    const water = new Cairo.LinearGradient(0, surface, 0, y + height);
+    water.addColorStopRGB(0, ...Scenes.mix(color, [1, 1, 1], 0.3));
+    water.addColorStopRGB(1, ...color);
+    cr.setSource(water);
+    cr.rectangle(x, surface, width, y + height - surface);
+    cr.fill();
+    // The glass is round: lit down its left, shaded down its right.
+    const sheen = new Cairo.LinearGradient(x, 0, x + width, 0);
+    sheen.addColorStopRGBA(0, 1, 1, 1, 0.35);
+    sheen.addColorStopRGBA(0.35, 1, 1, 1, 0);
+    sheen.addColorStopRGBA(0.7, 0, 0, 0, 0);
+    sheen.addColorStopRGBA(1, 0, 0, 0, 0.18);
+    cr.setSource(sheen);
+    cr.paint();
+    cr.restore();
+    window();
+    cr.setLineWidth(Math.max(0.75, width * 0.08));
+    cr.setSourceRGBA(0.45, 0.48, 0.53, 0.35);
+    cr.stroke();
+    cr.$dispose();
+}
 
 // glows as in GLOWS, color as glowOf() gives it.
 function shine(snapshot, rect, [x, y, across, down, core], [red, green, blue, alpha]) {
@@ -1026,6 +1081,7 @@ export const Tile = GObject.registerClass({
             glow: on ? glowOf(this.device) : null,
             dark: kind === 'tv' && !on,
             motion: picture && !offline ? motionOf(picture, hero, on) : null,
+            water: picture && GAUGES[picture] ? Scenes.tint('kettle', hero.state) ?? [0.5, 0.7, 0.95] : null,
         });
         const drawn = !withPictures && !this._look[2];
         this._picture.visible = pictured;
