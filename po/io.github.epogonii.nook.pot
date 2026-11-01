@@ -2764,7 +2764,7 @@ msgid "%s address copied"
 msgstr ""
 
 #: src/support.js:122
-msgid "Your smart home on the GNOME desktop"
+msgid "Your smart home on the Linux desktop"
 msgstr ""
 
 #: src/support.js:124

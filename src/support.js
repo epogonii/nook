@@ -119,7 +119,7 @@ export function aboutDialog(version) {
         website: PROJECT_URL,
         issue_url: ISSUES_URL,
         license_type: Gtk.License.GPL_2_0,
-        comments: _('Your smart home on the GNOME desktop'),
+        comments: _('Your smart home on the Linux desktop'),
     });
     about.add_link(_('Request a Feature'), FEATURE_URL);
     return about;

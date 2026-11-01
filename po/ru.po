@@ -2915,8 +2915,8 @@ msgid "%s address copied"
 msgstr "Адрес %s скопирован"
 
 #: src/support.js:122
-msgid "Your smart home on the GNOME desktop"
-msgstr "Ваш умный дом на рабочем столе GNOME"
+msgid "Your smart home on the Linux desktop"
+msgstr "Ваш умный дом на рабочем столе Linux"
 
 #: src/support.js:124
 msgid "Request a Feature"
