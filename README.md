@@ -5,7 +5,7 @@
 <h1 align="center">Nook</h1>
 
 <p align="center">
-  Your smart home on the GNOME desktop.<br>
+  Your smart home on the Linux desktop.<br>
   Lights, climate, sensors, cameras, speakers and TVs in one window.
 </p>
 
@@ -58,6 +58,10 @@ Home Assistant knows comes in through Home Assistant.
 </p>
 
 ## Install
+
+Nook is a GTK 4 app and doesn't need GNOME: it runs on other desktops too. Logins are kept
+through the Secret Service, so the desktop needs a keyring that offers it: GNOME Keyring, or
+KWallet or KeePassXC with their Secret Service option turned on.
 
 On Fedora 43 and later, install it from [Copr](https://copr.fedorainfracloud.org/coprs/swink/nook/):
 
