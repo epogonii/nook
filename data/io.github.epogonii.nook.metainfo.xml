@@ -47,8 +47,8 @@
   </screenshots>
 
   <branding>
-    <color type="primary" scheme_preference="light">#dedee2</color>
-    <color type="primary" scheme_preference="dark">#3d3d42</color>
+    <color type="primary" scheme_preference="light">#99c1f1</color>
+    <color type="primary" scheme_preference="dark">#1a5fb4</color>
   </branding>
 
   <launchable type="desktop-id">io.github.epogonii.nook.desktop</launchable>

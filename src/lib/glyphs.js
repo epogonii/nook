@@ -53,18 +53,6 @@ function star(context, centerX, centerY, radius) {
     context.stroke();
 }
 
-// Top half of an ellipse, left to right, or right to left when reversed.
-function halfEllipse(context, centerX, centerY, radiusX, radiusY, reversed = false) {
-    context.save();
-    context.translate(centerX, centerY);
-    context.scale(radiusX, radiusY);
-    if (reversed)
-        context.arcNegative(0, 0, 1, TAU, TAU / 2);
-    else
-        context.arc(0, 0, 1, TAU / 2, TAU);
-    context.restore();
-}
-
 const GLYPHS = {
     fan(context) {
         dot(context, 8, 8, 1.25);
@@ -397,37 +385,25 @@ const GLYPHS = {
         dot(context, 8, 4.5, 1.5);
     },
 
-    // Nook's logo: a roof over an arched doorway with the light on. Filled shapes only, so
-    // tools/icon.js can write it to icons/nook-symbolic.svg; see the note at the top.
+    // Nook's logo: the app icon's room as an outline, with its armchair. Filled shapes
+    // only, so tools/icon.js can write it to icons/nook-symbolic.svg; see the note at the top.
     nook(context) {
-        // The door sits up and right of its arch, as in icons/nook-logo.svg.
-        context.moveTo(5.3, 14.2);
-        halfEllipse(context, 9.4, 8.8, 4.1, 3.4);
-        context.lineTo(13.5, 14.2);
-        context.closePath();
+        const hexagon = (radius, turn) => {
+            context.newSubPath();
+            for (let i = 0; i < 6; i++) {
+                const angle = (turn ? -i : i) * TAU / 6 - TAU / 4;
+                context.lineTo(8 + radius * Math.cos(angle), 8 + radius * Math.sin(angle));
+            }
+            context.closePath();
+        };
+        hexagon(7.6, false);
+        hexagon(5.87, true);
         context.fill();
 
-        context.moveTo(0.42, 6.63);
-        context.lineTo(8, 0.23);
-        context.lineTo(15.58, 6.63);
-        context.lineTo(14.62, 7.77);
-        context.lineTo(8, 2.18);
-        context.lineTo(1.38, 7.77);
-        context.closePath();
-        context.fill();
-        dot(context, 0.9, 7.2, 0.75);
-        dot(context, 15.1, 7.2, 0.75);
-
-        context.moveTo(3.15, 14.2);
-        halfEllipse(context, 8, 9.9, 4.85, 4.15);
-        context.lineTo(12.85, 14.2);
-        context.lineTo(11.35, 14.2);
-        halfEllipse(context, 8, 9.9, 3.35, 2.65, true);
-        context.lineTo(4.65, 14.2);
-        context.closePath();
-        context.fill();
-
-        roundRect(context, 0.5, 13.5, 15, 1.5, 0.75);
+        roundRect(context, 5.48, 5.4, 5.04, 4.56, 1.32);
+        roundRect(context, 4.4, 7.68, 1.92, 4.2, 0.9);
+        roundRect(context, 9.68, 7.68, 1.92, 4.2, 0.9);
+        roundRect(context, 5.84, 9.12, 4.32, 2.04, 0.6);
         context.fill();
     },
 

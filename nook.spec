@@ -55,7 +55,7 @@ appstreamcli validate --no-net %{buildroot}%{_metainfodir}/%{app_id}.metainfo.xm
 %{_datadir}/applications/%{app_id}.desktop
 %{_datadir}/dbus-1/services/%{app_id}.service
 %{_datadir}/glib-2.0/schemas/%{app_id}.gschema.xml
-%{_datadir}/icons/hicolor/scalable/apps/%{app_id}.svg
+%{_datadir}/icons/hicolor/512x512/apps/%{app_id}.png
 %{_datadir}/icons/hicolor/symbolic/apps/%{app_id}-symbolic.svg
 %{_metainfodir}/%{app_id}.metainfo.xml
 
