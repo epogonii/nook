@@ -3,7 +3,7 @@
 
 // Renders the lib/glyphs.js logo to icons/nook-symbolic.svg (notifications, quick
 // settings) and icons/nook-top-bar-symbolic.svg (the show-in-top-bar buttons). Rerun
-// after changing the glyph. icons/nook-logo.svg (About page) is drawn by hand.
+// after changing the glyph. icons/nook-logo.png (prefs) is the app icon, scaled down.
 
 import Cairo from 'cairo';
 import GLib from 'gi://GLib';

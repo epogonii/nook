@@ -7,9 +7,7 @@ import {ExtensionPreferences, gettext as _} from 'resource:///org/gnome/Shell/Ex
 
 import {AppLink} from './prefs/app.js';
 
-const LOGO_FILE = 'icons/nook-logo.svg';
-
-const LOGO_FILE_DARK = 'icons/nook-logo-dark.svg';
+const LOGO_FILE = 'icons/nook-logo.png';
 
 // Accounts, devices and the menu's own settings are all set in the Nook app's window;
 // with the app there, this only opens it.
@@ -24,13 +22,7 @@ export default class NookPreferences extends ExtensionPreferences {
         window.search_enabled = false;
         const page = new Adw.PreferencesPage();
         const group = new Adw.PreferencesGroup();
-        const logo = new Gtk.Image({pixel_size: 96});
-        const style = Adw.StyleManager.get_default();
-        const show = () => (logo.file = `${this.path}/${style.dark ? LOGO_FILE_DARK : LOGO_FILE}`);
-        const handler = style.connect('notify::dark', show);
-        logo.connect('destroy', () => style.disconnect(handler));
-        show();
-        group.add(logo);
+        group.add(new Gtk.Image({pixel_size: 96, file: `${this.path}/${LOGO_FILE}`}));
         const title = new Gtk.Label({label: _('Nook'), margin_top: 12, css_classes: ['title-1']});
         group.add(title);
         const text = new Gtk.Label({

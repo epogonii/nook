@@ -40,8 +40,7 @@ prefs.js
 prefs/app.js
 LICENSE
 stylesheet.css
-icons/nook-logo-dark.svg
-icons/nook-logo.svg
+icons/nook-logo.png
 icons/nook-symbolic.svg
 icons/nook-top-bar-symbolic.svg
 lib/arrange.js
