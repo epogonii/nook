@@ -67,6 +67,14 @@ button.flat.nook-room-tab:checked:hover {
 }
 
 /* Home's background (backdrop.js): the choices in its dialog. */
+.nook-backdrop-options {
+  margin: 6px 24px 12px;
+}
+
+.nook-backdrop-styles {
+  margin-bottom: 6px;
+}
+
 .nook-backdrops {
   padding: 6px 18px 24px;
 }

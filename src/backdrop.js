@@ -5,11 +5,13 @@ import Gdk from 'gi://Gdk?version=4.0';
 import GdkPixbuf from 'gi://GdkPixbuf';
 import Gio from 'gi://Gio';
 import GLib from 'gi://GLib';
+import GObject from 'gi://GObject';
 import Gtk from 'gi://Gtk?version=4.0';
-import {gettext as _} from 'gettext';
+import {gettext as _, pgettext} from 'gettext';
 
 // Home's background: one of these, in backgrounds/, or a picture of the user's own, kept in
-// OWN_DIR. The background setting has its name, the path of the user's, or '' for none. The
+// OWN_DIR. The background setting has its name, the path of the user's, or '' for none;
+// background-dark the same for the dark style, while background-per-style is on. The
 // light ones first.
 const BUILT_IN = () => [
     ['morning', _('Morning')],
@@ -41,23 +43,23 @@ function fileOf(value) {
     return BUILT_IN().some(([name]) => name === value) ? builtIn(value) : null;
 }
 
-// The latest picture of the user's, kept to choose again after another.
-function ownPicture() {
+// The pictures of the user's that are kept, to choose again after another, the latest last.
+function ownPictures() {
     try {
         const names = [];
         const dir = Gio.File.new_for_path(OWN_DIR).enumerate_children('standard::name', Gio.FileQueryInfoFlags.NONE, null);
         for (let info = dir.next_file(null); info; info = dir.next_file(null))
             names.push(info.get_name());
         dir.close(null);
-        const latest = names.filter(name => name.endsWith('.jpg')).sort().at(-1);
-        return latest ? GLib.build_filenamev([OWN_DIR, latest]) : null;
+        return names.filter(name => name.endsWith('.jpg')).sort().map(name => GLib.build_filenamev([OWN_DIR, name]));
     } catch {
-        return null;
+        return [];
     }
 }
 
-// Turned upright, made no larger than OWN_SIZE and saved as JPEG; the copies before it go.
-function keepPicture(file) {
+// Turned upright, made no larger than OWN_SIZE and saved as JPEG; the copies before it go,
+// but for the paths in keep.
+function keepPicture(file, keep) {
     const path = file.get_path();
     // At scale makes a smaller one larger too.
     const [, width, height] = GdkPixbuf.Pixbuf.get_file_info(path);
@@ -72,7 +74,7 @@ function keepPicture(file) {
         const dir = Gio.File.new_for_path(OWN_DIR).enumerate_children('standard::name', Gio.FileQueryInfoFlags.NONE, null);
         for (let info = dir.next_file(null); info; info = dir.next_file(null)) {
             const other = GLib.build_filenamev([OWN_DIR, info.get_name()]);
-            if (other !== kept)
+            if (other !== kept && !keep.includes(other))
                 GLib.unlink(other);
         }
         dir.close(null);
@@ -110,10 +112,10 @@ function scrimOf(path) {
 let provider = null;
 let shown = null;
 
-// On widget, as the background setting says, under the window's colour in the style in use: a
-// provider of the app's own takes @media as in the light style. A picture that can't be read is
-// none.
-export function showBackdrop(widget, value) {
+// On widget, as the background settings say for the style in use, under the window's colour in
+// it: a provider of the app's own takes @media as in the light style. A picture that can't be
+// read is none.
+export function showBackdrop(widget, settings) {
     const manager = Adw.StyleManager.get_default();
     if (!provider) {
         provider = new Gtk.CssProvider();
@@ -123,7 +125,8 @@ export function showBackdrop(widget, value) {
                 showBackdrop(...shown);
         });
     }
-    shown = [widget, value];
+    shown = [widget, settings];
+    const value = settings.get_string(manager.dark && settings.get_boolean('background-per-style') ? 'background-dark' : 'background');
     let path = null;
     let css = '';
     try {
@@ -149,7 +152,7 @@ export function forgetBackdrop() {
     shown = null;
 }
 
-function chooseOwn(parent, onDone) {
+function chooseOwn(parent, keep, onDone) {
     const filter = new Gtk.FileFilter({name: _('Images')});
     filter.add_pixbuf_formats();
     const filters = new Gio.ListStore({item_type: Gtk.FileFilter.$gtype});
@@ -163,7 +166,7 @@ function chooseOwn(parent, onDone) {
             return;
         }
         try {
-            onDone(keepPicture(file));
+            onDone(keepPicture(file, keep));
         } catch (e) {
             const alert = new Adw.AlertDialog({heading: _('Could Not Use the Image'), body: e.message});
             alert.add_response('close', _('Close'));
@@ -172,8 +175,24 @@ function chooseOwn(parent, onDone) {
     });
 }
 
-// None, the pictures that come with the app, the user's own, and a button to choose another.
+// None, the pictures that come with the app, the user's own, and a button to choose another;
+// with one for each style, for the style chosen above them.
 export function backdropDialog(parent, settings) {
+    const perStyle = new Adw.SwitchRow({
+        title: _('Separate for Light and Dark'),
+        subtitle: _('Changes along with the system’s style.'),
+    });
+    settings.bind('background-per-style', perStyle, 'active', Gio.SettingsBindFlags.DEFAULT);
+    const options = new Gtk.ListBox({selection_mode: Gtk.SelectionMode.NONE, css_classes: ['boxed-list', 'nook-backdrop-options']});
+    options.append(perStyle);
+    // Named by the settings they choose for.
+    const styles = new Adw.ToggleGroup({halign: Gtk.Align.CENTER, css_classes: ['nook-backdrop-styles']});
+    styles.add(new Adw.Toggle({name: 'background', label: pgettext('style', 'Light')}));
+    styles.add(new Adw.Toggle({name: 'background-dark', label: pgettext('style', 'Dark')}));
+    styles.active_name = Adw.StyleManager.get_default().dark ? 'background-dark' : 'background';
+    perStyle.bind_property('active', styles, 'visible', GObject.BindingFlags.SYNC_CREATE);
+    const key = () => perStyle.active ? styles.active_name : 'background';
+
     const grid = new Gtk.FlowBox({
         selection_mode: Gtk.SelectionMode.NONE,
         homogeneous: true,
@@ -185,7 +204,7 @@ export function backdropDialog(parent, settings) {
     });
     const swatches = [];
     const mark = () => {
-        const value = settings.get_string('background');
+        const value = settings.get_string(key());
         for (const [swatch, own] of swatches) {
             if (own === value)
                 swatch.add_css_class('chosen');
@@ -193,7 +212,7 @@ export function backdropDialog(parent, settings) {
                 swatch.remove_css_class('chosen');
         }
     };
-    const add = (value, label, picture, onClick = () => settings.set_string('background', value)) => {
+    const add = (value, label, picture, onClick = () => settings.set_string(key(), value)) => {
         const box = new Gtk.Box({orientation: Gtk.Orientation.VERTICAL, spacing: 6});
         // Sized by the box: a picture would take its own size.
         const frame = new Gtk.Overlay({
@@ -214,28 +233,50 @@ export function backdropDialog(parent, settings) {
     add('', _('None'), null).add_css_class('none');
     for (const [name, label] of BUILT_IN())
         add(name, label, builtIn(name, '-thumb'));
-    const own = settings.get_string('background').startsWith('/') ? settings.get_string('background') : ownPicture();
-    if (own)
-        add(own, _('Your Picture'), own);
-    const choose = add(null, _('Choose…'), null, () => chooseOwn(grid, path => {
-        settings.set_string('background', path);
-        dialog.close();
-    }));
+    const own = new Set(ownPictures());
+    for (const name of ['background', 'background-dark']) {
+        if (settings.get_string(name).startsWith('/'))
+            own.add(settings.get_string(name));
+    }
+    for (const path of own)
+        add(path, _('Your Picture'), path);
+    const choose = add(null, _('Choose…'), null, () => {
+        const into = key();
+        // The other style's picture stays.
+        chooseOwn(grid, [settings.get_string(into === 'background' ? 'background-dark' : 'background')], path => {
+            settings.set_string(into, path);
+            dialog.close();
+        });
+    });
     choose.add_css_class('choose');
     choose.add_overlay(new Gtk.Image({icon_name: 'list-add-symbolic', pixel_size: 24, halign: Gtk.Align.CENTER, valign: Gtk.Align.CENTER}));
     mark();
-    const handler = settings.connect('changed::background', mark);
+    const handlers = ['changed::background', 'changed::background-dark'].map(signal => settings.connect(signal, mark));
+    styles.connect('notify::active-name', mark);
+    perStyle.connect('notify::active', () => {
+        if (perStyle.active) {
+            // Turned on for the first time, the dark style starts with the light one's picture.
+            if (settings.get_user_value('background-dark') === null)
+                settings.set_string('background-dark', settings.get_string('background'));
+            styles.active_name = 'background-dark';
+        }
+        mark();
+    });
 
+    const content = new Gtk.Box({orientation: Gtk.Orientation.VERTICAL});
+    content.append(options);
+    content.append(styles);
+    content.append(grid);
     const view = new Adw.ToolbarView({
         content: new Gtk.ScrolledWindow({
             hscrollbar_policy: Gtk.PolicyType.NEVER,
             propagate_natural_height: true,
-            child: grid,
+            child: content,
         }),
     });
     view.add_top_bar(new Adw.HeaderBar());
     // Four to a row.
     const dialog = new Adw.Dialog({title: _('Background'), content_width: 760, child: view});
-    dialog.connect('closed', () => settings.disconnect(handler));
+    dialog.connect('closed', () => handlers.forEach(id => settings.disconnect(id)));
     dialog.present(parent);
 }

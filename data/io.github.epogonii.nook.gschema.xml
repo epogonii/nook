@@ -168,7 +168,17 @@
     <key name="background" type="s">
       <default>''</default>
       <summary>Home's background</summary>
-      <description>The name of a picture that comes with the app (morning, blinds, linen, mist, sage, ripple, dunes, dusk, night, rain, lamp or velvet), the path of a picture of the user's own, kept in the app's data folder, or empty for none.</description>
+      <description>The name of a picture that comes with the app (morning, blinds, linen, mist, sage, ripple, dunes, dusk, night, rain, lamp or velvet), the path of a picture of the user's own, kept in the app's data folder, or empty for none. With "background-per-style" on, only in the light style.</description>
+    </key>
+    <key name="background-dark" type="s">
+      <default>''</default>
+      <summary>Home's background in the dark style</summary>
+      <description>As "background", shown in its place while the dark style is in use and "background-per-style" is on.</description>
+    </key>
+    <key name="background-per-style" type="b">
+      <default>false</default>
+      <summary>A background for each style</summary>
+      <description>Whether Home shows "background-dark" in the dark style. Off, it shows "background" in both.</description>
     </key>
     <key name="secrets-imported" type="b">
       <default>false</default>

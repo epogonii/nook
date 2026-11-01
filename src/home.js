@@ -277,7 +277,7 @@ export const HomePage = GObject.registerClass({
         const view = new Adw.ToolbarView({content: this._stack});
         view.add_top_bar(header);
         this.child = view;
-        showBackdrop(view, settings.get_string('background'));
+        showBackdrop(view, settings);
         holdStill(!settings.get_boolean('animations'));
         showPictures(settings.get_boolean('pictures'));
         setShownAs(settings.get_value('shown-as').deepUnpack());
@@ -293,7 +293,8 @@ export const HomePage = GObject.registerClass({
             setShownAs(settings.get_value('shown-as').deepUnpack());
             this._render();
         }), settings.connect('changed::glance', () => this._showGlance()),
-        settings.connect('changed::background', () => showBackdrop(view, settings.get_string('background'))));
+        ...['changed::background', 'changed::background-dark', 'changed::background-per-style']
+            .map(signal => settings.connect(signal, () => showBackdrop(view, settings))));
     }
 
     // Made anew each time the page empties, to rise in again. The text waits for the pictures.

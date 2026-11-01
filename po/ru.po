@@ -3915,6 +3915,24 @@ msgid "Choose…"
 msgstr "Выбрать…"
 
 #: src/backdrop.js
+msgid "Separate for Light and Dark"
+msgstr "Отдельно для светлого и тёмного"
+
+#: src/backdrop.js
+msgid "Changes along with the system’s style."
+msgstr "Меняется вместе со стилем системы."
+
+#: src/backdrop.js
+msgctxt "style"
+msgid "Light"
+msgstr "Светлый"
+
+#: src/backdrop.js
+msgctxt "style"
+msgid "Dark"
+msgstr "Тёмный"
+
+#: src/backdrop.js
 msgid "Blinds"
 msgstr "Жалюзи"
 
