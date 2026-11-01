@@ -30,19 +30,19 @@
   <screenshots>
     <screenshot type="default">
       <caption>Every device by section and room</caption>
-      <image>https://raw.githubusercontent.com/epogonii/nook/v1.0.0/screenshots/home.png</image>
+      <image>https://raw.githubusercontent.com/epogonii/nook/v1.1.0/screenshots/home.png</image>
     </screenshot>
     <screenshot environment="gnome:dark">
       <caption>The Home page in the dark style</caption>
-      <image>https://raw.githubusercontent.com/epogonii/nook/v1.0.0/screenshots/home-dark.png</image>
+      <image>https://raw.githubusercontent.com/epogonii/nook/v1.1.0/screenshots/home-dark.png</image>
     </screenshot>
     <screenshot>
       <caption>A device's page: its controls, name and icon</caption>
-      <image>https://raw.githubusercontent.com/epogonii/nook/v1.0.0/screenshots/device.png</image>
+      <image>https://raw.githubusercontent.com/epogonii/nook/v1.1.0/screenshots/device.png</image>
     </screenshot>
     <screenshot>
       <caption>Accounts and pairing for each kind of device</caption>
-      <image>https://raw.githubusercontent.com/epogonii/nook/v1.0.0/screenshots/accounts.png</image>
+      <image>https://raw.githubusercontent.com/epogonii/nook/v1.1.0/screenshots/accounts.png</image>
     </screenshot>
   </screenshots>
 
@@ -71,6 +71,11 @@
   <content_rating type="oars-1.1"/>
 
   <releases>
+    <release version="1.1.0" date="2026-11-01">
+      <description>
+        <p>A new icon, and Home can take another background for the dark style.</p>
+      </description>
+    </release>
     <release version="1.0.0" date="2026-10-31">
       <description>
         <p>The first release.</p>

@@ -1,7 +1,7 @@
 %global app_id io.github.epogonii.nook
 
 Name:           nook
-Version:        1.0.0
+Version:        1.1.0
 Release:        1%{?dist}
 Summary:        Control your smart home
 License:        GPL-2.0-or-later
@@ -60,5 +60,9 @@ appstreamcli validate --no-net %{buildroot}%{_metainfodir}/%{app_id}.metainfo.xm
 %{_metainfodir}/%{app_id}.metainfo.xml
 
 %changelog
+* Sun Nov 01 2026 Evghenii Pogonii <epogonii@gmail.com> - 1.1.0-1
+- A cozy room icon instead of the house
+- Home can take another background for the dark style
+
 * Sat Oct 31 2026 Evghenii Pogonii <epogonii@gmail.com> - 1.0.0-1
 - First release
