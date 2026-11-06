@@ -379,9 +379,10 @@ export const HomePage = GObject.registerClass({
                 css_classes: ['flat', 'nook-room-tab'],
             });
             group ??= tab;
-            tab.update_state([Gtk.AccessibleState.SELECTED], [tab.active]);
+            // GTK reads a state that can be undefined as an int, so a JS boolean warns.
+            tab.update_state([Gtk.AccessibleState.SELECTED], [tab.active ? 1 : 0]);
             tab.connect('toggled', () => {
-                tab.update_state([Gtk.AccessibleState.SELECTED], [tab.active]);
+                tab.update_state([Gtk.AccessibleState.SELECTED], [tab.active ? 1 : 0]);
                 if (tab.active && key !== this._room)
                     this.setRoom(key);
             });
@@ -879,7 +880,7 @@ export const HomePage = GObject.registerClass({
                 header.remove_css_class('folded');
             else
                 header.add_css_class('folded');
-            toggle.update_state([Gtk.AccessibleState.EXPANDED], [open]);
+            toggle.update_state([Gtk.AccessibleState.EXPANDED], [open ? 1 : 0]);
         };
         show(!folded);
         const flip = () => {
